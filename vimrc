@@ -436,17 +436,46 @@ let g:neobundle_default_git_protocol = 'git'
 " Let NeoBundle manage NeoBundle
 NeoBundle 'Shougo/neobundle.vim'
 
-NeoBundleLazy 'quickrun.vim'
-NeoBundle 'DrawIt'
-"NeoBundle 'AutoTag'
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'asciidoc.vim'
 NeoBundle 'AutoFenc.vim'
-NeoBundle 'lbdbq'
-NeoBundle 'matchit.zip'
-NeoBundle 'renamer.vim'
-NeoBundle 'surround.vim'
-NeoBundle 'vis'
-"NeoBundle 'VimIM'
+"NeoBundle 'AutoTag'
+NeoBundle 'CodeReviewer.vim'
+NeoBundle 'csv.vim'
+NeoBundle 'DoxygenToolkit.vim'
+NeoBundle 'DrawIt'
 NeoBundle 'echofunc.vim'
+NeoBundle 'fs111/pydoc.vim'
+NeoBundle 'FSwitch'
+NeoBundle 'h1mesuke/unite-outline'
+NeoBundle 'h1mesuke/vim-alignta'
+NeoBundle 'indentpython.vim--nianyang'
+NeoBundle 'LargeFile'
+NeoBundle 'lbdbq'
+NeoBundle 'Lokaltog/vim-easymotion'
+NeoBundle 'matchit.zip'
+"NeoBundle 'OmniCppComplete'
+NeoBundle 'osyo-manga/unite-quickfix'
+NeoBundle 'Python-2.x-Standard-Library-Reference'
+NeoBundleLazy 'quickrun.vim'
+NeoBundle 'renamer.vim'
+NeoBundle 'Rip-Rip/clang_complete'
+NeoBundle 'sgur/unite-qf'
+NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Shougo/neocomplcache-snippets-complete'
+NeoBundle 'Shougo/unite-build'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/vimfiler'
+NeoBundle 'Shougo/vimshell'
+NeoBundle 'Shougo/vinarise'  " Hex Editor
+NeoBundle 'sudo.vim'
+NeoBundle 'surround.vim'
+"NeoBundle 'VimIM'
+NeoBundle 'vis'
+NeoBundle 'tacroe/unite-mark'
+NeoBundle 'Tagbar'
+NeoBundle 'tComment'
+NeoBundle 'thawk/Intelligent_Tags'
 NeoBundle 'thawk/vimproc', {
       \ 'build' : {
       \ 'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
@@ -455,45 +484,14 @@ NeoBundle 'thawk/vimproc', {
       \ 'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
       \ },
       \ }
-NeoBundle 'Shougo/vimshell'
-NeoBundle 'Shougo/vimfiler'
-NeoBundle 'LargeFile'
-NeoBundle 'FSwitch'
-NeoBundle 'tComment'
-NeoBundle 'Lokaltog/vim-easymotion'
-NeoBundle 'YankRing.vim'
-NeoBundle 'Tagbar'
-"NeoBundle 'FuzzyFinder'     " 使用unite.vim
-"NeoBundle 'L9'
-NeoBundle 'h1mesuke/vim-alignta'
-"NeoBundle 'OmniCppComplete'
-NeoBundle 'Rip-Rip/clang_complete'
-NeoBundle 'fs111/pydoc.vim'
-NeoBundle 'Python-2.x-Standard-Library-Reference'
-NeoBundle 'csv.vim'
-NeoBundle 'ZenCoding.vim'
-NeoBundle 'Shougo/neocomplcache'
-NeoBundle 'Shougo/neocomplcache-snippets-complete'
-NeoBundle 'Shougo/echodoc'
-NeoBundle 'Shougo/vinarise'  " Hex Editor
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'tacroe/unite-mark'
+NeoBundle 'tmhedberg/SimpylFold'
 NeoBundle 'tsukkee/unite-help'
 NeoBundle 'tsukkee/unite-tag'
-NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'ujihisa/unite-colorscheme'
-NeoBundle 'sgur/unite-qf'
-NeoBundle 'Shougo/unite-build'
-NeoBundle 'CodeReviewer.vim'
-NeoBundle 'sudo.vim'
-NeoBundle 'thawk/Intelligent_Tags'
-NeoBundle 'DoxygenToolkit.vim'
-NeoBundle 'indentpython.vim--nianyang'
-NeoBundle 'tmhedberg/SimpylFold'
-NeoBundle 'asciidoc.vim'
 NeoBundle 'wps.vim' " syntax highlight for RockBox wps file
+NeoBundle 'YankRing.vim'
 NeoBundle 'Zenburn'
-NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'ZenCoding.vim'
 
 if v:version >= '701'
     NeoBundle 'Mark--Karkat'
@@ -780,10 +778,6 @@ smap <C-k>     <Plug>(neocomplcache_snippets_expand)
 
 " }}}
 
-" Plugin 'echodoc' {{{
-let g:echodoc_enable_at_startup = 1
-" }}}
-
 " Plugin 'vinarise' {{{ " Hex Editor
 " }}}
 
@@ -816,23 +810,23 @@ nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd di
 nnoremap <silent> [unite]g :<C-u>Unite grep -buffer-name=search -no-quit<CR>
 nnoremap <silent> [unite]G :<C-u>UniteWithCursorWord grep -buffer-name=search -no-quit<CR>
 
-" nnoremap <silent> [unite]q :<C-u>Unite qflist -no-quit<CR>
 nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search -start-insert line<CR>
 nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
-"nnoremap <silent> [unite]T :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
-nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag tag/include<CR>
 nnoremap <silent> [unite]b :<C-u>Unite buffer -start-insert<CR>
 nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
 nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps -start-insert help<CR>
 nnoremap <silent> [unite]H :<C-U>UniteWithCursorWord -buffer-name=helps help<CR>
-nnoremap <silent> [unite]m :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build<CR>
-nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
 nnoremap <silent> [unite]M :<C-U>Unite mark<CR>
+nnoremap <silent> [unite]m :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build<CR>
 nnoremap <silent> [unite]Q :<C-u>Unite poslist<CR>
+nnoremap <silent> [unite]q :<C-u>Unite quickfix -no-quit<CR>
 nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
 nnoremap <silent> [unite]s :<C-u>Unite -start-insert session<CR>
-nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
+"nnoremap <silent> [unite]T :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
+nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag tag/include<CR>
+nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
 nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
+nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
 
 function! s:unite_settings()
   nmap <buffer> <C-J> <Plug>(unite_loop_cursor_down)
