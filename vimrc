@@ -458,6 +458,7 @@ NeoBundle 'matchit.zip'
 NeoBundle 'osyo-manga/unite-quickfix'
 NeoBundle 'Python-2.x-Standard-Library-Reference'
 NeoBundleLazy 'quickrun.vim'
+NeoBundle 'rbtnn/hexript.vim'   " to generate binary file
 NeoBundle 'renamer.vim'
 NeoBundle 'Rip-Rip/clang_complete'
 NeoBundle 'sgur/unite-qf'
@@ -476,6 +477,7 @@ NeoBundle 'tacroe/unite-mark'
 NeoBundle 'Tagbar'
 NeoBundle 'tComment'
 NeoBundle 'thawk/Intelligent_Tags'
+"NeoBundle 'bahejl/Intelligent_Tags'
 NeoBundle 'thawk/vimproc', {
       \ 'build' : {
       \ 'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
@@ -484,6 +486,7 @@ NeoBundle 'thawk/vimproc', {
       \ 'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
       \ },
       \ }
+NeoBundle 'thinca/vim-prettyprint'  " PP variable_name，for debug
 NeoBundle 'tmhedberg/SimpylFold'
 NeoBundle 'tsukkee/unite-help'
 NeoBundle 'tsukkee/unite-tag'
