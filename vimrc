@@ -431,7 +431,7 @@ endif
 
 call neobundle#rc(expand('~/.vim/bundle/'))
 
-let g:neobundle_default_git_protocol = 'https'
+let g:neobundle_default_git_protocol = 'git'
 
 " Let NeoBundle manage NeoBundle
 NeoBundle 'Shougo/neobundle.vim'
@@ -482,11 +482,11 @@ NeoBundle 'tsukkee/unite-help'
 NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'ujihisa/unite-colorscheme'
-NeoBundle 'thawk009/unite-qf'
+NeoBundle 'sgur/unite-qf'
 NeoBundle 'Shougo/unite-build'
 NeoBundle 'CodeReviewer.vim'
 NeoBundle 'sudo.vim'
-NeoBundle 'thawk/Intelligent-Tags'
+NeoBundle 'thawk/Intelligent_Tags'
 NeoBundle 'DoxygenToolkit.vim'
 NeoBundle 'indentpython.vim--nianyang'
 NeoBundle 'tmhedberg/SimpylFold'
