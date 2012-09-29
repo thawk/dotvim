@@ -1,0 +1,3 @@
+set runtimepath^=D:\docs\tht\config\vim\vimfiles
+set runtimepath+=D:\docs\tht\config\vim\vimfiles\after
+source D:\docs\tht\config\vim\vimfiles\vimrc

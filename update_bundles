@@ -1,0 +1,333 @@
+#!/usr/bin/python2
+# vim: set fileencoding=utf-8 :
+# Author: thawk(thawk009@gmail.com)
+
+VERSION=20111104
+
+# {{{ Imports
+import codecs
+import locale
+import logging
+import optparse
+import os
+import re
+import shutil
+import subprocess
+import sys
+# }}}
+
+# {{{ Contants
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+VIMRC_PATH = os.path.join(BASE_DIR, "vimrc")
+BUNDLES_DIR = os.path.join(BASE_DIR, "bundle")
+TRASH_DIR = os.path.join(BASE_DIR, "Trashed-Bundles")
+TEMP_DIR_SUFFIX = ".new"
+# }}}
+
+# {{{ Globals
+options = None
+# }}}
+
+# {{{ func vim_string
+def vim_string(str):
+    """ quick & dirty, parse a single or double quoted string the way Vim would """
+    if str[0] == "'":
+        return re.sub(r"''", "'", re.sub(r"^'((:?[^']|'')*)'.*$", r"\1", str))
+    elif str[0] == '"':
+        return re.sub(r'^\s*"(.*)"\s*$', r"\1", str)
+    else:
+        return str
+# }}}
+
+# {{{ func ensure_dir
+def ensure_dir(dir):
+    """ mkdir dir if not exists """
+    if not os.path.exists(dir):
+        if options.test or options.verbose:
+            print u"os.makedirs({0})".format(dir)
+
+        if not options.test:
+            os.makedirs(dir)
+# }}}
+
+# {{{ func rmtree
+def rmtree(dir):
+    def onerror(func, path, exc_info):
+        """
+        Error handler for ``shutil.rmtree``.
+
+        If the error is due to an access error (read only file)
+        it attempts to add write permission and then retries.
+
+        If the error is for another reason it re-raises the error.
+
+        Usage : ``shutil.rmtree(path, onerror=onerror)``
+        """
+        import stat
+        if not os.access(path, os.W_OK):
+            # Is the error an access error ?
+            os.chmod(path, stat.S_IWUSR)
+            func(path)
+        else:
+            raise
+
+    if options.test or options.verbose:
+        print u"shutil.rmtree('{0}', True)".format(os.path.join(TRASH_DIR, dir))
+    
+    if not options.test:
+        if os.path.exists(dir):
+            shutil.rmtree(dir, onerror=onerror)
+# }}}
+
+# {{{ func move
+def move(from_dir, to_dir):
+    if options.test or options.verbose:
+        print u"shutil.move('{0}', '{1}')".format(from_dir, to_dir)
+
+    if not options.test:
+        shutil.move(from_dir, to_dir)
+# }}}
+
+# {{{ func check_call
+def check_call(cmd_list):
+    if options.test or options.verbose:
+        print u"subprocess.check_call({0}, shell=False)".format(cmd_list)
+
+    if not options.test:
+        subprocess.check_call(cmd_list, shell=False)
+# }}}
+
+# {{{ func chdir
+def chdir(dir):
+    if options.test or options.verbose:
+        print u"os.chdir('{0}')".format(dir)
+
+    if not options.test:
+        os.chdir(dir)
+# }}}
+
+# {{{ func remove_bundle
+def remove_bundle(dir):
+    if os.path.exists(os.path.join(BUNDLES_DIR, dir)):
+        ensure_dir(TRASH_DIR)
+        rmtree(os.path.join(TRASH_DIR, dir))
+        move(os.path.join(BUNDLES_DIR, dir), os.path.join(TRASH_DIR, dir))
+# }}}
+
+# {{{ func update_bundle
+def update_bundle(dir, source):
+    ss = source.split()
+    url = ss[0]
+    tag = ss[1] if len(ss) > 1 else ""
+
+    print("  processing '{url}' at '{tag}'".format(
+        url=url, tag=tag))
+
+    print("    Unpacking {url} into {dir}".format(
+        url=url, dir=dir, tmp_suffix=TEMP_DIR_SUFFIX))
+
+    if re.match(r"^[A-Za-z0-9-]+\/[A-Za-z0-9._-]+$", url):  # User/repository.
+        url = "https://github.com/{url}.git".format(url=url)
+    elif re.match(r"^[A-Za-z0-9._-]+$", url):               # Plain repository.
+        url = "https://github.com/vim-scripts/{url}.git".format(url=url)
+
+    try:
+        chdir(BUNDLES_DIR)
+        rmtree(os.path.join(BUNDLES_DIR, dir + TEMP_DIR_SUFFIX))
+
+        check_call(["git", "clone", url, dir + TEMP_DIR_SUFFIX])
+        chdir(os.path.join(BUNDLES_DIR, dir + TEMP_DIR_SUFFIX))
+        check_call(["git", "checkout", tag if tag else "master"])
+        rmtree(".git")
+
+        remove_bundle(dir)
+        move(os.path.join(BUNDLES_DIR, dir + TEMP_DIR_SUFFIX), os.path.join(BUNDLES_DIR, dir))
+
+        print("    ----- {dir} OK -----".format(dir=dir))
+        return True
+    except subprocess.CalledProcessError:
+        rmtree(os.path.join(TRASH_DIR, dir))
+
+        print("    ----- {dir} FAILED -----".format(dir=dir))
+        return False
+# }}}
+
+# {{{ func update_bundles
+def update_bundles(bundle_names):
+    ensure_dir(BUNDLES_DIR)
+
+    to_be_installed = dict()
+    to_be_updated   = dict()
+    to_be_cleaned   = [ os.path.basename(d) for d in os.listdir(BUNDLES_DIR) ]
+
+    installed_bundles = list()
+    updated_bundles   = list()
+    failed_bundles    = list()
+    removed_bundles   = list()
+
+    # Scan bundles in the vimrc {{{
+    with open(VIMRC_PATH, 'r') as f:
+        for line in f:
+            for r in [
+                re.compile(r'^\s*"\s*bundle:\s*(.*)$', re.IGNORECASE),
+                re.compile(r"^\s*Bundle\s*('(:?[^']*|'')*'|\"[^\"]*\")"),
+            ]:
+                m = r.match(line)
+                if m:
+                    source = vim_string(m.group(1))
+
+                    ss = source.split()
+                    url = ss[0]
+                    tag = ss[1] if len(ss) > 1 else ""
+
+                    dir = re.sub(r'\.git$', '', url.split('/')[-1])
+
+                    if bundle_names and dir not in bundle_names:
+                        break   # skip bundles which is not in bundles
+
+                    # quick sanity check
+                    for bundles in to_be_installed, to_be_updated:
+                        if bundles.has_key(dir):
+                            if bundles[dir] == source:
+                                print("duplicate entry for #{source}")
+                            else:
+                                print("urls map to the same bundle: {dir} and {source}. Skipping the latter...".format(dir=dir, source=source))
+
+                            break
+                    else:   # bundle not exists yet
+                        if dir in to_be_cleaned:
+                            to_be_cleaned.remove(dir)
+                            to_be_updated[dir] = source
+                        else:
+                            to_be_installed[dir] = source
+
+
+                    # Doesn't need to try the next pattern
+                    break
+
+    if bundle_names:    # 限定了要处理的bundle，只留bundle_names中有的bundle
+        to_be_cleaned = [dir for dir in to_be_cleaned if dir in bundle_names]
+    # }}}
+
+    if options.list: #{{{
+        if options.install:
+            print("New bundles: {0}".format(len(to_be_installed)))
+            for dir in to_be_installed:
+                print("  {dir}".format(dir=dir))
+
+        if options.update:
+            print("Exists bundles: {0}".format(len(to_be_updated)))
+            for dir in to_be_updated:
+                print("  {dir}".format(dir=dir))
+
+        if options.clean:
+            print("Unused bundles: {0}".format(len(to_be_cleaned)))
+            for dir in to_be_cleaned:
+                print("  {dir}".format(dir=dir))
+
+        return
+    # }}}
+
+    if options.install: # {{{
+        print("# Installing new bundles:")
+        if to_be_installed:
+            for dir in to_be_installed:
+                if update_bundle(dir, to_be_installed[dir]):
+                    installed_bundles.append(dir)
+                else:
+                    failed_bundles.append(dir)
+        else:
+            print("  None.")
+    # }}}
+
+    if options.update: # {{{
+        print("# Updating exists bundles:")
+        if to_be_updated:
+            for dir in to_be_updated:
+                if update_bundle(dir, to_be_updated[dir]):
+                    updated_bundles.append(dir)
+                else:
+                    failed_bundles.append(dir)
+        else:
+            print("  None.")
+    # }}}
+
+    if options.clean: # {{{
+        print("# Cleaning exists bundles:")
+        if to_be_cleaned:
+            for dir in to_be_cleaned:
+                print("  Trashing {dir}".format(dir=dir))
+                remove_bundle(dir)
+        else:
+            print("  None.")
+    # }}}
+
+    # Reports {{{
+    print("========================")
+    if options.install:
+        print("Total {0} new bundles installed".format(len(installed_bundles)))
+        for dir in installed_bundles:
+            print("  {dir}".format(dir=dir))
+
+    if options.update:
+        print("Total {0} bundles updated".format(len(updated_bundles)))
+        for dir in updated_bundles:
+            print("  {dir}".format(dir=dir))
+
+    if options.clean:
+        print("Total {0} bundles cleaned".format(len(to_be_cleaned)))
+        for dir in to_be_cleaned:
+            print("  {dir}".format(dir=dir))
+
+    if failed_bundles:
+        print("Total {0} bundles failed".format(len(failed_bundles)))
+        for dir in failed_bundles:
+            print("  {dir}".format(dir=dir))
+    # }}}
+
+# }}}
+
+# {{{ main
+if __name__ == "__main__":
+    sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
+    sys.stderr = codecs.getwriter(locale.getpreferredencoding())(sys.stderr)
+
+    optparser = optparse.OptionParser(
+        usage='''%prog [options] [bundle_names]
+
+Update bundles inside {bundles_dir} directory. 
+
+If none of --install/--update/--clean specified,
+asssume --install --update --clean options is specifed.
+
+if bundle_names is specified, only bundles in this list
+are affected.\
+'''.format(bundles_dir=BUNDLES_DIR),
+        version=VERSION)
+
+    optparser.add_option('', '--install', action="store_true", dest="install", default=False, help="Install new bundles.")
+    optparser.add_option('', '--update',  action="store_true", dest="update", default=False, help="Update exists bundles.")
+    optparser.add_option('', '--clean',   action="store_true", dest="clean", default=False, help="Cleanup unused bundles.")
+    optparser.add_option('', '--list',    action="store_true", dest="list", default=False, help="Only list bundles need to be install/update/cleanup.")
+    optparser.add_option('', '--test',    action="store_true", dest="test", default=False, help="Only show commands, don't execute")
+    optparser.add_option('', '--verbose', action="store_true", dest="verbose", default=False, help="Show commands before execute")
+
+    (options, args) = optparser.parse_args()
+
+    for k in vars(options):
+        if isinstance(getattr(options, k), basestring):
+            setattr(options, k, unicode(getattr(options, k), locale.getpreferredencoding()).strip())
+
+    args = [unicode(arg, locale.getpreferredencoding()) for arg in args]
+
+    if not options.install and not options.update and not options.clean:
+        options.install = True
+        options.update  = True
+        options.clean   = True
+
+    cwd = os.getcwd()
+    update_bundles(args)
+    os.chdir(cwd)
+
+    exit(0)
+# }}}
