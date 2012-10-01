@@ -496,6 +496,10 @@ NeoBundle 'YankRing.vim'
 NeoBundle 'Zenburn'
 NeoBundle 'ZenCoding.vim'
 
+" very slow ?
+"NeoBundle 'xolox/vim-easytags'
+"NeoBundle 'https://bitbucket.org/abudden/taghighlight'
+
 if v:version >= '701'
     NeoBundle 'Mark--Karkat'
 endif
