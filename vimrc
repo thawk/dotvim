@@ -450,6 +450,11 @@ NeoBundle 'FSwitch'
 NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'h1mesuke/vim-alignta'
 NeoBundle 'indentpython.vim--nianyang'
+NeoBundle 'jceb/vim-orgmode', {
+    \ 'depends' : [
+    \   'NrrwRgn',
+    \   'speeddating.vim',
+    \ ]}
 NeoBundle 'LargeFile'
 NeoBundle 'lbdbq'
 NeoBundle 'Lokaltog/vim-easymotion'
@@ -913,6 +918,12 @@ let g:DoxygenToolkit_returnTag="@return "
 nmap ,r <Plug>(quickrun)
 " }}}
 
+" Plugin 'vim-easytags' {{{
+if neobundle#is_installed("vim-easytags")
+    let g:easytags_updatetime_autodisable = 1
+    let g:easytags_updatetime_min = 10000
+    let g:easytags_on_cursorhold = 0
+endif
 " " }}}
 
 " Indents & Foldings" {{{
