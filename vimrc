@@ -450,6 +450,7 @@ NeoBundle 'FSwitch'
 NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'h1mesuke/vim-alignta'
 NeoBundle 'indentpython.vim--nianyang'
+NeoBundle 'jceb/vim-editqf'
 NeoBundle 'jceb/vim-orgmode', {
     \ 'depends' : [
     \   'NrrwRgn',
