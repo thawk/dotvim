@@ -431,7 +431,7 @@ endif
 
 call neobundle#rc(expand('~/.vim/bundle/'))
 
-let g:neobundle_default_git_protocol = 'git'
+let g:neobundle_default_git_protocol = 'https'
 
 " Let NeoBundle manage NeoBundle
 NeoBundle 'Shougo/neobundle.vim'
@@ -702,7 +702,6 @@ au FileType python nnoremap <silent> <buffer> K :<C-U>Pydoc <C-R><C-W><CR>
 " Plugin 'ZenCoding.vim' {{{
 " }}}
 
-
 " Plugin 'Mark--Karkat' {{{
 " 代替了 MultipleSearch
 if neobundle#is_installed("Mark--Karkat")
@@ -927,6 +926,13 @@ if neobundle#is_installed("vim-easytags")
 endif
 " " }}}
 
+" Plugin 'vim-editqf' {{{
+if neobundle#is_installed("vim-editqf")
+    " 重新定义两个映射，把缺省的<leader>n空出来给mark插件
+    nmap <leader>nn <Plug>QFAddNote
+    nmap <leader>nN <Plug>QFAddNotePattern
+endif
+" " }}}
 " Indents & Foldings" {{{
 " Plugin 'indentpython.vim--nianyang'
 " Plugin 'SimpylFold'
@@ -954,22 +960,24 @@ au BufRead,BufNewFile *.wps,*.sbs,*.fms setf wps
 " " }}}
 
 " Plugin 'vim-colors-solarized' {{{
-" 可以使用:SolarizedOptions生成solarized所需的参数
-let g:solarized_visibility="low"    "default value is normal
-syntax enable
-set background=dark
-colorscheme solarized
+if neobundle#is_installed("vim-colors-solarized")
+    " 可以使用:SolarizedOptions生成solarized所需的参数
+    let g:solarized_visibility="low"    "default value is normal
+    syntax enable
+    set background=dark
+    colorscheme solarized
 
-" let g:solarized_termtrans=0
-" let g:solarized_degrade=0
-" let g:solarized_bold=1
-" let g:solarized_underline=1
-" let g:solarized_italic=1
-" let g:solarized_termcolors=16
-" let g:solarized_contrast="normal"
-" let g:solarized_diffmode="normal"
-let g:solarized_hitrail=1
-" let g:solarized_menu=1
+    " let g:solarized_termtrans=0
+    " let g:solarized_degrade=0
+    " let g:solarized_bold=1
+    " let g:solarized_underline=1
+    " let g:solarized_italic=1
+    " let g:solarized_termcolors=16
+    " let g:solarized_contrast="normal"
+    " let g:solarized_diffmode="normal"
+    let g:solarized_hitrail=1
+    " let g:solarized_menu=1
+endif
 " }}}
 
 " " }}}
