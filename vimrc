@@ -468,7 +468,9 @@ NeoBundle 'rbtnn/hexript.vim'   " to generate binary file
 NeoBundle 'renamer.vim'
 NeoBundle 'Rip-Rip/clang_complete'
 NeoBundle 'sgur/unite-qf'
-NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Shougo/neocomplcache', {
+    \ 'rev' : 'c3f799e5f03a72b4bcd18390dad2bb710ec894cb',
+    \ }
 NeoBundle 'Shougo/neocomplcache-snippets-complete'
 NeoBundle 'Shougo/unite-build'
 NeoBundle 'Shougo/unite.vim'
