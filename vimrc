@@ -943,7 +943,7 @@ endif
 au FileType asciidoc      setlocal shiftwidth=2
                                \ tabstop=2
                                \ textwidth=70 wrap formatoptions=tcqnmB
-                               \ makeprg=asciidoc\ -o\ data-uri\ $*\ %
+                               \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
                                \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
                                \ foldexpr=MyAsciidocFoldLevel(v:lnum)
                                \ foldmethod=expr
