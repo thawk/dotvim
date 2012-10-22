@@ -170,9 +170,8 @@ if has('multi_byte_ime')
 endif
 
 let &termencoding = &encoding
-set encoding=utf-8
-"set encoding=unicode
 if (g:isWin)
+    set encoding=ucs-4
     "set guifont=Bitstream_Vera_Sans_Mono\ 12
     set guifont=Courier_New:h12
     set guifontwide=NSimsun:h12
@@ -183,6 +182,7 @@ if (g:isWin)
     "language messages zh_CN.utf-8
     language messages en_US
 else
+    set encoding=utf-8
     set guifont=DejaVu\ Sans\ Mono\ 14
     set guifontwide=WenQuanYi\ Bitmap\ Song\ 14
 endif
@@ -437,7 +437,6 @@ let g:neobundle_default_git_protocol = 'https'
 NeoBundle 'Shougo/neobundle.vim'
 
 NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'asciidoc.vim'
 NeoBundle 'AutoFenc.vim'
 "NeoBundle 'AutoTag'
 NeoBundle 'CodeReviewer.vim'
@@ -942,11 +941,11 @@ endif
 
 " Syntaxes " {{{
 " Plugin 'asciidoc.vim' "{{{
-au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
+"au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
 au FileType asciidoc      setlocal shiftwidth=2
                                \ tabstop=2
                                \ textwidth=70 wrap formatoptions=tcqnmB
-                               \ makeprg=asciidoc\ $*\ %
+                               \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
                                \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
                                \ foldexpr=MyAsciidocFoldLevel(v:lnum)
                                \ foldmethod=expr
