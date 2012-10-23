@@ -294,6 +294,7 @@ au FileType xml        exe 'setlocal equalprg=xmllint\ --format\ --recover\ -'
 
 au FileType qf setlocal wrap linebreak
 au FileType vim nnoremap <silent> <buffer> K :<C-U>help <C-R><C-W><CR>
+au FileType man setlocal foldmethod=indent foldnestmax=2 foldenable nomodifiable nonumber shiftwidth=3 foldlevel=2
 " "}}}
 
 " 根据不同的文件类型设定<F3>时应该查找的文件 "{{{
@@ -417,6 +418,9 @@ nnoremap <silent> <C-J> gEa<CR><ESC>ew
 
 " nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 
+" zJ跳到下个折叠处，并只显示该折叠的内容
+nmap zJ zjzx
+
 "map <S-CR> A<CR><ESC>
 
 map <silent> g<F12> :set invlist<CR>
@@ -446,7 +450,7 @@ NeoBundle 'DrawIt'
 NeoBundle 'echofunc.vim'
 NeoBundle 'fs111/pydoc.vim'
 NeoBundleLazy 'FSwitch'
-NeoBundle 'h1mesuke/unite-outline'
+"NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'h1mesuke/vim-alignta'
 NeoBundle 'indentpython.vim--nianyang'
 NeoBundle 'jceb/vim-editqf'
@@ -467,11 +471,10 @@ NeoBundle 'rbtnn/hexript.vim'   " to generate binary file
 NeoBundle 'renamer.vim'
 NeoBundle 'Rip-Rip/clang_complete'
 NeoBundle 'sgur/unite-qf'
-NeoBundle 'Shougo/neocomplcache', {
-    \ 'rev' : 'c3f799e5f03a72b4bcd18390dad2bb710ec894cb',
-    \ }
-NeoBundle 'Shougo/neocomplcache-snippets-complete'
+NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/unite-build'
+NeoBundle 'Shougo/unite-outline'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Shougo/vimshell'
