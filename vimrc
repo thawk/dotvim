@@ -171,7 +171,7 @@ endif
 
 let &termencoding = &encoding
 if (g:isWin)
-    set encoding=ucs-4
+    "set encoding=ucs-4
     "set guifont=Bitstream_Vera_Sans_Mono\ 12
     set guifont=Courier_New:h12
     set guifontwide=NSimsun:h12
@@ -471,8 +471,8 @@ NeoBundle 'rbtnn/hexript.vim'   " to generate binary file
 NeoBundle 'renamer.vim'
 NeoBundle 'Rip-Rip/clang_complete'
 NeoBundle 'sgur/unite-qf'
-NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neosnippet'
+NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/unite-build'
 NeoBundle 'Shougo/unite-outline'
 NeoBundle 'Shougo/unite.vim'
@@ -514,8 +514,6 @@ if v:version >= '701'
     NeoBundle 'Mark--Karkat'
 endif
 
-filetype plugin indent on     " Required!
-
 " Brief help
 " :NeoBundleList          - list configured bundles
 " :NeoBundleInstall(!)    - install(update) bundles
@@ -525,7 +523,7 @@ filetype plugin indent on     " Required!
 NeoBundleLocal ~/.vim/manual-bundles
 
 syntax on
-filetype plugin indent on
+filetype plugin indent on     " Required!
 
 " Installation check.
 if neobundle#exists_not_installed_bundles()
@@ -727,6 +725,7 @@ endif
 
 " Plugin 'neocomplcache' {{{
 " Use neocomplcache.
+"let g:neocomplcache_enable_debug = 1
 let g:neocomplcache_enable_at_startup = 1
 " Disable auto completion, if set to 1, must use <C-x><C-u>
 let g:neocomplcache_disable_auto_complete = 1
