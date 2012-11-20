@@ -430,6 +430,13 @@ map <silent> g<F12> :set invlist<CR>
 " }}}
 
 " NeoBundle -- load plugins {{{
+
+" Brief help
+" :NeoBundleList          - list configured bundles
+" :NeoBundleInstall(!)    - install(update) bundles
+" :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+
+" Loading NeoBundle {{{
 filetype off                   " Required!
 
 if has('vim_starting')
@@ -442,55 +449,109 @@ let g:neobundle_default_git_protocol = 'https'
 
 " Let NeoBundle manage NeoBundle
 NeoBundle 'Shougo/neobundle.vim'
+" }}}
 
-NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'AutoFenc.vim'
-"NeoBundle 'AutoTag'
-NeoBundle 'CodeReviewer.vim'
-NeoBundle 'csv.vim'
-NeoBundle 'DoxygenToolkit.vim'
-NeoBundle 'DrawIt'
-NeoBundle 'echofunc.vim'
+" Help {{{
 NeoBundle 'fs111/pydoc.vim'
-NeoBundle 'FSwitch'
+NeoBundle 'Python-2.x-Standard-Library-Reference'
+" }}}
+
+" Unite {{{
+NeoBundle 'Shougo/unite-build'
 "NeoBundle 'h1mesuke/unite-outline'
+NeoBundle 'Shougo/unite-outline'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'tacroe/unite-mark'
+NeoBundle 'tsukkee/unite-help'
+NeoBundle 'tsukkee/unite-tag'
+NeoBundle 'ujihisa/unite-colorscheme'
+NeoBundle 'sgur/unite-qf'
+" }}}
+
+" Editing {{{
 NeoBundle 'h1mesuke/vim-alignta'
 NeoBundle 'indentpython.vim--nianyang'
-NeoBundle 'jceb/vim-editqf'
+NeoBundle 'matchit.zip'
+NeoBundle 'YankRing.vim'
+NeoBundle 'vis'
+NeoBundle 'surround.vim'
+NeoBundle 'DrawIt'
+NeoBundle 'Lokaltog/vim-easymotion'
+NeoBundle 'tmhedberg/SimpylFold'
+NeoBundle 'Shougo/neosnippet'
+NeoBundle 'Shougo/neocomplcache'
+"NeoBundle 'VimIM'
+
+if v:version >= '701'
+    NeoBundle 'Mark--Karkat'
+endif
+" }}}
+
+" Text object {{{
+NeoBundle 'kana/vim-textobj-user'
+" a_ i_
+NeoBundle 'lucapette/vim-textobj-underscore'
+" ai ii（含更深缩进） aI iI（仅相同缩进）
+NeoBundle 'kana/vim-textobj-indent'
+" al il
+NeoBundle 'kana/vim-textobj-line'
+" ac ic
+NeoBundle 'thinca/vim-textobj-comment'
+" }}}
+
+" Programming {{{
+" NeoBundle 'tyru/current-func-info.vim'
+NeoBundle 'echofunc.vim'
+NeoBundle 'DoxygenToolkit.vim'
+NeoBundle 'CodeReviewer.vim'
+"NeoBundle 'tComment'
+" \\\ to comment a line, \\ to comment a motion, \\u to uncomment
+NeoBundle 'tpope/vim-commentary'
+NeoBundle 'bahejl/Intelligent_Tags'
+"NeoBundle 'AutoTag'
+"NeoBundle 'OmniCppComplete'
+NeoBundle 'Rip-Rip/clang_complete'
+" }}}
+
+" Language {{{
+NeoBundle 'csv.vim'
 NeoBundle 'jceb/vim-orgmode', {
     \ 'depends' : [
     \   'NrrwRgn',
     \   'speeddating.vim',
     \ ]}
-NeoBundle 'LargeFile'
 NeoBundle 'lbdbq'
-NeoBundle 'Lokaltog/vim-easymotion'
-NeoBundle 'matchit.zip'
-"NeoBundle 'OmniCppComplete'
+NeoBundle 'ZenCoding.vim'
+NeoBundle 'wps.vim' " syntax highlight for RockBox wps file
+" }}}
+
+" Colors {{{
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'Zenburn'
+" }}}
+
+" Files {{{
+NeoBundle 'FSwitch'
+NeoBundle 'jceb/vim-editqf'
 NeoBundle 'osyo-manga/unite-quickfix'
-NeoBundle 'Python-2.x-Standard-Library-Reference'
-NeoBundle 'quickrun.vim'
+NeoBundle 'LargeFile'
 NeoBundle 'rbtnn/hexript.vim'   " to generate binary file
+NeoBundle 'Shougo/vinarise'  " Hex Editor
+" }}}
+
+" Utils {{{
 NeoBundle 'renamer.vim'
-NeoBundle 'Rip-Rip/clang_complete'
-NeoBundle 'sgur/unite-qf'
-NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/neocomplcache'
-NeoBundle 'Shougo/unite-build'
-NeoBundle 'Shougo/unite-outline'
-NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Shougo/vimshell'
-NeoBundle 'Shougo/vinarise'  " Hex Editor
 NeoBundle 'sudo.vim'
-NeoBundle 'surround.vim'
-"NeoBundle 'VimIM'
-NeoBundle 'vis'
-NeoBundle 'tacroe/unite-mark'
-NeoBundle 'Tagbar'
-NeoBundle 'tComment'
-NeoBundle 'thawk/Intelligent_Tags'
-"NeoBundle 'bahejl/Intelligent_Tags'
+NeoBundle 'quickrun.vim'
+" }}}
+
+" Misc {{{
+NeoBundle 'sjl/gundo.vim'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'AutoFenc.vim'
+"NeoBundle 'Tagbar'
 NeoBundle 'thawk/vimproc', {
       \ 'build' : {
       \ 'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
@@ -500,31 +561,17 @@ NeoBundle 'thawk/vimproc', {
       \ },
       \ }
 NeoBundle 'thinca/vim-prettyprint'  " PP variable_name，for debug
-NeoBundle 'tmhedberg/SimpylFold'
-NeoBundle 'tsukkee/unite-help'
-NeoBundle 'tsukkee/unite-tag'
-NeoBundle 'ujihisa/unite-colorscheme'
-NeoBundle 'wps.vim' " syntax highlight for RockBox wps file
-NeoBundle 'YankRing.vim'
-NeoBundle 'Zenburn'
-NeoBundle 'ZenCoding.vim'
 
 " very slow ?
 "NeoBundle 'xolox/vim-easytags'
 "NeoBundle 'https://bitbucket.org/abudden/taghighlight'
 
-if v:version >= '701'
-    NeoBundle 'Mark--Karkat'
-endif
-
-" Brief help
-" :NeoBundleList          - list configured bundles
-" :NeoBundleInstall(!)    - install(update) bundles
-" :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+" }}}
 
 " 载入manual-bundles下的插件
 NeoBundleLocal ~/.vim/manual-bundles
 
+" Installation check {{{
 syntax on
 filetype plugin indent on     " Required!
 
@@ -535,6 +582,7 @@ if neobundle#exists_not_installed_bundles()
   echomsg 'Please execute ":NeoBundleInstall" command.'
   "finish
 endif
+" }}}
 
 " }}}
 
@@ -570,41 +618,16 @@ nmap ,r <Plug>(quickrun)
 " 在打开大文件时，自动禁用一些功能，保证大文件可以快速打开
 " }}}
 
-" Plugin 'tComment' {{{
-" let g:tcommentMapLeader1 = '<c-\>'
-
-" Default key bindings:
-" gc{motion}   :: Toggle comments (for small comments within one line
-"                 the &filetype_inline style will be used, if
-"                 defined)
-" gcc          :: Toggle comment for the current line
-" gC{motion}   :: Comment region
-" gCc          :: Comment the current line
-
-" <c-_><c-_>   :: :TComment
-" <c-_><space> :: :TComment <QUERY COMMENT-BEGIN ?COMMENT-END>
-" <c-_>b       :: :TCommentBlock
-" <c-_>a       :: :TCommentAs <QUERY COMMENT TYPE>
-" <c-_>n       :: :TCommentAs &filetype <QUERY COUNT>
-" <c-_>s       :: :TCommentAs &filetype_<QUERY COMMENT SUBTYPE>
-" <c-_>i       :: :TCommentInline
-" <c-_>r       :: :TCommentRight
-" <c-_>p       :: Comment the current inner paragraph
-" }}}
-
 " Plugin 'vim-easymotion' {{{
 " \\{motion}
+hi link EasyMotionTarget ErrorMsg
+hi link EasyMotionShade  Comment
 " }}}
 
 " Plugin 'YankRing.vim' {{{
 let g:yankring_persist = 0              "不把yankring持久化
 let g:yankring_share_between_instances = 0
 let g:yankring_manual_clipboard_check = 1
-" }}}
-
-" Plugin 'Tagbar' {{{
-nmap <c-w><c-t> :TagbarToggle<cr>
-let g:tagbar_autofocus = 1
 " }}}
 
 " Plugin 'vim-alignta' {{{
@@ -986,6 +1009,10 @@ if neobundle#is_installed("vim-colors-solarized")
     let g:solarized_hitrail=1
     " let g:solarized_menu=1
 endif
+" }}}
+
+" Plugin 'gundo' {{{
+nnoremap <F5> :GundoToggle<CR>
 " }}}
 
 " " }}}
