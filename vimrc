@@ -426,6 +426,9 @@ nmap zJ zjzx
 map <silent> g<F12> :set invlist<CR>
 " " }}}
 
+" Plugins settings (After load plugins) {{{
+" }}}
+
 " NeoBundle -- load plugins {{{
 filetype off                   " Required!
 
@@ -449,7 +452,7 @@ NeoBundle 'DoxygenToolkit.vim'
 NeoBundle 'DrawIt'
 NeoBundle 'echofunc.vim'
 NeoBundle 'fs111/pydoc.vim'
-NeoBundleLazy 'FSwitch'
+NeoBundle 'FSwitch'
 "NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'h1mesuke/vim-alignta'
 NeoBundle 'indentpython.vim--nianyang'
@@ -466,7 +469,7 @@ NeoBundle 'matchit.zip'
 "NeoBundle 'OmniCppComplete'
 NeoBundle 'osyo-manga/unite-quickfix'
 NeoBundle 'Python-2.x-Standard-Library-Reference'
-NeoBundleLazy 'quickrun.vim'
+NeoBundle 'quickrun.vim'
 NeoBundle 'rbtnn/hexript.vim'   " to generate binary file
 NeoBundle 'renamer.vim'
 NeoBundle 'Rip-Rip/clang_complete'
@@ -535,7 +538,23 @@ endif
 
 " }}}
 
-" Plugins settings {{{
+" Plugins settings (After load plugins) {{{
+
+" Plugin 'FSwitch' {{{
+let g:fsnonewfiles=1
+cabbrev A FSHere " 可以用:A在.h/.cpp间切换
+au! BufEnter *.h
+            \  let b:fswitchdst='cpp,c,ipp,cxx'
+            \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
+au! BufEnter *.c,*.cpp,*.ipp
+            \  let b:fswitchdst='h,hpp'
+            \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
+
+" Plugin 'quickrun.vim' {{{
+nmap ,r <Plug>(quickrun)
+" }}}
+
+" }}}
 
 " Plugin 'echofunc.vim' {{{
 " }}}
@@ -548,17 +567,6 @@ endif
 
 " Plugin 'LargeFile' {{{
 " 在打开大文件时，自动禁用一些功能，保证大文件可以快速打开
-" }}}
-
-" Plugin 'FSwitch' {{{
-let g:fsnonewfiles=1
-cabbrev A FSHere " 可以用:A在.h/.cpp间切换
-au! BufEnter *.h
-            \  let b:fswitchdst='cpp,c,ipp,cxx'
-            \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
-au! BufEnter *.c,*.cpp,*.ipp
-            \  let b:fswitchdst='h,hpp'
-            \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
 " }}}
 
 " Plugin 'tComment' {{{
@@ -917,10 +925,6 @@ let g:DoxygenToolkit_paramTag_pre="@param[in] "
 let g:DoxygenToolkit_returnTag="@return "
 " }}}
 
-" Plugin 'quickrun.vim' {{{
-nmap ,r <Plug>(quickrun)
-" }}}
-
 " Plugin 'vim-easytags' {{{
 if neobundle#is_installed("vim-easytags")
     let g:easytags_updatetime_autodisable = 1
@@ -984,9 +988,6 @@ endif
 " }}}
 
 " " }}}
-
-" Load all lazy plugins
-NeoBundleSource
 
 if filereadable($HOME . "/.vim_project_setting")
     source $HOME/.vim_project_setting
