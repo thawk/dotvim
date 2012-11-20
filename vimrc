@@ -418,8 +418,9 @@ nnoremap <silent> <C-J> gEa<CR><ESC>ew
 
 " nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 
-" zJ跳到下个折叠处，并只显示该折叠的内容
+" zJ/zK跳到下个/上个折叠处，并只显示该折叠的内容
 nmap zJ zjzx
+nmap zK zkzx
 
 "map <S-CR> A<CR><ESC>
 
