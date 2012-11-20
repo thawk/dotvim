@@ -426,7 +426,7 @@ nmap zJ zjzx
 map <silent> g<F12> :set invlist<CR>
 " " }}}
 
-" Plugins settings (After load plugins) {{{
+" Plugins settings (Before load plugins) {{{
 " }}}
 
 " NeoBundle -- load plugins {{{
@@ -543,17 +543,18 @@ endif
 " Plugin 'FSwitch' {{{
 let g:fsnonewfiles=1
 cabbrev A FSHere " 可以用:A在.h/.cpp间切换
+augroup fswitch_hack
 au! BufEnter *.h
             \  let b:fswitchdst='cpp,c,ipp,cxx'
             \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
 au! BufEnter *.c,*.cpp,*.ipp
             \  let b:fswitchdst='h,hpp'
             \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
+augroup END
+" }}}
 
 " Plugin 'quickrun.vim' {{{
 nmap ,r <Plug>(quickrun)
-" }}}
-
 " }}}
 
 " Plugin 'echofunc.vim' {{{
