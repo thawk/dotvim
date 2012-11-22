@@ -1,4 +1,0 @@
-dotvim
-======
-
-My vim configuration

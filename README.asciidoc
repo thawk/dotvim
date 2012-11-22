@@ -1,0 +1,57 @@
+= dotvim
+
+My vim configuration
+
+== Install
+
+. Clone this to \~/.vim
++
+[source,sh]
+----
+git clone <repo_url> ~/.vim
+----
+
+. Make \~/.vimrc call \~/.vim/vimrc
++
+[source,sh]
+----
+echo 'source $HOME/.vim/vimrc' > ~/.vimrc
+----
+
+. In \~/.vim, execute the following commands to get NeoBundle
++
+[source,sh]
+----
+git submodule init
+git submodule update
+----
+
+. Execute vim, and install plugins:
++
+[source,vim]
+----
+:NeoBundleInstall
+----
+
+. Make vimproc dll or so
++
+** For Linux, executes ++\~/.vim/setup.sh++ to make ++vimproc_\**.so++
+** For Windows, download and extract ++vimproc_win\**.dll++ to
+++~.vim/bundle/vimproc/autoload/++ 
++
+----
+https://github.com/Shougo/vimproc/downloads
+----
+
+. All done, you are ready to use.
+
+== Using 443 port to access github via ssh
+
+Add these lines to \~/.ssh/config:
+
+--------------------
+Host github.com
+  Hostname ssh.github.com
+  User git
+  Port 443
+--------------------
