@@ -11,14 +11,15 @@ My vim configuration
 git clone <repo_url> ~/.vim
 ----
 
-. Make ++~/.vimrc++ call ++~/.vim/vimrc++
+. Make ++\~/.vimrc++ call ++~/.vim/vimrc++
 +
 [source,sh]
 ----
 echo 'source $HOME/.vim/vimrc' > ~/.vimrc
 ----
 
-. In ~/.vim, execute the following commands to get NeoBundle
+. In ~/.vim, execute the following commands to install NeoBundle
+plugin
 +
 [source,sh]
 ----
@@ -35,9 +36,9 @@ git submodule update
 
 . Make vimproc dll or so
 +
-** For Linux, executes ++~/.vim/setup.sh++ to make ++vimproc_\**.so++
-** For Windows, download and extract ++vimproc_win\**.dll++ to
-++~.vim/bundle/vimproc/autoload/++ 
+** For Linux, executes ++~/.vim/setup.sh++ to make ++vimproc_**.so++
+** For Windows, download and extract ++vimproc_win**.dll++ to
+++~/.vim/bundle/vimproc/autoload/++ 
 +
 ----
 https://github.com/Shougo/vimproc/downloads
