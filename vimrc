@@ -703,11 +703,11 @@ endif
 " Plugin 'clang_complete' {{{
 
 let g:clang_complete_auto = 0
-let g:clang_use_library = 1
 let g:clang_auto_select = 0
 let g:clang_complete_copen = 0  " open quickfix window on error.
 let g:clang_hl_errors = 1       " highlight the warnings and errors the same way clang
 if filereadable(expand("~/libexec/libclang.so"))
+    let g:clang_use_library = 1
     let g:clang_library_path=expand("~/libexec")
 endif
 " }}}
@@ -994,11 +994,7 @@ au BufRead,BufNewFile *.wps,*.sbs,*.fms setf wps
 " Plugin 'vim-colors-solarized' {{{
 if neobundle#is_installed("vim-colors-solarized")
     " 可以使用:SolarizedOptions生成solarized所需的参数
-    let g:solarized_visibility="low"    "default value is normal
-    syntax enable
-    set background=dark
-    colorscheme solarized
-
+    " let g:solarized_visibility="low"    "default value is normal
     " let g:solarized_termtrans=0
     " let g:solarized_degrade=0
     " let g:solarized_bold=1
@@ -1009,6 +1005,11 @@ if neobundle#is_installed("vim-colors-solarized")
     " let g:solarized_diffmode="normal"
     let g:solarized_hitrail=1
     " let g:solarized_menu=1
+    "
+    syntax enable
+    set background=dark
+    " let g:solarized_termcolors=256
+    colorscheme solarized
 endif
 " }}}
 
