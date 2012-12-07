@@ -761,7 +761,8 @@ endif
 "let g:neocomplcache_enable_debug = 1
 let g:neocomplcache_enable_at_startup = 1
 " Disable auto completion, if set to 1, must use <C-x><C-u>
-let g:neocomplcache_disable_auto_complete = 1
+"
+let g:neocomplcache_disable_auto_complete = 0
 " Use smartcase.
 let g:neocomplcache_enable_smart_case = 1
 " Use camel case completion.
@@ -772,7 +773,7 @@ let g:neocomplcache_enable_underbar_completion = 1
 let g:neocomplcache_min_syntax_length = 3
 let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 let g:neocomplcache_enable_auto_select = 0
-"let g:neocomplcache_auto_completion_start_length = 20
+let g:neocomplcache_auto_completion_start_length = 3
 
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
