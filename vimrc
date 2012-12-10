@@ -511,12 +511,12 @@ NeoBundle 'tComment'
 NeoBundle 'bahejl/Intelligent_Tags'
 "NeoBundle 'AutoTag'
 if executable("clang")
+    NeoBundle 'Rip-Rip/clang_complete'
     NeoBundleDisable 'OmniCppComplete'
 else
+    NeoBundle 'thawk/OmniCppComplete'
     NeoBundleDisable 'clang_complete'
 endif
-NeoBundle 'Rip-Rip/clang_complete'
-NeoBundle 'thawk/OmniCppComplete'
 " }}}
 
 " Language {{{
@@ -778,7 +778,7 @@ let g:neocomplcache_enable_underbar_completion = 1
 let g:neocomplcache_min_syntax_length = 3
 let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 let g:neocomplcache_enable_auto_select = 0
-"let g:neocomplcache_auto_completion_start_length = 20
+let g:neocomplcache_auto_completion_start_length = 3
 
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
