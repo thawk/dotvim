@@ -1,0 +1,119 @@
+function! s:AddComponentsToPath(path)
+    " 把path目录下，include目录加入路径中
+    if isdirectory(a:path . "/include/")
+        call s:AddPath(a:path . "/include")
+    endif
+
+    " 把path目录下，所有直接子目录加入到include路径中
+    for l:p in split(glob(a:path . "/*"), "\n")
+        if isdirectory(l:p . "/boost/")
+            call s:AddPath(l:p)
+        elseif isdirectory(l:p . "/include/")
+            call s:AddPath(l:p . "/include")
+        elseif l:p =~ '.*/msgbus' && isdirectory(l:p . "/cpp/include")
+            call s:AddPath(l:p . "/cpp/include")
+        elseif findfile("*.h", l:p) || findfile("*.hpp", l:p)
+            call s:AddPath(l:p)
+        endif
+
+        if isdirectory(l:p . "/lib/")
+            call s:AddComponentsToPath(l:p . "/lib")
+        endif
+
+        if isdirectory(l:p . "/3rd/")
+            call s:AddComponentsToPath(l:p . "/3rd")
+        endif
+    endfor
+endfunction
+
+function! s:AddPath(path)
+    exec "setlocal path+=" . fnamemodify(a:path, ":p:h")
+endfunction
+
+function! SetupEnvironment()
+    " 使用当前目录
+    setlocal path=.
+
+    let l:path = expand('%:p')
+
+    if isdirectory(expand('$HOME/workspace'))
+        let l:workspace_dir = expand('$HOME/workspace')
+    elseif isdirectory(expand('$HOME/program'))
+        let l:workspace_dir = expand('$HOME/program')
+    else
+        let l:workspace_dir = expand('$HOME')
+    endif
+
+    " Boost库
+    if isdirectory($BOOST_ROOT)
+        call s:AddPath($BOOST_ROOT)
+    else
+        let l:boost_dirs = sort(split(glob(l:workspace_dir . "/boost_*/"), "\n"))
+        if len(l:boost_dirs) > 0
+            call s:AddPath(l:boost_dirs[0])
+        endif
+    endif
+
+    " 加入路径上所有lib目录下的库
+    for l:p in finddir("lib", '.;' . l:workspace_dir, -1)
+        call s:AddComponentsToPath(l:p)
+    endfor
+
+    " 加入路径上所有3rd目录下的库
+    for l:p in finddir("3rd", '.;' . l:workspace_dir, -1)
+        call s:AddComponentsToPath(l:p)
+    endfor
+
+    if l:path =~ '/test/'
+        let l:test_path = substitute(l:path, '/test/.*', '/test', '')
+        " 单元测试对象一般放在test的上层目录
+        call s:AddPath(fnamemodify(l:test_path, ":p:h:h"))
+        " test的上层目录一般为子组件，再上一层为组件目录
+        call s:AddPath(fnamemodify(l:test_path, ":p:h:h:h"))
+    else
+        " 加入当前文件目录的上层目录
+        call s:AddPath(fnamemodify(l:path, ":p:h:h"))
+    endif
+
+    " trunk
+    if l:path =~ '/\(trunk\)/'
+        call s:AddPath(substitute(l:path, '^\(.*/\(trunk\)\)/.*', '\1', ''))
+    endif
+
+    " tags/branches下的一层目录
+    if l:path =~ '/\(tags\|branches\)/[^/]\+/'
+        call s:AddPath(substitute(l:path, '^\(.*/\(tags\|branches\)/[^/]\+\)/.*', '\1', ''))
+    endif
+
+    " 各业务组件可能没有trunk
+    if l:path =~ '/\(biz\|mb\|cs\)/'
+        let l:comp_path = substitute(l:path, '^\(.*/\(biz\|mb\|cs\)\)/.*', '\1', '')
+        call s:AddPath(l:comp_path)
+    endif
+
+    " 如果在Boost目录，则加上boost目录的上一层目录
+    let l:boost_include = finddir("boost", '.;' . expand("$HOME"))
+    if len(l:boost_include) > 0
+        " 当前在Boost库的目录下
+        call s:AddPath(fnamemodify(l:boost_include, ":p:h:h"))
+    endif
+
+    " 加入路径上所有include目录
+    for l:p in finddir("include", '.;' . expand("$HOME"), -1)
+        call s:AddPath(l:p)
+    endfor
+
+    call s:AddPath("/usr/include")
+
+    " C++标准库
+    let l:cpp_include_path = substitute(substitute(glob("/usr/include/c++/*/"), "^.*\n", "", ""), "/$", "", "")
+    if isdirectory(l:cpp_include_path)
+        call s:AddPath(l:cpp_include_path)
+    endif
+
+endfunction
+
+augroup vim_project_setting
+    autocmd BufReadPre,BufNewFile *.h,*.hpp,*.cpp,*.c,*.ipp call SetupEnvironment()
+augroup end
+" vim: filetype=vim fileencoding=utf-8

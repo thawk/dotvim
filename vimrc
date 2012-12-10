@@ -510,8 +510,13 @@ NeoBundle 'tComment'
 "NeoBundle 'tpope/vim-commentary'
 NeoBundle 'bahejl/Intelligent_Tags'
 "NeoBundle 'AutoTag'
-"NeoBundle 'OmniCppComplete'
+if executable("clang")
+    NeoBundleDisable 'OmniCppComplete'
+else
+    NeoBundleDisable 'clang_complete'
+endif
 NeoBundle 'Rip-Rip/clang_complete'
+NeoBundle 'thawk/OmniCppComplete'
 " }}}
 
 " Language {{{
@@ -701,14 +706,15 @@ endif
 " }}}
 
 " Plugin 'clang_complete' {{{
-
-let g:clang_complete_auto = 0
-let g:clang_auto_select = 0
-let g:clang_complete_copen = 0  " open quickfix window on error.
-let g:clang_hl_errors = 1       " highlight the warnings and errors the same way clang
-if filereadable(expand("~/libexec/libclang.so"))
-    let g:clang_use_library = 1
-    let g:clang_library_path=expand("~/libexec")
+if neobundle#is_installed("clang_complete")
+    let g:clang_complete_auto = 0
+    let g:clang_auto_select = 0
+    let g:clang_complete_copen = 0  " open quickfix window on error.
+    let g:clang_hl_errors = 1       " highlight the warnings and errors the same way clang
+    if filereadable(expand("~/libexec/libclang.so"))
+        let g:clang_use_library = 1
+        let g:clang_library_path=expand("~/libexec")
+    endif
 endif
 " }}}
 
@@ -761,7 +767,7 @@ endif
 "let g:neocomplcache_enable_debug = 1
 let g:neocomplcache_enable_at_startup = 1
 " Disable auto completion, if set to 1, must use <C-x><C-u>
-let g:neocomplcache_disable_auto_complete = 1
+let g:neocomplcache_disable_auto_complete = 0
 " Use smartcase.
 let g:neocomplcache_enable_smart_case = 1
 " Use camel case completion.
@@ -1019,7 +1025,7 @@ nnoremap <F5> :GundoToggle<CR>
 
 " " }}}
 
-if filereadable($HOME . "/.vim_project_setting")
-    source $HOME/.vim_project_setting
+if filereadable($HOME . "/.vim/project_setting")
+    source $HOME/.vim/project_setting
 endif
 " vim: fileencoding=utf-8 foldmethod=marker:
