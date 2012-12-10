@@ -510,12 +510,12 @@ NeoBundle 'tComment'
 "NeoBundle 'tpope/vim-commentary'
 NeoBundle 'bahejl/Intelligent_Tags'
 "NeoBundle 'AutoTag'
+NeoBundleLazy 'Rip-Rip/clang_complete'
+NeoBundleLazy 'thawk/OmniCppComplete'
 if executable("clang")
-    NeoBundle 'Rip-Rip/clang_complete'
-    NeoBundleDisable 'OmniCppComplete'
+    NeoBundleSource 'clang_complete'
 else
-    NeoBundle 'thawk/OmniCppComplete'
-    NeoBundleDisable 'clang_complete'
+    NeoBundleSource 'OmniCppComplete'
 endif
 " }}}
 
