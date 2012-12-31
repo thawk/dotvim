@@ -64,16 +64,23 @@ function! SetupEnvironment()
         call s:AddComponentsToPath(l:p)
     endfor
 
-    if l:path =~ '/test/'
-        let l:test_path = substitute(l:path, '/test/.*', '/test', '')
-        " 单元测试对象一般放在test的上层目录
-        call s:AddPath(fnamemodify(l:test_path, ":p:h:h"))
-        " test的上层目录一般为子组件，再上一层为组件目录
-        call s:AddPath(fnamemodify(l:test_path, ":p:h:h:h"))
-    else
-        " 加入当前文件目录的上层目录
-        call s:AddPath(fnamemodify(l:path, ":p:h:h"))
-    endif
+    " 加入路径上所有Jamroot/Jamfile所在目录，这种目录通常都在include路径中
+    for l:name in ["Jamfile", "Jamfile.v2", "Jamroot", "Jamroot.v2"]
+        for l:p in findfile(l:name, '.;' . l:workspace_dir, -1)
+            call s:AddPath(fnamemodify(l:p, ":p:h"))
+        endfor
+    endfor
+
+    " if l:path =~ '/test/'
+    "     let l:test_path = substitute(l:path, '/test/.*', '/test', '')
+    "     " 单元测试对象一般放在test的上层目录
+    "     call s:AddPath(fnamemodify(l:test_path, ":p:h:h"))
+    "     " test的上层目录一般为子组件，再上一层为组件目录
+    "     call s:AddPath(fnamemodify(l:test_path, ":p:h:h:h"))
+    " else
+    "     " 加入当前文件目录的上层目录
+    "     call s:AddPath(fnamemodify(l:path, ":p:h:h"))
+    " endif
 
     " trunk
     if l:path =~ '/\(trunk\)/'
