@@ -1,8 +1,10 @@
-= dotvim
+dotvim
+======
 
 My vim configuration
 
-== Install
+Install
+------
 
 . Clone this to ++~/.vim++
 +
@@ -28,7 +30,6 @@ echo 'source $HOME/.vim/vimrc' > ~/.vimrc
 
 . Execute vim, and install plugins:
 +
-[source,vim]
 ----
 :NeoBundleInstall
 ----
@@ -45,7 +46,8 @@ https://github.com/Shougo/vimproc/downloads
 
 . All done, you are ready to use.
 
-== Using 443 port to access github via ssh
+Using 443 port to access github via ssh
+---------------------------------------
 
 Add these lines to ++~/.ssh/config++:
 
