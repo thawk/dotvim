@@ -11,20 +11,19 @@ My vim configuration
 git clone <repo_url> ~/.vim
 ----
 
+. Clone NeoBundle
++
+[source,sh]
+----
+mkdir ~/.vim/bundle
+git clone https://github.com/Shougo/neobundle.vim.git ~/.vim/bundle/neobundle.vim
+----
+
 . Make ++\~/.vimrc++ call ++~/.vim/vimrc++
 +
 [source,sh]
 ----
 echo 'source $HOME/.vim/vimrc' > ~/.vimrc
-----
-
-. In ~/.vim, execute the following commands to install NeoBundle
-plugin
-+
-[source,sh]
-----
-git submodule init
-git submodule update
 ----
 
 . Execute vim, and install plugins:
