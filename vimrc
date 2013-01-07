@@ -511,6 +511,7 @@ NeoBundle 'tComment'
 "NeoBundle 'bahejl/Intelligent_Tags'
 NeoBundle 'thawk/Intelligent_Tags'
 "NeoBundle 'AutoTag'
+NeoBundle 'gprof.vim'
 NeoBundleLazy 'Rip-Rip/clang_complete'
 NeoBundleLazy 'thawk/OmniCppComplete'
 if executable("clang")
