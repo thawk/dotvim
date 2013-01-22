@@ -195,6 +195,19 @@ set tags+=./tags;/ " walk directory tree upto / looking for tags
 set completeopt=menuone,menu,longest,preview
 set completeopt-=longest
 
+" 忽略2012-01-18 13:14:15之类的日志行
+set errorformat^=%-G20%\[0-9]%\[0-9]-%\[0-9]%\[0-9]-%\[0-9]%\[0-9]\ %\[0-9]%\[0-9]:%\[0-9]%\[0-9]:%\[0-9]%\[0-9]%m
+
+" Doxygen的出错信息
+set errorformat+=Generating\ code\ for\ file\ %f:%l:%m
+set errorformat+=Generating\ docs\ for\ compound\ %f:%l:%m
+set errorformat+=Generating\ docs\ Error:\ %f:%l:%m
+set errorformat+=Generating\ annotated\ compound\ ind%f:%l:%m
+set errorformat+=Generating\ docs\ %f:%l:%m
+set errorformat+=GeneratinError:\ %f:%l:\ %m
+set errorformat+=Error:\ %f:%l:\ %m
+set errorformat+=Parsing\ file\ %f:%l:\ %m
+
 " Highlight space errors in C/C++ source files (Vim tip #935)
 let c_space_errors=1
 let java_space_errors=1
@@ -282,11 +295,9 @@ au BufRead,BufNewFile *.ipp             setf cpp
 
 " Filetype related autosettings " {{{
 au FileType jam   set makeprg=b2
-            \| nnoremap <Leader>tm :<C-U>make<CR>
-            \| nnoremap <Leader>tt :<C-U>make test<CR>
 
 au FileType diff  setlocal shiftwidth=4 tabstop=4
-au FileType html  setlocal autoindent indentexpr=
+au FileType html  setlocal autoindent indentexpr= shiftwidth=2 tabstop=2
 au FileType changelog setlocal textwidth=76
 " 把-等符号也作为xml文件的有效关键字，可以用Ctrl-N补全带-等字符的属性名
 au FileType {xml,xslt} setlocal iskeyword=@,-,\:,48-57,_,128-167,224-235
@@ -332,8 +343,8 @@ au FileType python setlocal complete+=k~/.vim/pydiction "isk+=.,
 
 " 设定python的makeprg
 au FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-"au FileType python set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-au FileType python setlocal efm=%[%^(]%\\+('%m'\\,\ ('%f'\\,\ %l\\,\ %v\\,%.%#
+"au FileType python set errorformat=%C\ %.%#,%A\ \ File\ \"%f\"\\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+au FileType python setlocal errorformat=%[%^(]%\\+('%m'\\,\ ('%f'\\,\ %l\\,\ %v\\,%.%#
 au FileType python setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 " "}}}
 
@@ -423,6 +434,12 @@ nmap zJ zjzx
 nmap zK zkzx
 
 "map <S-CR> A<CR><ESC>
+
+" 一些方便编译的快捷键
+nnoremap <Leader>tm :<C-U>make<CR>
+nnoremap <Leader>tt :<C-U>make test<CR>
+nnoremap <Leader>ts :<C-U>make stage<CR>
+nnoremap <Leader>tc :<C-U>make clean<CR>
 
 map <silent> g<F12> :set invlist<CR>
 " " }}}
@@ -826,6 +843,7 @@ let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
 " Plugin 'neocomplcache-snippets-complete' {{{
 let g:neocomplcache_snippets_dir = fnamemodify(finddir("snippets", &runtimepath), ":p")
+let g:neocomplcache_snippets_dir .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
 
 imap <C-k>     <Plug>(neocomplcache_snippets_expand)
 smap <C-k>     <Plug>(neocomplcache_snippets_expand)

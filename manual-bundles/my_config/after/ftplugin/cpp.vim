@@ -280,10 +280,6 @@ vnoremap  <buffer>  ///<        ///<<Space>
 inoremap  <buffer>  /**<Space>  /**<Space>@brief<Space><Space>*/<Left><Left><Left>
 vnoremap  <buffer>  /**<Space>  /**<Space>@brief<Space><Space>*/<Left><Left><Left>
 
-" \tm -> make, \tt -> make test
-nnoremap <Leader>tm :<C-U>make<CR>
-nnoremap <Leader>tt :<C-U>make test<CR>
-
 nnoremap ff :<C-U>echo WhatFunctionAreWeIn()<CR>
 
 setlocal foldmethod=syntax
