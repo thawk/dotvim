@@ -172,6 +172,7 @@ endif
 let &termencoding = &encoding
 if (g:isWin)
     "set encoding=ucs-4
+    set encoding=utf-8
     "set guifont=Bitstream_Vera_Sans_Mono\ 12
     set guifont=Courier_New:h12
     set guifontwide=NSimsun:h12
