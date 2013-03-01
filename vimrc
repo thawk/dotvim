@@ -282,6 +282,7 @@ au BufRead,BufNewFile {Gemfile,Rakefile,Capfile,*.rake,config.ru} setf ruby
 au BufRead,BufNewFile {*.md,*.mkd,*.markdown} setf markdown
 au BufRead,BufNewFile {COMMIT_EDITMSG}  setf gitcommit
 au BufRead,BufNewFile TDM*C,TDM*H       setf c
+au BufRead,BufNewFile *.dox             setf cpp    " Doxygen
 
 "" Remove trailing spaces for C/C++ and Vim files
 au BufWritePre *                  call RemoveTrailingSpace()
