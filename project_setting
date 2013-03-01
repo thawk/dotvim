@@ -54,6 +54,11 @@ function! SetupEnvironment()
         endif
     endif
 
+    " 加入路径上所有util目录下的库
+    for l:p in finddir("util", '.;' . l:workspace_dir, -1)
+        call s:AddComponentsToPath(l:p)
+    endfor
+
     " 加入路径上所有lib目录下的库
     for l:p in finddir("lib", '.;' . l:workspace_dir, -1)
         call s:AddComponentsToPath(l:p)
@@ -82,21 +87,21 @@ function! SetupEnvironment()
     "     call s:AddPath(fnamemodify(l:path, ":p:h:h"))
     " endif
 
-    " trunk
-    if l:path =~ '/\(trunk\)/'
-        call s:AddPath(substitute(l:path, '^\(.*/\(trunk\)\)/.*', '\1', ''))
-    endif
+    " " trunk
+    " if l:path =~ '/\(trunk\)/'
+    "     call s:AddPath(substitute(l:path, '^\(.*/\(trunk\)\)/.*', '\1', ''))
+    " endif
 
-    " tags/branches下的一层目录
-    if l:path =~ '/\(tags\|branches\)/[^/]\+/'
-        call s:AddPath(substitute(l:path, '^\(.*/\(tags\|branches\)/[^/]\+\)/.*', '\1', ''))
-    endif
+    " " tags/branches下的一层目录
+    " if l:path =~ '/\(tags\|branches\)/[^/]\+/'
+    "     call s:AddPath(substitute(l:path, '^\(.*/\(tags\|branches\)/[^/]\+\)/.*', '\1', ''))
+    " endif
 
-    " 各业务组件可能没有trunk
-    if l:path =~ '/\(biz\|mb\|cs\)/'
-        let l:comp_path = substitute(l:path, '^\(.*/\(biz\|mb\|cs\)\)/.*', '\1', '')
-        call s:AddPath(l:comp_path)
-    endif
+    " " 各业务组件可能没有trunk
+    " if l:path =~ '/\(biz\|mb\|cs\)/'
+    "     let l:comp_path = substitute(l:path, '^\(.*/\(biz\|mb\|cs\)\)/.*', '\1', '')
+    "     call s:AddPath(l:comp_path)
+    " endif
 
     " 如果在Boost目录，则加上boost目录的上一层目录
     let l:boost_include = finddir("boost", '.;' . expand("$HOME"))

@@ -145,7 +145,7 @@ if version >= 700 && &term != 'cygwin' && &term != 'linux' && !(g:isGUI)
     set t_Co=256
 endif
 
-colorscheme desert
+"colorscheme desert
 
 " 在listchars中用到可能是双倍宽度的字符时，不能设置ambiwidth=double
 "" 如果 Vim 的语言是中文（zh）、日文（ja）或韩文（ko）的话，将模糊宽度的 Unicode 字符的宽度（ambiwidth）设为双宽度（double）
@@ -903,6 +903,8 @@ nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag tag/i
 nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
 nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
 nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
+nnoremap <silent> [unite]v :<C-u>Unite vcs/status<CR>
+nnoremap <silent> [unite]l :<C-u>Unite vcs/log<CR>
 
 function! s:unite_settings()
   nmap <buffer> <C-J> <Plug>(unite_loop_cursor_down)
@@ -1023,7 +1025,8 @@ au BufRead,BufNewFile *.wps,*.sbs,*.fms setf wps
 if neobundle#is_installed("vim-colors-solarized")
     " 可以使用:SolarizedOptions生成solarized所需的参数
     " let g:solarized_visibility="low"    "default value is normal
-    " let g:solarized_termtrans=0
+    " Xshell需要打开termtrans选项才能正确显示
+    let g:solarized_termtrans=1
     " let g:solarized_degrade=0
     " let g:solarized_bold=1
     " let g:solarized_underline=1
