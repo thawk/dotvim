@@ -140,13 +140,6 @@ set selection=inclusive
 set splitbelow
 set splitright
 
-" 选择配色方案
-if version >= 700 && &term != 'cygwin' && &term != 'linux' && !(g:isGUI)
-    set t_Co=256
-endif
-
-"colorscheme desert
-
 " 在listchars中用到可能是双倍宽度的字符时，不能设置ambiwidth=double
 "" 如果 Vim 的语言是中文（zh）、日文（ja）或韩文（ko）的话，将模糊宽度的 Unicode 字符的宽度（ambiwidth）设为双宽度（double）
 "if has('multi_byte') && v:version > 601
@@ -442,6 +435,7 @@ nnoremap <Leader>tm :<C-U>make<CR>
 nnoremap <Leader>tt :<C-U>make test<CR>
 nnoremap <Leader>ts :<C-U>make stage<CR>
 nnoremap <Leader>tc :<C-U>make clean<CR>
+nnoremap <Leader>td :<C-U>make doc<CR>
 
 map <silent> g<F12> :set invlist<CR>
 " " }}}
@@ -1037,11 +1031,21 @@ if neobundle#is_installed("vim-colors-solarized")
     " let g:solarized_diffmode="normal"
     let g:solarized_hitrail=1
     " let g:solarized_menu=1
-    "
+
+    if !g:isGUI " 在终端模式下，使用8色（终端需要使用solarized配色方案才能得到所要的效果）
+        set t_Co=8
+    end
+
     syntax enable
     set background=dark
     " let g:solarized_termcolors=256
     colorscheme solarized
+else
+    if version >= 700 && &term != 'cygwin' && &term != 'linux' && !(g:isGUI)
+        set t_Co=256
+    endif
+
+    colorscheme desert
 endif
 " }}}
 
