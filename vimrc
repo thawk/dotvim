@@ -329,13 +329,6 @@ autocmd QuickFixCmdPost    l* nested lwindow
 " "}}}
 
 " python autocommands "{{{
-
-" Python 自动补全功能，用 Ctrl-N 调用
-" isk+=.,表示把小数点和逗号作为word的一部分
-" 需要把从http://www.vim.org/scripts/script.php?script_id=850下载的
-" pydiction文件放到~/.vim下
-au FileType python setlocal complete+=k~/.vim/pydiction "isk+=.,
-
 " 设定python的makeprg
 au FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 "au FileType python set errorformat=%C\ %.%#,%A\ \ File\ \"%f\"\\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
@@ -533,6 +526,8 @@ if executable("clang")
 else
     NeoBundleSource 'OmniCppComplete'
 endif
+NeoBundle 'kevinw/pyflakes-vim'
+NeoBundle 'Pydiction'
 " }}}
 
 " Language {{{
