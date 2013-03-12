@@ -111,26 +111,6 @@ function! CurDir()
     let curdir = substitute(getcwd(), "^".$HOME, "~", "")
     return curdir
 endfunction
-"set statusline=%<%n:\ %f\ %h%m%r\ %=%k%y[%{&ff},%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
-set statusline=%<%n:                " Buffer number
-set statusline+=\                   " 空格
-set statusline+=%f                  " 文件名
-set statusline+=\                   " 空格
-set statusline+=%h                  " Help buffer flag
-set statusline+=%m                  " Modified flag
-set statusline+=%r                  " Readonly flag
-set statusline+=\                   " 空格
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-set statusline+=%=                  " 左右对齐部分的分界
-set statusline+=%k                  " Value of "b:keymap_name" or 'keymap'
-set statusline+=%y                  " filetype
-set statusline+=[%{&ff},%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]    " 文件编码
-set statusline+=\                   " 空格
-set statusline+=%-14.(%l,%c%V%)     " 行号、列号等
-set statusline+=\                   " 空格
-set statusline+=%P
 
 set nolist " Display unprintable characters g<f12> - switches
 "let &listchars="tab:\u2192 ,eol:\u00b6,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
@@ -1067,6 +1047,34 @@ endif
 nnoremap <F5> :GundoToggle<CR>
 " }}}
 
+" " }}}
+
+" Plugins depend settings {{{
+
+"set statusline=%<%n:\ %f\ %h%m%r\ %=%k%y[%{&ff},%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
+set statusline=%<%n:                " Buffer number
+set statusline+=\                   " 空格
+set statusline+=%f                  " 文件名
+set statusline+=\                   " 空格
+set statusline+=%h                  " Help buffer flag
+set statusline+=%m                  " Modified flag
+set statusline+=%r                  " Readonly flag
+set statusline+=\                   " 空格
+
+if neobundle#is_installed("syntastic")
+    set statusline+=%#warningmsg#
+    set statusline+=%{SyntasticStatuslineFlag()}
+    set statusline+=%*
+endif
+
+set statusline+=%=                  " 左右对齐部分的分界
+set statusline+=%k                  " Value of "b:keymap_name" or 'keymap'
+set statusline+=%y                  " filetype
+set statusline+=[%{&ff},%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]    " 文件编码
+set statusline+=\                   " 空格
+set statusline+=%-14.(%l,%c%V%)     " 行号、列号等
+set statusline+=\                   " 空格
+set statusline+=%P
 " " }}}
 
 if filereadable($HOME . "/.vim/project_setting")
