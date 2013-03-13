@@ -239,7 +239,7 @@ function! OpenCProject()
 endfunction
 
 function! WhatFunctionAreWeIn()
-  let strList = ["while", "foreach", "ifelse", "if else", "for", "if", "else", "try", "catch", "case"]
+  let strList = ["while", "foreach", "ifelse", "if else", "for", "if", "else", "try", "catch", "case", "switch", "do"]
   let foundcontrol = 1
   let position = ""
   let pos=getpos(".")          " This saves the cursor position
