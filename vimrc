@@ -623,8 +623,7 @@ nmap ,r <Plug>(quickrun)
 
 " Plugin 'echofunc.vim' {{{
 " }}}
-" Plugin 'vimproc'
-" Plugin 'vimshell'
+
 " Plugin 'vimfiler' {{{
 " 文件管理器，通过 :VimFiler 启动。
 " c : copy, m : move, r : rename,
@@ -746,6 +745,12 @@ au FileType python nnoremap <silent> <buffer> K :<C-U>Pydoc <C-R><C-W><CR>
 " :help py2stdlib<tab>
 " :help py2stdlib-os
 " }}}
+
+" Plugin 'Pydiction' {{{
+if neobundle#is_installed("Pydiction")
+    let g:pydiction_location = fnamemodify(findfile("complete-dict",&runtimepath), ":p")
+endif
+"  }}}
 
 " Plugin 'csv.vim' {{{
 "  }}}
