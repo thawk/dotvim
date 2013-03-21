@@ -433,6 +433,23 @@ map <silent> g<F12> :set invlist<CR>
 " " }}}
 
 " Plugins settings (Before load plugins) {{{
+
+" Plugin 'vimfiler' {{{
+" 文件管理器，通过 :VimFiler 启动。
+" c : copy, m : move, r : rename,
+let g:vimfiler_as_default_explorer = 1
+" }}}
+
+" Plugin 'syntastic' {{{
+let g:syntastic_mode_map = {
+            \ 'mode': 'active',
+            \ 'active_filetypes': ['ruby', 'php', 'python'],
+            \ 'passive_filetypes': ['cpp'] }
+
+" 0: 不会自动打开、关闭 1: 自动打开及关闭 2: 没错误时自动关闭，但不会自动打开
+let g:syntastic_auto_loc_list=2
+" }}}
+"
 " }}}
 
 " NeoBundle -- load plugins {{{
@@ -624,11 +641,6 @@ nmap ,r <Plug>(quickrun)
 " Plugin 'echofunc.vim' {{{
 " }}}
 
-" Plugin 'vimfiler' {{{
-" 文件管理器，通过 :VimFiler 启动。
-" c : copy, m : move, r : rename,
-" }}}
-
 " Plugin 'LargeFile' {{{
 " 在打开大文件时，自动禁用一些功能，保证大文件可以快速打开
 " }}}
@@ -728,15 +740,15 @@ endif
 " }}}
 
 " Plugin 'pydoc.vim' {{{
-let pydoc_perform_mappings = 0
+let pydoc_perform_mappings = 1
 
-au FileType python nnoremap <silent> <buffer> <Leader>pw :<C-U>Pydoc <C-R><C-W><CR>
-au FileType python nnoremap <silent> <buffer> <Leader>pW :<C-U>Pydoc <C-R><C-A><CR>
-au FileType python nnoremap <silent> <buffer> <Leader>pk :<C-U>PydocSearch <C-R><C-W><CR>
-au FileType python nnoremap <silent> <buffer> <Leader>pK :<C-U>PydocSearch <C-R><C-A><CR>
-
-" remap the K (or 'help') key
-au FileType python nnoremap <silent> <buffer> K :<C-U>Pydoc <C-R><C-W><CR>
+"au FileType python nnoremap <silent> <buffer> <Leader>pw :<C-U>Pydoc <C-R><C-W><CR>
+"au FileType python nnoremap <silent> <buffer> <Leader>pW :<C-U>Pydoc <C-R><C-A><CR>
+"au FileType python nnoremap <silent> <buffer> <Leader>pk :<C-U>PydocSearch <C-R><C-W><CR>
+"au FileType python nnoremap <silent> <buffer> <Leader>pK :<C-U>PydocSearch <C-R><C-A><CR>
+"
+"" remap the K (or 'help') key
+"au FileType python nnoremap <silent> <buffer> K :<C-U>Pydoc <C-R><C-W><CR>
 "  }}}
 
 " Plugin 'Python-2.x-Standard-Library-Reference' {{{
@@ -893,7 +905,8 @@ nnoremap <silent> [unite]q :<C-u>Unite quickfix -no-quit<CR>
 nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
 nnoremap <silent> [unite]s :<C-u>Unite -start-insert session<CR>
 "nnoremap <silent> [unite]T :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
-nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag tag/include<CR>
+"nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag tag/include<CR>
+nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag<CR>
 nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
 nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
 nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
