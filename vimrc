@@ -188,9 +188,6 @@ set tags+=./tags;/ " walk directory tree upto / looking for tags
 set completeopt=menuone,menu,longest,preview
 set completeopt-=longest
 
-" 忽略2012-01-18 13:14:15之类的日志行
-set errorformat^=%-G20%\[0-9]%\[0-9]-%\[0-9]%\[0-9]-%\[0-9]%\[0-9]\ %\[0-9]%\[0-9]:%\[0-9]%\[0-9]:%\[0-9]%\[0-9]%m
-
 " Doxygen的出错信息
 set errorformat+=Generating\ code\ for\ file\ %f:%l:%m
 set errorformat+=Generating\ docs\ for\ compound\ %f:%l:%m
@@ -200,6 +197,11 @@ set errorformat+=Generating\ docs\ %f:%l:%m
 set errorformat+=GeneratinError:\ %f:%l:\ %m
 set errorformat+=Error:\ %f:%l:\ %m
 set errorformat+=Parsing\ file\ %f:%l:\ %m
+
+" Boost.Assert: common-test_stream_reader: include/common/stream_reader.h:306:...
+set errorformat^=%[a-zA-Z0-9_-]%\\+:\ %f:%l:%m
+" 忽略2012-01-18 13:14:15之类的日志行
+set errorformat^=%+G20%\[0-9]%\[0-9]-%\[0-9]%\[0-9]-%\[0-9]%\[0-9]\ %\[0-9]%\[0-9]:%\[0-9]%\[0-9]:%\[0-9]%\[0-9]%m
 
 " Highlight space errors in C/C++ source files (Vim tip #935)
 let c_space_errors=1
@@ -488,7 +490,8 @@ NeoBundle 'tacroe/unite-mark'
 NeoBundle 'tsukkee/unite-help'
 NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'ujihisa/unite-colorscheme'
-NeoBundle 'sgur/unite-qf'
+NeoBundle 'osyo-manga/unite-quickfix'
+NeoBundle 'eiiches/unite-tselect'
 " }}}
 
 " Editing {{{
@@ -567,7 +570,6 @@ NeoBundle 'Zenburn'
 " Files {{{
 NeoBundle 'FSwitch'
 NeoBundle 'jceb/vim-editqf'
-NeoBundle 'osyo-manga/unite-quickfix'
 NeoBundle 'LargeFile'
 NeoBundle 'rbtnn/hexript.vim'   " to generate binary file
 NeoBundle 'Shougo/vinarise'  " Hex Editor
@@ -623,20 +625,24 @@ endif
 " Plugins settings (After load plugins) {{{
 
 " Plugin 'FSwitch' {{{
-let g:fsnonewfiles=1
-cabbrev A FSHere " 可以用:A在.h/.cpp间切换
-augroup fswitch_hack
-au! BufEnter *.h
-            \  let b:fswitchdst='cpp,c,ipp,cxx'
-            \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
-au! BufEnter *.c,*.cpp,*.ipp
-            \  let b:fswitchdst='h,hpp'
-            \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
-augroup END
+if neobundle#is_installed("FSwitch")
+    let g:fsnonewfiles=1
+    cabbrev A FSHere " 可以用:A在.h/.cpp间切换
+    augroup fswitch_hack
+        au! BufEnter *.h
+                    \  let b:fswitchdst='cpp,c,ipp,cxx'
+                    \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
+        au! BufEnter *.c,*.cpp,*.ipp
+                    \  let b:fswitchdst='h,hpp'
+                    \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
+    augroup END
+endif
 " }}}
 
 " Plugin 'quickrun.vim' {{{
-nmap ,r <Plug>(quickrun)
+if neobundle#is_installed("quickrun.vim")
+    nmap ,r <Plug>(quickrun)
+endif
 " }}}
 
 " Plugin 'echofunc.vim' {{{
@@ -647,62 +653,68 @@ nmap ,r <Plug>(quickrun)
 " }}}
 
 " Plugin 'vim-easymotion' {{{
-" \\{motion}
-hi link EasyMotionTarget ErrorMsg
-hi link EasyMotionShade  Comment
+if neobundle#is_installed("vim-easymotion")
+    " \\{motion}
+    hi link EasyMotionTarget ErrorMsg
+    hi link EasyMotionShade  Comment
+endif
 " }}}
 
 " Plugin 'YankRing.vim' {{{
-let g:yankring_persist = 0              "不把yankring持久化
-let g:yankring_share_between_instances = 0
-let g:yankring_manual_clipboard_check = 1
+if neobundle#is_installed("YankRing.vim")
+    let g:yankring_persist = 0              "不把yankring持久化
+    let g:yankring_share_between_instances = 0
+    let g:yankring_manual_clipboard_check = 1
+endif
 " }}}
 
 " Plugin 'vim-alignta' {{{
-" 对齐
-" :[range]Alignta [arguments] 或 [range]Align [arguments]
-" 参数：
-" g/regex 或 v/regex 过滤行
-"
-" :Alignta = 对齐等号
-" :Alignta = 对齐等号，
-" :Alignta <- b 对齐b字符
+if neobundle#is_installed("vim-alignta")
+    " 对齐
+    " :[range]Alignta [arguments] 或 [range]Align [arguments]
+    " 参数：
+    " g/regex 或 v/regex 过滤行
+    "
+    " :Alignta = 对齐等号
+    " :Alignta = 对齐等号，
+    " :Alignta <- b 对齐b字符
 
-let s:comment_leadings = '^\s*\("\|#\|/\*\|//\|<!--\)'
+    let s:comment_leadings = '^\s*\("\|#\|/\*\|//\|<!--\)'
 
-let g:unite_source_alignta_preset_arguments = [
-      \ ["Align at ' '", '\S\+'],
-      \ ["Declaration", 'v/^\w\+:\|' . s:comment_leadings . ' \(\S\+;\|\w\+()\(\s*const\)\?\s*;\|\w\+,\|\w\+);\?\) \(\/\/.*\|\/\*.*\)\?'],
-      \ ["Align at '='", '=>\='],
-      \ ["Align at ':'", '01 :'],
-      \ ["Align at ','", '01 ,'],
-      \ ["Align at '|'", '|'   ],
-      \ ["Align at ')'", '0 )' ],
-      \ ["Align at ']'", '0 ]' ],
-      \ ["Align at '}'", '}'   ],
-      \]
+    let g:unite_source_alignta_preset_arguments = [
+                \ ["Align at ' '", '\S\+'],
+                \ ["Declaration", 'v/^\w\+:\|' . s:comment_leadings . ' \(\S\+;\|\w\+()\(\s*const\)\?\s*;\|\w\+,\|\w\+);\?\) \(\/\/.*\|\/\*.*\)\?'],
+                \ ["Align at '='", '=>\='],
+                \ ["Align at ':'", '01 :'],
+                \ ["Align at ','", '01 ,'],
+                \ ["Align at '|'", '|'   ],
+                \ ["Align at ')'", '0 )' ],
+                \ ["Align at ']'", '0 ]' ],
+                \ ["Align at '}'", '}'   ],
+                \]
 
-let g:unite_source_alignta_preset_options = [
-      \ ["Not in comment ".s:comment_leadings, 'v/' . s:comment_leadings],
-      \ ["Justify Left",      '<<' ],
-      \ ["Justify Center",    '||' ],
-      \ ["Justify Right",     '>>' ],
-      \ ["Justify None",      '==' ],
-      \ ["Shift Left",        '<-' ],
-      \ ["Shift Right",       '->' ],
-      \ ["Shift Left  [Tab]", '<--'],
-      \ ["Shift Right [Tab]", '-->'],
-      \ ["Margin 0:0",        '0'  ],
-      \ ["Margin 0:1",        '01' ],
-      \ ["Margin 1:0",        '10' ],
-      \ ["Margin 1:1",        '1'  ],
-      \ ["In comment ".s:comment_leadings, 'g/' . s:comment_leadings],
-      \]
-unlet s:comment_leadings
+    let g:unite_source_alignta_preset_options = [
+                \ ["Not in comment ".s:comment_leadings, 'v/' . s:comment_leadings],
+                \ ["Justify Left",      '<<' ],
+                \ ["Justify Center",    '||' ],
+                \ ["Justify Right",     '>>' ],
+                \ ["Justify None",      '==' ],
+                \ ["Shift Left",        '<-' ],
+                \ ["Shift Right",       '->' ],
+                \ ["Shift Left  [Tab]", '<--'],
+                \ ["Shift Right [Tab]", '-->'],
+                \ ["Margin 0:0",        '0'  ],
+                \ ["Margin 0:1",        '01' ],
+                \ ["Margin 1:0",        '10' ],
+                \ ["Margin 1:1",        '1'  ],
+                \ ["In comment ".s:comment_leadings, 'g/' . s:comment_leadings],
+                \]
+    unlet s:comment_leadings
 
-" 在没选中文本时，按[unite]a选择需要用的选项，再选中要操作的文本，[unite]a进行操作
-nnoremap <silent> [unite]a :<C-u>Unite alignta:options<CR>
-xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
+    " 在没选中文本时，按[unite]a选择需要用的选项，再选中要操作的文本，[unite]a进行操作
+    nnoremap <silent> [unite]a :<C-u>Unite alignta:options<CR>
+    xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
+endif
 " }}}
 
 " Plugin 'OmniCppComplete' {{{
@@ -791,201 +803,207 @@ endif
 " }}}
 
 " Plugin 'neocomplcache' {{{
-" Use neocomplcache.
-"let g:neocomplcache_enable_debug = 1
-let g:neocomplcache_enable_at_startup = 1
-" Disable auto completion, if set to 1, must use <C-x><C-u>
-let g:neocomplcache_disable_auto_complete = 0
-" Use smartcase.
-let g:neocomplcache_enable_smart_case = 1
-" Use camel case completion.
-let g:neocomplcache_enable_camel_case_completion = 1
-" Use underbar completion.
-let g:neocomplcache_enable_underbar_completion = 1
-" Set minimum syntax keyword length.
-let g:neocomplcache_min_syntax_length = 3
-let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-let g:neocomplcache_enable_auto_select = 0
-let g:neocomplcache_auto_completion_start_length = 3
+if neobundle#is_installed("neocomplcache")
+    " Use neocomplcache.
+    "let g:neocomplcache_enable_debug = 1
+    let g:neocomplcache_enable_at_startup = 1
+    " Disable auto completion, if set to 1, must use <C-x><C-u>
+    let g:neocomplcache_disable_auto_complete = 0
+    " Use smartcase.
+    let g:neocomplcache_enable_smart_case = 1
+    " Use camel case completion.
+    let g:neocomplcache_enable_camel_case_completion = 1
+    " Use underbar completion.
+    let g:neocomplcache_enable_underbar_completion = 1
+    " Set minimum syntax keyword length.
+    let g:neocomplcache_min_syntax_length = 3
+    let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+    let g:neocomplcache_enable_auto_select = 0
+    let g:neocomplcache_auto_completion_start_length = 3
 
-" Define dictionary.
-let g:neocomplcache_dictionary_filetype_lists = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-    \ }
+    " Define dictionary.
+    let g:neocomplcache_dictionary_filetype_lists = {
+                \ 'default' : '',
+                \ 'vimshell' : $HOME.'/.vimshell_hist',
+                \ 'scheme' : $HOME.'/.gosh_completions'
+                \ }
 
-inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
+    inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
 
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplcache#undo_completion()
-inoremap <expr><C-l>     neocomplcache#complete_common_string()
+    " Plugin key-mappings.
+    inoremap <expr><C-g>     neocomplcache#undo_completion()
+    inoremap <expr><C-l>     neocomplcache#complete_common_string()
 
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
-" <TAB>: completion.
-"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplcache#close_popup()
-inoremap <expr><C-e>  neocomplcache#cancel_popup()
+    " Recommended key-mappings.
+    " <CR>: close popup and save indent.
+    inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
+    " <TAB>: completion.
+    "inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+    " <C-h>, <BS>: close popup and delete backword char.
+    inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+    inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+    inoremap <expr><C-y>  neocomplcache#close_popup()
+    inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+    " Enable omni completion.
+    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+    autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
-" Enable heavy omni completion.
-if !exists('g:neocomplcache_omni_patterns')
-    let g:neocomplcache_omni_patterns = {}
+    " Enable heavy omni completion.
+    if !exists('g:neocomplcache_omni_patterns')
+        let g:neocomplcache_omni_patterns = {}
+    endif
+    let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+    "autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+    let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+    let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
+    let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+    " }}}
+
+    " Plugin 'neocomplcache-snippets-complete' {{{
+    let g:neocomplcache_snippets_dir = fnamemodify(finddir("snippets", &runtimepath), ":p")
+    let g:neocomplcache_snippets_dir .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
+
+    imap <C-k>     <Plug>(neocomplcache_snippets_expand)
+    smap <C-k>     <Plug>(neocomplcache_snippets_expand)
+    " SuperTab like snippets behavior.
+    "imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 endif
-let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-"autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
-" }}}
-
-" Plugin 'neocomplcache-snippets-complete' {{{
-let g:neocomplcache_snippets_dir = fnamemodify(finddir("snippets", &runtimepath), ":p")
-let g:neocomplcache_snippets_dir .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
-
-imap <C-k>     <Plug>(neocomplcache_snippets_expand)
-smap <C-k>     <Plug>(neocomplcache_snippets_expand)
-" SuperTab like snippets behavior.
-"imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-
 " }}}
 
 " Plugin 'vinarise' {{{ " Hex Editor
 " }}}
 
 " unite {{{
+if neobundle#is_installed("unite.vim")
+    " Plugin 'unite.vim' {{{
+    " 类似Fuzzyfinder的插件
+    " The prefix key.
+    nnoremap [unite] <Nop>
+    xnoremap [unite] <Nop>
+    nmap <Leader>f [unite]
+    xmap <Leader>f [unite]
 
-" Plugin 'unite.vim' {{{
-" 类似Fuzzyfinder的插件
-" The prefix key.
-nnoremap [unite] <Nop>
-xnoremap [unite] <Nop>
-nmap <Leader>f [unite]
-xmap <Leader>f [unite]
+    let g:unite_enable_ignore_case = 1
+    let g:unite_enable_smart_case = 1
 
-let g:unite_enable_ignore_case = 1
-let g:unite_enable_smart_case = 1
+    let g:unite_source_session_path = expand('~/.vim/session/')
+    let g:unite_source_grep_default_opts = "-iHn --color=never"
 
-let g:unite_source_session_path = expand('~/.vim/session/')
-let g:unite_source_grep_default_opts = "-iHn --color=never"
+    let g:unite_winheight = winheight("%") / 2
+    let g:unite_winwidth = winwidth("%") / 2
 
-let g:unite_winheight = winheight("%") / 2
-let g:unite_winwidth = winwidth("%") / 2
+    nnoremap [unite]S :<C-U>Unite source<CR>
 
-nnoremap [unite]S :<C-U>Unite source<CR>
+    nnoremap <silent> [unite]p :<C-U>Unite -buffer-name=register register history/yank<CR>
+    nnoremap <silent> [unite]w :<C-u>UniteWithCursorWord -buffer-name=register buffer file_mru bookmark file<CR>
+    nnoremap <silent> [unite]c :<C-u>Unite change jump<CR>
+    nnoremap <silent> [unite]R :<C-u>Unite -buffer-name=resume resume<CR>
+    nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+    nnoremap <silent> [unite]g :<C-u>Unite grep -buffer-name=search -no-quit<CR>
+    nnoremap <silent> [unite]G :<C-u>UniteWithCursorWord grep -buffer-name=search -no-quit<CR>
 
-nnoremap <silent> [unite]p :<C-U>Unite -buffer-name=register register history/yank<CR>
-nnoremap <silent> [unite]w :<C-u>UniteWithCursorWord -buffer-name=register buffer file_mru bookmark file<CR>
-nnoremap <silent> [unite]c :<C-u>Unite change jump<CR>
-nnoremap <silent> [unite]R :<C-u>Unite -buffer-name=resume resume<CR>
-nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
-nnoremap <silent> [unite]g :<C-u>Unite grep -buffer-name=search -no-quit<CR>
-nnoremap <silent> [unite]G :<C-u>UniteWithCursorWord grep -buffer-name=search -no-quit<CR>
+    nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search -start-insert line<CR>
+    nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
+    nnoremap <silent> [unite]b :<C-u>Unite buffer -start-insert<CR>
+    nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
+    nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps -start-insert help<CR>
+    nnoremap <silent> [unite]H :<C-U>UniteWithCursorWord -buffer-name=helps help<CR>
+    nnoremap <silent> [unite]M :<C-U>Unite mark<CR>
+    nnoremap <silent> [unite]m :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build<CR>
+    nnoremap <silent> [unite]Q :<C-u>Unite poslist<CR>
+    nnoremap <silent> [unite]q :<C-u>Unite quickfix -no-quit<CR>
+    nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
+    nnoremap <silent> [unite]s :<C-u>Unite -start-insert session<CR>
+    "nnoremap <silent> [unite]T :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
+    "nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag tag/include<CR>
+    nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag<CR>
+    nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
+    nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
+    nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
+    nnoremap <silent> [unite]v :<C-u>Unite vcs/status<CR>
+    nnoremap <silent> [unite]l :<C-u>Unite vcs/log<CR>
 
-nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search -start-insert line<CR>
-nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
-nnoremap <silent> [unite]b :<C-u>Unite buffer -start-insert<CR>
-nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
-nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps -start-insert help<CR>
-nnoremap <silent> [unite]H :<C-U>UniteWithCursorWord -buffer-name=helps help<CR>
-nnoremap <silent> [unite]M :<C-U>Unite mark<CR>
-nnoremap <silent> [unite]m :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build<CR>
-nnoremap <silent> [unite]Q :<C-u>Unite poslist<CR>
-nnoremap <silent> [unite]q :<C-u>Unite quickfix -no-quit<CR>
-nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
-nnoremap <silent> [unite]s :<C-u>Unite -start-insert session<CR>
-"nnoremap <silent> [unite]T :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
-"nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag tag/include<CR>
-nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag<CR>
-nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
-nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
-nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
-nnoremap <silent> [unite]v :<C-u>Unite vcs/status<CR>
-nnoremap <silent> [unite]l :<C-u>Unite vcs/log<CR>
+    function! s:unite_settings()
+      nmap <buffer> <C-J> <Plug>(unite_loop_cursor_down)
+      nmap <buffer> <C-K> <Plug>(unite_loop_cursor_up)
+      nmap <buffer> m <Plug>(unite_toggle_mark_current_candidate)
+      nmap <buffer> M <Plug>(unite_toggle_mark_all_candidate)
+      nmap <buffer> <LocalLeader><F5> <Plug>(unite_redraw)
+      nmap <buffer> <LocalLeader>q <Plug>(unite_exit)
 
-function! s:unite_settings()
-  nmap <buffer> <C-J> <Plug>(unite_loop_cursor_down)
-  nmap <buffer> <C-K> <Plug>(unite_loop_cursor_up)
-  nmap <buffer> m <Plug>(unite_toggle_mark_current_candidate)
-  nmap <buffer> M <Plug>(unite_toggle_mark_all_candidate)
-  nmap <buffer> <LocalLeader><F5> <Plug>(unite_redraw)
-  nmap <buffer> <LocalLeader>q <Plug>(unite_exit)
+      vmap <buffer> m <Plug>(unite_toggle_mark_selected_candidates)
 
-  vmap <buffer> m <Plug>(unite_toggle_mark_selected_candidates)
+      imap <buffer> <C-J> <Plug>(unite_select_next_line)
+      imap <buffer> <C-K> <Plug>(unite_select_previous_line)
+      imap <buffer> <LocalLeader><BS> <Plug>(unite_delete_backward_path)
+      imap <buffer> <LocalLeader>q <Plug>(unite_exit)
+    endfunction
+    autocmd! FileType unite call s:unite_settings()
+    " }}}
 
-  imap <buffer> <C-J> <Plug>(unite_select_next_line)
-  imap <buffer> <C-K> <Plug>(unite_select_previous_line)
-  imap <buffer> <LocalLeader><BS> <Plug>(unite_delete_backward_path)
-  imap <buffer> <LocalLeader>q <Plug>(unite_exit)
-endfunction
-autocmd! FileType unite call s:unite_settings()
-" }}}
+    " Plugin 'unite-mark' {{{
+    " }}}
 
-" Plugin 'unite-mark' {{{
-" }}}
+    " Plugin 'unite-help' {{{
+    " }}}
 
-" Plugin 'unite-help' {{{
-" }}}
+    " Plugin 'unite-tag' {{{
+    "autocmd BufEnter *
+    "    \ if empty(&buftype)
+    "    \| nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
+    "    \| endif
+    " }}}
 
-" Plugin 'unite-tag' {{{
-"autocmd BufEnter *
-"    \ if empty(&buftype)
-"    \| nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
-"    \| endif
-" }}}
+    " Plugin 'unite-outline' {{{
+    if neobundle#is_installed("CodeReviewer.vim")
+        nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
+    endif
+    " }}}
 
-" Plugin 'unite-outline' {{{
-nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
-" }}}
+    " Plugin 'unite-colorscheme' {{{
+    " }}}
 
-" Plugin 'unite-colorscheme' {{{
-" }}}
-
-" Plugin 'unite-qf' {{{
-nnoremap <silent> [unite]q :<C-u>Unite qf/valid -no-quit<CR>
-" }}}
-
-" Plugin 'unite-build'
-
+    " Plugin 'unite-build'
+endif
 " }}} " unite
 
 " Plugin 'CodeReviewer.vim' {{{
-" Typical review session:
-" 1. A reviewer open the code to review, positions the cursor on the line he/she wants to comment on and types "\ic" - this puts the file name, the line number, the reviewer's initials and the defect type in the review file
-" 2. The comment is typed next to the line number and can span multiple lines
-" 3. Send the comments to the author of the code
-" 4. The author collates the inputs from various reviewers into one file (by simply concatenating them) and sorts it. Now the comments are arranged per file, in the order of line numbers (in a file called say, all_comments.txt)
-" 5. Using the :cfile all_comments.txt (or :CheckReview) the author can now navigate through all the comments.
-let g:CodeReviewer_reviewer = $USER
+if neobundle#is_installed("CodeReviewer.vim")
+    " Typical review session:
+    " 1. A reviewer open the code to review, positions the cursor on the line he/she wants to comment on and types "\ic" - this puts the file name, the line number, the reviewer's initials and the defect type in the review file
+    " 2. The comment is typed next to the line number and can span multiple lines
+    " 3. Send the comments to the author of the code
+    " 4. The author collates the inputs from various reviewers into one file (by simply concatenating them) and sorts it. Now the comments are arranged per file, in the order of line numbers (in a file called say, all_comments.txt)
+    " 5. Using the :cfile all_comments.txt (or :CheckReview) the author can now navigate through all the comments.
+    let g:CodeReviewer_reviewer = $USER
+endif
 " }}}
+
 " Plugin 'sudo.vim' {{{
 "   (command line): vim sudo:/etc/passwd
 "   (within vim):   :e sudo:/etc/passwd
 " }}}
 
 " Plugin 'Intelligent-Tags' {{{
-" 自动为当前文件及其包含的文件生成tags
-let Itags_Depth=3    " 缺省是1，当前文件及其包含的文件。-1表示无穷层
-let Itags_Ctags_Flags="--c++-kinds=+p --fields=+iaS --extra=+q -R"
-let Itags_header_mapping= {'h':['c', 'cpp', 'c++']}
+if neobundle#is_installed("Intelligent-Tags")
+    " 自动为当前文件及其包含的文件生成tags
+    let Itags_Depth=3    " 缺省是1，当前文件及其包含的文件。-1表示无穷层
+    let Itags_Ctags_Flags="--c++-kinds=+p --fields=+iaS --extra=+q -R"
+    let Itags_header_mapping= {'h':['c', 'cpp', 'c++']}
+endif
 "
 "}}}
 
 " Plugin 'DoxygenToolkit.vim' {{{
-let g:DoxygenToolkit_briefTag_pre="@brief "
-let g:DoxygenToolkit_paramTag_pre="@param[in] "
-let g:DoxygenToolkit_returnTag="@return "
+if neobundle#is_installed("DoxygenToolkit.vim")
+    let g:DoxygenToolkit_briefTag_pre="@brief "
+    let g:DoxygenToolkit_paramTag_pre="@param[in] "
+    let g:DoxygenToolkit_returnTag="@return "
+endif
 " }}}
 
 " Plugin 'vim-easytags' {{{
@@ -996,6 +1014,13 @@ if neobundle#is_installed("vim-easytags")
 endif
 " " }}}
 
+" Plugin 'vim-easytags' {{{
+if neobundle#is_installed("unite-tselect")
+    nnoremap g<C-]> :<C-u>Unite -immediately tselect:<C-r>=expand('<cword>')<CR><CR>
+    nnoremap g] :<C-u>Unite tselect:<C-r>=expand('<cword>')<CR><CR>
+endif
+" " }}}
+
 " Plugin 'vim-editqf' {{{
 if neobundle#is_installed("vim-editqf")
     " 重新定义两个映射，把缺省的<leader>n空出来给mark插件
@@ -1003,6 +1028,7 @@ if neobundle#is_installed("vim-editqf")
     nmap <leader>nN <Plug>QFAddNotePattern
 endif
 " " }}}
+
 " Indents & Foldings" {{{
 " Plugin 'indentpython.vim--nianyang'
 " Plugin 'SimpylFold'
