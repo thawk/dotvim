@@ -548,6 +548,7 @@ else
 endif
 NeoBundle 'Pydiction'
 NeoBundle 'scrooloose/syntastic'
+NeoBundle 'OrangeT/vim-csharp'
 " }}}
 
 " Language {{{
