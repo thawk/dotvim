@@ -238,39 +238,39 @@ function! OpenCProject()
     endif
 endfunction
 
-function! WhatFunctionAreWeIn()
-  let strList = ["while", "foreach", "ifelse", "if else", "for", "if", "else", "try", "catch", "case", "switch", "do"]
-  let foundcontrol = 1
-  let position = ""
-  let pos=getpos(".")          " This saves the cursor position
-  let view=winsaveview()       " This saves the window view
-  while (foundcontrol)
-    let foundcontrol = 0
-    normal [{
-    call search('\S','bW')
-    let tempchar = getline(".")[col(".") - 1]
-    if (match(tempchar, ")") >=0 )
-      normal %
-      call search('\S','bW')
-    endif
-    let tempstring = getline(".")
-    for item in strList
-      if( match(tempstring,item) >= 0 )
-        let position = item . " - " . position
-        let foundcontrol = 1
-        break
-      endif
-    endfor
-    if(foundcontrol == 0)
-      call cursor(pos)
-      call winrestview(view)
-      return tempstring.position
-    endif
-  endwhile
-  call cursor(pos)
-  call winrestview(view)
-  return tempstring.position
-endfunction
+" function! WhatFunctionAreWeIn()
+"   let strList = ["while", "foreach", "ifelse", "if else", "for", "if", "else", "try", "catch", "case", "switch", "do"]
+"   let foundcontrol = 1
+"   let position = ""
+"   let pos=getpos(".")          " This saves the cursor position
+"   let view=winsaveview()       " This saves the window view
+"   while (foundcontrol)
+"     let foundcontrol = 0
+"     normal [{
+"     call search('\S','bW')
+"     let tempchar = getline(".")[col(".") - 1]
+"     if (match(tempchar, ")") >=0 )
+"       normal %
+"       call search('\S','bW')
+"     endif
+"     let tempstring = getline(".")
+"     for item in strList
+"       if( match(tempstring,item) >= 0 )
+"         let position = item . " - " . position
+"         let foundcontrol = 1
+"         break
+"       endif
+"     endfor
+"     if(foundcontrol == 0)
+"       call cursor(pos)
+"       call winrestview(view)
+"       return tempstring.position
+"     endif
+"   endwhile
+"   call cursor(pos)
+"   call winrestview(view)
+"   return tempstring.position
+" endfunction
 
 inoremap  <buffer>  /**<CR>     /**<CR><CR>/<Esc>kA<Space>@brief<Space>
 inoremap  <buffer>  /**<        /**<<Space>@brief<Space><Space>*/<Left><Left><Left>
@@ -280,7 +280,7 @@ vnoremap  <buffer>  ///<        ///<<Space>
 inoremap  <buffer>  /**<Space>  /**<Space>@brief<Space><Space>*/<Left><Left><Left>
 vnoremap  <buffer>  /**<Space>  /**<Space>@brief<Space><Space>*/<Left><Left><Left>
 
-nnoremap ff :<C-U>echo WhatFunctionAreWeIn()<CR>
+" nnoremap ff :<C-U>echo WhatFunctionAreWeIn()<CR>
 
 setlocal foldmethod=syntax
 setlocal keywordprg=man\ -S2:3

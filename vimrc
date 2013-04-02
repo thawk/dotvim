@@ -453,7 +453,9 @@ let g:syntastic_mode_map = {
 " 0: 不会自动打开、关闭 1: 自动打开及关闭 2: 没错误时自动关闭，但不会自动打开
 let g:syntastic_auto_loc_list=2
 " }}}
-"
+
+" Plugin 'tagbar' {{{
+let g:tagbar_left = 1
 " }}}
 
 " NeoBundle -- load plugins {{{
@@ -1102,6 +1104,10 @@ endif
 " Plugin 'vim-csharp' {{{
 if neobundle#is_installed("vim-csharp")
 endif
+" }}}
+
+" Plugin 'tagbar' {{{
+nnoremap ff :<C-U>TagbarCurrentTag fs<CR>
 " }}}
 
 " " }}}
