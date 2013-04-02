@@ -546,9 +546,11 @@ if executable("clang")
 else
     NeoBundleSource 'OmniCppComplete'
 endif
-NeoBundle 'Pydiction'
+NeoBundle 'rkulla/pydiction'
 NeoBundle 'scrooloose/syntastic'
-NeoBundle 'OrangeT/vim-csharp'
+if (g:isWin)
+    NeoBundle 'OrangeT/vim-csharp'
+endif
 " }}}
 
 " Language {{{
@@ -772,8 +774,8 @@ let pydoc_perform_mappings = 1
 " :help py2stdlib-os
 " }}}
 
-" Plugin 'Pydiction' {{{
-if neobundle#is_installed("Pydiction")
+" Plugin 'pydiction' {{{
+if neobundle#is_installed("pydiction")
     let g:pydiction_location = fnamemodify(findfile("complete-dict",&runtimepath), ":p")
 endif
 "  }}}
