@@ -277,6 +277,7 @@ au BufRead,BufNewFile {*.md,*.mkd,*.markdown} setf markdown
 au BufRead,BufNewFile {COMMIT_EDITMSG}  setf gitcommit
 au BufRead,BufNewFile TDM*C,TDM*H       setf c
 au BufRead,BufNewFile *.dox             setf cpp    " Doxygen
+au BufRead,BufNewFile *.cshtml          setf cshtml
 
 "" Remove trailing spaces for C/C++ and Vim files
 au BufWritePre *                  call RemoveTrailingSpace()
@@ -302,6 +303,7 @@ au FileType xml        exe 'setlocal equalprg=xmllint\ --format\ --recover\ -'
 au FileType qf setlocal wrap linebreak
 au FileType vim nnoremap <silent> <buffer> K :<C-U>help <C-R><C-W><CR>
 au FileType man setlocal foldmethod=indent foldnestmax=2 foldenable nomodifiable nonumber shiftwidth=3 foldlevel=2
+au FileType cs setlocal wrap
 " "}}}
 
 " 根据不同的文件类型设定<F3>时应该查找的文件 "{{{
@@ -590,7 +592,7 @@ NeoBundle 'quickrun.vim'
 NeoBundle 'sjl/gundo.vim'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'AutoFenc.vim'
-"NeoBundle 'Tagbar'
+NeoBundle 'majutsushi/tagbar'
 NeoBundle 'thawk/vimproc', {
       \ 'build' : {
       \ 'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
@@ -1092,7 +1094,14 @@ endif
 " }}}
 
 " Plugin 'gundo' {{{
-nnoremap <F5> :GundoToggle<CR>
+if neobundle#is_installed("gundo")
+    nnoremap <F5> :GundoToggle<CR>
+endif
+" }}}
+
+" Plugin 'vim-csharp' {{{
+if neobundle#is_installed("vim-csharp")
+endif
 " }}}
 
 " " }}}
