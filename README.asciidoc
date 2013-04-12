@@ -1,10 +1,8 @@
-dotvim
-======
+= dotvim
 
 My vim configuration
 
-Install
-------
+== Install
 
 . Clone this to ++~/.vim++
 +
@@ -46,10 +44,28 @@ https://github.com/Shougo/vimproc/downloads
 
 . All done, you are ready to use.
 
-Using 443 port to access github via ssh
----------------------------------------
+== Upgrading
 
-Add these lines to ++~/.ssh/config++:
+. Use git pull to update to the lastest version.
+
+. Start vim, clean up unused plugins:
++
+----
+:NeoBundleClean
+----
+
+. Upgrade existing plugins and install new plugins:
++
+----
+:NeoBundleUpdate
+----
+
+. run ++~/.vim/setup.sh++ to recompile vimproc if necessary.
+
+== Using 443 port to access github via ssh
+
+If you can't access github via standard port 22, you can add these
+lines to ++~/.ssh/config++ to access github through https port:
 
 --------------------
 Host github.com
