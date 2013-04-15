@@ -567,6 +567,7 @@ NeoBundle 'jceb/vim-orgmode', {
 NeoBundle 'lbdbq'
 NeoBundle 'ZenCoding.vim'
 NeoBundle 'wps.vim' " syntax highlight for RockBox wps file
+NeoBundle 'othree/xml.vim'
 " }}}
 
 " Colors {{{
