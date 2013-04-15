@@ -116,60 +116,84 @@ prev_word '^'
 # Boost.Test
 snippet ut
 	#include <boost/test/unit_test.hpp>
+    #include <boost/system/error_code.hpp>
 	#include "../`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
 
 	using namespace `substitute(expand("%:p:h:h:t"),"\\.","_","g")`;
     using boost::system::error_code;
 
-	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`)
+	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`);
 
-	BOOST_AUTO_TEST_CASE(Test${1})
+	struct Fixture
 	{
-	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${2:`substitute(expand("%:t:r"), "^test_\\?", "", "")`}
-	}
+	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${2:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
+	};
 
 	BOOST_AUTO_TEST_SUITE_END()
 
 # Boost.Test
 snippet sut
 	#include <boost/test/unit_test.hpp>
+    #include <boost/system/error_code.hpp>
 	#include "../`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
 
 	using namespace sscc::`substitute(expand("%:p:h:h:t"),"\\.","_","g")`;
     using boost::system::error_code;
 
-	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`)
+	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`);
 
-	BOOST_AUTO_TEST_CASE(Test${1})
-	{
-	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${2:`substitute(expand("%:t:r"), "^test_\\?", "", "")`}
-	}
+    struct Fixture
+    {
+	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${1:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
+    };
+
+    ${0}
 
 	BOOST_AUTO_TEST_SUITE_END()
 
 # Boost.Test
 snippet sut2
 	#include <boost/test/unit_test.hpp>
+    #include <boost/system/error_code.hpp>
 	#include "`substitute(expand("%:p:h:h:h:t"),"\\.","_","g")`/`substitute(expand("%:p:h:t"),"\\.","_","g")`/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
 
 	using namespace sscc::`substitute(expand("%:p:h:h:h:t"),"\\.","_","g")`;
     using boost::system::error_code;
 
-	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`)
+	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`);
 
-	BOOST_AUTO_TEST_CASE(Test${1})
-	{
-	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${2:`substitute(expand("%:t:r"), "^test_\\?", "", "")`}
-	}
+    struct Fixture
+    {
+	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${1:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
+    };
+
+    ${0}
 
 	BOOST_AUTO_TEST_SUITE_END()
 
-# Comment for unit test
-snippet test_comment
+# Comment for Sscc Test Case
+snippet stc
     /**
-     * @brief ${1}
-     *
-     * <b>输入数据：</b> ${2}
-     *
+     * @class sscc::`substitute(expand("%:p:h:h:t"),"\\.","_","g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`;
+     * @test ${1}\n
+     * <b>输入数据：</b> ${2}\n
      * <b>预期输出：</b> ${3}
      */
+     BOOST_FIXTURE_TEST_CASE(Test${4}, Fixture)
+     {
+         ${0}
+     }
+
+# Comment for Sscc Test Case
+snippet stc2
+    /**
+	 * @class sscc::`substitute(expand("%:p:h:h:h:t"),"\\.","_","g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`;
+     * @test ${1}\n
+     * <b>输入数据：</b> ${2}\n
+     * <b>预期输出：</b> ${3}
+     */
+     BOOST_FIXTURE_TEST_CASE(Test${4}, Fixture)
+     {
+         ${0}
+     }
+
