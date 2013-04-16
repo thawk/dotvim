@@ -564,9 +564,12 @@ NeoBundle 'jceb/vim-orgmode', {
     \   'NrrwRgn',
     \   'speeddating.vim',
     \ ]}
-NeoBundle 'lbdbq'
 NeoBundle 'ZenCoding.vim'
-NeoBundle 'wps.vim' " syntax highlight for RockBox wps file
+if (g:isWin)
+    NeoBundle 'wps.vim' " syntax highlight for RockBox wps file
+else
+    NeoBundle 'lbdbq'
+endif
 NeoBundle 'othree/xml.vim'
 " }}}
 
