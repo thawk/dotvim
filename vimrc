@@ -555,6 +555,9 @@ NeoBundle 'scrooloose/syntastic'
 if (g:isWin)
     NeoBundle 'OrangeT/vim-csharp'
 endif
+if executable("cpplint.py")
+    NeoBundle 'funorpain/vim-cpplint'
+endif
 " }}}
 
 " Language {{{
