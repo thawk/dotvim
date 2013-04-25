@@ -694,7 +694,7 @@ if neobundle#is_installed("vim-alignta")
 
     let g:unite_source_alignta_preset_arguments = [
                 \ ["Align at ' '", '\S\+'],
-                \ ["Declaration", 'v/^\w\+:\|' . s:comment_leadings . ' \(\S\+;\|\w\+()\(\s*const\)\?\s*;\|\w\+,\|\w\+);\?\) \(\/\/.*\|\/\*.*\)\?'],
+                \ ["Declaration", 'v/^\w\+:\|' . s:comment_leadings . ' <<1:2 \(\S\+;\|\w\+()\(\s*const\)\?\s*;\|\w\+,\|\w\+);\?\) \(\/\/.*\|\/\*.*\)\?'],
                 \ ["Align at '='", '=>\='],
                 \ ["Align at ':'", '01 :'],
                 \ ["Align at ','", '01 ,'],
