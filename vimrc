@@ -538,8 +538,10 @@ NeoBundle 'tComment'
 " \\\ to comment a line, \\ to comment a motion, \\u to uncomment
 "NeoBundle 'tpope/vim-commentary'
 "NeoBundle 'bahejl/Intelligent_Tags'
-NeoBundle 'thawk/Intelligent_Tags'
-"NeoBundle 'AutoTag'
+if executable("ctags")
+    NeoBundle 'thawk/Intelligent_Tags'
+    "NeoBundle 'AutoTag'
+endif
 NeoBundle 'hrsh7th/vim-unite-vcs'
 NeoBundle 'vcscommand.vim'
 NeoBundle 'gprof.vim'
