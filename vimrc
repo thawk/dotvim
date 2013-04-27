@@ -1117,6 +1117,7 @@ endif
 
 " Plugin 'tagbar' {{{
 nnoremap ff :<C-U>TagbarCurrentTag fs<CR>
+nnoremap <silent> <F9> :TagbarToggle<CR>
 " }}}
 
 " " }}}
