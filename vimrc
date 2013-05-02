@@ -1004,12 +1004,12 @@ endif
 "   (within vim):   :e sudo:/etc/passwd
 " }}}
 
-" Plugin 'Intelligent-Tags' {{{
-if neobundle#is_installed("Intelligent-Tags")
+" Plugin 'Intelligent_Tags' {{{
+if neobundle#is_installed("Intelligent_Tags")
     " 自动为当前文件及其包含的文件生成tags
-    let Itags_Depth=3    " 缺省是1，当前文件及其包含的文件。-1表示无穷层
-    let Itags_Ctags_Flags="--c++-kinds=+p --fields=+iaS --extra=+q -R"
-    let Itags_header_mapping= {'h':['c', 'cpp', 'c++']}
+    let g:Itags_Depth=3    " 缺省是1，当前文件及其包含的文件。-1表示无穷层
+    let g:Itags_Ctags_Flags="--c++-kinds=+p --fields=+iaS --extra=+q -R"
+    let g:Itags_header_mapping= {'h':['c', 'cpp', 'c++']}
 endif
 "
 "}}}
