@@ -469,10 +469,10 @@ let g:tagbar_left = 1
 filetype off                   " Required!
 
 if has('vim_starting')
-    set runtimepath+=~/.vim/bundle/neobundle.vim/
+    let &runtimepath .= "," . fnamemodify(finddir("bundle/neobundle.vim", &runtimepath), ":p")
 endif
 
-call neobundle#rc(expand('~/.vim/bundle/'))
+call neobundle#rc()
 
 let g:neobundle_default_git_protocol = 'https'
 
@@ -621,7 +621,7 @@ NeoBundle 'thinca/vim-prettyprint'  " PP variable_name，for debug
 " }}}
 
 " 载入manual-bundles下的插件
-NeoBundleLocal ~/.vim/manual-bundles
+call neobundle#local(fnamemodify(finddir("manual-bundles", &runtimepath), ":p"), {})
 
 " Installation check {{{
 syntax on
