@@ -545,12 +545,12 @@ endif
 NeoBundle 'hrsh7th/vim-unite-vcs'
 NeoBundle 'vcscommand.vim'
 NeoBundle 'gprof.vim'
-NeoBundleLazy 'Rip-Rip/clang_complete'
-NeoBundleLazy 'thawk/OmniCppComplete'
 if executable("clang")
-    NeoBundleSource 'clang_complete'
+    NeoBundle 'Rip-Rip/clang_complete'
+    NeoBundleLazy 'thawk/OmniCppComplete'
 else
-    NeoBundleSource 'OmniCppComplete'
+    NeoBundleLazy 'Rip-Rip/clang_complete'
+    NeoBundle 'thawk/OmniCppComplete'
 endif
 NeoBundle 'rkulla/pydiction'
 NeoBundle 'scrooloose/syntastic'
@@ -869,17 +869,24 @@ if neobundle#is_installed("neocomplcache")
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
     " Enable heavy omni completion.
-    if !exists('g:neocomplcache_omni_patterns')
-        let g:neocomplcache_omni_patterns = {}
-    endif
-    let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-    "autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-    let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-    let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-    let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
-    " }}}
+	if !exists('g:neocomplcache_force_omni_patterns')
+	  let g:neocomplcache_force_omni_patterns = {}
+	endif
+	let g:neocomplcache_force_overwrite_completefunc = 1
+	let g:neocomplcache_force_omni_patterns.c =
+	      \ '[^.[:digit:] *\t]\%(\.\|->\)'
+	let g:neocomplcache_force_omni_patterns.cpp =
+	      \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+	let g:neocomplcache_force_omni_patterns.objc =
+	      \ '[^.[:digit:] *\t]\%(\.\|->\)'
+	let g:neocomplcache_force_omni_patterns.objcpp =
+	      \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
-    " Plugin 'neocomplcache-snippets-complete' {{{
+endif
+" }}}
+
+" neosnippet {{{
+if neobundle#is_installed("neosnippet")
     let g:neocomplcache_snippets_dir = fnamemodify(finddir("snippets", &runtimepath), ":p")
     let g:neocomplcache_snippets_dir .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
 
