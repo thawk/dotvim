@@ -1,199 +1,97 @@
-# Include-Guard
-snippet once
-abbr include-guard
-    #ifndef `toupper(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g"))`_`toupper(substitute(expand("%:t"),"\\.","_","g"))`_
-    #define `toupper(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g"))`_`toupper(substitute(expand("%:t"),"\\.","_","g"))`_
-
-    namespace `tolower(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g"))` {
-
-	/**
-	 * @brief ${1}
-	 */
-    class `substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
+snippet     if
+abbr        if () {}
+    if (${1:#:condition})
     {
-    public:
-        ${0}
-    };
-
+        ${0:TARGET}
     }
 
-    #endif /* end of include guard */
-
-# Include-Guard，以上层目录名为名字空间，前面再加上一层sscc::名字空间
-snippet h1
-abbr include-guard
-	/**
-	 * @file
-	 * @brief  ${1:`substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`类的声明}
-	 * @author `$USER`
-	 */
-    #ifndef SSCC_`toupper(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g")."_")``toupper(substitute(expand("%:t"),"\\.","_","g"))`_
-    #define SSCC_`toupper(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g")."_")``toupper(substitute(expand("%:t"),"\\.","_","g"))`_
-
-    namespace sscc { namespace `tolower(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g"))` {
-
-	/**
-	 * @brief ${2}
-	 */
-    class `substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
+snippet else
+    else
     {
-    public:
-        ${0}
+        ${0:TARGET}
+    }
+
+snippet elseif
+    else if (${1:#:condition})
+    {
+        ${0:TARGET}
+    }
+
+snippet     ifelse
+abbr        if () {} else {}
+    if (${1:#:condition})
+    {
+        ${2:TARGET}
+    }
+    else
+    {
+        ${3}
+    }
+
+snippet     for
+abbr        for () {}
+    for (${1} = 0; $1 < ${2}; ++$1)
+    {
+        ${0:TARGET}
+    }
+
+snippet     while
+abbr        while () {}
+    while (${1:#:condition})
+    {
+        ${0:TARGET}
+    }
+
+snippet     do_while
+alias       do
+    do
+    {
+        ${0:TARGET:code}
+    } while (${1:#:condition});
+
+snippet     switch
+abbr        switch () {}
+    switch (${1:#:var})
+    {
+    case ${2:#:val}:
+        ${0:TARGET}
+        break;
+    }
+
+snippet     function
+alias       func
+abbr        func() {}
+    ${1:void} ${2:#:func_name}(${3:#:args})
+    {
+        ${0:TARGET}
+    }
+
+snippet     struct
+abbr        struct {}
+    struct ${1:#:name}
+    {
+        ${0:TARGET:data}
     };
 
-    }}
-
-    #endif /* end of include guard */
-
-# Include-Guard，以上上层目录名为名字空间，前面再加上一层sscc::名字空间
-snippet h2
-abbr include-guard
-	/**
-	 * @file
-	 * @brief  ${1:`substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`类的声明}
-	 * @author `$USER`
-	 */
-    #ifndef SSCC_`toupper(substitute(fnamemodify(substitute(expand("%:p:h:h:h:t")."/".expand("%:p:h:h:t"),"/include","",""),":t"),"\\.","_","g")."_")``toupper(substitute(expand("%:t"),"\\.","_","g"))`_
-    #define SSCC_`toupper(substitute(fnamemodify(substitute(expand("%:p:h:h:h:t")."/".expand("%:p:h:h:t"),"/include","",""),":t"),"\\.","_","g")."_")``toupper(substitute(expand("%:t"),"\\.","_","g"))`_
-
-    namespace sscc { namespace `tolower(substitute(fnamemodify(substitute(expand("%:p:h:h:h:t")."/".expand("%:p:h:h:t"),"/include","",""),":t"),"\\.","_","g"))` {
-
-	/**
-	 * @brief ${2}
-	 */
-    class `substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
+# Typedef struct
+snippet struct_typedef
+    typedef struct ${1:#:name}
     {
-    public:
-        ${0}
+        ${0:TARGET:data}
     };
 
-    }}
+snippet     enum
+abbr        enum {}
+    enum ${1:#:name}
+    {
+        ${0:TARGET}
+    };
 
-    #endif /* end of include guard */
-
-snippet c1
-abbr include-guard
-	/**
-	 * @file
-	 * @brief  ${1:`substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`类的定义}
-	 * @author `$USER`
-	 */
-    #include "`expand("%:t:r")`.h"
-
-    namespace sscc { namespace `tolower(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g"))` {
-
-    ${0}
-
-    }}
-
-
-snippet c2
-abbr include-guard
-	/**
-	 * @file
-	 * @brief  ${1:`substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`类的定义}
-	 * @author `$USER`
-	 */
-    #include "`expand("%:t:r")`.h"
-
-    namespace sscc { namespace `tolower(substitute(fnamemodify(substitute(expand("%:p:h:h:h:t")."/".expand("%:p:h:h:t"),"/src","",""),":t"),"\\.","_","g"))` {
-
-    ${0}
-
-    }}
-
-
-# File declaration
-snippet fc
-prev_word '^'
-	/**
-	 * @file
-	 * @brief  ${1}
-	 * @author `$USER`
-	 */
-	${0}
-
-# Boost.Test
-snippet ut
-	#include <boost/test/unit_test.hpp>
-    #include <boost/system/error_code.hpp>
-	#include "../`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
-
-	using namespace `substitute(expand("%:p:h:h:t"),"\\.","_","g")`;
-    using boost::system::error_code;
-
-	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`);
-
-	struct Fixture
+# hard-tab is necessary; C indent doesn't support this.
+snippet main
+	int main(int argc, char const* argv[])
 	{
-	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${2:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
-	};
-
-	BOOST_AUTO_TEST_SUITE_END()
-
-# Boost.Test
-snippet sut
-	#include <boost/test/unit_test.hpp>
-    #include <boost/system/error_code.hpp>
-	#include "../`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
-
-	using namespace sscc::`substitute(expand("%:p:h:h:t"),"\\.","_","g")`;
-    using boost::system::error_code;
-
-	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`);
-
-    struct Fixture
-    {
-	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${1:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
-    };
-
-    ${0}
-
-	BOOST_AUTO_TEST_SUITE_END()
-
-# Boost.Test
-snippet sut2
-	#include <boost/test/unit_test.hpp>
-    #include <boost/system/error_code.hpp>
-	#include "`substitute(expand("%:p:h:h:h:t"),"\\.","_","g")`/`substitute(expand("%:p:h:t"),"\\.","_","g")`/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
-
-	using namespace sscc::`substitute(expand("%:p:h:h:h:t"),"\\.","_","g")`;
-    using boost::system::error_code;
-
-	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`);
-
-    struct Fixture
-    {
-	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${1:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
-    };
-
-    ${0}
-
-	BOOST_AUTO_TEST_SUITE_END()
-
-# Comment for Sscc Test Case
-snippet stc
-    /**
-     * @class sscc::`substitute(expand("%:p:h:h:t"),"\\.","_","g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`;
-     * @test ${1}\n
-     * <b>输入数据：</b> ${2}\n
-     * <b>预期输出：</b> ${3}
-     */
-     BOOST_FIXTURE_TEST_CASE(Test${4}, Fixture)
-     {
-         ${0}
-     }
-
-# Comment for Sscc Test Case
-snippet stc2
-    /**
-	 * @class sscc::`substitute(expand("%:p:h:h:h:t"),"\\.","_","g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`;
-     * @test ${1}\n
-     * <b>输入数据：</b> ${2}\n
-     * <b>预期输出：</b> ${3}
-     */
-     BOOST_FIXTURE_TEST_CASE(Test${4}, Fixture)
-     {
-         ${0}
-     }
+		${0:TARGET}
+		return 0;
+	}
 

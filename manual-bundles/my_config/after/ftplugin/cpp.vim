@@ -23,10 +23,12 @@ setlocal expandtab
 " Setup for indending
 setlocal nosmartindent
 setlocal autoindent
+setlocal cindent
 setlocal cinkeys-=0#
+" 缩进设置。下面的s代表一个shiftwidth
 setlocal cinoptions=
 setlocal cinoptions+=^      " no specific indent for function
-setlocal cinoptions+=:s     " case label indent
+setlocal cinoptions+=:0     " case label indent
 setlocal cinoptions+=l1     " align with a case label
 setlocal cinoptions+=g0     " c++ scope declaration not indent
 setlocal cinoptions+=ps     " K&R-style parameter declaration indent
@@ -35,6 +37,8 @@ setlocal cinoptions+=i2     " C++ base class declarations and constructor initia
 setlocal cinoptions+=+s     " continuation line indent
 setlocal cinoptions+=c3     " comment line indent
 setlocal cinoptions+=(0     " align to first non-white character after the unclosed parentheses
+setlocal cinoptions+=us     " same as (N, but for one level deeper
+setlocal cinoptions+=U0     " do not ignore the indenting specified by ( or u in case that the unclosed parentheses is the first non-white charactoer in its line
 setlocal cinoptions+=w1
 setlocal cinoptions+=Ws     " indent line ended with open parentheses
 
