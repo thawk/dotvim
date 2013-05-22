@@ -509,7 +509,7 @@ NeoBundle 'DrawIt'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'tmhedberg/SimpylFold'
 NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/neocomplcache'
+"NeoBundle 'Shougo/neocomplcache'
 "NeoBundle 'VimIM'
 
 if v:version >= '701'
@@ -545,7 +545,7 @@ endif
 NeoBundle 'hrsh7th/vim-unite-vcs'
 NeoBundle 'vcscommand.vim'
 NeoBundle 'gprof.vim'
-if executable("clang")
+if executable("clang") || filereadable(expand("~/libexec/libclang.so")) || filereadable(expand("/usr/lib/libclang.so")) || filereadable(expand("/usr/lib64/libclang.so"))
     NeoBundle 'Rip-Rip/clang_complete'
     NeoBundleLazy 'thawk/OmniCppComplete'
 else
@@ -764,6 +764,12 @@ if neobundle#is_installed("clang_complete")
     if filereadable(expand("~/libexec/libclang.so"))
         let g:clang_use_library = 1
         let g:clang_library_path=expand("~/libexec")
+    elseif filereadable(expand("/usr/lib/libclang.so"))
+        let g:clang_use_library = 1
+        let g:clang_library_path=expand("/usr/lib")
+    elseif filereadable(expand("/usr/lib64/libclang.so"))
+        let g:clang_use_library = 1
+        let g:clang_library_path=expand("/usr/lib64")
     endif
 endif
 " }}}
