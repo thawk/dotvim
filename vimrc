@@ -604,7 +604,7 @@ NeoBundle 'sjl/gundo.vim'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'AutoFenc.vim'
 NeoBundle 'majutsushi/tagbar'
-NeoBundle 'thawk/vimproc', {
+NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
       \ 'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
       \ 'cygwin' : 'make -f make_cygwin.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
