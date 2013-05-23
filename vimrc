@@ -756,6 +756,17 @@ endif
 " }}}
 
 " Plugin 'clang_complete' {{{
+"
+" clang编译方法：
+"
+" svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
+" svn co http://llvm.org/svn/llvm-project/cfe/trunk llvm/tools/clang
+" mkdir -p llvm/build && cd llvm/build
+" ../configure
+" make -j9 ENABLE_OPTIMIZED=1 DISABLE_ASSERTIONS=1
+"
+" 要把Release/lib/libclang.so和Release/lib/clang目录拷贝到g:clang_library_path
+" 指向的位置，这样clang就可以比较快速地进行补全了。
 if neobundle#is_installed("clang_complete")
     let g:clang_complete_auto = 0
     let g:clang_auto_select = 0
