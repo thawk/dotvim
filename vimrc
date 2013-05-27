@@ -436,28 +436,6 @@ nnoremap <Leader>td :<C-U>make doc<CR>
 map <silent> g<F12> :set invlist<CR>
 " " }}}
 
-" Plugins settings (Before load plugins) {{{
-
-" Plugin 'vimfiler' {{{
-" 文件管理器，通过 :VimFiler 启动。
-" c : copy, m : move, r : rename,
-let g:vimfiler_as_default_explorer = 1
-" }}}
-
-" Plugin 'syntastic' {{{
-let g:syntastic_mode_map = {
-            \ 'mode': 'active',
-            \ 'active_filetypes': ['ruby', 'php', 'python'],
-            \ 'passive_filetypes': ['cpp'] }
-
-" 0: 不会自动打开、关闭 1: 自动打开及关闭 2: 没错误时自动关闭，但不会自动打开
-let g:syntastic_auto_loc_list=2
-" }}}
-
-" Plugin 'tagbar' {{{
-let g:tagbar_left = 1
-" }}}
-
 " NeoBundle -- load plugins {{{
 
 " Brief help
@@ -534,6 +512,7 @@ NeoBundle 'thinca/vim-textobj-comment'
 NeoBundle 'echofunc.vim'
 NeoBundle 'DoxygenToolkit.vim'
 NeoBundle 'CodeReviewer.vim'
+NeoBundle 'OrelSokolov/HiCursorWords'
 NeoBundle 'tComment'
 " \\\ to comment a line, \\ to comment a motion, \\u to uncomment
 "NeoBundle 'tpope/vim-commentary'
@@ -1140,11 +1119,42 @@ endif
 " }}}
 
 " Plugin 'tagbar' {{{
-nnoremap ff :<C-U>TagbarCurrentTag fs<CR>
-nnoremap <silent> <F9> :TagbarToggle<CR>
+if neobundle#is_installed("tagbar")
+    let g:tagbar_left = 1
+
+    nnoremap ff :<C-U>TagbarCurrentTag fs<CR>
+    nnoremap <silent> <F9> :TagbarToggle<CR>
+endif
 " }}}
 
+" Plugin 'HiCursorWords' {{{
+if neobundle#is_installed("HiCursorWords")
+    let g:HiCursorWords_delay = 200
+    let g:HiCursorWords_hiGroupRegexp = ''
+    let g:HiCursorWords_debugEchoHiName = 0
+endif
 " " }}}
+
+" Plugin 'syntastic' {{{
+if neobundle#is_installed("syntastic")
+    let g:syntastic_mode_map = {
+                \ 'mode': 'active',
+                \ 'active_filetypes': ['ruby', 'php', 'python'],
+                \ 'passive_filetypes': ['cpp'] }
+
+    " 0: 不会自动打开、关闭 1: 自动打开及关闭 2: 没错误时自动关闭，但不会自动打开
+    let g:syntastic_auto_loc_list=2
+endif
+
+" Plugin 'vimfiler' {{{
+if neobundle#is_installed("vimfiler")
+    " 文件管理器，通过 :VimFiler 启动。
+    " c : copy, m : move, r : rename,
+    let g:vimfiler_as_default_explorer = 1
+endif
+" }}}
+
+" }}}
 
 " Plugins depend settings {{{
 
