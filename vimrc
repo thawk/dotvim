@@ -509,7 +509,7 @@ NeoBundle 'DrawIt'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'tmhedberg/SimpylFold'
 NeoBundle 'Shougo/neosnippet'
-"NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Shougo/neocomplcache'
 "NeoBundle 'VimIM'
 
 if v:version >= '701'
