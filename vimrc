@@ -898,7 +898,6 @@ endif
 
 " unite {{{
 if neobundle#is_installed("unite.vim")
-    " Plugin 'unite.vim' {{{
     " 类似Fuzzyfinder的插件
     " The prefix key.
     nnoremap [unite] <Nop>
@@ -962,31 +961,10 @@ if neobundle#is_installed("unite.vim")
       imap <buffer> <LocalLeader>q <Plug>(unite_exit)
     endfunction
     autocmd! FileType unite call s:unite_settings()
-    " }}}
 
-    " Plugin 'unite-mark' {{{
-    " }}}
-
-    " Plugin 'unite-help' {{{
-    " }}}
-
-    " Plugin 'unite-tag' {{{
-    "autocmd BufEnter *
-    "    \ if empty(&buftype)
-    "    \| nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
-    "    \| endif
-    " }}}
-
-    " Plugin 'unite-outline' {{{
-    if neobundle#is_installed("CodeReviewer.vim")
+    if neobundle#is_installed("unite-outline")
         nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
     endif
-    " }}}
-
-    " Plugin 'unite-colorscheme' {{{
-    " }}}
-
-    " Plugin 'unite-build'
 endif
 " }}} " unite
 
@@ -998,7 +976,13 @@ if neobundle#is_installed("CodeReviewer.vim")
     " 3. Send the comments to the author of the code
     " 4. The author collates the inputs from various reviewers into one file (by simply concatenating them) and sorts it. Now the comments are arranged per file, in the order of line numbers (in a file called say, all_comments.txt)
     " 5. Using the :cfile all_comments.txt (or :CheckReview) the author can now navigate through all the comments.
-    let g:CodeReviewer_reviewer = $USER
+    if $USER != ""
+        let g:CodeReviewer_reviewer = $USER
+    elseif $USERNAME != ""
+        let g:CodeReviewer_reviewer = $USERNAME
+    else
+        let g:CodeReviewer_reviewer = "Unknown"
+    endif
 endif
 " }}}
 

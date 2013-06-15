@@ -1,3 +1,2 @@
-set runtimepath^=D:\docs\tht\config\vim\vimfiles
-set runtimepath+=D:\docs\tht\config\vim\vimfiles\after
-source D:\docs\tht\config\vim\vimfiles\vimrc
+# 可以把vim的配置文件放到~/vimfiles下
+runtime vimrc

@@ -10,6 +10,8 @@ My vim configuration
 ----
 git clone <repo_url> ~/.vim
 ----
++
+NOTE: You should clone to ~/vimfiles instead of ~/.vim in Windows.
 
 . Clone NeoBundle
 +
@@ -73,3 +75,4 @@ Host github.com
   User git
   Port 443
 --------------------
+
