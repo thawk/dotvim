@@ -622,7 +622,8 @@ endif
 " Plugin 'FSwitch' {{{
 if neobundle#is_installed("FSwitch")
     let g:fsnonewfiles=1
-    cabbrev A FSHere " 可以用:A在.h/.cpp间切换
+    " 可以用:A在.h/.cpp间切换
+    cabbrev A FSHere
     augroup fswitch_hack
         au! BufEnter *.h
                     \  let b:fswitchdst='cpp,c,ipp,cxx'
@@ -631,6 +632,25 @@ if neobundle#is_installed("FSwitch")
                     \  let b:fswitchdst='h,hpp'
                     \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
     augroup END
+
+    " Switch to the file and load it into the current window >
+	nmap <silent> <Leader>oo :FSHere<cr>
+    " Switch to the file and load it into the window on the right >
+	nmap <silent> <Leader>ol :FSRight<cr>
+    " Switch to the file and load it into a new window split on the right >
+	nmap <silent> <Leader>oL :FSSplitRight<cr>
+    " Switch to the file and load it into the window on the left >
+	nmap <silent> <Leader>oh :FSLeft<cr>
+    " Switch to the file and load it into a new window split on the left >
+	nmap <silent> <Leader>oH :FSSplitLeft<cr>
+    " Switch to the file and load it into the window above >
+	nmap <silent> <Leader>ok :FSAbove<cr>
+    " Switch to the file and load it into a new window split above >
+	nmap <silent> <Leader>oK :FSSplitAbove<cr>
+    " Switch to the file and load it into the window below >
+	nmap <silent> <Leader>oj :FSBelow<cr>
+    " Switch to the file and load it into a new window split below >
+	nmap <silent> <Leader>oJ :FSSplitBelow<cr>
 endif
 " }}}
 
