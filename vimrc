@@ -484,6 +484,7 @@ NeoBundle 'YankRing.vim'
 NeoBundle 'vis'
 NeoBundle 'surround.vim'
 NeoBundle 'DrawIt'
+NeoBundle 'thawk/tdvim_FoldDigest'    " 按照folding，显示折叠树
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'tmhedberg/SimpylFold'
 NeoBundle 'Shougo/neosnippet'
@@ -672,6 +673,17 @@ if neobundle#is_installed("vim-easymotion")
     " \\{motion}
     hi link EasyMotionTarget ErrorMsg
     hi link EasyMotionShade  Comment
+endif
+" }}}
+
+" Plugin 'tdvim_FoldDigest' {{{
+if neobundle#is_installed("tdvim_FoldDigest")
+    let g:FoldDigest_Pos = "left"
+    let g:folddigest_size = 40
+
+    augroup FoldDigestMappings
+        au! FileType asciidoc nnoremap <silent> <buffer> <F9> :FoldDigestToggle<CR>
+    augroup END
 endif
 " }}}
 
@@ -1127,7 +1139,9 @@ if neobundle#is_installed("tagbar")
     let g:tagbar_left = 1
 
     nnoremap ff :<C-U>TagbarCurrentTag fs<CR>
-    nnoremap <silent> <F9> :TagbarToggle<CR>
+    augroup TagbarMappings
+        au! FileType c,cpp,php,cs,vim,javascript,python nnoremap <silent> <buffer> <F9> :TagbarToggle<CR>
+    augroup END
 endif
 " }}}
 
