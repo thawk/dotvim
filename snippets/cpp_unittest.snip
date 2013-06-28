@@ -13,16 +13,22 @@ options head
 	struct Fixture
 	{
 	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${2:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
+
+        Fixture()
+        : $1(${2})
+        {
+        }
 	};
 
 	BOOST_AUTO_TEST_SUITE_END()
 
 # Boost.Test
 snippet sut
+abbr sscc::upper
 options head
 	#include <boost/test/unit_test.hpp>
     #include <boost/system/error_code.hpp>
-	#include "../`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
+	#include "`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
 
 	using namespace sscc::`substitute(expand("%:p:h:h:t"),"\\.","_","g")`;
     using boost::system::error_code;
@@ -32,6 +38,11 @@ options head
     struct Fixture
     {
 	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${1:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
+
+        Fixture()
+        : $1(${2})
+        {
+        }
     };
 
     ${0}
@@ -40,6 +51,7 @@ options head
 
 # Boost.Test
 snippet sut2
+abbr sscc::upper_upper
 options head
 	#include <boost/test/unit_test.hpp>
     #include <boost/system/error_code.hpp>
@@ -53,18 +65,38 @@ options head
     struct Fixture
     {
 	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${1:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
+
+        Fixture()
+        : $1(${2})
+        {
+        }
     };
 
     ${0}
 
 	BOOST_AUTO_TEST_SUITE_END()
 
+# Comment for Test Case
+snippet tc
+abbr unittest for any class
+options head
+    /**
+     * @class ${1}`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
+     * @test ${2}\n
+     * <b>输入数据：</b> ${3}\n
+     * <b>预期输出：</b> ${4}
+     */
+     BOOST_FIXTURE_TEST_CASE(Test${5}, Fixture)
+     {
+         ${0}
+     }
+
 # Comment for Sscc Test Case
 snippet stc
 abbr unittest for sscc::upper::class
 options head
     /**
-     * @class sscc::`substitute(expand("%:p:h:h:t"),"\\.","_","g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`;
+     * @class sscc::`substitute(expand("%:p:h:h:t"),"\\.","_","g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
      * @test ${1}\n
      * <b>输入数据：</b> ${2}\n
      * <b>预期输出：</b> ${3}
@@ -79,7 +111,7 @@ snippet stc2
 abbr unittest for sscc::upper upper::class
 options head
     /**
-	 * @class sscc::`substitute(expand("%:p:h:h:h:t"),"\\.","_","g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`;
+	 * @class sscc::`substitute(expand("%:p:h:h:h:t"),"\\.","_","g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
      * @test ${1}\n
      * <b>输入数据：</b> ${2}\n
      * <b>预期输出：</b> ${3}

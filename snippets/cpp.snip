@@ -1,4 +1,5 @@
 include c.snip
+include cpp_guard.snip
 
 snippet     class
 abbr        class {}
@@ -16,6 +17,13 @@ abbr        try catch
     catch (${2:e:xception})
     {
         ${3}
+    }
+
+snippet     fori
+abbr        for (T i::) {}
+    for (${1:size_t} ${2:i}=${3:0}; $2 < ${4}; ++$2)
+    {
+        ${0}
     }
 
 # range based for ( C++11 feature )

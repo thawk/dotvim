@@ -1,2 +1,2 @@
-# 可以把vim的配置文件放到~/vimfiles下
+" 可以把vim的配置文件放到~/vimfiles下
 runtime vimrc
