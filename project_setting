@@ -53,8 +53,8 @@ function! SetupEnvironment()
         endif
     endif
 
-    " 加入路径上所有util/lib/3rd目录下的库
-    for l:d in ["util", "lib", "3rd"]
+    " 加入路径上所有lib/3rd/util/framework目录下的库
+    for l:d in ["lib", "3rd", "util", "framework"]
         for l:p in finddir(l:d, '.;' . l:workspace_dir, -1)
             call s:AddComponentsToPath(l:p)
         endfor
