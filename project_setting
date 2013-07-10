@@ -1,18 +1,17 @@
 function! s:AddComponentsToPath(path)
-    " 把path目录下，include目录加入路径中
-    if isdirectory(a:path . "/include/")
-        call s:AddPath(a:path . "/include")
-    endif
+    " 把path目录下，两层子目录内的include目录加入路径中
+    for l:p in finddir("include", a:path . "/**2", -1)
+        call s:AddPath(l:p)
+    endfor
 
-    " 把path目录下，所有直接子目录加入到include路径中
+    " 把boost目录的上层目录加入路径
+    for l:p in finddir("boost", a:path . "/**2", -1)
+        call s:AddPath(fnamemodify(l:p, ":p:h"))
+    endfor
+
+    " 把path目录下，所有包含头文件的直接子目录include路径中
     for l:p in split(glob(a:path . "/*"), "\n")
-        if isdirectory(l:p . "/boost/")
-            call s:AddPath(l:p)
-        elseif isdirectory(l:p . "/include/")
-            call s:AddPath(l:p . "/include")
-        elseif l:p =~ '.*/msgbus' && isdirectory(l:p . "/cpp/include")
-            call s:AddPath(l:p . "/cpp/include")
-        elseif findfile("*.h", l:p) || findfile("*.hpp", l:p)
+        if findfile("*.h", l:p) || findfile("*.hpp", l:p)
             call s:AddPath(l:p)
         endif
 
@@ -54,19 +53,11 @@ function! SetupEnvironment()
         endif
     endif
 
-    " 加入路径上所有util目录下的库
-    for l:p in finddir("util", '.;' . l:workspace_dir, -1)
-        call s:AddComponentsToPath(l:p)
-    endfor
-
-    " 加入路径上所有lib目录下的库
-    for l:p in finddir("lib", '.;' . l:workspace_dir, -1)
-        call s:AddComponentsToPath(l:p)
-    endfor
-
-    " 加入路径上所有3rd目录下的库
-    for l:p in finddir("3rd", '.;' . l:workspace_dir, -1)
-        call s:AddComponentsToPath(l:p)
+    " 加入路径上所有util/lib/3rd目录下的库
+    for l:d in ["util", "lib", "3rd"]
+        for l:p in finddir(l:d, '.;' . l:workspace_dir, -1)
+            call s:AddComponentsToPath(l:p)
+        endfor
     endfor
 
     " 加入路径上所有Jamroot/Jamfile所在目录，这种目录通常都在include路径中
@@ -75,33 +66,6 @@ function! SetupEnvironment()
             call s:AddPath(fnamemodify(l:p, ":p:h"))
         endfor
     endfor
-
-    " if l:path =~ '/test/'
-    "     let l:test_path = substitute(l:path, '/test/.*', '/test', '')
-    "     " 单元测试对象一般放在test的上层目录
-    "     call s:AddPath(fnamemodify(l:test_path, ":p:h:h"))
-    "     " test的上层目录一般为子组件，再上一层为组件目录
-    "     call s:AddPath(fnamemodify(l:test_path, ":p:h:h:h"))
-    " else
-    "     " 加入当前文件目录的上层目录
-    "     call s:AddPath(fnamemodify(l:path, ":p:h:h"))
-    " endif
-
-    " " trunk
-    " if l:path =~ '/\(trunk\)/'
-    "     call s:AddPath(substitute(l:path, '^\(.*/\(trunk\)\)/.*', '\1', ''))
-    " endif
-
-    " " tags/branches下的一层目录
-    " if l:path =~ '/\(tags\|branches\)/[^/]\+/'
-    "     call s:AddPath(substitute(l:path, '^\(.*/\(tags\|branches\)/[^/]\+\)/.*', '\1', ''))
-    " endif
-
-    " " 各业务组件可能没有trunk
-    " if l:path =~ '/\(biz\|mb\|cs\)/'
-    "     let l:comp_path = substitute(l:path, '^\(.*/\(biz\|mb\|cs\)\)/.*', '\1', '')
-    "     call s:AddPath(l:comp_path)
-    " endif
 
     " 如果在Boost目录，则加上boost目录的上一层目录
     let l:boost_include = finddir("boost", '.;' . expand("$HOME"))
@@ -122,7 +86,6 @@ function! SetupEnvironment()
     if isdirectory(l:cpp_include_path)
         call s:AddPath(l:cpp_include_path)
     endif
-
 endfunction
 
 augroup vim_project_setting

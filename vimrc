@@ -203,6 +203,9 @@ set errorformat^=%[a-zA-Z0-9_-]%\\+:\ %f:%l:%m
 " 忽略2012-01-18 13:14:15之类的日志行
 set errorformat^=%+G20%\[0-9]%\[0-9]-%\[0-9]%\[0-9]-%\[0-9]%\[0-9]\ %\[0-9]%\[0-9]:%\[0-9]%\[0-9]:%\[0-9]%\[0-9]%m
 
+" xgettext出错信息
+set errorformat+=xgettext:\ %m\ at\ %f:%l.
+
 " Highlight space errors in C/C++ source files (Vim tip #935)
 let c_space_errors=1
 let java_space_errors=1
@@ -428,7 +431,7 @@ nmap zK zkzx
 
 " 一些方便编译的快捷键
 nnoremap <Leader>tm :<C-U>make<CR>
-nnoremap <Leader>tt :<C-U>make test<CR>
+nnoremap <Leader>tt :<C-U>make unittest<CR>
 nnoremap <Leader>ts :<C-U>make stage<CR>
 nnoremap <Leader>tc :<C-U>make clean<CR>
 nnoremap <Leader>td :<C-U>make doc<CR>
