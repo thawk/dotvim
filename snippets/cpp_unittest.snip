@@ -28,7 +28,7 @@ abbr sscc::upper
 options head
 	#include <boost/test/unit_test.hpp>
     #include <boost/system/error_code.hpp>
-	#include "`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
+	#include <sscc/`substitute(expand("%:p:h:h:t"),"\\.","_","g")`/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h>
 
 	using namespace sscc::`substitute(expand("%:p:h:h:t"),"\\.","_","g")`;
     using boost::system::error_code;
@@ -55,7 +55,7 @@ abbr sscc::upper_upper
 options head
 	#include <boost/test/unit_test.hpp>
     #include <boost/system/error_code.hpp>
-	#include "`substitute(expand("%:p:h:h:h:t"),"\\.","_","g")`/`substitute(expand("%:p:h:t"),"\\.","_","g")`/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
+	#include <sscc/`substitute(expand("%:p:h:h:h:t"),"\\.","_","g")`/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h>
 
 	using namespace sscc::`substitute(expand("%:p:h:h:h:t"),"\\.","_","g")`;
     using boost::system::error_code;
