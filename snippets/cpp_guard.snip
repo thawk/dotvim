@@ -18,8 +18,22 @@ options head
     public:
         ${0}
     };
-    `substitute(substitute(substitute(expand("%:p:h"), ".*\\<include/", "", ""), "[.-]", "_", "g"), "/\\?\\([^/]\\+\\)", "}  // namespace \\1\\n", "g")`
+    `join(reverse(split(substitute(substitute(substitute(expand("%:p:h"), ".*\\<include/", "", ""), "[.-]", "_", "g"), "/\\?\\([^/]\\+\\)", "}  // namespace \\1\\n", "g"), "\\n")), "\n")`
     #endif  // `toupper(substitute(substitute(expand("%:p"), ".*\\<include/", "", ""), "[/.-]", "_", "g"))."_"`
+
+# C++源文件框架，适用于目录层次中有src目录，头文件放在src同层的include下的情况。会自动从include下找到与本文件同名的头文件，按其目录确定最终的名字空间
+snippet src
+abbr src for src/*
+options head
+	/**
+	 * @file
+	 * @brief  `substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")."类的定义"`
+	 * @author `$USER`
+	 */
+    #include <`substitute(findfile(expand("%:t:r") . ".h", substitute(expand("%:p"), "\\<src/.*", "include/**", ""), 1), ".*\\<include/", "", "")`>
+    `substitute(substitute(fnamemodify(substitute(findfile(expand("%:t:r") . ".h", substitute(expand("%:p"), "\\<src/.*", "include/**", ""), 1), ".*\\<include/", "", ""), ":p:h"), "[.-]", "_", "g"), "/\\?\\([^/]\\+\\)", "\\nnamespace \\1\\n{", "g")`
+    ${0}
+    `join(reverse(split(substitute(substitute(fnamemodify(substitute(findfile(expand("%:t:r") . ".h", substitute(expand("%:p"), "\\<src/.*", "include/**", ""), 1), ".*\\<include/", "", ""), ":p:h"), "[.-]", "_", "g"), "/\\?\\([^/]\\+\\)", "}  // namespace \\1\\n", "g"), "\\n")), "\n")`
 
 # Include-Guard，以上层目录名为名字空间，前面再加上一层sscc::名字空间
 snippet h1

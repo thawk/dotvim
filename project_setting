@@ -4,6 +4,11 @@ function! s:AddComponentsToPath(path)
         call s:AddPath(l:p)
     endfor
 
+    " 把path目录下，两层子目录内的3rd目录加入路径中
+    for l:p in finddir("3rd", a:path . "/**2", -1)
+        call s:AddComponentsToPath(l:p)
+    endfor
+
     " 把boost目录的上层目录加入路径
     for l:p in finddir("boost", a:path . "/**2", -1)
         call s:AddPath(fnamemodify(l:p, ":p:h"))
@@ -17,10 +22,6 @@ function! s:AddComponentsToPath(path)
 
         if isdirectory(l:p . "/lib/")
             call s:AddComponentsToPath(l:p . "/lib")
-        endif
-
-        if isdirectory(l:p . "/3rd/")
-            call s:AddComponentsToPath(l:p . "/3rd")
         endif
     endfor
 endfunction
