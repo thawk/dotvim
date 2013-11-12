@@ -194,12 +194,14 @@ set errorformat+=Generating\ docs\ for\ compound\ %f:%l:%m
 set errorformat+=Generating\ docs\ Error:\ %f:%l:%m
 set errorformat+=Generating\ annotated\ compound\ ind%f:%l:%m
 set errorformat+=Generating\ docs\ %f:%l:%m
-set errorformat+=GeneratinError:\ %f:%l:\ %m
+set errorformat+=Generating\ docs\ for\ page\ %\\w%\\+...%f:%l:%m
+set errorformat+=Generating\ Error:\ %f:%l:\ %m
 set errorformat+=Error:\ %f:%l:\ %m
-set errorformat+=Parsing\ file\ %f:%l:\ %m
+set errorformat^=Parsing\ file\ %f:%l:%m
 
 " Boost.Assert: common-test_stream_reader: include/common/stream_reader.h:306:...
 set errorformat^=%[a-zA-Z0-9_-]%\\+:\ %f:%l:%m
+
 " 忽略2012-01-18 13:14:15之类的日志行
 set errorformat^=%+G20%\[0-9]%\[0-9]-%\[0-9]%\[0-9]-%\[0-9]%\[0-9]\ %\[0-9]%\[0-9]:%\[0-9]%\[0-9]:%\[0-9]%\[0-9]%m
 
@@ -307,6 +309,27 @@ au FileType qf setlocal wrap linebreak
 au FileType vim nnoremap <silent> <buffer> K :<C-U>help <C-R><C-W><CR>
 au FileType man setlocal foldmethod=indent foldnestmax=2 foldenable nomodifiable nonumber shiftwidth=3 foldlevel=2
 au FileType cs setlocal wrap
+
+" 如果系统中能找到jing（RELAX NG验证工具）
+if executable("jing")
+    function! s:jing_settings(filetype)
+        if a:filetype == "rnc"
+            " 如果存在与rnc文件同名的xml文件，把makeprg设为jing，以rnc文件来验证相应的xml文件
+            if filereadable(expand("%:r") . ".xml")
+                setlocal makeprg=jing\ %\ %:r.xml
+            endif
+        else
+            " 如果存在与xml文件同名的rnc文件，把makeprg设为jing，以相应的rnc文件来验证xml文件
+            if filereadable(expand("%:r") . ".rnc")
+                setlocal makeprg=jing\ %:r.rnc\ %
+            endif
+        endif
+    endfunction
+    augroup jing
+        au FileType xml call s:jing_settings("xml")
+        au FileType rnc call s:jing_settings("rnc")
+    augroup END
+endif
 " "}}}
 
 " 根据不同的文件类型设定<F3>时应该查找的文件 "{{{
@@ -397,8 +420,8 @@ inoremap <Down> <C-O>gj
 inoremap <Up>   <C-O>gk
 
 " Key mappings for the quickfix commands
-nmap <F11> :cn<CR>
-nmap <F12> :cp<CR>
+nmap <F11> :cnf<CR>
+nmap <F12> :cpf<CR>
 
 " F3自动vimgrep当前word
 "nmap <F3> :exec "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.c **/*.h **/*.php"<CR>:copen<CR>
@@ -487,7 +510,6 @@ NeoBundle 'YankRing.vim'
 NeoBundle 'vis'
 NeoBundle 'surround.vim'
 NeoBundle 'DrawIt'
-NeoBundle 'thawk/tdvim_FoldDigest'    " 按照folding，显示折叠树
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'tmhedberg/SimpylFold'
 NeoBundle 'Shougo/neosnippet'
@@ -626,15 +648,20 @@ endif
 " Plugin 'FSwitch' {{{
 if neobundle#is_installed("FSwitch")
     let g:fsnonewfiles=1
-    " 可以用:A在.h/.cpp间切换
-    cabbrev A FSHere
+    cabbrev A FSHere " 可以用:A在.h/.cpp间切换
     augroup fswitch_hack
         au! BufEnter *.h
                     \  let b:fswitchdst='cpp,c,ipp,cxx'
-                    \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
+                    \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!\<include/\w\+/!src/!,reg:!\<include/\(\w\+/\)\{2}!src/!,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
         au! BufEnter *.c,*.cpp,*.ipp
                     \  let b:fswitchdst='h,hpp'
                     \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
+        au! BufEnter *.xml
+                    \  let b:fswitchdst='rnc'
+                    \| let b:fswitchlocs='./'
+        au! BufEnter *.rnc
+                    \  let b:fswitchdst='xml'
+                    \| let b:fswitchlocs='./'
     augroup END
 
     " Switch to the file and load it into the current window >
@@ -679,17 +706,6 @@ if neobundle#is_installed("vim-easymotion")
 endif
 " }}}
 
-" Plugin 'tdvim_FoldDigest' {{{
-if neobundle#is_installed("tdvim_FoldDigest")
-    let g:FoldDigest_Pos = "left"
-    let g:folddigest_size = 40
-
-    augroup FoldDigestMappings
-        au! FileType asciidoc nnoremap <silent> <buffer> <F9> :FoldDigestToggle<CR>
-    augroup END
-endif
-" }}}
-
 " Plugin 'YankRing.vim' {{{
 if neobundle#is_installed("YankRing.vim")
     let g:yankring_persist = 0              "不把yankring持久化
@@ -716,7 +732,7 @@ if neobundle#is_installed("vim-alignta")
                 \ ["Declaration", 'v/^\w\+:\|' . s:comment_leadings . ' <<1:2 \(\S\+;\|\w\+()\(\s*const\)\?\s*;\|\w\+,\|\w\+);\?\) \(\/\/.*\|\/\*.*\)\?'],
                 \ ["Align at '='", '=>\='],
                 \ ["Align at ':'", '01 :'],
-                \ ["Align at ','", '01 ,'],
+                \ ["Align at ','", '10 \(,\s*\)\@<=\S'],
                 \ ["Align at '|'", '|'   ],
                 \ ["Align at ')'", '0 )' ],
                 \ ["Align at ']'", '0 ]' ],
@@ -786,6 +802,8 @@ if neobundle#is_installed("clang_complete")
     let g:clang_auto_select = 0
     let g:clang_complete_copen = 0  " open quickfix window on error.
     let g:clang_hl_errors = 1       " highlight the warnings and errors the same way clang
+    let g:clang_jumpto_declaration_key = '<C-S-]>'
+    let g:clang_jumpto_back_key = '<C-S-T>'
     if filereadable(expand("~/libexec/libclang.so"))
         let g:clang_use_library = 1
         let g:clang_library_path=expand("~/libexec")
@@ -1067,6 +1085,12 @@ if neobundle#is_installed("vim-editqf")
 endif
 " " }}}
 
+" Plugin 'vcscommand.vim' {{{
+if neobundle#is_installed("vcscommand.vim")
+    nnoremap <Leader>cp :VCSVimDiff PREV<CR>
+endif
+" " }}}
+
 " Indents & Foldings" {{{
 " Plugin 'indentpython.vim--nianyang'
 " Plugin 'SimpylFold'
@@ -1127,7 +1151,7 @@ endif
 " }}}
 
 " Plugin 'gundo' {{{
-if neobundle#is_installed("gundo")
+if neobundle#is_installed("gundo.vim")
     nnoremap <F5> :GundoToggle<CR>
 endif
 " }}}

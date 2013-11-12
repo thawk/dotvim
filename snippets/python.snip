@@ -1,6 +1,60 @@
 snippet modeline
     #!/usr/bin/python
     # vim: set fileencoding=utf-8 tabstop=8 expandtab shiftwidth=4 softtabstop=4:
-    # Author: ${1:author}(${2:email})
-    
-    ${3}
+
+    ${0}
+
+snippet main
+	#!/usr/bin/python
+	# vim: set fileencoding=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4:
+	
+	# Imports
+	import codecs
+	import locale
+	import logging
+	import optparse
+	import sys
+
+	VERSION=u"`strftime("%Y")`"
+
+	if __name__ == "__main__":
+		sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
+		sys.stderr = codecs.getwriter(locale.getpreferredencoding())(sys.stderr)
+		locale.setlocale(locale.LC_NUMERIC, 'en_US')	# 可以使用带locale.format("%d", 1234567, groupin=True)得到逗号分隔的格式
+
+		optparser = optparse.OptionParser(
+			usage="%prog [options]", 
+			description="""\
+		${1:description}""",
+			version=VERSION)
+
+		optparser.add_option('-v', '--verbose', action="store_true", dest="verbose", default=False, help="Be moderatery verbose")
+		optparser.add_option('-s', '--silent',  action="store_true", dest="silent", default=False, help="Only show warning and errors")
+
+		(options, args) = optparser.parse_args()
+
+		# 对解释出来的参数进行编码转换
+		for k in vars(options):
+			if isinstance(getattr(options, k), str):
+				setattr(options, k, unicode(getattr(options, k), locale.getpreferredencoding()).strip())
+
+		# 对剩余的命令行参数进行编码转换
+		args = [unicode(arg, locale.getpreferredencoding()) for arg in args]
+
+		# 日志初始化
+		log_format = u"%(asctime)s %(levelname)s %(message)s"
+
+		if options.silent:
+			logging.basicConfig(level=logging.WARNING, format=log_format)
+		elif options.verbose:
+			logging.basicConfig(level=logging.DEBUG, format=log_format)
+		else:
+			logging.basicConfig(level=logging.INFO, format=log_format)
+
+		${0}
+		# 参数最小个数验证
+		if len(args) < 1:
+			sys.stderr.write("Error: <gateway_id> is missing\n")
+			optparser.print_help(sys.stderr)
+			sys.exit(2)
+

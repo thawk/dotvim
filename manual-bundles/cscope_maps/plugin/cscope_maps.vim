@@ -100,6 +100,15 @@ if has("cscope")
     nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
 
+    nmap <C-\>S :cs find s<SPACE>
+    nmap <C-\>G :cs find g<SPACE>
+    nmap <C-\>C :cs find c<SPACE>
+    nmap <C-\>T :cs find t<SPACE>
+    nmap <C-\>E :cs find e<SPACE>
+    nmap <C-\>F :cs find f<SPACE>
+    nmap <C-\>I :cs find i ^
+    nmap <C-\>D :cs find d<SPACE>
+
     " Using 'CTRL-spacebar' (intepreted as CTRL-@ by vim) then a search type
     " makes the vim window split horizontally, with search result displayed in
     " the new window.
