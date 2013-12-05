@@ -62,35 +62,35 @@ let g:load_doxygen_syntax=1
 " that we should clean up.
 "
 
+" "
+" " DisableErrorHighlights()
+" "
+" " Clear out the highlighting that was done to warn us about the messes.
+" "
+" function! DisableErrorHighlights()
+"     if exists("w:match120")
+"         call matchdelete(w:match120)
+"         unlet w:match120
+"     endif
+"     if exists("w:matchTab")
+"         call matchdelete(w:matchTab)
+"         unlet w:matchTab
+"     endif
+" endfunction
 "
-" DisableErrorHighlights()
-"
-" Clear out the highlighting that was done to warn us about the messes.
-"
-function! DisableErrorHighlights()
-    if exists("w:match120")
-        call matchdelete(w:match120)
-        unlet w:match120
-    endif
-    if exists("w:matchTab")
-        call matchdelete(w:matchTab)
-        unlet w:matchTab
-    endif
-endfunction
-
-"
-" EnableErrorHighlights()
-"
-" Highlight the stuff we are unhappy with.
-"
-function! EnableErrorHighlights()
-    if !exists("w:match120") && &textwidth>0
-        let w:match120=matchadd('BadInLine', '\%'.string(&textwidth+1).'v.*', -1)
-    endif
-    if !exists("w:matchTab")
-        let w:matchTab=matchadd('BadInLine', '^\t\+', -1)
-    endif
-endfunction
+" "
+" " EnableErrorHighlights()
+" "
+" " Highlight the stuff we are unhappy with.
+" "
+" function! EnableErrorHighlights()
+"     if !exists("w:match120") && &textwidth>0
+"         let w:match120=matchadd('BadInLine', '\%'.string(&textwidth+1).'v.*', -1)
+"     endif
+"     if !exists("w:matchTab")
+"         let w:matchTab=matchadd('BadInLine', '^\t\+', -1)
+"     endif
+" endfunction
 
 "
 " AlterColour() {{{
@@ -296,8 +296,15 @@ augroup local_ftplugin_cpp
     au!
     " Enable and disable the highlighting of lines greater than
     " our 'allowed' length
-    au BufWinEnter *.h,*.cpp call EnableErrorHighlights()
-    "au BufWinLeave *.h,*.cpp call DisableErrorHighlights()
+    if version < 703
+        " au BufWinEnter *.h,*.cpp call EnableErrorHighlights()
+        " au BufWinLeave *.h,*.cpp call DisableErrorHighlights()
+        au BufWinEnter *.h,*.cpp let w:m1=matchadd('Search', '\%<92v.\%>91v', -1)
+        au BufWinEnter *.h,*.cpp let w:m2=matchadd('ErrorMsg', '\%<121v.\%>120v', -1)
+    else
+        setlocal colorcolumn=+1,120
+    endif
+
     " Change the directory when entering a buffer
     "au BufWinEnter,BufEnter *.h,*.cpp :lcd %:h
 

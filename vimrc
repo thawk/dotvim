@@ -1099,16 +1099,16 @@ endif
 " Syntaxes " {{{
 " Plugin 'asciidoc.vim' "{{{
 "au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
+" 原选项是                     \ textwidth=70 wrap formatoptions=tcqnmB
 au FileType asciidoc      setlocal shiftwidth=2
                                \ tabstop=2
-                               \ textwidth=70 wrap formatoptions=tcqnmB
+                               \ textwidth=70 wrap formatoptions=qnmB
                                \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
                                \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
                                \ foldexpr=MyAsciidocFoldLevel(v:lnum)
                                \ foldmethod=expr
                                \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
                                \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
-                               \ textwidth=70 wrap formatoptions=tcqnmB
 " "}}}
 
 " Plugin 'wps.vim' {{{syntax highlight for RockBox wps file
