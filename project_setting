@@ -11,7 +11,12 @@ function! s:AddComponentsToPath(path)
 
     " 把boost目录的上层目录加入路径
     for l:p in finddir("boost", a:path . "/**2", -1)
-        call s:AddPath(fnamemodify(l:p, ":p:h"))
+        call s:AddPath(fnamemodify(l:p, ":p:h:h"))
+    endfor
+
+    " 把sscc目录的上层目录加入路径
+    for l:p in finddir("sscc", a:path . "/**2", -1)
+        call s:AddPath(fnamemodify(l:p, ":p:h:h"))
     endfor
 
     " 把path目录下，所有包含头文件的直接子目录include路径中
@@ -55,7 +60,7 @@ function! SetupEnvironment()
     endif
 
     " 加入路径上所有lib/3rd/util/framework目录下的库
-    for l:d in ["lib", "3rd", "util", "framework"]
+    for l:d in ["lib", "3rd", "util", "framework", "share"]
         for l:p in finddir(l:d, '.;' . l:workspace_dir, -1)
             call s:AddComponentsToPath(l:p)
         endfor

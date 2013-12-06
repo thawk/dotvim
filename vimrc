@@ -112,11 +112,12 @@ function! CurDir()
     return curdir
 endfunction
 
-set nolist " Display unprintable characters g<f12> - switches
+set list " Display unprintable characters g<f12> - switches
 "let &listchars="tab:\u2192 ,eol:\u00b6,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 "let &listchars="tab:\u21e5 ,eol:\u00b6,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 "let &listchars="tab:\u21e5 ,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
-let &listchars="tab:\u2192 ,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
+"let &listchars="tab:\u21e2\u21e5,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
+let &listchars="tab:>-,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 "set listchars=tab:>-,eol:<,trail:-,nbsp:%,extends:>,precedes:<
 
 set foldenable " Turn on folding
@@ -420,8 +421,10 @@ inoremap <Down> <C-O>gj
 inoremap <Up>   <C-O>gk
 
 " Key mappings for the quickfix commands
-nmap <F11> :cnf<CR>
-nmap <F12> :cpf<CR>
+nmap <F11> :cn<CR>
+nmap <F12> :cp<CR>
+nmap g<F11> :cnf<CR>
+nmap g<F12> :cpf<CR>
 
 " F3自动vimgrep当前word
 "nmap <F3> :exec "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.c **/*.h **/*.php"<CR>:copen<CR>
@@ -458,8 +461,6 @@ nnoremap <Leader>tt :<C-U>make unittest<CR>
 nnoremap <Leader>ts :<C-U>make stage<CR>
 nnoremap <Leader>tc :<C-U>make clean<CR>
 nnoremap <Leader>td :<C-U>make doc<CR>
-
-map <silent> g<F12> :set invlist<CR>
 " " }}}
 
 " NeoBundle -- load plugins {{{
@@ -1036,6 +1037,7 @@ if neobundle#is_installed("CodeReviewer.vim")
     else
         let g:CodeReviewer_reviewer = "Unknown"
     endif
+    let g:CodeReviewer_reviewFile="review.rev"
 endif
 " }}}
 
@@ -1099,16 +1101,16 @@ endif
 " Syntaxes " {{{
 " Plugin 'asciidoc.vim' "{{{
 "au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
-" 原选项是                     \ textwidth=70 wrap formatoptions=tcqnmB
 au FileType asciidoc      setlocal shiftwidth=2
                                \ tabstop=2
-                               \ textwidth=70 wrap formatoptions=qnmB
+                               \ textwidth=70 wrap formatoptions=tcqnmB
                                \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
                                \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
                                \ foldexpr=MyAsciidocFoldLevel(v:lnum)
                                \ foldmethod=expr
                                \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
                                \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
+                               \ textwidth=70 wrap formatoptions=tcqnmB
 " "}}}
 
 " Plugin 'wps.vim' {{{syntax highlight for RockBox wps file

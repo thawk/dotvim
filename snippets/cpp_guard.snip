@@ -37,20 +37,19 @@ options head
 
 # Include-Guard，以上层目录名为名字空间，前面再加上一层sscc::名字空间
 snippet h1
-abbr header for sscc::upper::class
+abbr header for sscc::util
 options head
 	/**
 	 * @file
 	 * @brief  `substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")."类的声明"`
 	 * @author `$USER`
 	 */
-    #ifndef SSCC_`toupper(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g")."_")``toupper(substitute(expand("%:t"),"\\.","_","g"))`_
-    #define SSCC_`toupper(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g")."_")``toupper(substitute(expand("%:t"),"\\.","_","g"))`_
+    #ifndef SSCC`toupper(substitute(substitute(substitute(expand("%:p"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{2}\\)$", "\\1", ""), "[/.-]", "_", "g"))."_"`
+    #define SSCC`toupper(substitute(substitute(substitute(expand("%:p"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{2}\\)$", "\\1", ""), "[/.-]", "_", "g"))."_"`
 
     namespace sscc
     {
-    namespace `tolower(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g"))`
-    {
+    `substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{1}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "namespace \\1\\n{\\n", "g")`
 	/**
 	 * @brief ${2}
 	 */
@@ -59,27 +58,26 @@ options head
     public:
         ${0}
     };
-    }   // namespace `tolower(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g"))`
-    }   // namespace sscc
+    `join(reverse(split(substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{1}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "}  // namespace \\1\\n", "g"), "\\n")), "\n")`
+    }  // namespace sscc
 
-    #endif  // SSCC_`toupper(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g")."_")``toupper(substitute(expand("%:t"),"\\.","_","g"))`_
+    #endif  // SSCC`toupper(substitute(substitute(substitute(expand("%:p"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{2}\\)$", "\\1", ""), "[/.-]", "_", "g"))."_"`
 
 # Include-Guard，以上上层目录名为名字空间，前面再加上一层sscc::名字空间
 snippet h2
-abbr header for sscc::upper upper::class
+abbr header for sscc::trade::share
 options head
 	/**
 	 * @file
 	 * @brief  `substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")."类的声明"`
 	 * @author `$USER`
 	 */
-    #ifndef SSCC_`toupper(substitute(fnamemodify(substitute(expand("%:p:h:h:h:t")."/".expand("%:p:h:h:t"),"/include","",""),":t"),"\\.","_","g")."_")``toupper(substitute(expand("%:t"),"\\.","_","g"))`_
-    #define SSCC_`toupper(substitute(fnamemodify(substitute(expand("%:p:h:h:h:t")."/".expand("%:p:h:h:t"),"/include","",""),":t"),"\\.","_","g")."_")``toupper(substitute(expand("%:t"),"\\.","_","g"))`_
+    #ifndef SSCC`toupper(substitute(substitute(substitute(expand("%:p"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{3}\\)$", "\\1", ""), "[/.-]", "_", "g"))."_"`
+    #define SSCC`toupper(substitute(substitute(substitute(expand("%:p"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{3}\\)$", "\\1", ""), "[/.-]", "_", "g"))."_"`
 
     namespace sscc
     {
-    namespace `tolower(substitute(fnamemodify(substitute(expand("%:p:h:h:h:t")."/".expand("%:p:h:h:t"),"/include","",""),":t"),"\\.","_","g"))`
-    {
+    `substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{2}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "namespace \\1\\n{\\n", "g")`
 	/**
 	 * @brief ${2}
 	 */
@@ -88,13 +86,40 @@ options head
     public:
         ${0}
     };
-    }   // namespace `tolower(substitute(fnamemodify(substitute(expand("%:p:h:h:h:t")."/".expand("%:p:h:h:t"),"/include","",""),":t"),"\\.","_","g"))`
-    }   // namespace sscc
+    `join(reverse(split(substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{2}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "}  // namespace \\1\\n", "g"), "\\n")), "\n")`
+    }  // namespace sscc
 
-    #endif  // SSCC_`toupper(substitute(fnamemodify(substitute(expand("%:p:h:h:h:t")."/".expand("%:p:h:h:t"),"/include","",""),":t"),"\\.","_","g")."_")``toupper(substitute(expand("%:t"),"\\.","_","g"))`_
+    #endif  // SSCC`toupper(substitute(substitute(substitute(expand("%:p"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{3}\\)$", "\\1", ""), "[/.-]", "_", "g"))."_"`
+
+snippet h3
+abbr header for sscc::trade::tcs::core
+options head
+	/**
+	 * @file
+	 * @brief  `substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")."类的声明"`
+	 * @author `$USER`
+	 */
+    #ifndef SSCC`toupper(substitute(substitute(substitute(expand("%:p"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{4}\\)$", "\\1", ""), "[/.-]", "_", "g"))."_"`
+    #define SSCC`toupper(substitute(substitute(substitute(expand("%:p"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{4}\\)$", "\\1", ""), "[/.-]", "_", "g"))."_"`
+
+    namespace sscc
+    {
+    `substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{3}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "namespace \\1\\n{\\n", "g")`
+	/**
+	 * @brief ${2}
+	 */
+    class `substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
+    {
+    public:
+        ${0}
+    };
+    `join(reverse(split(substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{3}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "}  // namespace \\1\\n", "g"), "\\n")), "\n")`
+    }  // namespace sscc
+
+    #endif  // SSCC`toupper(substitute(substitute(substitute(expand("%:p"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{4}\\)$", "\\1", ""), "[/.-]", "_", "g"))."_"`
 
 snippet c1
-abbr cpp for sscc::upper::class
+abbr cpp for sscc::util
 options head
 	/**
 	 * @file
@@ -105,15 +130,13 @@ options head
 
     namespace sscc
     {
-    namespace `tolower(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g"))`
-    {
+    `substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{1}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "namespace \\1\\n{\\n", "g")`
     ${0}
-    }  // namespace `tolower(substitute(fnamemodify(substitute(expand("%:p:h:h:t")."/".expand("%:p:h:t"),"/include","",""),":t"),"\\.","_","g"))`
+    `join(reverse(split(substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{1}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "}  // namespace \\1\\n", "g"), "\\n")), "\n")`
     }  // namespace sscc
-
 
 snippet c2
-abbr cpp for sscc::upper_upper::class
+abbr cpp for sscc::trade::share
 options head
 	/**
 	 * @file
@@ -124,12 +147,27 @@ options head
 
     namespace sscc
     {
-    namespace `tolower(substitute(fnamemodify(substitute(expand("%:p:h:h:h:t")."/".expand("%:p:h:h:t"),"/src","",""),":t"),"\\.","_","g"))`
-    {
+    `substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{2}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "namespace \\1\\n{\\n", "g")`
     ${0}
-    }  // namespace `tolower(substitute(fnamemodify(substitute(expand("%:p:h:h:h:t")."/".expand("%:p:h:h:t"),"/src","",""),":t"),"\\.","_","g"))`
+    `join(reverse(split(substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{2}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "}  // namespace \\1\\n", "g"), "\\n")), "\n")`
     }  // namespace sscc
 
+snippet c3
+abbr cpp for sscc::trade::tcs::core
+options head
+	/**
+	 * @file
+	 * @brief  ${1:`substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`类的定义}
+	 * @author `$USER`
+	 */
+    #include "`expand("%:t:r")`.h"
+
+    namespace sscc
+    {
+    `substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{3}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "namespace \\1\\n{\\n", "g")`
+    ${0}
+    `join(reverse(split(substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{3}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "}  // namespace \\1\\n", "g"), "\\n")), "\n")`
+    }  // namespace sscc
 
 # File declaration
 snippet fc
