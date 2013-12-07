@@ -1135,8 +1135,8 @@ if neobundle#is_installed("vim-colors-solarized")
     let g:solarized_hitrail=1
     " let g:solarized_menu=1
 
-    if !g:isGUI " 在终端模式下，使用8色（终端需要使用solarized配色方案才能得到所要的效果）
-        set t_Co=8
+    if !g:isGUI " 在终端模式下，使用16色（终端需要使用solarized配色方案才能得到所要的效果）
+        set t_Co=16
     end
 
     syntax enable
