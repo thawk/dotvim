@@ -112,7 +112,7 @@ function! CurDir()
     return curdir
 endfunction
 
-set list " Display unprintable characters g<f12> - switches
+set nolist " Don't display unprintable characters
 "let &listchars="tab:\u2192 ,eol:\u00b6,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 "let &listchars="tab:\u21e5 ,eol:\u00b6,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 "let &listchars="tab:\u21e5 ,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
@@ -386,12 +386,17 @@ au FileType python setlocal smartindent cinwords=if,elif,else,for,while,try,exce
 
 " Key mappings " {{{
 
-if !g:isWin && !g:isGUI
-    set <M-->=-
-    set <M-=>==
-    set <M-\>=\
-    set ttimeoutlen=10  " 缩短keycode的timeout
-endif
+" 使用Kitty后，不再需要映射Alt键
+" if !g:isWin && !g:isGUI
+"     " 修改对Alt/Meta键的映射
+"     for i in range(33, 126)
+"         let c = nr2char(i)
+"         exec "\"map \e".c." <M-".c.">\""
+"         exec "\"map! \e".c." <M-".c.">\""
+"         exec "\"imap \e".c." <M-".toupper(c).">\""
+"     endfor
+"     set ttimeoutlen=10  " 缩短keycode的timeout
+" endif
 
 "用,cd进入当前目录
 nmap ,cd :cd <C-R>=expand("%:p:h")<CR><CR>
@@ -1151,6 +1156,13 @@ else
     colorscheme desert
 endif
 " }}}
+
+" " Plugin 'Zenburn' {{{
+" if neobundle#is_installed("Zenburn")
+"     set background=dark
+"     colorscheme zenburn
+" endif
+" " }}}
 
 " Plugin 'gundo' {{{
 if neobundle#is_installed("gundo.vim")
