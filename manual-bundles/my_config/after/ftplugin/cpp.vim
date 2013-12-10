@@ -42,6 +42,8 @@ setlocal cinoptions+=U0     " do not ignore the indenting specified by ( or u in
 setlocal cinoptions+=w1
 setlocal cinoptions+=Ws     " indent line ended with open parentheses
 
+setlocal list
+
 " Highlight strings inside C comments
 let c_comment_strings=1
 
