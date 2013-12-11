@@ -487,56 +487,50 @@ call neobundle#rc()
 let g:neobundle_default_git_protocol = 'https'
 
 " Let NeoBundle manage NeoBundle
-NeoBundle 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/neobundle.vim'    " 插件管理软件
 " }}}
 
 " Help {{{
-NeoBundle 'fs111/pydoc.vim'
-NeoBundle 'Python-2.x-Standard-Library-Reference'
+NeoBundle 'fs111/pydoc.vim'                         " 对python文件，可以按K取得帮助
+NeoBundle 'Python-2.x-Standard-Library-Reference'   " 可通过 :help py2stdlib 获得python的帮助文件
 " }}}
 
 " Unite {{{
-NeoBundle 'Shougo/unite-build'
+NeoBundle 'Shougo/unite.vim'                        " Unite主插件，提供\f开头的功能
+"NeoBundle 'Shougo/unite-build'
 "NeoBundle 'h1mesuke/unite-outline'
-NeoBundle 'Shougo/unite-outline'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'tacroe/unite-mark'
-NeoBundle 'tsukkee/unite-help'
-NeoBundle 'tsukkee/unite-tag'
-NeoBundle 'ujihisa/unite-colorscheme'
-NeoBundle 'osyo-manga/unite-quickfix'
-NeoBundle 'eiiches/unite-tselect'
+NeoBundle 'Shougo/unite-outline'                    " 提供代码的大纲。通过\fo访问
+NeoBundle 'tacroe/unite-mark'                       " 列出所有标记点
+NeoBundle 'tsukkee/unite-help'                      " 查找vim的帮助
+NeoBundle 'tsukkee/unite-tag'                       " 跳转到光标下的tag。通过\fT访问
+NeoBundle 'ujihisa/unite-colorscheme'               " 列出所有配色方案
+NeoBundle 'osyo-manga/unite-quickfix'               " 过滤quickfix窗口（如在编译结果中查找）
+NeoBundle 'eiiches/unite-tselect'                   " 跳转到光标下的tag。通过g]和g<C-]>访问
 " }}}
 
 " Editing {{{
-NeoBundle 'h1mesuke/vim-alignta'
-NeoBundle 'indentpython.vim--nianyang'
-NeoBundle 'matchit.zip'
-NeoBundle 'YankRing.vim'
-NeoBundle 'vis'
-NeoBundle 'surround.vim'
-NeoBundle 'DrawIt'
-NeoBundle 'Lokaltog/vim-easymotion'
-NeoBundle 'tmhedberg/SimpylFold'
-NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/neocomplcache'
-"NeoBundle 'VimIM'
+NeoBundle 'h1mesuke/vim-alignta'                    " 代码对齐插件。通过\fa访问
+NeoBundle 'matchit.zip'                             " 将%的功能扩展到多种语言（如对于XML，可以在开始tag和结束tag之间进行跳转）
+NeoBundle 'YankRing.vim'                            " 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容
+NeoBundle 'vis'                                     " 在块选后（<C-V>进行选择），:B cmd在选中内容中执行cmd
+NeoBundle 'surround.vim'                            " 增加s?的motion，可用于快速替换括号、引号等。:help surround.txt 可查看其帮助
+NeoBundle 'DrawIt'                                  " 使用横、竖线画图、制表。\di和\ds分别启、停画图模式。在模式中，hjkl移动光标，方向键画线
+NeoBundle 'Lokaltog/vim-easymotion'                 " \\w启动word motion，\\f<字符>启动查找模式
+NeoBundle 'Shougo/neocomplcache'                    " 代码补全插件
+NeoBundle 'Shougo/neosnippet'                       " 代码模板
+"NeoBundle 'VimIM'                                   " 中文输入法
 
 if v:version >= '701'
-    NeoBundle 'Mark--Karkat'
+    NeoBundle 'Mark--Karkat'                        " 可同时标记多个mark。\M显示隐，\N清除所有Mark。\m标识当前word
 endif
 " }}}
 
 " Text object {{{
-NeoBundle 'kana/vim-textobj-user'
-" a_ i_
-NeoBundle 'lucapette/vim-textobj-underscore'
-" ai ii（含更深缩进） aI iI（仅相同缩进）
-NeoBundle 'kana/vim-textobj-indent'
-" al il
-NeoBundle 'kana/vim-textobj-line'
-" ac ic
-NeoBundle 'thinca/vim-textobj-comment'
+NeoBundle 'kana/vim-textobj-user'                   " 可自定义motion
+NeoBundle 'lucapette/vim-textobj-underscore'        " 增加motion: a_ i_
+NeoBundle 'kana/vim-textobj-indent'                 " 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进）
+NeoBundle 'kana/vim-textobj-line'                   " 增加motion: al il
+NeoBundle 'thinca/vim-textobj-comment'              " 增加motion: ac ic
 " }}}
 
 " Programming {{{
@@ -587,6 +581,8 @@ else
     NeoBundle 'lbdbq'
 endif
 NeoBundle 'othree/xml.vim'
+NeoBundle 'indentpython.vim--nianyang'              " Python的代码缩进插件
+"NeoBundle 'tmhedberg/SimpylFold'
 " }}}
 
 " Colors {{{
@@ -623,7 +619,8 @@ NeoBundle 'Shougo/vimproc', {
       \ 'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
       \ },
       \ }
-NeoBundle 'thinca/vim-prettyprint'  " PP variable_name，for debug
+NeoBundle 'thinca/vim-prettyprint'                  " PP variable_name，以用户友好的方式打印变量值，调试vim脚本用
+NeoBundle 'bling/vim-airline'                       " 增强的statusline
 
 " very slow ?
 "NeoBundle 'xolox/vim-easytags'
