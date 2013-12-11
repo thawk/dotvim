@@ -506,6 +506,7 @@ NeoBundle 'tsukkee/unite-tag'                       " 跳转到光标下的tag�
 NeoBundle 'ujihisa/unite-colorscheme'               " 列出所有配色方案
 NeoBundle 'osyo-manga/unite-quickfix'               " 过滤quickfix窗口（如在编译结果中查找）
 NeoBundle 'eiiches/unite-tselect'                   " 跳转到光标下的tag。通过g]和g<C-]>访问
+NeoBundle 'hrsh7th/vim-unite-vcs'                   " \fv 看未提交的文件列表，\fl 看更新日志
 " }}}
 
 " Editing {{{
@@ -535,82 +536,81 @@ NeoBundle 'thinca/vim-textobj-comment'              " 增加motion: ac ic
 
 " Programming {{{
 " NeoBundle 'tyru/current-func-info.vim'
-NeoBundle 'echofunc.vim'
-NeoBundle 'DoxygenToolkit.vim'
-NeoBundle 'CodeReviewer.vim'
-NeoBundle 'OrelSokolov/HiCursorWords'
-NeoBundle 'tComment'
+NeoBundle 'echofunc.vim'                            " 在插入模式下输入(时，会在statusline显示函数的签名，对于有多个重载的函数，可通过<A-->/<A-=>进行切换
+NeoBundle 'DoxygenToolkit.vim'                      " 为函数插入Doxygen注释。在函数名所在行输入 :Dox 即可
+NeoBundle 'CodeReviewer.vim'                        " 记录代码走查意见，\ic激活。可通过 cfile <文件名> 把记录走查意见的文件导入 quickfix 列表
+NeoBundle 'OrelSokolov/HiCursorWords'               " 高亮与光标下word一样的词
+NeoBundle 'tComment'                                " 注释工具。gc{motion}/gcc/<C-_>等
 " \\\ to comment a line, \\ to comment a motion, \\u to uncomment
 "NeoBundle 'tpope/vim-commentary'
 "NeoBundle 'bahejl/Intelligent_Tags'
 if executable("ctags")
-    NeoBundle 'thawk/Intelligent_Tags'
+    NeoBundle 'thawk/Intelligent_Tags'              " 自动扫描所依赖的头文件，生成tags文件
     "NeoBundle 'AutoTag'
 endif
-NeoBundle 'hrsh7th/vim-unite-vcs'
-NeoBundle 'vcscommand.vim'
-NeoBundle 'gprof.vim'
+NeoBundle 'majutsushi/tagbar'                       " 列出文件中所有类和方法。用<F9>调用
+NeoBundle 'vcscommand.vim'                          " SVN/GIT前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件
 if executable("clang") || filereadable(expand("~/libexec/libclang.so")) || filereadable(expand("/usr/lib/libclang.so")) || filereadable(expand("/usr/lib64/libclang.so"))
-    NeoBundle 'Rip-Rip/clang_complete'
-    NeoBundleLazy 'thawk/OmniCppComplete'
+    NeoBundle 'Rip-Rip/clang_complete'              " 使用clang编译器进行上下文补全
+    NeoBundleLazy 'thawk/OmniCppComplete'           " 使用tags进行上下文补全
 else
-    NeoBundleLazy 'Rip-Rip/clang_complete'
-    NeoBundle 'thawk/OmniCppComplete'
+    NeoBundleLazy 'Rip-Rip/clang_complete'          " 使用clang编译器进行上下文补全
+    NeoBundle 'thawk/OmniCppComplete'               " 使用tags进行上下文补全
 endif
-NeoBundle 'rkulla/pydiction'
-NeoBundle 'scrooloose/syntastic'
+NeoBundle 'scrooloose/syntastic'                    " 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表
 if (g:isWin)
-    NeoBundle 'OrangeT/vim-csharp'
+    NeoBundle 'OrangeT/vim-csharp'                  " C#文件的相关
 endif
 if executable("cpplint.py")
-    NeoBundle 'funorpain/vim-cpplint'
+    NeoBundle 'funorpain/vim-cpplint'               " <F7>执行cpplint检查（要求PATH中能找到cpplint.py）
 endif
+NeoBundle 'rkulla/pydiction'                        " Python的补全
 " }}}
 
 " Language {{{
-NeoBundle 'csv.vim'
+NeoBundle 'csv.vim'                                 " 增加对CSV文件（逗号分隔文件）的支持
 NeoBundle 'jceb/vim-orgmode', {
     \ 'depends' : [
     \   'NrrwRgn',
     \   'speeddating.vim',
     \ ]}
-NeoBundle 'ZenCoding.vim'
+NeoBundle 'Emmet.vim'                               " 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>,
 if (g:isWin)
-    NeoBundle 'wps.vim' " syntax highlight for RockBox wps file
+    NeoBundle 'wps.vim'                             " syntax highlight for RockBox wps file
 else
-    NeoBundle 'lbdbq'
+    NeoBundle 'lbdbq'                               " 支持lbdb
 endif
-NeoBundle 'othree/xml.vim'
+NeoBundle 'othree/xml.vim'                          " 辅助编写XML文件
 NeoBundle 'indentpython.vim--nianyang'              " Python的代码缩进插件
 "NeoBundle 'tmhedberg/SimpylFold'
+NeoBundle 'gprof.vim'                               " 对gprof文件提供语法高亮
 " }}}
 
 " Colors {{{
-NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'Zenburn'
+NeoBundle 'altercation/vim-colors-solarized'        " Solarized配色方案
+NeoBundle 'Zenburn'                                 " Zenburn配色方案
 " }}}
 
 " Files {{{
-NeoBundle 'FSwitch'
-NeoBundle 'jceb/vim-editqf'
-NeoBundle 'LargeFile'
-NeoBundle 'rbtnn/hexript.vim'   " to generate binary file
-NeoBundle 'Shougo/vinarise'  " Hex Editor
+NeoBundle 'FSwitch'                                 " 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示
+"NeoBundle 'jceb/vim-editqf'
+NeoBundle 'LargeFile'                               " 在打开大文件时，禁用语法高亮以提供打开速度
+NeoBundle 'rbtnn/hexript.vim'                       " to generate binary file
+NeoBundle 'Shougo/vinarise'                         " Hex Editor
 " }}}
 
 " Utils {{{
-NeoBundle 'renamer.vim'
-NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Shougo/vimshell'
-NeoBundle 'sudo.vim'
-NeoBundle 'quickrun.vim'
+NeoBundle 'renamer.vim'                             " 可对当前目录下的文件进行批量改名，:Renamer
+NeoBundle 'Shougo/vimfiler'                         " 文件管理器，:VimFiler
+NeoBundle 'Shougo/vimshell'                         " Shell，:VimShell
+NeoBundle 'sudo.vim'                                " 通过sudo读、写文件。:SudoRead/:SudoWrite
+NeoBundle 'quickrun.vim'                            " 快速运行代码片段
 " }}}
 
 " Misc {{{
-NeoBundle 'sjl/gundo.vim'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'AutoFenc.vim'
-NeoBundle 'majutsushi/tagbar'
+NeoBundle 'sjl/gundo.vim'                           " 列出修改历史，方便undo到一个特定的位置
+NeoBundle 'tpope/vim-repeat'                        " 把.能重复的操作扩展到一些插件中的操作
+NeoBundle 'AutoFenc.vim'                            " 自动判别文件的编码
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
       \ 'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
