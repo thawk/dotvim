@@ -1210,6 +1210,11 @@ endif
 " }}}
 
 " Plugin 'vim-airline' {{{
+if neobundle#is_installed("vim-airline")
+    if neobundle#is_installed("vcscommand.vim")
+        let g:airline#extensions#branch#use_vcscommand = 1
+    endif
+endif
 " }}}
 
 " Plugins depend settings {{{
