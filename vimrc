@@ -668,23 +668,23 @@ if neobundle#is_installed("FSwitch")
     augroup END
 
     " Switch to the file and load it into the current window >
-	nmap <silent> <Leader>oo :FSHere<cr>
+    nmap <silent> <Leader>oo :FSHere<cr>
     " Switch to the file and load it into the window on the right >
-	nmap <silent> <Leader>ol :FSRight<cr>
+    nmap <silent> <Leader>ol :FSRight<cr>
     " Switch to the file and load it into a new window split on the right >
-	nmap <silent> <Leader>oL :FSSplitRight<cr>
+    nmap <silent> <Leader>oL :FSSplitRight<cr>
     " Switch to the file and load it into the window on the left >
-	nmap <silent> <Leader>oh :FSLeft<cr>
+    nmap <silent> <Leader>oh :FSLeft<cr>
     " Switch to the file and load it into a new window split on the left >
-	nmap <silent> <Leader>oH :FSSplitLeft<cr>
+    nmap <silent> <Leader>oH :FSSplitLeft<cr>
     " Switch to the file and load it into the window above >
-	nmap <silent> <Leader>ok :FSAbove<cr>
+    nmap <silent> <Leader>ok :FSAbove<cr>
     " Switch to the file and load it into a new window split above >
-	nmap <silent> <Leader>oK :FSSplitAbove<cr>
+    nmap <silent> <Leader>oK :FSSplitAbove<cr>
     " Switch to the file and load it into the window below >
-	nmap <silent> <Leader>oj :FSBelow<cr>
+    nmap <silent> <Leader>oj :FSBelow<cr>
     " Switch to the file and load it into a new window split below >
-	nmap <silent> <Leader>oJ :FSSplitBelow<cr>
+    nmap <silent> <Leader>oJ :FSSplitBelow<cr>
 endif
 " }}}
 
@@ -921,19 +921,18 @@ if neobundle#is_installed("neocomplcache")
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
     " Enable heavy omni completion.
-	if !exists('g:neocomplcache_force_omni_patterns')
-	  let g:neocomplcache_force_omni_patterns = {}
-	endif
-	let g:neocomplcache_force_overwrite_completefunc = 1
-	let g:neocomplcache_force_omni_patterns.c =
-	      \ '[^.[:digit:] *\t]\%(\.\|->\)'
-	let g:neocomplcache_force_omni_patterns.cpp =
-	      \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-	let g:neocomplcache_force_omni_patterns.objc =
-	      \ '[^.[:digit:] *\t]\%(\.\|->\)'
-	let g:neocomplcache_force_omni_patterns.objcpp =
-	      \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
+    if !exists('g:neocomplcache_force_omni_patterns')
+        let g:neocomplcache_force_omni_patterns = {}
+    endif
+    let g:neocomplcache_force_overwrite_completefunc = 1
+    let g:neocomplcache_force_omni_patterns.c =
+                \ '[^.[:digit:] *\t]\%(\.\|->\)'
+    let g:neocomplcache_force_omni_patterns.cpp =
+                \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+    let g:neocomplcache_force_omni_patterns.objc =
+                \ '[^.[:digit:] *\t]\%(\.\|->\)'
+    let g:neocomplcache_force_omni_patterns.objcpp =
+                \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 endif
 " }}}
 
@@ -1105,7 +1104,7 @@ endif
 "au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
 au FileType asciidoc      setlocal shiftwidth=2
                                \ tabstop=2
-                               \ textwidth=70 wrap formatoptions=tcqnmB
+                               \ textwidth=70 wrap formatoptions=cqnmB
                                \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
                                \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
                                \ foldexpr=MyAsciidocFoldLevel(v:lnum)
@@ -1210,6 +1209,7 @@ if neobundle#is_installed("vimfiler")
 endif
 " }}}
 
+" Plugin 'vim-airline' {{{
 " }}}
 
 " Plugins depend settings {{{
