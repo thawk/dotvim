@@ -1192,11 +1192,12 @@ endif
 
 " Plugin 'syntastic' {{{
 if neobundle#is_installed("syntastic")
-    let g:syntastic_mode_map = {
-                \ 'mode': 'active',
-                \ 'active_filetypes': ['ruby', 'php', 'python'],
-                \ 'passive_filetypes': ['cpp'] }
+    " let g:syntastic_mode_map = {
+    "             \ 'mode': 'active',
+    "             \ 'active_filetypes': ['ruby', 'php', 'python'],
+    "             \ 'passive_filetypes': ['cpp'] }
 
+    let g:syntastic_cpp_checkers = ['cpplint']
     " 0: 不会自动打开、关闭 1: 自动打开及关闭 2: 没错误时自动关闭，但不会自动打开
     let g:syntastic_auto_loc_list=2
 endif
