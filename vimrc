@@ -941,10 +941,22 @@ if neobundle#is_installed("neosnippet")
     let g:neocomplcache_snippets_dir = fnamemodify(finddir("snippets", &runtimepath), ":p")
     let g:neocomplcache_snippets_dir .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
 
-    imap <C-k>     <Plug>(neocomplcache_snippets_expand)
-    smap <C-k>     <Plug>(neocomplcache_snippets_expand)
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k>     <Plug>(neosnippet_expand_target)
+
     " SuperTab like snippets behavior.
-    "imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+    imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+                \ "\<Plug>(neosnippet_expand_or_jump)"
+                \: pumvisible() ? "\<C-n>" : "\<TAB>"
+    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+                \ "\<Plug>(neosnippet_expand_or_jump)"
+                \: "\<TAB>"
+
+    " For snippet_complete marker.
+    if has('conceal')
+        set conceallevel=2 concealcursor=i
+    endif
 endif
 " }}}
 
