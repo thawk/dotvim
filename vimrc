@@ -3,9 +3,9 @@ scriptencoding utf-8
 " 判断当前环境 "{{{
 " 判断操作系统
 if (has("win32") || has("win64") || has("win32unix"))
-    let g:isWin = 1
+    let s:is_windows = 1
 else
-    let g:isWin = 0
+    let s:is_windows = 0
 endif
 
 " 判断是终端还是gvim
@@ -37,13 +37,13 @@ set modelines=5 " default numbers of lines to read for modeline instructions
 set nowritebackup
 set nobackup
 " 设置swap-file保存路径
-if (g:isWin)
+if (s:is_windows)
     let &directory='$TEMP//,$TMP//,' . &directory
     let &backupdir='$TEMP//,$TMP//,' . &backupdir
 else
     let &backupdir='$HOME/bak//,' . &backupdir
 endif
-if (g:isWin)
+if (s:is_windows)
     set shellpipe=\|\ tee
     set shellslash
 endif
@@ -71,6 +71,7 @@ set nowrap
 set textwidth=0 " Don't wrap lines by default
 set wildmode=list:longest,full  " 先列出所有候选项，补全候选项的共同前缀，再按wildchar就出现菜单来选择候选项
 set wildmenu    " 用一行菜单显示候选项。<C-P>/<C-N>或<Left>/<Right>为选择上一个/下一个，<Up>返回父目录，<Down>进入子目录
+set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.idea/*,*/.DS_Store
 
 set backspace=indent,eol,start " more powerful backspacing
 set whichwrap+=b,s,<,>,h,l " 退格键和方向键可以换行
@@ -78,6 +79,7 @@ set whichwrap+=b,s,<,>,h,l " 退格键和方向键可以换行
 set tabstop=4 " Set the default tabstop
 set softtabstop=4
 set shiftwidth=4 " Set the default shift width for indents
+set shiftround   " <</>>等缩进位置不是+/-4空格，而是对齐到下个'shiftwidth'位置
 set expandtab " Make tabs into spaces (set by tabstop)
 set smarttab " Smarter tab levels
 
@@ -117,7 +119,7 @@ set nolist " Don't display unprintable characters
 "let &listchars="tab:\u21e5 ,eol:\u00b6,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 "let &listchars="tab:\u21e5 ,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 "let &listchars="tab:\u21e2\u21e5,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
-let &listchars="tab:>-,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
+let &listchars="tab:|-,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 "set listchars=tab:>-,eol:<,trail:-,nbsp:%,extends:>,precedes:<
 
 set foldenable " Turn on folding
@@ -163,7 +165,7 @@ if has('multi_byte_ime')
 endif
 
 let &termencoding = &encoding
-if (g:isWin)
+if (s:is_windows)
     "set encoding=ucs-4
     set encoding=utf-8
     "set guifont=Bitstream_Vera_Sans_Mono\ 12
@@ -188,6 +190,7 @@ set tags+=./tags;/ " walk directory tree upto / looking for tags
 
 set completeopt=menuone,menu,longest,preview
 set completeopt-=longest
+set showfulltag
 
 " Doxygen的出错信息
 set errorformat+=Generating\ code\ for\ file\ %f:%l:%m
@@ -268,7 +271,7 @@ comm! W exec 'w !sudo tee % > /dev/null' | e!
 
 "Auto commands
 
-if (g:isWin)
+if (s:is_windows)
   au GUIEnter * simalt ~x " 启动时自动全屏
 endif
 
@@ -387,7 +390,7 @@ au FileType python setlocal smartindent cinwords=if,elif,else,for,while,try,exce
 " Key mappings " {{{
 
 " 使用Kitty后，不再需要映射Alt键
-" if !g:isWin && !g:isGUI
+" if !s:is_windows && !g:isGUI
 "     " 修改对Alt/Meta键的映射
 "     for i in range(33, 126)
 "         let c = nr2char(i)
@@ -558,7 +561,7 @@ else
     NeoBundle 'thawk/OmniCppComplete'               " 使用tags进行上下文补全
 endif
 NeoBundle 'scrooloose/syntastic'                    " 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表
-if (g:isWin)
+if (s:is_windows)
     NeoBundle 'OrangeT/vim-csharp'                  " C#文件的相关
 endif
 if executable("cpplint.py")
@@ -575,7 +578,7 @@ NeoBundle 'jceb/vim-orgmode', {
     \   'speeddating.vim',
     \ ]}
 NeoBundle 'Emmet.vim'                               " 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>,
-if (g:isWin)
+if (s:is_windows)
     NeoBundle 'wps.vim'                             " syntax highlight for RockBox wps file
 else
     NeoBundle 'lbdbq'                               " 支持lbdb
@@ -972,6 +975,9 @@ if neobundle#is_installed("unite.vim")
     nmap <Leader>f [unite]
     xmap <Leader>f [unite]
 
+	let g:unite_enable_start_insert = 1
+	"let g:unite_enable_short_source_names = 1
+
     let g:unite_enable_ignore_case = 1
     let g:unite_enable_smart_case = 1
 
@@ -981,57 +987,107 @@ if neobundle#is_installed("unite.vim")
     let g:unite_winheight = winheight("%") / 2
     let g:unite_winwidth = winwidth("%") / 2
 
+    call unite#custom_source(
+                \"file_rec", "ignore_pattern",
+                \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|a\)$'.
+                \'\|\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)')
+
     nnoremap [unite]S :<C-U>Unite source<CR>
 
-    nnoremap <silent> [unite]p :<C-U>Unite -buffer-name=register register history/yank<CR>
+    nnoremap <silent> [unite]y :<C-U>Unite -buffer-name=yanks history/yank register<CR>
     nnoremap <silent> [unite]w :<C-u>UniteWithCursorWord -buffer-name=register buffer file_mru bookmark file<CR>
-    nnoremap <silent> [unite]c :<C-u>Unite change jump<CR>
-    nnoremap <silent> [unite]R :<C-u>Unite -buffer-name=resume resume<CR>
-    nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
-    nnoremap <silent> [unite]g :<C-u>Unite grep -buffer-name=search -no-quit<CR>
-    nnoremap <silent> [unite]G :<C-u>UniteWithCursorWord grep -buffer-name=search -no-quit<CR>
+    " nnoremap <silent> [unite]c :<C-u>Unite change jump<CR>
+    " nnoremap <silent> [unite]R :<C-u>Unite -buffer-name=resume resume<CR>
+    " nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+    nnoremap <silent> [unite]G :<C-u>Unite grep -buffer-name=search -no-quit<CR>
+    " nnoremap <silent> [unite]G :<C-u>UniteWithCursorWord grep -buffer-name=search -no-quit<CR>
+    nnoremap <silent> [unite]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
 
     nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search -start-insert line<CR>
-    nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
-    nnoremap <silent> [unite]b :<C-u>Unite buffer -start-insert<CR>
-    nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
+    "nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
+    nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=files buffer<CR>
+    nnoremap <silent> [unite]b :<C-u>UniteWithBufferDir -buffer-name=files buffer bookmark file file_mru -start-insert<CR>
+    nnoremap <silent> [unite]c :<C-u>UniteWithCurrentDir -buffer-name=files buffer bookmark file file_mru -start-insert<CR>
+    " nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
     nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps -start-insert help<CR>
     nnoremap <silent> [unite]H :<C-U>UniteWithCursorWord -buffer-name=helps help<CR>
     nnoremap <silent> [unite]M :<C-U>Unite mark<CR>
-    nnoremap <silent> [unite]m :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build<CR>
+    " nnoremap <silent> [unite]m :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build<CR>
     nnoremap <silent> [unite]Q :<C-u>Unite poslist<CR>
     nnoremap <silent> [unite]q :<C-u>Unite quickfix -no-quit<CR>
-    nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
-    nnoremap <silent> [unite]s :<C-u>Unite -start-insert session<CR>
+    " nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
+    " nnoremap <silent> [unite]s :<C-u>Unite -start-insert session<CR>
     "nnoremap <silent> [unite]T :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
     "nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag tag/include<CR>
     nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag<CR>
     nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
-    nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
-    nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
+    " nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
+    " nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
     nnoremap <silent> [unite]v :<C-u>Unite vcs/status<CR>
     nnoremap <silent> [unite]l :<C-u>Unite vcs/log<CR>
 
-    function! s:unite_settings()
-      nmap <buffer> <C-J> <Plug>(unite_loop_cursor_down)
-      nmap <buffer> <C-K> <Plug>(unite_loop_cursor_up)
-      nmap <buffer> m <Plug>(unite_toggle_mark_current_candidate)
-      nmap <buffer> M <Plug>(unite_toggle_mark_all_candidate)
-      nmap <buffer> <LocalLeader><F5> <Plug>(unite_redraw)
-      nmap <buffer> <LocalLeader>q <Plug>(unite_exit)
+    nnoremap <silent> [unite]r :<C-u>UniteResume<CR>
+    " nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files buffer file_rec:! file_mru bookmark<cr><c-u>
 
-      vmap <buffer> m <Plug>(unite_toggle_mark_selected_candidates)
+	nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+    nnoremap <silent> [unite]ma :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
+	nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
 
-      imap <buffer> <C-J> <Plug>(unite_select_next_line)
-      imap <buffer> <C-K> <Plug>(unite_select_previous_line)
-      imap <buffer> <LocalLeader><BS> <Plug>(unite_delete_backward_path)
-      imap <buffer> <LocalLeader>q <Plug>(unite_exit)
+    if s:is_windows
+        nnoremap <silent> [unite]s
+                    \ :<C-u>Unite -buffer-name=files -no-split -multi-line
+                    \ jump_point file_point buffer_tab
+                    \ file_rec:! file file/new file_mru<CR>
+    else
+        nnoremap <silent> [unite]s
+                    \ :<C-u>Unite -buffer-name=files -no-split -multi-line
+                    \ jump_point file_point buffer_tab
+                    \ file_rec/async:! file file/new file_mru<CR>
+    endif
+
+    autocmd! FileType unite call s:unite_my_settings()
+    function! s:unite_my_settings() "{{{
+	  nmap <buffer> <ESC>      <Plug>(unite_exit)
+	  imap <buffer> jj      <Plug>(unite_insert_leave)
+
+	  imap <buffer><expr> j unite#smart_map('j', '')
+	  imap <buffer> <TAB>   <Plug>(unite_select_next_line)
+	  imap <buffer> <S-TAB>   <Plug>(unite_select_previous_line)
+	  imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
+	  imap <buffer> '     <Plug>(unite_quick_match_default_action)
+	  nmap <buffer> '     <Plug>(unite_quick_match_default_action)
+	  imap <buffer><expr> x
+	          \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
+	  nmap <buffer> x     <Plug>(unite_quick_match_choose_action)
+	  nmap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
+	  imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
+	  imap <buffer> <C-y>     <Plug>(unite_narrowing_path)
+	  nmap <buffer> <C-y>     <Plug>(unite_narrowing_path)
+	  nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
+	  nmap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
+	  imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
+	  nnoremap <silent><buffer><expr> l
+	          \ unite#smart_map('l', unite#do_action('default'))
+
+	  let unite = unite#get_current_unite()
+	  if unite.profile_name ==# 'search'
+	    nnoremap <silent><buffer><expr> r     unite#do_action('replace')
+	  else
+	    nnoremap <silent><buffer><expr> r     unite#do_action('rename')
+	  endif
+
+	  nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
+	  nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
+	          \ empty(unite#mappings#get_current_filters()) ?
+	          \ ['sorter_reverse'] : [])
+
+	  " Runs "split" action by <C-s>.
+	  imap <silent><buffer><expr> <C-s>     unite#do_action('split')
     endfunction
-    autocmd! FileType unite call s:unite_settings()
 
     if neobundle#is_installed("unite-outline")
         nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
-    endif
+    endif " }}}
 endif
 " }}} " unite
 
@@ -1227,6 +1283,8 @@ if neobundle#is_installed("vim-airline")
     if neobundle#is_installed("vcscommand.vim")
         let g:airline#extensions#branch#use_vcscommand = 1
     endif
+
+    set noshowmode
 endif
 " }}}
 
