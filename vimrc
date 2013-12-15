@@ -106,7 +106,8 @@ set ruler " Show ruler
 set showcmd " Display an incomplete command in the lower right corner of the Vim window
 set cmdheight=1
 set winminheight=0  " 最小化窗口的高度为0
-set shortmess=atI " Shortens messages
+"set shortmess=atI " Shortens messages
+
 " 状态栏里显示文字编码和换行符等信息
 " 获取当前路径，将$HOME转化为~
 function! CurDir()
@@ -1174,14 +1175,13 @@ endif
 "au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
 au FileType asciidoc      setlocal shiftwidth=2
                                \ tabstop=2
-                               \ textwidth=70 wrap formatoptions=cqnmB
+                               \ textwidth=80 wrap formatoptions=cqnmB
                                \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
                                \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
                                \ foldexpr=MyAsciidocFoldLevel(v:lnum)
                                \ foldmethod=expr
                                \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
                                \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
-                               \ textwidth=70 wrap formatoptions=tcqnmB
 " "}}}
 
 " Plugin 'wps.vim' {{{syntax highlight for RockBox wps file
