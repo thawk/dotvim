@@ -1045,6 +1045,10 @@ if neobundle#is_installed("unite.vim")
                     \ file_rec/async:! file file/new file_mru<CR>
     endif
 
+    if neobundle#is_installed("unite-outline")
+        nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
+    endif
+
     autocmd! FileType unite call s:unite_my_settings()
     function! s:unite_my_settings() "{{{
 	  nmap <buffer> <ESC>      <Plug>(unite_exit)
@@ -1083,11 +1087,7 @@ if neobundle#is_installed("unite.vim")
 
 	  " Runs "split" action by <C-s>.
 	  imap <silent><buffer><expr> <C-s>     unite#do_action('split')
-    endfunction
-
-    if neobundle#is_installed("unite-outline")
-        nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
-    endif " }}}
+    endfunction "}}}
 endif
 " }}} " unite
 
@@ -1319,4 +1319,5 @@ set statusline+=%P
 if filereadable($HOME . "/.vim/project_setting")
     source $HOME/.vim/project_setting
 endif
+
 " vim: fileencoding=utf-8 foldmethod=marker:
