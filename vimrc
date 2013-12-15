@@ -522,6 +522,8 @@ NeoBundle 'DrawIt'                                  " 使用横、竖线画图�
 NeoBundle 'Lokaltog/vim-easymotion'                 " \\w启动word motion，\\f<字符>启动查找模式
 NeoBundle 'Shougo/neocomplcache'                    " 代码补全插件
 NeoBundle 'Shougo/neosnippet'                       " 代码模板
+NeoBundle 'othree/eregex.vim'                       " 支持Perl风格的正则表达式。:M、:S、:G、:V
+
 "NeoBundle 'VimIM'                                   " 中文输入法
 
 if v:version >= '701'
