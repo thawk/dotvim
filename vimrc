@@ -611,6 +611,7 @@ NeoBundle 'Shougo/vimfiler'                         " 文件管理器，:VimFile
 NeoBundle 'Shougo/vimshell'                         " Shell，:VimShell
 NeoBundle 'sudo.vim'                                " 通过sudo读、写文件。:SudoRead/:SudoWrite
 NeoBundle 'quickrun.vim'                            " 快速运行代码片段
+NeoBundle 'mtth/scratch.vim'                        " 打开一个临时窗口。gs/gS/:Scratch
 " }}}
 
 " Misc {{{
@@ -978,8 +979,8 @@ if neobundle#is_installed("unite.vim")
     nmap <Leader>f [unite]
     xmap <Leader>f [unite]
 
-	let g:unite_enable_start_insert = 1
-	"let g:unite_enable_short_source_names = 1
+    let g:unite_enable_start_insert = 1
+    "let g:unite_enable_short_source_names = 1
 
     let g:unite_enable_ignore_case = 1
     let g:unite_enable_smart_case = 1
@@ -1032,9 +1033,9 @@ if neobundle#is_installed("unite.vim")
     nnoremap <silent> [unite]r :<C-u>UniteResume<CR>
     " nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files buffer file_rec:! file_mru bookmark<cr><c-u>
 
-	nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+    nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
     nnoremap <silent> [unite]ma :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
-	nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
+    nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
 
     if s:is_windows
         nnoremap <silent> [unite]s
@@ -1054,42 +1055,42 @@ if neobundle#is_installed("unite.vim")
 
     autocmd! FileType unite call s:unite_my_settings()
     function! s:unite_my_settings() "{{{
-	  nmap <buffer> <ESC>      <Plug>(unite_exit)
-	  imap <buffer> jj      <Plug>(unite_insert_leave)
+        nmap <buffer> <ESC>      <Plug>(unite_exit)
+        imap <buffer> jj      <Plug>(unite_insert_leave)
 
-	  imap <buffer><expr> j unite#smart_map('j', '')
-	  imap <buffer> <TAB>   <Plug>(unite_select_next_line)
-	  imap <buffer> <S-TAB>   <Plug>(unite_select_previous_line)
-	  imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
-	  imap <buffer> '     <Plug>(unite_quick_match_default_action)
-	  nmap <buffer> '     <Plug>(unite_quick_match_default_action)
-	  imap <buffer><expr> x
-	          \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
-	  nmap <buffer> x     <Plug>(unite_quick_match_choose_action)
-	  nmap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
-	  imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
-	  imap <buffer> <C-y>     <Plug>(unite_narrowing_path)
-	  nmap <buffer> <C-y>     <Plug>(unite_narrowing_path)
-	  nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
-	  nmap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
-	  imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
-	  nnoremap <silent><buffer><expr> l
-	          \ unite#smart_map('l', unite#do_action('default'))
+        imap <buffer><expr> j unite#smart_map('j', '')
+        imap <buffer> <TAB>   <Plug>(unite_select_next_line)
+        imap <buffer> <S-TAB>   <Plug>(unite_select_previous_line)
+        imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
+        imap <buffer> '     <Plug>(unite_quick_match_default_action)
+        nmap <buffer> '     <Plug>(unite_quick_match_default_action)
+        imap <buffer><expr> x
+                    \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
+        nmap <buffer> x     <Plug>(unite_quick_match_choose_action)
+        nmap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
+        imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
+        imap <buffer> <C-y>     <Plug>(unite_narrowing_path)
+        nmap <buffer> <C-y>     <Plug>(unite_narrowing_path)
+        nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
+        nmap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
+        imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
+        nnoremap <silent><buffer><expr> l
+                    \ unite#smart_map('l', unite#do_action('default'))
 
-	  let unite = unite#get_current_unite()
-	  if unite.profile_name ==# 'search'
-	    nnoremap <silent><buffer><expr> r     unite#do_action('replace')
-	  else
-	    nnoremap <silent><buffer><expr> r     unite#do_action('rename')
-	  endif
+        let unite = unite#get_current_unite()
+        if unite.profile_name ==# 'search'
+            nnoremap <silent><buffer><expr> r     unite#do_action('replace')
+        else
+            nnoremap <silent><buffer><expr> r     unite#do_action('rename')
+        endif
 
-	  nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
-	  nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
-	          \ empty(unite#mappings#get_current_filters()) ?
-	          \ ['sorter_reverse'] : [])
+        nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
+        nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
+                    \ empty(unite#mappings#get_current_filters()) ?
+                    \ ['sorter_reverse'] : [])
 
-	  " Runs "split" action by <C-s>.
-	  imap <silent><buffer><expr> <C-s>     unite#do_action('split')
+        " Runs "split" action by <C-s>.
+        imap <silent><buffer><expr> <C-s>     unite#do_action('split')
     endfunction "}}}
 endif
 " }}} " unite
