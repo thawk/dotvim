@@ -1286,6 +1286,8 @@ if neobundle#is_installed("vim-airline")
         let g:airline#extensions#branch#use_vcscommand = 1
     endif
 
+    let g:airline_left_sep = '►'
+    let g:airline_right_sep = '◄'
     set noshowmode
 endif
 " }}}
