@@ -991,10 +991,10 @@ if neobundle#is_installed("unite.vim")
     let g:unite_winheight = winheight("%") / 2
     let g:unite_winwidth = winwidth("%") / 2
 
-    call unite#custom_source(
-                \"file_rec", "ignore_pattern",
+    let g:unite_source_file_rec_ignore_pattern =
                 \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|a\)$'.
-                \'\|\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)')
+                \'\|gcc-[0-9]\+\%(\.[0-9]\+\)*/'.
+                \'\|\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)'
 
     nnoremap [unite]S :<C-U>Unite source<CR>
 
@@ -1038,14 +1038,14 @@ if neobundle#is_installed("unite.vim")
     nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
 
     if s:is_windows
-        nnoremap <silent> [unite]s
+        nnoremap <silent> [unite]f
                     \ :<C-u>Unite -buffer-name=files -no-split -multi-line
-                    \ jump_point file_point buffer_tab
+                    \ jump_point file_point buffer
                     \ file_rec:! file file/new file_mru<CR>
     else
-        nnoremap <silent> [unite]s
+        nnoremap <silent> [unite]f
                     \ :<C-u>Unite -buffer-name=files -no-split -multi-line
-                    \ jump_point file_point buffer_tab
+                    \ jump_point file_point buffer
                     \ file_rec/async:! file file/new file_mru<CR>
     endif
 
