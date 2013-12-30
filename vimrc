@@ -170,7 +170,8 @@ if (s:is_windows)
     "set encoding=ucs-4
     set encoding=utf-8
     "set guifont=Bitstream_Vera_Sans_Mono\ 12
-    set guifont=Courier_New:h12
+    "set guifont=Courier_New:h12
+    set guifont=Powerline_Consolas:h12,Consolas:h12,Courier_New:h12
     set guifontwide=NSimsun:h12
     "解决菜单乱码
     source $VIMRUNTIME/delmenu.vim
@@ -523,7 +524,7 @@ NeoBundle 'DrawIt'                                  " 使用横、竖线画图�
 NeoBundle 'Lokaltog/vim-easymotion'                 " \\w启动word motion，\\f<字符>启动查找模式
 NeoBundle 'Shougo/neocomplcache'                    " 代码补全插件
 NeoBundle 'Shougo/neosnippet'                       " 代码模板
-NeoBundle 'othree/eregex.vim'                       " 支持Perl风格的正则表达式。:M、:S、:G、:V
+"NeoBundle 'othree/eregex.vim'                       " 支持Perl风格的正则表达式。:M、:S、:G、:V
 
 "NeoBundle 'VimIM'                                   " 中文输入法
 
@@ -1287,8 +1288,14 @@ if neobundle#is_installed("vim-airline")
         let g:airline#extensions#branch#use_vcscommand = 1
     endif
 
-    let g:airline_left_sep = '►'
-    let g:airline_right_sep = '◄'
+    " let g:airline_left_sep = '►'
+    " let g:airline_right_sep = '◄'
+
+    " 开启powerline字体，可在 https://github.com/runsisi/consolas-font-for-powerline
+    " 找到增加了特定字符的Consolas字体。
+    " https://github.com/Lokaltog/powerline-fonts 在更多免费的字体
+    let g:airline_powerline_fonts=1
+
     set noshowmode
 endif
 " }}}
