@@ -556,7 +556,9 @@ if executable("ctags")
     "NeoBundle 'AutoTag'
 endif
 NeoBundle 'majutsushi/tagbar'                       " 列出文件中所有类和方法。用<F9>调用
-NeoBundle 'vcscommand.vim'                          " SVN/GIT前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件
+NeoBundle 'vcscommand.vim'                          " SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件
+NeoBundle 'tpope/vim-fugitive'                      " GIT前端
+
 if executable("clang") || filereadable(expand("~/libexec/libclang.so")) || filereadable(expand("/usr/lib/libclang.so")) || filereadable(expand("/usr/lib64/libclang.so"))
     NeoBundle 'Rip-Rip/clang_complete'              " 使用clang编译器进行上下文补全
     NeoBundleLazy 'thawk/OmniCppComplete'           " 使用tags进行上下文补全
