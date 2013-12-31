@@ -45,6 +45,13 @@ options     head
 
     } // namespace $1
 
+snippet mfun
+    
+    ${4:void} ${1:`substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`}::${2:MemberFunction}(${3})
+    {
+        ${0}
+    }
+
 snippet     helloworld
 abbr        #include<iostream> int main...
     #include <iostream>

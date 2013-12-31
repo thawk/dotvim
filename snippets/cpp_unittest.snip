@@ -3,6 +3,7 @@ snippet ut
 options head
 	#include <boost/test/unit_test.hpp>
     #include <boost/system/error_code.hpp>
+    #include <turtle/mock.hpp>
 	#include "../src/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
 
 	using namespace `substitute(expand("%:p:h:h:t"),"\\.","_","g")`;
@@ -28,6 +29,7 @@ abbr sscc::util
 options head
 	#include <boost/test/unit_test.hpp>
     #include <boost/system/error_code.hpp>
+    #include <turtle/mock.hpp>
     #include "../src/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
 
     using namespace sscc`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*\\(\\(/[^/]\\+\\)\\{1}\\)$", "\\1", ""), "/", "::", "g")`;
@@ -55,6 +57,7 @@ abbr sscc::trade::share
 options head
 	#include <boost/test/unit_test.hpp>
     #include <boost/system/error_code.hpp>
+    #include <turtle/mock.hpp>
     #include "../src/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
 
     using namespace sscc`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*\\(\\(/[^/]\\+\\)\\{2}\\)$", "\\1", ""), "/", "::", "g")`;
@@ -82,6 +85,7 @@ abbr sscc::trade::tcs::core
 options head
 	#include <boost/test/unit_test.hpp>
     #include <boost/system/error_code.hpp>
+    #include <turtle/mock.hpp>
     #include "../src/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
 
     using namespace sscc`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*\\(\\(/[^/]\\+\\)\\{3}\\)$", "\\1", ""), "/", "::", "g")`;
