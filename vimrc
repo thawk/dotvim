@@ -309,7 +309,11 @@ au FileType html  setlocal autoindent indentexpr= shiftwidth=2 tabstop=2
 au FileType changelog setlocal textwidth=76
 " 把-等符号也作为xml文件的有效关键字，可以用Ctrl-N补全带-等字符的属性名
 au FileType {xml,xslt} setlocal iskeyword=@,-,\:,48-57,_,128-167,224-235
-au FileType xml        exe 'setlocal equalprg=xmllint\ --format\ --recover\ -'
+if executable("tidy")
+    au FileType xml        exe 'setlocal equalprg=tidy\ -quiet\ -indent\ -xml\ -raw\ --show-errors\ 0\ --wrap\ 0\ --vertical-space\ 1\ --indent-spaces\ 4'
+elseif executable("xmllint")
+    au FileType xml        exe 'setlocal equalprg=xmllint\ --format\ --recover\ --encode\ UTF-8\ -'
+endif
 
 au FileType qf setlocal wrap linebreak
 au FileType vim nnoremap <silent> <buffer> K :<C-U>help <C-R><C-W><CR>
