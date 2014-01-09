@@ -775,8 +775,8 @@ if neobundle#is_installed("vim-alignta")
     unlet s:comment_leadings
 
     " 在没选中文本时，按[unite]a选择需要用的选项，再选中要操作的文本，[unite]a进行操作
-    nnoremap <silent> [unite]a :<C-u>Unite alignta:options<CR>
-    xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
+    nnoremap <silent> [unite]a :<C-u>Unite alignta:options -no-start-insert<CR>
+    xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments -no-start-insert<CR>
 endif
 " }}}
 
@@ -998,10 +998,28 @@ if neobundle#is_installed("unite.vim")
     let g:unite_winheight = winheight("%") / 2
     let g:unite_winwidth = winwidth("%") / 2
 
-    let g:unite_source_file_rec_ignore_pattern =
+	if executable('ag')
+	  " Use ag in unite grep source.
+	  let g:unite_source_grep_command = 'ag'
+	  let g:unite_source_grep_default_opts =
+	  \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
+	  \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+	  let g:unite_source_grep_recursive_opt = ''
+	elseif executable('ack-grep')
+	  " Use ack in unite grep source.
+	  let g:unite_source_grep_command = 'ack-grep'
+	  let g:unite_source_grep_default_opts =
+	  \ '--no-heading --no-color -a -H'
+	  let g:unite_source_grep_recursive_opt = ''
+	endif
+
+    let g:unite_source_rec_ignore_pattern =
                 \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|a\)$'.
-                \'\|gcc-[0-9]\+\%(\.[0-9]\+\)*/'.
+                \'\|\%(^\|/\)gcc-[0-9]\+\%(\.[0-9]\+\)*/'.
+                \'\|\%(^\|/\)doc/html/'.
+                \'\|\%(^\|/\)boost\(\|_\w\+\)/'.
                 \'\|\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)'
+    "let g:unite_source_rec_max_cache_files = 0
 
     nnoremap [unite]S :<C-U>Unite source<CR>
 
@@ -1046,14 +1064,14 @@ if neobundle#is_installed("unite.vim")
 
     if s:is_windows
         nnoremap <silent> [unite]f
-                    \ :<C-u>Unite -buffer-name=files -no-split -multi-line
-                    \ jump_point file_point buffer
-                    \ file_rec:! file file/new file_mru<CR>
+                    \ :<C-u>Unite -buffer-name=files -multi-line
+                    \ jump_point file_point file buffer
+                    \ file_rec:! file/new file_mru<CR>
     else
         nnoremap <silent> [unite]f
-                    \ :<C-u>Unite -buffer-name=files -no-split -multi-line
-                    \ jump_point file_point buffer
-                    \ file_rec/async:! file file/new file_mru<CR>
+                    \ :<C-u>Unite -buffer-name=files -multi-line
+                    \ jump_point file_point file buffer
+                    \ file_rec/async:! file/new file_mru<CR>
     endif
 
     if neobundle#is_installed("unite-outline")
