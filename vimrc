@@ -528,6 +528,7 @@ NeoBundle 'DrawIt'                                  " 使用横、竖线画图�
 NeoBundle 'Lokaltog/vim-easymotion'                 " \\w启动word motion，\\f<字符>启动查找模式
 NeoBundle 'Shougo/neocomplcache'                    " 代码补全插件
 NeoBundle 'Shougo/neosnippet'                       " 代码模板
+NeoBundle 'Shougo/neosnippet-snippets'              " 代码模板
 "NeoBundle 'othree/eregex.vim'                       " 支持Perl风格的正则表达式。:M、:S、:G、:V
 
 "NeoBundle 'VimIM'                                   " 中文输入法
@@ -952,8 +953,8 @@ endif
 
 " neosnippet {{{
 if neobundle#is_installed("neosnippet")
-    let g:neocomplcache_snippets_dir = fnamemodify(finddir("snippets", &runtimepath), ":p")
-    let g:neocomplcache_snippets_dir .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
+    let g:neosnippet#snippets_directory = fnamemodify(finddir("snippets", &runtimepath), ":p")
+    let g:neosnippet#snippets_directory .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
 
     imap <C-k>     <Plug>(neosnippet_expand_or_jump)
     smap <C-k>     <Plug>(neosnippet_expand_or_jump)
