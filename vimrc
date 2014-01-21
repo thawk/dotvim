@@ -487,7 +487,7 @@ nnoremap <Leader>td :<C-U>make doc<CR>
 " Loading NeoBundle {{{
 filetype off                   " Required!
 
-if has('vim_starting')
+if match("neobundle", &runtimepath) < 0
     let &runtimepath .= "," . fnamemodify(finddir("bundle/neobundle.vim", &runtimepath), ":p")
 endif
 
@@ -1035,8 +1035,8 @@ if neobundle#is_installed("unite.vim")
     nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search -start-insert line<CR>
     "nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
     nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=files buffer<CR>
-    nnoremap <silent> [unite]b :<C-u>UniteWithBufferDir -buffer-name=files buffer file bookmark file_mru -start-insert<CR>
-    nnoremap <silent> [unite]c :<C-u>UniteWithCurrentDir -buffer-name=files buffer file bookmark file_mru -start-insert<CR>
+    nnoremap <silent> [unite]b :<C-u>UniteWithBufferDir -buffer-name=files file buffer bookmark file_mru -start-insert<CR>
+    nnoremap <silent> [unite]c :<C-u>UniteWithCurrentDir -buffer-name=files file buffer bookmark file_mru -start-insert<CR>
     " nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
     nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps -start-insert help<CR>
     nnoremap <silent> [unite]H :<C-U>UniteWithCursorWord -buffer-name=helps help<CR>

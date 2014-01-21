@@ -51,7 +51,7 @@ options head
     {
     `substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{1}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "namespace \\1\\n{\\n", "g")`
 	/**
-	 * @brief ${2}
+	 * @brief ${1}
 	 */
     class `substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
     {
@@ -79,7 +79,7 @@ options head
     {
     `substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{2}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "namespace \\1\\n{\\n", "g")`
 	/**
-	 * @brief ${2}
+	 * @brief ${1}
 	 */
     class `substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
     {
@@ -106,7 +106,7 @@ options head
     {
     `substitute(tolower(substitute(substitute(expand("%:p:h"), "/src\\>", "", ""), "^.*\\(\\(/[^/]\\+\\)\\{3}\\)$", "\\1", "")), "/\\([^/]\\+\\)", "namespace \\1\\n{\\n", "g")`
 	/**
-	 * @brief ${2}
+	 * @brief ${1}
 	 */
     class `substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
     {
