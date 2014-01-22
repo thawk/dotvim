@@ -5,21 +5,20 @@ My vim configuration
 == Install
 
 . Clone this to ++~/.vim++
+** Linux
 +
 [source,sh]
 ----
 git clone <repo_url> ~/.vim
+cd ~/.vim
+git submodule update --init
 ----
+
+** Windows
++
+Using TortoiseGit's ++Git clone...++ menu, check ++Recursive++。
 +
 NOTE: You should clone to ~/vimfiles instead of ~/.vim in Windows.
-
-. Clone NeoBundle
-+
-[source,sh]
-----
-mkdir ~/.vim/bundle
-git clone https://github.com/Shougo/neobundle.vim.git ~/.vim/bundle/neobundle.vim
-----
 
 . Make ++\~/.vimrc++ call ++~/.vim/vimrc++
 +
