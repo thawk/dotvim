@@ -1069,12 +1069,12 @@ if neobundle#is_installed("unite.vim")
         nnoremap <silent> [unite]f
                     \ :<C-u>Unite -buffer-name=files -multi-line
                     \ jump_point file_point buffer
-                    \ file_rec:! file file/new file_mru<CR>
+                    \ file_rec:! file file_mru file/new<CR>
     else
         nnoremap <silent> [unite]f
                     \ :<C-u>Unite -buffer-name=files -multi-line
                     \ jump_point file_point buffer
-                    \ file_rec/async:! file file/new file_mru<CR>
+                    \ file_rec/async:! file file_mru file/new<CR>
     endif
 
     if neobundle#is_installed("unite-outline")
