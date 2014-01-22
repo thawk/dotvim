@@ -9,16 +9,14 @@ My vim configuration
 +
 [source,sh]
 ----
-git clone <repo_url> ~/.vim
-cd ~/.vim
-git submodule update --init
+git clone --recursive <repo_url> ~/.vim
 ----
 
 ** Windows
 +
-Using TortoiseGit's ++Git clone...++ menu, check ++Recursive++。
+Using TortoiseGit's ++Git clone...++ menu, remember to check ++Recursive++。
 +
-NOTE: You should clone to ~/vimfiles instead of ~/.vim in Windows.
+NOTE: You should clone to \~/vimfiles instead of ~/.vim in Windows.
 
 . Make ++\~/.vimrc++ call ++~/.vim/vimrc++
 +
