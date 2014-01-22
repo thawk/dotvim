@@ -15,13 +15,13 @@ git clone --recursive https://github.com/thawk/dotvim.git ~/.vim
 
 ** Windows下使用++TortoiseGit++工具
 +
-在资源管理器上，右键菜单中，选择++Git clone...++，记得选中++Recursive++选项，这样就可以把NeoBundle.vim也一并安装好。
+在资源管理器上，右键菜单中，选择++Git clone...++，记得选中++Recursive++选项，这样就可以把++NeoBundle.vim++也一并安装好。
 +
-NOTE: 在Windows下，clone到++~/vimfiles++会比clone到++~/.vim++更加方便。
+NOTE: 在Windows下，clone到++\~/vimfiles++会比clone到++~/.vim++更加方便。
 
 . 让vim使用我们的配置文件
 +
-vim缺省会使用++~/.vimrc++（Windows下使用++~/_vimrc++）配置文件。由于该文件在git管理的范围外，不方便管理，因此可以将通过该文件来调用真正的配置文件（++~/.vim/vimrc++或++~/vimfiles/vimrc++）：
+vim缺省会使用++\~/.vimrc++（Windows下使用++~/_vimrc++）配置文件。由于该文件在git管理的范围外，不方便管理，因此可以将通过该文件来调用真正的配置文件（++\~/.vim/vimrc++或++~/vimfiles/vimrc++）：
 
 ** Linux下
 +
@@ -50,7 +50,7 @@ runtime vimrc
 +
 本配置使用了++vimproc++插件，该插件需要安装相应的动态库才能正常使用。在Linux下，vim会自动执行编译步骤，而在Windows下则需要手工安装预先了的库文件到++~/vimfiles/bundle/vimproc/autoload/++下。
 +
-对于32位Windows系统，++~/vimfiles/win32/vimproc_win32.dll++下已经有一份可用动态库，也可以到 https://github.com/Shougo/vimproc/downloads 下载更新的版本，并拷贝到++~/vimfiles/bundle/vimproc/autoload/++。
+对于32位Windows系统，++\~/vimfiles/win32/vimproc_win32.dll++下已经有一份可用动态库，也可以到 https://github.com/Shougo/vimproc/downloads 下载更新的版本，并拷贝到++~/vimfiles/bundle/vimproc/autoload/++。
 ----
 
 . 至此，所有配置均已完成，可以开始体验vim了。
