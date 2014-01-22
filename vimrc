@@ -960,13 +960,13 @@ if neobundle#is_installed("neosnippet")
     smap <C-k>     <Plug>(neosnippet_expand_or_jump)
     xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-    " SuperTab like snippets behavior.
-    imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-                \ "\<Plug>(neosnippet_expand_or_jump)"
-                \: pumvisible() ? "\<C-n>" : "\<TAB>"
-    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-                \ "\<Plug>(neosnippet_expand_or_jump)"
-                \: "\<TAB>"
+    " " SuperTab like snippets behavior.
+    " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    "             \ "\<Plug>(neosnippet_expand_or_jump)"
+    "             \: pumvisible() ? "\<C-n>" : "\<TAB>"
+    " smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    "             \ "\<Plug>(neosnippet_expand_or_jump)"
+    "             \: "\<TAB>"
 
     " For snippet_complete marker.
     if has('conceal')
@@ -995,6 +995,8 @@ if neobundle#is_installed("unite.vim")
 
     let g:unite_source_session_path = expand('~/.vim/session/')
     let g:unite_source_grep_default_opts = "-iHn --color=never"
+
+    let g:unite_source_history_yank_enable = 1
 
     let g:unite_winheight = winheight("%") / 2
     let g:unite_winwidth = winwidth("%") / 2
@@ -1309,9 +1311,9 @@ endif
 
 " Plugin 'vim-airline' {{{
 if neobundle#is_installed("vim-airline")
-    if neobundle#is_installed("vcscommand.vim")
-        let g:airline#extensions#branch#use_vcscommand = 1
-    endif
+    " if neobundle#is_installed("vcscommand.vim")
+    "     let g:airline#extensions#branch#use_vcscommand = 1
+    " endif
 
     " let g:airline_left_sep = '►'
     " let g:airline_right_sep = '◄'
