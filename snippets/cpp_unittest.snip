@@ -1,12 +1,12 @@
-# Boost.Test
+# Boost.Test，必须放在unittest目录下，且与unittest同层有include目录
 snippet ut
 options head
 	#include <boost/test/unit_test.hpp>
     #include <boost/system/error_code.hpp>
     #include <turtle/mock.hpp>
-	#include "../src/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
-
-	using namespace `substitute(expand("%:p:h:h:t"),"\\.","_","g")`;
+    #include <`substitute(findfile(substitute(expand("%:t:r"), "^test_\\?", "", "") . ".h", substitute(expand("%:p"), "\\<unittest/.*", "include/**", ""), 1), ".*\\<include/", "", "")`>
+    
+    using namespace `substitute(substitute(fnamemodify(substitute(findfile(substitute(expand("%:t:r"), "^test_\\?", "", "") . ".h", substitute(expand("%:p"), "\\<unittest/.*", "include/**", ""), 1), ".*\\<include/", "", ""), ":p:h"), "[.-]", "_", "g"), "/", "::", "g")`;
     using boost::system::error_code;
 
 	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`);
@@ -112,12 +112,12 @@ snippet tc
 abbr unittest for any class
 options head
     /**
-     * @class ${1}`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
-     * @test ${2}\n
-     * <b>输入数据：</b> ${3}\n
-     * <b>预期输出：</b> ${4}
+     * @class `substitute(substitute(fnamemodify(substitute(findfile(substitute(expand("%:t:r"), "^test_\\?", "", "") . ".h", substitute(expand("%:p"), "\\<unittest/.*", "include/**", ""), 1), ".*\\<include/", "", ""), ":p:h"), "[.-]", "_", "g"), "/", "::", "g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
+     * @test ${1}\n
+     * <b>输入数据：</b> ${2}\n
+     * <b>预期输出：</b> ${3}
      */
-     BOOST_FIXTURE_TEST_CASE(Test${5}, Fixture)
+     BOOST_FIXTURE_TEST_CASE(Test${4}, Fixture)
      {
          ${0}
      }
