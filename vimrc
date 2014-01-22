@@ -495,9 +495,10 @@ call neobundle#rc()
 
 let g:neobundle_default_git_protocol = 'https'
 
-" Let NeoBundle manage NeoBundle
-NeoBundle 'Shougo/neobundle.vim'    " 插件管理软件
-" }}}
+" 使用submodule管理NeoBundle
+" " Let NeoBundle manage NeoBundle
+" NeoBundle 'Shougo/neobundle.vim'    " 插件管理软件
+" " }}}
 
 " Help {{{
 NeoBundle 'fs111/pydoc.vim'                         " 对python文件，可以按K取得帮助
