@@ -500,11 +500,6 @@ let g:neobundle_default_git_protocol = 'https'
 " NeoBundle 'Shougo/neobundle.vim'    " 插件管理软件
 " " }}}
 
-" Help {{{
-NeoBundle 'fs111/pydoc.vim'                         " 对python文件，可以按K取得帮助
-NeoBundle 'Python-2.x-Standard-Library-Reference'   " 可通过 :help py2stdlib 获得python的帮助文件
-" }}}
-
 " Unite {{{
 NeoBundle 'Shougo/unite.vim'                        " Unite主插件，提供\f开头的功能
 "NeoBundle 'Shougo/unite-build'
@@ -579,7 +574,8 @@ endif
 if executable("cpplint.py")
     NeoBundle 'funorpain/vim-cpplint'               " <F7>执行cpplint检查（要求PATH中能找到cpplint.py）
 endif
-NeoBundle 'rkulla/pydiction'                        " Python的补全
+
+NeoBundle 'davidhalter/jedi-vim'                    " 强大的Python补全、pydoc查询工具
 " }}}
 
 " Language {{{
