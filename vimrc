@@ -427,10 +427,10 @@ imap <C-S-tab> <ESC>:tabprevious<cr>i
 imap <C-tab> <ESC>:tabnext<cr>i
 
 " Key mappings to ease browsing long lines
-nnoremap  <C-J>       gj
-nnoremap  <C-K>       gk
-nnoremap  <Down>      gj
-nnoremap  <Up>        gk
+nnoremap <C-J>       gj
+nnoremap <C-K>       gk
+nnoremap <Down>      gj
+nnoremap <Up>        gk
 inoremap <Down> <C-O>gj
 inoremap <Up>   <C-O>gk
 
@@ -525,6 +525,7 @@ NeoBundle 'Lokaltog/vim-easymotion'                 " \\w启动word motion，\\f
 NeoBundle 'Shougo/neocomplcache'                    " 代码补全插件
 NeoBundle 'Shougo/neosnippet'                       " 代码模板
 NeoBundle 'Shougo/neosnippet-snippets'              " 代码模板
+NeoBundle 'ton/vim-bufsurf'                         " :BufSurfForward/:BufSurfBack跳转到本窗口的下一个、上一个buffer（增强<C-I>/<C-O>）
 "NeoBundle 'othree/eregex.vim'                       " 支持Perl风格的正则表达式。:M、:S、:G、:V
 
 "NeoBundle 'VimIM'                                   " 中文输入法
@@ -1342,6 +1343,18 @@ if neobundle#is_installed("vim-airline")
     endif
 
     set noshowmode
+endif
+" }}}
+
+" Plugin 'vim-bufsurf' {{{
+if neobundle#is_installed("vim-bufsurf")
+    " 把原来的<C-I>/<C-O>换掉
+    nnoremap <M-I> <C-I>
+    nnoremap <M-O> <C-O>
+
+    " <C-I>/<C-O>直接跳到不同的buffer
+    nnoremap <silent> <C-I> :BufSurfForward<CR>
+    nnoremap <silent> <C-O> :BufSurfBack<CR>
 endif
 " }}}
 
