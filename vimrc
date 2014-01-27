@@ -576,7 +576,7 @@ if executable("cpplint.py")
     NeoBundle 'funorpain/vim-cpplint'               " <F7>执行cpplint检查（要求PATH中能找到cpplint.py）
 endif
 
-NeoBundle 'davidhalter/jedi-vim'                    " 强大的Python补全、pydoc查询工具
+NeoBundle 'davidhalter/jedi-vim'                    " 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置
 " }}}
 
 " Language {{{
