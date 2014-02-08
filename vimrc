@@ -646,6 +646,7 @@ NeoBundle 'Shougo/vimproc', {
       \ }
 NeoBundle 'thinca/vim-prettyprint'                  " PP variable_name，以用户友好的方式打印变量值，调试vim脚本用
 NeoBundle 'bling/vim-airline'                       " 增强的statusline
+NeoBundle 'zhaocai/GoldenView.Vim'                  " <C-L>分隔出一个窗口，<F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口
 
 " very slow ?
 "NeoBundle 'xolox/vim-easytags'
