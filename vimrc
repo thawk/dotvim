@@ -342,7 +342,7 @@ if executable("jing")
 endif
 " "}}}
 
-" 根据不同的文件类型设定<F3>时应该查找的文件 "{{{
+" 根据不同的文件类型设定g<F3>时应该查找的文件 "{{{
 au FileType *             let b:vimgrep_files=expand("%:e") == "" ? "**/*" : "**/*." . expand("%:e")
 au FileType c,cpp         let b:vimgrep_files="**/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.ipp"
 au FileType php           let b:vimgrep_files="**/*.php **/*.htm **/*.html"
@@ -440,13 +440,25 @@ nmap <F12> :cp<CR>
 nmap g<F11> :cnf<CR>
 nmap g<F12> :cpf<CR>
 
-" F3自动vimgrep当前word
+" <F3>自动在当前文件中vimgrep当前word，g<F3>在当前目录下，vimgrep_files指定的文件中查找
 "nmap <F3> :exec "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.c **/*.h **/*.php"<CR>:copen<CR>
 "nmap <S-F3> :exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR>:copen<CR>
 "map <F3> <ESC>:exec "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.php" <CR><ESC>:copen<CR>
-nmap g<F3> <ESC>:exec "vimgrep /\\<" . expand("<cword>") . "\\>/j " . b:vimgrep_files <CR><ESC>:copen<CR>
+nmap g<F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j " . b:vimgrep_files <CR><ESC>:copen<CR>
 "map <S-F3> <ESC>:exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:copen<CR>
 nmap <F3> <ESC>:<C-U>exec "vimgrep /" . expand("<cword>") . "/j %" <CR><ESC>:copen<CR>
+
+" V模式下，搜索选中的内容而不是当前word
+vnoremap g<F3> :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy
+  \:exec "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:copen<CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <F3> :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy
+  \:exec "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:copen<CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
 
 " 在VISUAL模式下，缩进后保持原来的选择，以便再次进行缩进
 vnoremap > >gv
