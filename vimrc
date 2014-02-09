@@ -944,8 +944,12 @@ if neobundle#is_installed("neocomplcache")
     autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
     autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
     autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-    autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+    if neobundle#is_installed("jedi-vim")
+        autocmd FileType python setlocal omnifunc=jedi#completions
+    else
+        autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+    endif
 
     " Enable heavy omni completion.
     if !exists('g:neocomplcache_force_omni_patterns')
@@ -1365,6 +1369,12 @@ if neobundle#is_installed("vim-bufsurf")
     " g<C-I>/g<C-O>直接跳到不同的buffer
     nnoremap <silent> g<C-I> :BufSurfForward<CR>
     nnoremap <silent> g<C-O> :BufSurfBack<CR>
+endif
+" }}}
+
+" Plugin 'jedi-vim' {{{
+if neobundle#is_installed("jedi-vim")
+    let g:jedi#popup_select_first = 0   " 不要自动选择第一个候选项
 endif
 " }}}
 
