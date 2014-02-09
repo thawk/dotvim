@@ -616,7 +616,7 @@ NeoBundle 'Zenburn'                                 " Zenburn配色方案
 " }}}
 
 " Files {{{
-NeoBundle 'FSwitch'                                 " 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示
+NeoBundle 'FSwitch'                                 " 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示，\of当前窗口
 "NeoBundle 'jceb/vim-editqf'
 NeoBundle 'LargeFile'                               " 在打开大文件时，禁用语法高亮以提供打开速度
 NeoBundle 'rbtnn/hexript.vim'                       " to generate binary file
@@ -677,7 +677,8 @@ endif
 " Plugin 'FSwitch' {{{
 if neobundle#is_installed("FSwitch")
     let g:fsnonewfiles=1
-    cabbrev A FSHere " 可以用:A在.h/.cpp间切换
+    " 可以用:A在.h/.cpp间切换
+    command! A :call FSwitch('%', '')
     augroup fswitch_hack
         au! BufEnter *.h
                     \  let b:fswitchdst='cpp,c,ipp,cxx'
