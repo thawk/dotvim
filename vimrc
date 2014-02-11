@@ -363,8 +363,8 @@ au FileType xml           let b:vimgrep_files="**/*.xml"
 " Note: Normally, :cwindow jumps to the quickfix window if the command opens it
 " (but not if it's already open). However, as part of the autocmd, this doesn't
 " seem to happen.
-autocmd QuickFixCmdPost [^l]* nested cwindow
-autocmd QuickFixCmdPost    l* nested lwindow
+autocmd QuickFixCmdPost [^l]* nested botright cwindow
+autocmd QuickFixCmdPost    l* nested botright lwindow
 " "}}}
 
 " python autocommands "{{{
@@ -444,20 +444,20 @@ nmap g<F12> :cpf<CR>
 "nmap <F3> :exec "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.c **/*.h **/*.php"<CR>:copen<CR>
 "nmap <S-F3> :exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR>:copen<CR>
 "map <F3> <ESC>:exec "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.php" <CR><ESC>:copen<CR>
-nmap g<F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j " . b:vimgrep_files <CR><ESC>:copen<CR>
+nmap g<F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j " . b:vimgrep_files <CR><ESC>:botright cwindow<CR>
 "map <S-F3> <ESC>:exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:copen<CR>
-nmap <F3> <ESC>:<C-U>exec "vimgrep /" . expand("<cword>") . "/j %" <CR><ESC>:copen<CR>
+nmap <F3> <ESC>:<C-U>exec "vimgrep /" . expand("<cword>") . "/j %" <CR><ESC>:botright cwindow<CR>
 
 " V模式下，搜索选中的内容而不是当前word
 vnoremap g<F3> :<C-U>
   \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
   \gvy
-  \:exec "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:copen<CR>
+  \:exec "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright cwindow<CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
 vnoremap <F3> :<C-U>
   \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
   \gvy
-  \:exec "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:copen<CR>
+  \:exec "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright cwindow<CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
 
 " 在VISUAL模式下，缩进后保持原来的选择，以便再次进行缩进
