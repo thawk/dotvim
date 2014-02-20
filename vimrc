@@ -529,11 +529,13 @@ NeoBundle 'hrsh7th/vim-unite-vcs'                   " \fv 看未提交的文件�
 " Editing {{{
 NeoBundle 'h1mesuke/vim-alignta'                    " 代码对齐插件。通过\fa访问
 NeoBundle 'matchit.zip'                             " 将%的功能扩展到多种语言（如对于XML，可以在开始tag和结束tag之间进行跳转）
-NeoBundle 'YankRing.vim'                            " 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容
+"NeoBundle 'YankRing.vim'                            " 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容
 NeoBundle 'vis'                                     " 在块选后（<C-V>进行选择），:B cmd在选中内容中执行cmd
 NeoBundle 'surround.vim'                            " 增加s?的motion，可用于快速替换括号、引号等。:help surround.txt 可查看其帮助
 NeoBundle 'DrawIt'                                  " 使用横、竖线画图、制表。\di和\ds分别启、停画图模式。在模式中，hjkl移动光标，方向键画线
-NeoBundle 'Lokaltog/vim-easymotion'                 " \\w启动word motion，\\f<字符>启动查找模式
+NeoBundle 'Lokaltog/vim-easymotion', {
+   \ 'rev' : '965003'
+   \ }                                              " \\w启动word motion，\\f<字符>启动查找模式
 NeoBundle 'Shougo/neocomplcache'                    " 代码补全插件
 NeoBundle 'Shougo/neosnippet'                       " 代码模板
 NeoBundle 'Shougo/neosnippet-snippets'              " 代码模板
