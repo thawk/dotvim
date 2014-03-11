@@ -1293,9 +1293,10 @@ if neobundle#is_installed("tagbar")
     let g:tagbar_left = 1
 
     nnoremap ff :<C-U>TagbarCurrentTag fs<CR>
-    augroup TagbarMappings
-        au! FileType c,cpp,php,cs,vim,javascript,python nnoremap <silent> <buffer> <F9> :TagbarToggle<CR>
-    augroup END
+    nnoremap <silent> <F9> :TagbarToggle<CR>
+    " augroup TagbarMappings
+    "     au! FileType c,cpp,php,cs,vim,javascript,python nnoremap <silent> <buffer> <F9> :TagbarToggle<CR>
+    " augroup END
 endif
 " }}}
 
