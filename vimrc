@@ -537,7 +537,8 @@ NeoBundle 'Lokaltog/vim-easymotion', {
    \ 'rev' : '965003'
    \ }                                              " \\w启动word motion，\\f<字符>启动查找模式
 NeoBundle 'Shougo/neocomplcache'                    " 代码补全插件
-NeoBundle 'Shougo/neosnippet'                       " 代码模板
+NeoBundle 'Shougo/neosnippet'                       " 代码模板引擎
+NeoBundle 'Shougo/neomru.vim'                       " 代码模板
 NeoBundle 'Shougo/neosnippet-snippets'              " 代码模板
 NeoBundle 'ton/vim-bufsurf'                         " g<C-I>/g<C-O>或:BufSurfForward/:BufSurfBack跳转到本窗口的下一个、上一个buffer（增强<C-I>/<C-O>）
 "NeoBundle 'othree/eregex.vim'                       " 支持Perl风格的正则表达式。:M、:S、:G、:V
