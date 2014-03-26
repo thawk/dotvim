@@ -446,7 +446,7 @@ nmap g<F12> :cpf<CR>
 "map <F3> <ESC>:exec "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.php" <CR><ESC>:botright copen<CR>
 nmap g<F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
 "map <S-F3> <ESC>:exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
-nmap <F3> <ESC>:<C-U>exec "vimgrep /" . expand("<cword>") . "/j %" <CR><ESC>:botright copen<CR>
+nmap <F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
 
 " V模式下，搜索选中的内容而不是当前word
 vnoremap g<F3> :<C-U>
