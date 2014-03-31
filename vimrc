@@ -534,7 +534,7 @@ NeoBundle 'vis'                                     " 在块选后（<C-V>进行
 NeoBundle 'surround.vim'                            " 增加s?的motion，可用于快速替换括号、引号等。:help surround.txt 可查看其帮助
 NeoBundle 'DrawIt'                                  " 使用横、竖线画图、制表。\di和\ds分别启、停画图模式。在模式中，hjkl移动光标，方向键画线
 NeoBundle 'Lokaltog/vim-easymotion', {
-   \ 'rev' : '965003'
+   \ 'rev' : 'e41082'
    \ }                                              " \\w启动word motion，\\f<字符>启动查找模式
 NeoBundle 'Shougo/neocomplcache'                    " 代码补全插件
 NeoBundle 'Shougo/neosnippet'                       " 代码模板引擎
