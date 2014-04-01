@@ -13,13 +13,15 @@ options head
 
 	struct Fixture
 	{
-	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${2:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
+	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${1:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
 
         Fixture()
         : $1(${2})
         {
         }
 	};
+
+    ${0}
 
 	BOOST_AUTO_TEST_SUITE_END()
 
