@@ -627,7 +627,6 @@ NeoBundle 'Shougo/vinarise'                         " Hex Editor
 " }}}
 
 " Utils {{{
-NeoBundle 'renamer.vim'                             " 可对当前目录下的文件进行批量改名，:Renamer
 NeoBundle 'Shougo/vimfiler'                         " 文件管理器，:VimFiler
 NeoBundle 'Shougo/vimshell'                         " Shell，:VimShell
 NeoBundle 'sudo.vim'                                " 通过sudo读、写文件。:SudoRead/:SudoWrite
