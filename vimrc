@@ -94,6 +94,26 @@ filetype plugin indent on " Automatically detect file types.
 " "}}}
 
 " Visual "{{{
+let &termencoding = &encoding
+if (s:is_windows)
+    "set encoding=ucs-4
+    "set encoding=utf-8
+    "set guifont=Bitstream_Vera_Sans_Mono\ 12
+    "set guifont=Courier_New:h12
+    set guifont=Powerline_Consolas:h12,Consolas:h12,Courier_New:h12
+    set guifontwide=NSimsun:h12
+    "解决菜单乱码
+    source $VIMRUNTIME/delmenu.vim
+    source $VIMRUNTIME/menu.vim
+    "解决consle输出乱码
+    "language messages zh_CN.utf-8
+    language messages en_US
+else
+    set encoding=utf-8
+    set guifont=DejaVu\ Sans\ Mono\ 14
+    set guifontwide=WenQuanYi\ Bitmap\ Song\ 14
+endif
+
 set number " Line numbers on
 set showmatch " Show matching brackets.
 set cursorline " 高亮当前行
@@ -120,8 +140,12 @@ set nolist " Don't display unprintable characters
 "let &listchars="tab:\u21e5 ,eol:\u00b6,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 "let &listchars="tab:\u21e5 ,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 "let &listchars="tab:\u21e2\u21e5,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
-let &listchars="tab:|-,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 "set listchars=tab:>-,eol:<,trail:-,nbsp:%,extends:>,precedes:<
+if &encoding != "utf-8"
+    set listchars=tab:>-,trail:-,nbsp:%,extends:>,precedes:<
+else
+    let &listchars="tab:|-,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
+endif
 
 set foldenable " Turn on folding
 set foldmethod=marker " Fold on the marker
@@ -163,26 +187,6 @@ endif
 if has('multi_byte_ime')
     highlight Cursor guifg=NONE guibg=Green
     highlight CursorIM guifg=NONE guibg=Purple
-endif
-
-let &termencoding = &encoding
-if (s:is_windows)
-    "set encoding=ucs-4
-    set encoding=utf-8
-    "set guifont=Bitstream_Vera_Sans_Mono\ 12
-    "set guifont=Courier_New:h12
-    set guifont=Powerline_Consolas:h12,Consolas:h12,Courier_New:h12
-    set guifontwide=NSimsun:h12
-    "解决菜单乱码
-    source $VIMRUNTIME/delmenu.vim
-    source $VIMRUNTIME/menu.vim
-    "解决consle输出乱码
-    "language messages zh_CN.utf-8
-    language messages en_US
-else
-    set encoding=utf-8
-    set guifont=DejaVu\ Sans\ Mono\ 14
-    set guifontwide=WenQuanYi\ Bitmap\ Song\ 14
 endif
 
 " "}}}
@@ -1334,33 +1338,45 @@ if neobundle#is_installed("vim-airline")
     "     let g:airline#extensions#branch#use_vcscommand = 1
     " endif
 
-    " let g:airline_left_sep = '►'
-    " let g:airline_right_sep = '◄'
+    " let g:airline_left_sep = '\u25ba'
+    " let g:airline_right_sep = '\u25c4'
 
     " 开启powerline字体，可在 https://github.com/runsisi/consolas-font-for-powerline
     " 找到增加了特定字符的Consolas字体。
     " https://github.com/Lokaltog/powerline-fonts 在更多免费的字体
-    let g:airline_powerline_fonts=1
+    if &encoding == "utf-8"
+        let g:airline_powerline_fonts=1
 
-    " let g:airline_left_sep = ''
-    " let g:airline_left_alt_sep = ''
-    " let g:airline_right_sep = ''
-    " let g:airline_right_alt_sep = ''
-
-    if !exists('g:airline_symbols')
-        let g:airline_symbols = {}
-    endif
-
-    " let g:airline_symbols.branch = ''
-    " let g:airline_symbols.readonly = ''
-    " let g:airline_symbols.linenr = ''
-    " let g:airline_symbols.paste = '∥'
-
-    if s:is_windows
-        let g:airline_symbols.whitespace = ' '
+        if s:is_windows
+            let g:airline_symbols.whitespace = ' '
+        else
+            let g:airline_symbols.whitespace = '\u039e'
+            let g:airline_symbols.paste = '\u2225'
+        endif
     else
-        let g:airline_symbols.whitespace = 'Ξ'
-        let g:airline_symbols.paste = '∥'
+        if !exists('g:airline_symbols')
+            let g:airline_symbols = {}
+        endif
+
+        let g:airline_left_sep = ' '
+        let g:airline_left_alt_sep = '|'
+        let g:airline_right_sep = ' '
+        let g:airline_right_alt_sep = '|'
+        let g:airline_symbols.branch = ''
+        let g:airline_symbols.readonly = 'RO'
+        let g:airline_symbols.linenr = 'LN'
+        let g:airline_symbols.paste = 'PASTE'
+        let g:airline_symbols.whitespace = ' '
+
+        " let g:airline_left_sep = '\ue0b0'
+        " let g:airline_left_alt_sep = '\ue0b1'
+        " let g:airline_right_sep = '\ue0b2'
+        " let g:airline_right_alt_sep = '\ue0b3'
+
+        " let g:airline_symbols.branch = '\ue0a0'
+        " let g:airline_symbols.readonly = '\ue0a2'
+        " let g:airline_symbols.linenr = '\ue0a1'
+        " let g:airline_symbols.paste = '\u22256'
     endif
 
     set noshowmode
