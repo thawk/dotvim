@@ -306,7 +306,7 @@ au BufRead,BufNewFile *.ipp             setf cpp
 " "}}}
 
 " Filetype related autosettings " {{{
-au FileType jam   set makeprg=b2
+au FileType jam   if &makeprg=='make' | setlocal makeprg=b2 | endif
 
 au FileType diff  setlocal shiftwidth=4 tabstop=4
 au FileType html  setlocal autoindent indentexpr= shiftwidth=2 tabstop=2
@@ -1341,10 +1341,14 @@ if neobundle#is_installed("vim-airline")
     " let g:airline_left_sep = '\u25ba'
     " let g:airline_right_sep = '\u25c4'
 
-    " 开启powerline字体，可在 https://github.com/runsisi/consolas-font-for-powerline
-    " 找到增加了特定字符的Consolas字体。
-    " https://github.com/Lokaltog/powerline-fonts 在更多免费的字体
+    if !exists('g:airline_symbols')
+        let g:airline_symbols = {}
+    endif
+
     if &encoding == "utf-8"
+        " 开启powerline字体，可在 https://github.com/runsisi/consolas-font-for-powerline
+        " 找到增加了特定字符的Consolas字体。
+        " https://github.com/Lokaltog/powerline-fonts 在更多免费的字体
         let g:airline_powerline_fonts=1
 
         if s:is_windows
@@ -1354,10 +1358,6 @@ if neobundle#is_installed("vim-airline")
             let g:airline_symbols.paste = '\u2225'
         endif
     else
-        if !exists('g:airline_symbols')
-            let g:airline_symbols = {}
-        endif
-
         let g:airline_left_sep = ' '
         let g:airline_left_alt_sep = '|'
         let g:airline_right_sep = ' '
@@ -1429,8 +1429,9 @@ set statusline+=\                   " 空格
 set statusline+=%P
 " " }}}
 
-if filereadable($HOME . "/.vim/project_setting")
-    source $HOME/.vim/project_setting
+let s:vimrc_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+if filereadable(s:vimrc_path . "/project_setting")
+    exec "source " . s:vimrc_path . "/project_setting"
 endif
 
 " vim: fileencoding=utf-8 foldmethod=marker:

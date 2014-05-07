@@ -1,22 +1,15 @@
 function! s:AddComponentsToPath(path)
-    " 把path目录下，两层子目录内的include目录加入路径中
-    for l:p in finddir("include", a:path . "/**2", -1)
-        call s:AddPath(l:p)
-    endfor
+    if index(b:proj_processed_components, a:path) >= 0
+        return
+    endif
 
-    " 把path目录下，两层子目录内的3rd目录加入路径中
-    for l:p in finddir("3rd", a:path . "/**2", -1)
-        call s:AddComponentsToPath(l:p)
-    endfor
+    call add(b:proj_processed_components, a:path)
 
-    " 把boost目录的上层目录加入路径
-    for l:p in finddir("boost", a:path . "/**2", -1)
-        call s:AddPath(fnamemodify(l:p, ":p:h:h"))
-    endfor
-
-    " 把sscc目录的上层目录加入路径
-    for l:p in finddir("sscc", a:path . "/**2", -1)
-        call s:AddPath(fnamemodify(l:p, ":p:h:h"))
+    " 把path目录下，两层子目录内的include/3rd/boost/sscc等目录加入路径中
+    for l:name in ["include", "3rd", "boost", "sscc"]
+        for l:p in finddir(l:name, a:path . "/**2", -1)
+            call s:AddPath(l:p)
+        endfor
     endfor
 
     " 把path目录下，所有包含头文件的直接子目录include路径中
@@ -25,37 +18,36 @@ function! s:AddComponentsToPath(path)
             call s:AddPath(l:p)
         endif
 
-        if isdirectory(l:p . "/lib/")
+        if isdirectory(l:p . "/lib")
             call s:AddComponentsToPath(l:p . "/lib")
         endif
     endfor
 endfunction
 
 function! s:AddPath(path)
-    exec "setlocal path+=" . fnamemodify(a:path, ":p:h")
+    let l:p = fnamemodify(a:path, ":p:h")
+    if isdirectory(l:p) && index(b:proj_processed_paths, l:p) < 0
+        call add(b:proj_processed_paths, l:p)
+        exec "setlocal path+=" . l:p
+    endif
 endfunction
 
 function! SetupEnvironment()
     " 使用当前目录
-    setlocal path=.
+    "setlocal path=.
+    let b:proj_processed_components = []
+    let b:proj_processed_paths = []
 
     let l:path = expand('%:p')
 
-    if isdirectory(expand('$HOME/workspace'))
-        let l:workspace_dir = expand('$HOME/workspace')
-    elseif isdirectory(expand('$HOME/program'))
-        let l:workspace_dir = expand('$HOME/program')
-    else
-        let l:workspace_dir = expand('$HOME')
-    endif
-
-    " Boost库
-    if isdirectory($BOOST_ROOT)
-        call s:AddPath($BOOST_ROOT)
-    else
-        let l:boost_dirs = sort(split(glob(l:workspace_dir . "/boost_*/"), "\n"))
-        if len(l:boost_dirs) > 0
-            call s:AddPath(l:boost_dirs[0])
+    let l:workspace_dir = finddir("workspace", '.;')
+    if ! isdirectory(l:workspace_dir)
+        if isdirectory(expand('$HOME/workspace'))
+            let l:workspace_dir = expand('$HOME/workspace')
+        elseif isdirectory(expand('$HOME/program'))
+            let l:workspace_dir = expand('$HOME/program')
+        else
+            let l:workspace_dir = expand('$HOME')
         endif
     endif
 
@@ -65,6 +57,18 @@ function! SetupEnvironment()
             call s:AddComponentsToPath(l:p)
         endfor
     endfor
+
+    " Boost库
+    if match(&path, "boost") < 0    " 路径中没有boost库才需要加入
+        if isdirectory($BOOST_ROOT)
+            call s:AddPath($BOOST_ROOT)
+        else
+            let l:boost_dirs = sort(split(glob(l:workspace_dir . "/boost_*/"), "\n"))
+            if len(l:boost_dirs) > 0
+                call s:AddPath(l:boost_dirs[0])
+            endif
+        endif
+    endif
 
     " 加入路径上所有Jamroot/Jamfile所在目录，这种目录通常都在include路径中
     for l:name in ["Jamfile", "Jamfile.v2", "Jamroot", "Jamroot.v2"]

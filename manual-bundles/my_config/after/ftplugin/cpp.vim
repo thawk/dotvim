@@ -235,12 +235,14 @@ function! OpenCProject()
         endif
     endif
 
-    if     findfile("Jamfile", ";") != "" ||
-          \findfile("Jamroot", ";") != "" ||
-          \findfile("Jamfile.v2", ";") != "" ||
-          \findfile("Jamroot.v2", ";") != ""
-      "set makeprg=bjam
-      set makeprg=b2
+    if &makeprg == 'make'
+        if     findfile("Jamfile", ";") != "" ||
+                    \findfile("Jamroot", ";") != "" ||
+                    \findfile("Jamfile.v2", ";") != "" ||
+                    \findfile("Jamroot.v2", ";") != ""
+            "set makeprg=bjam
+            set makeprg=b2
+        endif
     endif
 endfunction
 
