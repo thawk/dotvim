@@ -540,7 +540,8 @@ NeoBundle 'DrawIt'                                  " 使用横、竖线画图�
 NeoBundle 'Lokaltog/vim-easymotion', {
    \ 'rev' : 'e41082'
    \ }                                              " \\w启动word motion，\\f<字符>启动查找模式
-NeoBundle 'Shougo/neocomplcache'                    " 代码补全插件
+"NeoBundle 'Shougo/neocomplcache'                    " 代码补全插件
+NeoBundle 'Shougo/neocomplete'                      " 代码补全插件
 NeoBundle 'Shougo/neosnippet'                       " 代码模板引擎
 NeoBundle 'Shougo/neomru.vim'                       " 代码模板
 NeoBundle 'Shougo/neosnippet-snippets'              " 代码模板
@@ -900,6 +901,69 @@ if neobundle#is_installed("Mark--Karkat")
                 \ highlight MarkWord5 ctermbg=DarkGreen   ctermfg=Black guibg=#FFB3FF guifg=Black |
                 \ highlight MarkWord6 ctermbg=DarkRed     ctermfg=Black guibg=#9999FF guifg=Black
     augroup END
+endif
+" }}}
+
+" Plugin 'neocomplete' {{{
+if neobundle#is_installed("neocomplete")
+    "let g:neocomplcache_enable_debug = 1
+    let g:neocomplete#enable_at_startup = 1
+    " Disable auto completion, if set to 1, must use <C-x><C-u>
+    let g:neocomplete#disable_auto_complete = 0
+    " Use smartcase.
+    let g:neocomplete#enable_smart_case = 1
+    " Set minimum syntax keyword length.
+    let g:neocomplete#sources#syntax#min_syntax_length = 3
+    let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+    let g:neocomplete#enable_auto_select = 0
+    let g:neocomplete#auto_completion_start_length = 3
+
+    " Define dictionary.
+    let g:neocomplete#sources#dictionary#dictionaries = {
+                \ 'default' : '',
+                \ 'vimshell' : $HOME.'/.vimshell_hist',
+                \ 'scheme' : $HOME.'/.gosh_completions'
+                \ }
+
+    " Plugin key-mappings.
+    inoremap <expr><C-g>     neocomplete#undo_completion()
+    inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+    " Recommended key-mappings.
+    " <CR>: close popup and save indent.
+    inoremap <expr><CR>  neocomplete#smart_close_popup() . "\<CR>"
+    " <TAB>: completion.
+    "inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+    " <C-h>, <BS>: close popup and delete backword char.
+    inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+    inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+    inoremap <expr><C-y>  neocomplete#close_popup()
+    inoremap <expr><C-e>  neocomplete#cancel_popup()
+
+    " Enable omni completion.
+    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+    if neobundle#is_installed("jedi-vim")
+        autocmd FileType python setlocal omnifunc=jedi#completions
+    else
+        autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+    endif
+
+    " 使得neocomplete能和clang_complete共存，见neocomplete帮助的FAQ
+	if !exists('g:neocomplete#force_omni_input_patterns')
+	  let g:neocomplete#force_omni_input_patterns = {}
+	endif
+	let g:neocomplete#force_overwrite_completefunc = 1
+	let g:neocomplete#force_omni_input_patterns.c =
+	      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+	let g:neocomplete#force_omni_input_patterns.cpp =
+	      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+	let g:neocomplete#force_omni_input_patterns.objc =
+	      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+	let g:neocomplete#force_omni_input_patterns.objcpp =
+	      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 endif
 " }}}
 
