@@ -14,6 +14,9 @@ if has("gui_running")
 else
     let g:isGUI = 0
 endif
+
+" 当前脚本路径
+let s:vimrc_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 " "}}}
 
 " General "{{{
@@ -540,8 +543,13 @@ NeoBundle 'DrawIt'                                  " 使用横、竖线画图�
 NeoBundle 'Lokaltog/vim-easymotion', {
    \ 'rev' : 'e41082'
    \ }                                              " \\w启动word motion，\\f<字符>启动查找模式
-"NeoBundle 'Shougo/neocomplcache'                    " 代码补全插件
-NeoBundle 'Shougo/neocomplete'                      " 代码补全插件
+
+if v:version >= '703' && has('lua')
+    NeoBundle 'Shougo/neocomplete'                  " 代码补全插件
+else
+    NeoBundle 'Shougo/neocomplcache'                " 代码补全插件
+endif
+
 NeoBundle 'Shougo/neosnippet'                       " 代码模板引擎
 NeoBundle 'Shougo/neomru.vim'                       " 代码模板
 NeoBundle 'Shougo/neosnippet-snippets'              " 代码模板
@@ -581,13 +589,8 @@ NeoBundle 'majutsushi/tagbar'                       " 列出文件中所有类�
 NeoBundle 'vcscommand.vim'                          " SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件
 NeoBundle 'tpope/vim-fugitive'                      " GIT前端
 
-if executable("clang") || filereadable(expand("~/libexec/libclang.so")) || filereadable(expand("/usr/lib/libclang.so")) || filereadable(expand("/usr/lib64/libclang.so"))
-    NeoBundle 'Rip-Rip/clang_complete'              " 使用clang编译器进行上下文补全
-    NeoBundleLazy 'thawk/OmniCppComplete'           " 使用tags进行上下文补全
-else
-    NeoBundleLazy 'Rip-Rip/clang_complete'          " 使用clang编译器进行上下文补全
-    NeoBundle 'thawk/OmniCppComplete'               " 使用tags进行上下文补全
-endif
+NeoBundle 'Rip-Rip/clang_complete'              " 使用clang编译器进行上下文补全
+
 NeoBundle 'scrooloose/syntastic'                    " 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表
 if (s:is_windows)
     NeoBundle 'OrangeT/vim-csharp'                  " C#文件的相关
@@ -841,15 +844,23 @@ if neobundle#is_installed("clang_complete")
     let g:clang_hl_errors = 1       " highlight the warnings and errors the same way clang
     "let g:clang_jumpto_declaration_key = '<C-]>'
     "let g:clang_jumpto_back_key = '<C-T>'
-    if filereadable(expand("~/libexec/libclang.so"))
-        let g:clang_use_library = 1
-        let g:clang_library_path=expand("~/libexec")
-    elseif filereadable(expand("/usr/lib/libclang.so"))
-        let g:clang_use_library = 1
-        let g:clang_library_path=expand("/usr/lib")
-    elseif filereadable(expand("/usr/lib64/libclang.so"))
-        let g:clang_use_library = 1
-        let g:clang_library_path=expand("/usr/lib64")
+
+    if s:is_windows
+        if filereadable(s:vimrc_path . "/win32/libclang.dll")
+            let g:clang_use_library  = 1
+            let g:clang_library_path = s:vimrc_path . "/win32"
+        endif
+    else
+        if filereadable(expand("~/libexec/libclang.so"))
+            let g:clang_use_library  = 1
+            let g:clang_library_path = expand("~/libexec")
+        elseif filereadable(expand("/usr/lib/libclang.so"))
+            let g:clang_use_library  = 1
+            let g:clang_library_path = expand("/usr/lib")
+        elseif filereadable(expand("/usr/lib64/libclang.so"))
+            let g:clang_use_library  = 1
+            let g:clang_library_path = expand("/usr/lib64")
+        endif
     endif
 endif
 " }}}
@@ -1493,7 +1504,6 @@ set statusline+=\                   " 空格
 set statusline+=%P
 " " }}}
 
-let s:vimrc_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 if filereadable(s:vimrc_path . "/project_setting")
     exec "source " . s:vimrc_path . "/project_setting"
 endif
