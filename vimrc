@@ -1427,31 +1427,31 @@ if neobundle#is_installed("vim-airline")
         let g:airline_powerline_fonts=1
 
         if s:is_windows
-            let g:airline_symbols.whitespace = ' '
+            let g:airline_symbols.whitespace = " "
         else
-            let g:airline_symbols.whitespace = '\u039e'
-            let g:airline_symbols.paste = '\u2225'
+            let g:airline_symbols.whitespace = "\u039e"
+            let g:airline_symbols.paste = "\u2225"
         endif
     else
-        let g:airline_left_sep = ' '
-        let g:airline_left_alt_sep = '|'
-        let g:airline_right_sep = ' '
-        let g:airline_right_alt_sep = '|'
-        let g:airline_symbols.branch = ''
-        let g:airline_symbols.readonly = 'RO'
-        let g:airline_symbols.linenr = 'LN'
-        let g:airline_symbols.paste = 'PASTE'
-        let g:airline_symbols.whitespace = ' '
+        let g:airline_left_sep = " "
+        let g:airline_left_alt_sep = "|"
+        let g:airline_right_sep = " "
+        let g:airline_right_alt_sep = "|"
+        let g:airline_symbols.branch = ""
+        let g:airline_symbols.readonly = "RO"
+        let g:airline_symbols.linenr = "LN"
+        let g:airline_symbols.paste = "PASTE"
+        let g:airline_symbols.whitespace = " "
 
-        " let g:airline_left_sep = '\ue0b0'
-        " let g:airline_left_alt_sep = '\ue0b1'
-        " let g:airline_right_sep = '\ue0b2'
-        " let g:airline_right_alt_sep = '\ue0b3'
+        " let g:airline_left_sep = "\ue0b0"
+        " let g:airline_left_alt_sep = "\ue0b1"
+        " let g:airline_right_sep = "\ue0b2"
+        " let g:airline_right_alt_sep = "\ue0b3"
 
-        " let g:airline_symbols.branch = '\ue0a0'
-        " let g:airline_symbols.readonly = '\ue0a2'
-        " let g:airline_symbols.linenr = '\ue0a1'
-        " let g:airline_symbols.paste = '\u22256'
+        " let g:airline_symbols.branch = "\ue0a0"
+        " let g:airline_symbols.readonly = "\ue0a2"
+        " let g:airline_symbols.linenr = "\ue0a1"
+        " let g:airline_symbols.paste = "\u22256"
     endif
 
     set noshowmode
