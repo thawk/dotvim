@@ -17,6 +17,22 @@ endif
 
 " 当前脚本路径
 let s:vimrc_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+
+" 确定libclang的位置
+let s:libclang_path = ""
+if s:is_windows
+    if filereadable(s:vimrc_path . "/win32/libclang.dll")
+        let s:libclang_path = s:vimrc_path . "/win32"
+    endif
+else
+    if filereadable(expand("~/libexec/libclang.so"))
+        let s:libclang_path = expand("~/libexec")
+    elseif filereadable(expand("/usr/lib/libclang.so"))
+        let s:libclang_path = expand("/usr/lib")
+    elseif filereadable(expand("/usr/lib64/libclang.so"))
+        let s:libclang_path = expand("/usr/lib64")
+    endif
+endif
 " "}}}
 
 " General "{{{
@@ -589,7 +605,11 @@ NeoBundle 'majutsushi/tagbar'                       " 列出文件中所有类�
 NeoBundle 'vcscommand.vim'                          " SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件
 NeoBundle 'tpope/vim-fugitive'                      " GIT前端
 
-NeoBundle 'Rip-Rip/clang_complete'              " 使用clang编译器进行上下文补全
+"if s:libclang_path != ""
+"    NeoBundle 'osyo-manga/vim-snowdrop'                 " 使用clang编译器进行上下文补全
+"elseif executable("clang")
+    NeoBundle 'Rip-Rip/clang_complete'                  " 使用clang编译器进行上下文补全
+"endif
 
 NeoBundle 'scrooloose/syntastic'                    " 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表
 if (s:is_windows)
@@ -845,23 +865,23 @@ if neobundle#is_installed("clang_complete")
     "let g:clang_jumpto_declaration_key = '<C-]>'
     "let g:clang_jumpto_back_key = '<C-T>'
 
-    if s:is_windows
-        if filereadable(s:vimrc_path . "/win32/libclang.dll")
-            let g:clang_use_library  = 1
-            let g:clang_library_path = s:vimrc_path . "/win32"
-        endif
-    else
-        if filereadable(expand("~/libexec/libclang.so"))
-            let g:clang_use_library  = 1
-            let g:clang_library_path = expand("~/libexec")
-        elseif filereadable(expand("/usr/lib/libclang.so"))
-            let g:clang_use_library  = 1
-            let g:clang_library_path = expand("/usr/lib")
-        elseif filereadable(expand("/usr/lib64/libclang.so"))
-            let g:clang_use_library  = 1
-            let g:clang_library_path = expand("/usr/lib64")
-        endif
+    if s:libclang_path != ""
+        let g:clang_use_library = 1
+        let g:clang_library_path = s:libclang_path
     endif
+endif
+" }}}
+
+" Plugin 'vim-snowdrop' {{{
+if neobundle#is_installed("vim-snowdrop")
+    " set libclang directory path
+    let g:snowdrop#libclang_directory = s:libclang_path
+
+    " Enable code completion in neocomplete.vim.
+    let g:neocomplete#sources#snowdrop#enable = 1
+
+    " Not skip
+    let g:neocomplete#skip_auto_completion_time = ""
 endif
 " }}}
 
