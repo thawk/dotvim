@@ -978,6 +978,8 @@ if neobundle#is_installed("neocomplete")
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
     if neobundle#is_installed("jedi-vim")
         autocmd FileType python setlocal omnifunc=jedi#completions
+        let g:jedi#completions_enabled = 0
+        let g:jedi#auto_vim_configuration = 0 " 解决neocomplete下自动补第一个候选项的问题
     else
         autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
     endif
@@ -995,6 +997,8 @@ if neobundle#is_installed("neocomplete")
 	      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
 	let g:neocomplete#force_omni_input_patterns.objcpp =
 	      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+    let g:neocomplete#force_omni_input_patterns.python =
+          \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 endif
 " }}}
 
@@ -1048,6 +1052,7 @@ if neobundle#is_installed("neocomplcache")
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
     if neobundle#is_installed("jedi-vim")
         autocmd FileType python setlocal omnifunc=jedi#completions
+        let g:jedi#auto_vim_configuration = 0 " 解决neocomplete下自动补第一个候选项的问题
     else
         autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
     endif
@@ -1065,6 +1070,8 @@ if neobundle#is_installed("neocomplcache")
                 \ '[^.[:digit:] *\t]\%(\.\|->\)'
     let g:neocomplcache_force_omni_patterns.objcpp =
                 \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+    let g:neocomplcache_force_omni_patterns.python =
+          \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 endif
 " }}}
 
