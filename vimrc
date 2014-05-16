@@ -574,6 +574,8 @@ NeoBundle 'ton/vim-bufsurf'                         " g<C-I>/g<C-O>或:BufSurfFo
 
 "NeoBundle 'VimIM'                                   " 中文输入法
 
+NeoBundle 'nathanaelkane/vim-indent-guides'         " 标记出各缩进块。\ig切换
+
 if v:version >= '701'
     NeoBundle 'Mark--Karkat'                        " 可同时标记多个mark。\M显示隐，\N清除所有Mark。\m标识当前word
 endif
@@ -1486,6 +1488,16 @@ if neobundle#is_installed("vim-airline")
     " 把section a的第1个part从mode改为bufnr() + mode
     let g:airline_section_a = airline#section#create_left(['%{bufnr("%") . " " . airline#parts#mode()}', 'paste', 'iminsert'])
     :
+endif
+" }}}
+
+" Plugin 'vim-airline' {{{
+if neobundle#is_installed("vim-indent-guides")
+    let g:indent_guides_auto_colors = 0
+    let g:indent_guides_start_level = 2
+    "let g:indent_guides_guide_size = 1
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=black
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=darkgray ctermbg=8
 endif
 " }}}
 
