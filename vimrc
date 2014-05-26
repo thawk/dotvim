@@ -621,7 +621,9 @@ if executable("cpplint.py")
     NeoBundle 'funorpain/vim-cpplint'               " <F7>执行cpplint检查（要求PATH中能找到cpplint.py）
 endif
 
-NeoBundle 'davidhalter/jedi-vim'                    " 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置
+NeoBundleLazy 'davidhalter/jedi-vim', {
+    \ 'autoload':{'filetypes':['python', 'py']}
+    \ }                                             " 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置
 " }}}
 
 " Language {{{
@@ -631,16 +633,31 @@ NeoBundle 'jceb/vim-orgmode', {
     \   'NrrwRgn',
     \   'speeddating.vim',
     \ ]}
-NeoBundle 'Emmet.vim'                               " 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>,
-if (s:is_windows)
-    NeoBundle 'wps.vim'                             " syntax highlight for RockBox wps file
-else
-    NeoBundle 'lbdbq'                               " 支持lbdb
-endif
-NeoBundle 'othree/xml.vim'                          " 辅助编写XML文件
-NeoBundle 'indentpython.vim--nianyang'              " Python的代码缩进插件
+NeoBundleLazy 'Emmet.vim', {
+    \ 'autoload':{'filetypes':['html','css','sass','scss','less']}
+    \ }                                             " 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>,
+
+NeoBundleLazy 'wps.vim', {
+    \ 'autoload':{'filetypes':['wps']},
+    \ 'disabled':!(has("win32") || has("win64"))
+    \ }                                             " syntax highlight for RockBox wps file
+NeoBundleLazy 'lbdbq', {
+    \ 'autoload':{'mappings':'<LocalLeader>lb'}
+    \ }                                             " 支持lbdb
+NeoBundleLazy 'othree/xml.vim', {
+    \ 'autoload':{'filetypes':['xml']}
+    \ }                                             " 辅助编写XML文件
+"NeoBundle 'indentpython.vim--nianyang'              " Python的代码缩进插件
 "NeoBundle 'tmhedberg/SimpylFold'
-NeoBundle 'gprof.vim'                               " 对gprof文件提供语法高亮
+NeoBundleLazy 'gprof.vim', {
+    \ 'autoload':{'filetypes':['gprof']}
+    \ }                                             " 对gprof文件提供语法高亮
+NeoBundleLazy 'elzr/vim-json', {
+    \ 'autoload':{'filetypes':['json']}
+    \ }                                             " 对JSON文件提供语法高亮
+NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {
+    \ 'autoload':{'filetypes':['javascript', 'js']}
+    \ }                                             " Javascript语法高亮
 " }}}
 
 " Colors {{{
@@ -653,19 +670,32 @@ NeoBundle 'FSwitch'                                 " 在头文件和CPP文件�
 "NeoBundle 'jceb/vim-editqf'
 NeoBundle 'LargeFile'                               " 在打开大文件时，禁用语法高亮以提供打开速度
 NeoBundle 'rbtnn/hexript.vim'                       " to generate binary file
-NeoBundle 'Shougo/vinarise'                         " Hex Editor
+NeoBundleLazy 'Shougo/vinarise', {
+      \ 'autoload':{'commands':['Vinarise','VinariseDump','VinariseScript2Hex']}
+      \ }                                           " Hex Editor
 " }}}
 
 " Utils {{{
 NeoBundle 'Shougo/vimfiler'                         " 文件管理器，:VimFiler
-NeoBundle 'Shougo/vimshell'                         " Shell，:VimShell
-NeoBundle 'sudo.vim'                                " 通过sudo读、写文件。:SudoRead/:SudoWrite
-NeoBundle 'quickrun.vim'                            " 快速运行代码片段
-NeoBundle 'mtth/scratch.vim'                        " 打开一个临时窗口。gs/gS/:Scratch
+NeoBundleLazy 'Shougo/vimshell', {
+      \ 'autoload':{'commands':['VimShell']}
+      \ }                                           " Shell，:VimShell
+NeoBundleLazy 'sudo.vim', {
+      \ 'autoload':{'commands':['SudoRead','SudoWrite']}
+      \ }
+" 通过sudo读、写文件。:SudoRead/:SudoWrite
+NeoBundleLazy 'quickrun.vim', {
+      \ 'autoload':{'commands':['QuickRun']}
+      \ }                                           " 快速运行代码片段
+NeoBundleLazy 'mtth/scratch.vim', {
+      \ 'autoload':{'commands':['Scratch','ScratchInsert','ScratchSelection'], 'mappings':['v','gs','gS']}
+      \ }                                           " 打开一个临时窗口。gs/gS/:Scratch
 " }}}
 
 " Misc {{{
-NeoBundle 'sjl/gundo.vim'                           " 列出修改历史，方便undo到一个特定的位置
+NeoBundleLazy 'sjl/gundo.vim', {
+      \ 'autoload':{'mappings':['n','<F5>'],'commands':['GundoHide','GundoRenderGraph','GundoShow','GundoToggle']}
+      \ }                                           " 列出修改历史，方便undo到一个特定的位置
 NeoBundle 'tpope/vim-repeat'                        " 把.能重复的操作扩展到一些插件中的操作
 NeoBundle 'AutoFenc.vim'                            " 自动判别文件的编码
 NeoBundle 'Shougo/vimproc', {
@@ -676,7 +706,9 @@ NeoBundle 'Shougo/vimproc', {
       \ 'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
       \ },
       \ }
-NeoBundle 'thinca/vim-prettyprint'                  " PP variable_name，以用户友好的方式打印变量值，调试vim脚本用
+NeoBundleLazy 'thinca/vim-prettyprint', {
+      \ 'autoload':{'commands':'PP'}
+      \ }                                           " PP variable_name，以用户友好的方式打印变量值，调试vim脚本用
 NeoBundle 'bling/vim-airline'                       " 增强的statusline
 NeoBundle 'zhaocai/GoldenView.Vim'                  " <C-L>分隔出一个窗口，<F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口
 
