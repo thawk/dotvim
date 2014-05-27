@@ -536,21 +536,30 @@ let g:neobundle_default_git_protocol = 'https'
 " " }}}
 
 " Unite {{{
-NeoBundle 'Shougo/unite.vim'                        " Unite主插件，提供\f开头的功能
+NeoBundleLazy 'Shougo/unite.vim', {
+    \ 'autoload' : {
+    \   'commands' : [{ 'name' : 'Unite',
+    \                   'complete' : 'customlist,unite#complete_source'},
+    \                 'UniteWithCursorWord', 'UniteWithInput']
+    \ }}                                            " Unite主插件，提供\f开头的功能
 "NeoBundle 'Shougo/unite-build'
 "NeoBundle 'h1mesuke/unite-outline'
-NeoBundle 'Shougo/unite-outline'                    " 提供代码的大纲。通过\fo访问
-NeoBundle 'tacroe/unite-mark'                       " 列出所有标记点
-NeoBundle 'tsukkee/unite-help'                      " 查找vim的帮助
-NeoBundle 'tsukkee/unite-tag'                       " 跳转到光标下的tag。通过\fT访问
-NeoBundle 'ujihisa/unite-colorscheme'               " 列出所有配色方案
-NeoBundle 'osyo-manga/unite-quickfix'               " 过滤quickfix窗口（如在编译结果中查找）
-NeoBundle 'eiiches/unite-tselect'                   " 跳转到光标下的tag。通过g]和g<C-]>访问
-NeoBundle 'hrsh7th/vim-unite-vcs'                   " \fv 看未提交的文件列表，\fl 看更新日志
+NeoBundleLazy 'Shougo/unite-outline'                " 提供代码的大纲。通过\fo访问
+NeoBundleLazy 'tacroe/unite-mark'                   " 列出所有标记点
+NeoBundleLazy 'tsukkee/unite-help'                  " 查找vim的帮助
+NeoBundleLazy 'tsukkee/unite-tag'                   " 跳转到光标下的tag。通过\fT访问
+NeoBundleLazy 'ujihisa/unite-colorscheme'           " 列出所有配色方案
+NeoBundleLazy 'osyo-manga/unite-quickfix'           " 过滤quickfix窗口（如在编译结果中查找）
+NeoBundleLazy 'eiiches/unite-tselect'               " 跳转到光标下的tag。通过g]和g<C-]>访问
+NeoBundleLazy 'hrsh7th/vim-unite-vcs', {
+    \ 'unite_sources' : 'vcs',
+    \ }                                             " \fv 看未提交的文件列表，\fl 看更新日志
 " }}}
 
 " Editing {{{
-NeoBundle 'h1mesuke/vim-alignta'                    " 代码对齐插件。通过\fa访问
+NeoBundleLazy 'h1mesuke/vim-alignta', {
+    \ 'autoload':{'commands':['Alignta']}
+    \ }                                             " 代码对齐插件。通过\fa访问
 NeoBundle 'matchit.zip'                             " 将%的功能扩展到多种语言（如对于XML，可以在开始tag和结束tag之间进行跳转）
 "NeoBundle 'YankRing.vim'                            " 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容
 NeoBundle 'vis'                                     " 在块选后（<C-V>进行选择），:B cmd在选中内容中执行cmd
@@ -561,12 +570,22 @@ NeoBundle 'Lokaltog/vim-easymotion', {
    \ }                                              " \\w启动word motion，\\f<字符>启动查找模式
 
 if v:version >= '703' && has('lua')
-    NeoBundle 'Shougo/neocomplete'                  " 代码补全插件
+    NeoBundleLazy 'Shougo/neocomplete', {
+        \ 'autoload':{'insert':1}
+        \ }                                         " 代码补全插件
 else
-    NeoBundle 'Shougo/neocomplcache'                " 代码补全插件
+    NeoBundleLazy 'Shougo/neocomplcache', {
+        \ 'autoload':{'insert':1}
+        \ }                                         " 代码补全插件
 endif
 
-NeoBundle 'Shougo/neosnippet'                       " 代码模板引擎
+NeoBundleLazy 'Shougo/neosnippet', {
+    \ 'autoload' : {
+    \   'insert' : 1,
+    \   'filetypes' : 'snippet',
+    \   'commands' : ['NeoSnippetEdit'],
+    \   'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
+    \ }}                                            " 代码模板引擎
 NeoBundle 'Shougo/neomru.vim'                       " 代码模板
 NeoBundle 'Shougo/neosnippet-snippets'              " 代码模板
 NeoBundle 'ton/vim-bufsurf'                         " g<C-I>/g<C-O>或:BufSurfForward/:BufSurfBack跳转到本窗口的下一个、上一个buffer（增强<C-I>/<C-O>）
@@ -574,7 +593,11 @@ NeoBundle 'ton/vim-bufsurf'                         " g<C-I>/g<C-O>或:BufSurfFo
 
 "NeoBundle 'VimIM'                                   " 中文输入法
 
-NeoBundle 'nathanaelkane/vim-indent-guides'         " 标记出各缩进块。\ig切换
+NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
+    \ 'autoload':{
+    \     'commands':['IndentGuidesToggle','IndentGuidesEnable','IndentGuidesDisable'],
+    \     'mappings':['<Leader>ig']}
+    \ }                                             " 标记出各缩进块。\ig切换
 
 if v:version >= '701'
     NeoBundle 'Mark--Karkat'                        " 可同时标记多个mark。\M显示隐，\N清除所有Mark。\m标识当前word
@@ -603,15 +626,17 @@ if executable("ctags")
     NeoBundle 'thawk/Intelligent_Tags'              " 自动扫描所依赖的头文件，生成tags文件
     "NeoBundle 'AutoTag'
 endif
-NeoBundle 'majutsushi/tagbar'                       " 列出文件中所有类和方法。用<F9>调用
+NeoBundleLazy 'majutsushi/tagbar', {
+    \ 'autoload':{
+    \     'commands':['TagbarToggle','TagbarCurrentTag'],
+    \     'mappings' : ['<Plug>(vimfiler_switch)'],
+    \ }}                                            " 列出文件中所有类和方法。用<F9>调用
 NeoBundle 'vcscommand.vim'                          " SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件
 NeoBundle 'tpope/vim-fugitive'                      " GIT前端
 
-"if s:libclang_path != ""
-"    NeoBundle 'osyo-manga/vim-snowdrop'                 " 使用clang编译器进行上下文补全
-"elseif executable("clang")
-    NeoBundle 'Rip-Rip/clang_complete'                  " 使用clang编译器进行上下文补全
-"endif
+NeoBundleLazy 'Rip-Rip/clang_complete', {
+    \ 'autoload':{'filetypes':['c', 'cpp']}
+    \ }                                             " 使用clang编译器进行上下文补全
 
 NeoBundle 'scrooloose/syntastic'                    " 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表
 if (s:is_windows)
@@ -622,7 +647,7 @@ if executable("cpplint.py")
 endif
 
 NeoBundleLazy 'davidhalter/jedi-vim', {
-    \ 'autoload':{'filetypes':['python', 'py']}
+    \ 'autoload':{'filetypes':['python', 'python3']}
     \ }                                             " 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置
 " }}}
 
@@ -666,27 +691,57 @@ NeoBundle 'Zenburn'                                 " Zenburn配色方案
 " }}}
 
 " Files {{{
-NeoBundle 'FSwitch'                                 " 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示，\of当前窗口
+NeoBundleLazy 'FSwitch', {
+      \ 'autoload':{
+      \     'functions':['FSwitch'],
+      \     'commands':['FSHere','FSRight','FSSplitRight','FSLeft','FSSplitLeft','FSAbove','FSSplitAbove','FSBelow','FSSplitBelow'],
+      \ }}                                          " 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示，\of当前窗口
 "NeoBundle 'jceb/vim-editqf'
 NeoBundle 'LargeFile'                               " 在打开大文件时，禁用语法高亮以提供打开速度
-NeoBundle 'rbtnn/hexript.vim'                       " to generate binary file
+NeoBundleLazy 'rbtnn/hexript.vim', {
+      \ 'autoload':{'commands':['HexriptToBinaryFile']}
+      \ }                                           " to generate binary file
 NeoBundleLazy 'Shougo/vinarise', {
       \ 'autoload':{'commands':['Vinarise','VinariseDump','VinariseScript2Hex']}
       \ }                                           " Hex Editor
 " }}}
 
 " Utils {{{
-NeoBundle 'Shougo/vimfiler'                         " 文件管理器，:VimFiler
+NeoBundleLazy 'Shougo/vimfiler', {
+    \ 'depends' : 'Shougo/unite.vim',
+    \ 'autoload' : {
+    \   'commands' : [
+    \                 { 'name' : 'VimFiler',
+    \                   'complete' : 'customlist,vimfiler#complete' },
+    \                 { 'name' : 'VimFilerTab',
+    \                   'complete' : 'customlist,vimfiler#complete' },
+    \                 { 'name' : 'VimFilerExplorer',
+    \                   'complete' : 'customlist,vimfiler#complete' },
+    \                 { 'name' : 'Edit',
+    \                   'complete' : 'customlist,vimfiler#complete' },
+    \                 { 'name' : 'Write',
+    \                   'complete' : 'customlist,vimfiler#complete' },
+    \                 'Read', 'Source'],
+    \   'mappings' : ['<Plug>(vimfiler_switch)'],
+    \   'explorer' : 1,
+    \ }}                                            " 文件管理器，:VimFiler
 NeoBundleLazy 'Shougo/vimshell', {
-      \ 'autoload':{'commands':['VimShell']}
-      \ }                                           " Shell，:VimShell
+    \ 'autoload' : {
+    \   'commands' : [{ 'name' : 'VimShell',
+    \                   'complete' : 'customlist,vimshell#complete'},
+    \                 'VimShellExecute', 'VimShellInteractive',
+    \                 'VimShellTerminal', 'VimShellPop'],
+    \   'mappings' : ['<Plug>(vimshell_switch)']
+    \ }}                                            " Shell，:VimShell
 NeoBundleLazy 'sudo.vim', {
-      \ 'autoload':{'commands':['SudoRead','SudoWrite']}
-      \ }
+    \ 'autoload':{'commands':['SudoRead','SudoWrite']}
+    \ }
 " 通过sudo读、写文件。:SudoRead/:SudoWrite
 NeoBundleLazy 'quickrun.vim', {
-      \ 'autoload':{'commands':['QuickRun']}
-      \ }                                           " 快速运行代码片段
+    \ 'autoload':{
+    \     'mappings':[['nxo', '<Plug>(quickrun)']],
+    \     'commands':['QuickRun']}
+    \ }                                           " 快速运行代码片段
 NeoBundleLazy 'mtth/scratch.vim', {
       \ 'autoload':{'commands':['Scratch','ScratchInsert','ScratchSelection'], 'mappings':['v','gs','gS']}
       \ }                                           " 打开一个临时窗口。gs/gS/:Scratch
@@ -1131,6 +1186,9 @@ if neobundle#is_installed("neosnippet")
         set conceallevel=2 concealcursor=i
     endif
 endif
+" }}}
+
+" Plugin 'hexript.vim' {{{ " Hex Generator
 " }}}
 
 " Plugin 'vinarise' {{{ " Hex Editor
