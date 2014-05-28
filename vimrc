@@ -667,13 +667,13 @@ NeoBundleLazy 'majutsushi/tagbar', {
 NeoBundle 'vcscommand.vim'                          " SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件
 NeoBundle 'tpope/vim-fugitive'                      " GIT前端
 
-NeoBundleLazy 'osyo-manga/vim-snowdrop', {
-    \ 'filetypes' : ['c', 'cpp'],
-    \ }
-
-"NeoBundleLazy 'Rip-Rip/clang_complete', {
+"NeoBundleLazy 'osyo-manga/vim-snowdrop', {
 "    \ 'filetypes' : ['c', 'cpp'],
-"    \ }                                             " 使用clang编译器进行上下文补全
+"    \ }
+
+NeoBundleLazy 'Rip-Rip/clang_complete', {
+    \ 'filetypes' : ['c', 'cpp'],
+    \ }                                             " 使用clang编译器进行上下文补全
 
 NeoBundle 'scrooloose/syntastic'                    " 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表
 if (s:is_windows)
