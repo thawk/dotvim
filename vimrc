@@ -590,10 +590,13 @@ NeoBundleLazy 'DrawIt', {
     \ 'mappings' : [['n', '<Leader>di']],
     \ 'commands' : ['DIstart', 'DIsngl', 'DIdbl', 'DrawIt'],
     \ }                                             " 使用横、竖线画图、制表。\di和\ds分别启、停画图模式。在模式中，hjkl移动光标，方向键画线
-NeoBundle 'Lokaltog/vim-easymotion', {
+NeoBundleLazy 'Lokaltog/vim-easymotion', {
     \ 'rev' : 'e41082',
-    \ 'mappings' : [['n', '<Leader>f', '<Leader>F', '<Leader>t', '<Leader>T', '<Leader>w', '<Leader>W', '<Leader>b', '<Leader>B', '<Leader>e', '<Leader>E', '<Leader>g', '<Leader>g', '<Leader>j', '<Leader>k', '<Leader>l', '<Leader>n', '<Leader>N', '<Leader>p', '<Leader>s', '<Leader>S']],
+    \ 'mappings' : [['n', '<Leader><Leader>f', '<Leader><Leader>F', '<Leader><Leader>t', '<Leader><Leader>T', '<Leader><Leader>w', '<Leader><Leader>W', '<Leader><Leader>b', '<Leader><Leader>B', '<Leader><Leader>e', '<Leader><Leader>E', '<Leader><Leader>g', '<Leader><Leader>g', '<Leader><Leader>j', '<Leader><Leader>k', '<Leader><Leader>l', '<Leader><Leader>n', '<Leader><Leader>N', '<Leader><Leader>p', '<Leader><Leader>s', '<Leader><Leader>S']],
     \ }                                             " \\w启动word motion，\\f<字符>启动查找模式
+NeoBundleLazy 'rhysd/clever-f.vim', {
+    \ 'mappings' : [['n', 'f', 'F', 't', 'T']],
+    \ }                                             " 用f/F代替;来查找下一个字符
 
 if v:version >= '703' && has('lua')
     NeoBundleLazy 'Shougo/neocomplete', {
@@ -664,9 +667,13 @@ NeoBundleLazy 'majutsushi/tagbar', {
 NeoBundle 'vcscommand.vim'                          " SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件
 NeoBundle 'tpope/vim-fugitive'                      " GIT前端
 
-NeoBundleLazy 'Rip-Rip/clang_complete', {
+NeoBundleLazy 'osyo-manga/vim-snowdrop', {
     \ 'filetypes' : ['c', 'cpp'],
-    \ }                                             " 使用clang编译器进行上下文补全
+    \ }
+
+"NeoBundleLazy 'Rip-Rip/clang_complete', {
+"    \ 'filetypes' : ['c', 'cpp'],
+"    \ }                                             " 使用clang编译器进行上下文补全
 
 NeoBundle 'scrooloose/syntastic'                    " 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表
 if (s:is_windows)
@@ -796,7 +803,11 @@ NeoBundle 'Shougo/vimproc', {
     \ },
     \ }
 NeoBundleLazy 'thinca/vim-prettyprint', {
-    \ 'commands' : ['PP'],
+    \ 'commands' : [
+    \     { 'name' : 'PP', 'complete' : 'expression' },
+    \     { 'name' : 'PrettyPrint', 'complete' : 'expression' },
+    \ ],
+    \ 'functions' : ['PP', 'PrettyPrint'],
     \ }                                             " PP variable_name，以用户友好的方式打印变量值，调试vim脚本用
 NeoBundle 'bling/vim-airline'                       " 增强的statusline
 NeoBundle 'zhaocai/GoldenView.Vim'                  " <C-L>分隔出一个窗口，<F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口
@@ -884,7 +895,12 @@ endif
 " Plugin 'vim-easymotion' {{{
 if neobundle#is_installed("vim-easymotion")
     " \\{motion}
-    hi link EasyMotionTarget ErrorMsg
+    let g:EasyMotion_startofline = 0
+    let g:EasyMotion_smartcase = 1
+
+    hi link EasyMotionTarget IncSearch
+    hi link EasyMotionTarget2First IncSearch
+    hi link EasyMotionTarget2First Search
     hi link EasyMotionShade  Comment
 endif
 " }}}
@@ -1537,8 +1553,8 @@ endif
 if neobundle#is_installed("tagbar")
     let g:tagbar_left = 1
 
-    nnoremap ff :<C-U>TagbarCurrentTag fs<CR>
-    nnoremap <silent> <F9> :TagbarToggle<CR>
+    nnoremap <silent> g<F9> :<C-U>TagbarCurrentTag fs<CR>
+    nnoremap <silent> <F9> :<C-U>TagbarToggle<CR>
     " augroup TagbarMappings
     "     au! FileType c,cpp,php,cs,vim,javascript,python nnoremap <silent> <buffer> <F9> :TagbarToggle<CR>
     " augroup END
