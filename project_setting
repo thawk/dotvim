@@ -5,10 +5,17 @@ function! s:AddComponentsToPath(path)
 
     call add(b:proj_processed_components, a:path)
 
-    " 把path目录下，两层子目录内的include/3rd/boost/sscc等目录加入路径中
-    for l:name in ["include", "3rd", "boost", "sscc"]
+    " 把path目录下，两层子目录内的include/3rd等目录加入路径中
+    for l:name in ["include", "3rd"]
         for l:p in finddir(l:name, a:path . "/**2", -1)
             call s:AddPath(l:p)
+        endfor
+    endfor
+
+    " 把path目录下，两层子目录内的boost/sscc等目录的上一层目录加入路径中
+    for l:name in ["boost", "sscc"]
+        for l:p in finddir(l:name, a:path . "/**2", -1)
+            call s:AddPath(fnamemodify(l:p, ":h"))
         endfor
     endfor
 
