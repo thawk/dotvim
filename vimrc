@@ -565,6 +565,7 @@ NeoBundleLazy 'hrsh7th/vim-unite-vcs', {
 " Editing {{{
 NeoBundleLazy 'h1mesuke/vim-alignta', {
     \ 'commands' : ['Alignta'],
+    \ 'unite_sources' : 'alignta',
     \ }                                             " 代码对齐插件。通过\fa访问
 NeoBundleLazy 'matchit.zip', {
     \ 'mappings' : [['nxo', '%', 'g%']]
@@ -1312,7 +1313,8 @@ if neobundle#is_installed("unite.vim")
     " nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
     nnoremap <silent> [unite]G :<C-u>Unite grep -buffer-name=search -no-quit<CR>
     " nnoremap <silent> [unite]G :<C-u>UniteWithCursorWord grep -buffer-name=search -no-quit<CR>
-    nnoremap <silent> [unite]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
+    "nnoremap <silent> [unite]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
+    nnoremap <silent> [unite]g :<C-u>Unite grep:! -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
 
     nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search -start-insert line<CR>
     "nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
