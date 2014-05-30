@@ -20,9 +20,19 @@ let s:vimrc_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
 " 确定libclang的位置
 let s:libclang_path = ""
+let s:ag_path = ""
+
+if executable("ag")
+    let s:ag_path = "ag"
+endif
+
 if s:is_windows
-    if filereadable(s:vimrc_path . "/win32/libclang.dll")
-        let s:libclang_path = s:vimrc_path . "/win32"
+    if filereadable(s:vimrc_path . "\\win32\\libclang.dll")
+        let s:libclang_path = s:vimrc_path . "\\win32"
+    endif
+
+    if !s:ag_path && executable(s:vimrc_path . "\\win32\\ag")
+        let s:ag_path = s:vimrc_path . "\\win32\\ag"
     endif
 else
     if filereadable(expand("~/libexec/libclang.so"))
@@ -1281,9 +1291,9 @@ if neobundle#is_installed("unite.vim")
     let g:unite_winheight = winheight("%") / 2
     let g:unite_winwidth = winwidth("%") / 2
 
-	if executable('ag')
+	if s:ag_path != ""
 	  " Use ag in unite grep source.
-	  let g:unite_source_grep_command = 'ag'
+	  let g:unite_source_grep_command = s:ag_path
 	  let g:unite_source_grep_default_opts =
 	  \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
 	  \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
@@ -1643,6 +1653,14 @@ if neobundle#is_installed("vim-airline")
     " 把section a的第1个part从mode改为bufnr() + mode
     let g:airline_section_a = airline#section#create_left(['%{bufnr("%") . " " . airline#parts#mode()}', 'paste', 'iminsert'])
     :
+endif
+" }}}
+
+" Plugin 'vimproc' {{{
+if neobundle#is_installed("vimproc")
+    if s:is_windows && filereadable(s:vimrc_path . "\\win32\\vimproc_win32.dll")
+        let g:vimproc_dll_path = s:vimrc_path . "\\win32\\vimproc_win32.dll"
+    endif
 endif
 " }}}
 
