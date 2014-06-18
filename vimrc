@@ -1216,6 +1216,7 @@ if neobundle#is_installed("neocomplcache")
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
     if neobundle#is_installed("jedi-vim")
         autocmd FileType python setlocal omnifunc=jedi#completions
+        let g:jedi#completions_enabled = 0
         let g:jedi#auto_vim_configuration = 0 " 解决neocomplete下自动补第一个候选项的问题
     else
         autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
