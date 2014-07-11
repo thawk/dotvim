@@ -65,3 +65,12 @@ abbr        #include<iostream> int main...
         return 0;
     }
 
+snippet log
+    LOG_${1:INFO}(
+        ${2:kInfo},
+        format(translate(${3}))
+        % ${4},
+        ${5:""});
+
+    ${0}
+
