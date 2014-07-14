@@ -821,7 +821,7 @@ NeoBundleLazy 'thinca/vim-prettyprint', {
     \ ],
     \ 'functions' : ['PP', 'PrettyPrint'],
     \ }                                             " PP variable_name，以用户友好的方式打印变量值，调试vim脚本用
- NeoBundle 'bling/vim-airline'                       " 增强的statusline
+NeoBundle 'bling/vim-airline'                       " 增强的statusline
 "NeoBundle 'itchyny/lightline.vim'
 "NeoBundle 'itchyny/lightline-powerful'
 NeoBundle 'zhaocai/GoldenView.Vim'                  " <C-L>分隔出一个窗口，<F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口
@@ -1656,8 +1656,12 @@ if neobundle#is_installed("vim-airline")
     set noshowmode
 
     " 把section a的第1个part从mode改为bufnr() + mode
-    let g:airline_section_a = airline#section#create_left(['%{bufnr("%") . " " . airline#parts#mode()}', 'paste', 'iminsert'])
-    :
+    call airline#parts#define_raw('bufnr_mode', '%{bufnr("%") . " " . airline#parts#mode()}')
+    let g:airline_section_a = airline#section#create_left(['bufnr_mode', 'paste', 'iminsert'])
+
+    let g:unite_force_overwrite_statusline = 0
+    let g:vimfiler_force_overwrite_statusline = 0
+    let g:vimshell_force_overwrite_statusline = 0
 endif
 " }}}
 
