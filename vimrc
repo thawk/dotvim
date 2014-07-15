@@ -326,12 +326,12 @@ au BufRead,BufNewFile *.cshtml          setf cshtml
 "" Remove trailing spaces for C/C++ and Vim files
 au BufWritePre *                  call RemoveTrailingSpace()
 
-au BufRead,BufNewFile todo.txt,done.txt setf todo
-au BufRead,BufNewFile *.mm              setf xml
-au BufRead,BufNewFile *.proto           setf proto
-au BufRead,BufNewFile Jamfile*,Jamroot* setf jam
+au BufRead,BufNewFile todo.txt,done.txt           setf todo
+au BufRead,BufNewFile *.mm                        setf xml
+au BufRead,BufNewFile *.proto                     setf proto
+au BufRead,BufNewFile Jamfile*,Jamroot*,*.jam     setf jam
 au BufRead,BufNewFile pending.data,completed.data setf task
-au BufRead,BufNewFile *.ipp             setf cpp
+au BufRead,BufNewFile *.ipp                       setf cpp
 " "}}}
 
 " Filetype related autosettings " {{{
@@ -621,7 +621,7 @@ endif
 
 NeoBundleLazy 'Shougo/neosnippet', {
     \ 'insert' : 1,
-    \ 'filetypes' : 'snippet',
+    \ 'filetypes' : 'neosnippet',
     \ 'commands' : ['NeoSnippetEdit'],
     \ 'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
     \ }                                             " 代码模板引擎
@@ -668,10 +668,11 @@ NeoBundle 'OrelSokolov/HiCursorWords'               " 高亮与光标下word一�
 NeoBundle 'tComment'                                " 注释工具。gc{motion}/gcc/<C-_>等
 "NeoBundle 'tpope/vim-commentary'
 "NeoBundle 'bahejl/Intelligent_Tags'
-if executable("ctags")
-    NeoBundle 'thawk/Intelligent_Tags'              " 自动扫描所依赖的头文件，生成tags文件
-    "NeoBundle 'AutoTag'
-endif
+"if executable("ctags")
+"    NeoBundle 'thawk/Intelligent_Tags'              " 自动扫描所依赖的头文件，生成tags文件
+"    "NeoBundle 'AutoTag'
+"endif
+
 NeoBundleLazy 'majutsushi/tagbar', {
     \ 'commands' : ['TagbarToggle','TagbarCurrentTag'],
     \ }                                             " 列出文件中所有类和方法。用<F9>调用
@@ -1572,9 +1573,40 @@ if neobundle#is_installed("tagbar")
 
     nnoremap <silent> g<F9> :<C-U>TagbarCurrentTag fs<CR>
     nnoremap <silent> <F9> :<C-U>TagbarToggle<CR>
-    " augroup TagbarMappings
-    "     au! FileType c,cpp,php,cs,vim,javascript,python nnoremap <silent> <buffer> <F9> :TagbarToggle<CR>
-    " augroup END
+
+    let g:tagbar_type_jam = {
+        \ 'ctagstype' : 'jam',
+        \ 'kinds' : [
+            \ 's:Table of Contents',
+        \ ],
+        \ 'sort' : 0,
+        \ 'deffile' : expand('<sfile>:p:h') . '/ctags/jam.cnf',
+    \ }
+
+    let g:tagbar_type_neosnippet = {
+        \ 'ctagstype' : 'neosnippet',
+        \ 'kinds' : [
+            \ 's:snippet',
+        \ ],
+        \ 'sort' : 1,
+        \ 'deffile' : expand('<sfile>:p:h') . '/ctags/neosnippet.cnf',
+    \ }
+    let g:tagbar_type_asciidoc = {
+        \ 'ctagstype' : 'asciidoc',
+        \ 'kinds' : [
+            \ 's:Table of Contents'
+        \ ],
+        \ 'sort' : 0,
+        \ 'deffile' : expand('<sfile>:p:h') . '/ctags/asciidoc.cnf',
+        \ }
+    let g:tagbar_type_markdown = {
+        \ 'ctagstype' : 'markdown',
+        \ 'kinds' : [
+            \ 's:Table of Contents'
+        \ ],
+        \ 'sort' : 0,
+        \ 'deffile' : expand('<sfile>:p:h') . '/ctags/markdown.cnf',
+        \ }
 endif
 " }}}
 

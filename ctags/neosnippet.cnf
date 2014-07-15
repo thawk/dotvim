@@ -1,0 +1,4 @@
+--langdef=neosnippet
+--langmap=neosnippet:.snip
+--regex-neosnippet=/^snippet\s+(\S+).*/\1/s,snippet/
+

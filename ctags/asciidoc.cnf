@@ -1,0 +1,5 @@
+--langdef=markdown
+--langmap=markdown:.mkd.markdown
+--regex-markdown#/^#[ \t]+(.*)/\1/s,Section_L0/
+--regex-markdown#/^##[ \t]+(.*)/. \1/s,Section_L1/
+--regex-markdown#/^###[ \t]+(.*)/. . \1/s,Section_L2/
