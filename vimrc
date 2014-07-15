@@ -737,6 +737,10 @@ NeoBundleLazy 'elzr/vim-json', {
 NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {
     \ 'filetypes' : ['javascript', 'js'],
     \ }                                             " Javascript语法高亮
+NeoBundleLazy 'po.vim', {
+    \ 'filetypes' : ['po'],
+    \ 'filename_patterns' : ['.*\.pot\?'],
+    \ }                                             " 用于编辑PO语言包文件。
 " }}}
 
 " Colors {{{
