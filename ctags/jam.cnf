@@ -2,5 +2,5 @@
 --langmap=jam:.jam
 --regex-jam=/^\s*class[ \t]+(\S+).*/class \1/s,Section_L0/
 --regex-jam=/^((local[ \t]+)?rule)[ \t]+(\S+)[ \t]*\(.*/\1 \3/s,Section_L0/
---regex-jam=/^\s*((local[ \t]+)?rule)[ \t]+(\S+)[ \t]*\(.*/.   \1 \3/s,Section_L1/
+--regex-jam=/^\s+((local[ \t]+)?rule)[ \t]+(\S+)[ \t]*\(.*/.   \1 \3/s,Section_L1/
 --regex-jam=/^[ \t]*(exe|lib|make|run|test|unittest)[ \t]+(\S+).*/\1 \2/s,Section_L0/

@@ -1152,18 +1152,18 @@ if neobundle#is_installed("neocomplete")
     endif
 
     " 使得neocomplete能和clang_complete共存，见neocomplete帮助的FAQ
-	if !exists('g:neocomplete#force_omni_input_patterns')
-	  let g:neocomplete#force_omni_input_patterns = {}
-	endif
-	let g:neocomplete#force_overwrite_completefunc = 1
-	let g:neocomplete#force_omni_input_patterns.c =
-	      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-	let g:neocomplete#force_omni_input_patterns.cpp =
-	      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-	let g:neocomplete#force_omni_input_patterns.objc =
-	      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-	let g:neocomplete#force_omni_input_patterns.objcpp =
-	      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+    if !exists('g:neocomplete#force_omni_input_patterns')
+      let g:neocomplete#force_omni_input_patterns = {}
+    endif
+    let g:neocomplete#force_overwrite_completefunc = 1
+    let g:neocomplete#force_omni_input_patterns.c =
+          \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+    let g:neocomplete#force_omni_input_patterns.cpp =
+          \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+    let g:neocomplete#force_omni_input_patterns.objc =
+          \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+    let g:neocomplete#force_omni_input_patterns.objcpp =
+          \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
     let g:neocomplete#force_omni_input_patterns.python =
           \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 endif
@@ -1296,20 +1296,20 @@ if neobundle#is_installed("unite.vim")
     let g:unite_winheight = winheight("%") / 2
     let g:unite_winwidth = winwidth("%") / 2
 
-	if s:ag_path != ""
-	  " Use ag in unite grep source.
-	  let g:unite_source_grep_command = s:ag_path
-	  let g:unite_source_grep_default_opts =
-	  \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
-	  \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
-	  let g:unite_source_grep_recursive_opt = ''
-	elseif executable('ack-grep')
-	  " Use ack in unite grep source.
-	  let g:unite_source_grep_command = 'ack-grep'
-	  let g:unite_source_grep_default_opts =
-	  \ '--no-heading --no-color -a -H'
-	  let g:unite_source_grep_recursive_opt = ''
-	endif
+    if s:ag_path != ""
+      " Use ag in unite grep source.
+      let g:unite_source_grep_command = s:ag_path
+      let g:unite_source_grep_default_opts =
+      \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
+      \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+      let g:unite_source_grep_recursive_opt = ''
+    elseif executable('ack-grep')
+      " Use ack in unite grep source.
+      let g:unite_source_grep_command = 'ack-grep'
+      let g:unite_source_grep_default_opts =
+      \ '--no-heading --no-color -a -H'
+      let g:unite_source_grep_recursive_opt = ''
+    endif
 
     let g:unite_source_rec_ignore_pattern =
                 \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|a\)$'.
@@ -1317,7 +1317,9 @@ if neobundle#is_installed("unite.vim")
                 \'\|\%(^\|/\)doc/html/'.
                 \'\|\%(^\|/\)boost\(\|_\w\+\)/'.
                 \'\|\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)'
-    "let g:unite_source_rec_max_cache_files = 0
+
+    " let g:unite_source_rec_max_cache_files = 0
+    " call unite#custom#source('file_rec,file_rec/async', 'max_candidates', 0)
 
     nnoremap [unite]S :<C-U>Unite source<CR>
 
