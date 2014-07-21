@@ -601,10 +601,20 @@ NeoBundleLazy 'DrawIt', {
     \ 'mappings' : [['n', '<Leader>di']],
     \ 'commands' : ['DIstart', 'DIsngl', 'DIdbl', 'DrawIt'],
     \ }                                             " 使用横、竖线画图、制表。\di和\ds分别启、停画图模式。在模式中，hjkl移动光标，方向键画线
-NeoBundleLazy 'Lokaltog/vim-easymotion', {
-    \ 'rev' : 'e41082',
-    \ 'mappings' : [['n', '<Leader><Leader>f', '<Leader><Leader>F', '<Leader><Leader>t', '<Leader><Leader>T', '<Leader><Leader>w', '<Leader><Leader>W', '<Leader><Leader>b', '<Leader><Leader>B', '<Leader><Leader>e', '<Leader><Leader>E', '<Leader><Leader>g', '<Leader><Leader>g', '<Leader><Leader>j', '<Leader><Leader>k', '<Leader><Leader>l', '<Leader><Leader>n', '<Leader><Leader>N', '<Leader><Leader>p', '<Leader><Leader>s', '<Leader><Leader>S']],
-    \ }                                             " \\w启动word motion，\\f<字符>启动查找模式
+if v:version >= '703'
+    NeoBundleLazy 'Lokaltog/vim-easymotion', {
+                \ 'mappings' : [['n'] + map(
+                \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
+                \     '"<Leader><Leader>" . v:val')],
+                \ }                                 " \\w启动word motion，\\f<字符>启动查找模式
+else
+    NeoBundleLazy 'Lokaltog/vim-easymotion', {
+                \ 'rev' : 'e41082',
+                \ 'mappings' : [['n'] + map(
+                \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
+                \     '"<Leader><Leader>" . v:val')],
+                \ }                                 " \\w启动word motion，\\f<字符>启动查找模式
+endif
 NeoBundleLazy 'rhysd/clever-f.vim', {
     \ 'mappings' : [['n', 'f', 'F', 't', 'T']],
     \ }                                             " 用f/F代替;来查找下一个字符
@@ -916,11 +926,17 @@ if neobundle#is_installed("vim-easymotion")
     " \\{motion}
     let g:EasyMotion_startofline = 0
     let g:EasyMotion_smartcase = 1
+    let g:EasyMotion_do_shade = 1
 
-    hi link EasyMotionTarget IncSearch
+    if v:version >= '703'
+        let g:EasyMotion_use_upper = 1
+        let g:EasyMotion_keys = 'ASDGHKLQWERTYUIOPZXCVBNMFJ;'
+    endif
+
+    hi link EasyMotionTarget Search
     hi link EasyMotionTarget2First IncSearch
-    hi link EasyMotionTarget2First Search
-    hi link EasyMotionShade  Comment
+    hi link EasyMotionTarget2Second IncSearch
+    hi link EasyMotionShade Comment
 endif
 " }}}
 
@@ -1156,20 +1172,20 @@ if neobundle#is_installed("neocomplete")
     endif
 
     " 使得neocomplete能和clang_complete共存，见neocomplete帮助的FAQ
-    if !exists('g:neocomplete#force_omni_input_patterns')
-      let g:neocomplete#force_omni_input_patterns = {}
-    endif
-    let g:neocomplete#force_overwrite_completefunc = 1
-    let g:neocomplete#force_omni_input_patterns.c =
-          \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-    let g:neocomplete#force_omni_input_patterns.cpp =
-          \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-    let g:neocomplete#force_omni_input_patterns.objc =
-          \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-    let g:neocomplete#force_omni_input_patterns.objcpp =
-          \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+	if !exists('g:neocomplete#force_omni_input_patterns')
+        let g:neocomplete#force_omni_input_patterns = {}
+	endif
+	let g:neocomplete#force_overwrite_completefunc = 1
+	let g:neocomplete#force_omni_input_patterns.c =
+                \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+	let g:neocomplete#force_omni_input_patterns.cpp =
+                \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+	let g:neocomplete#force_omni_input_patterns.objc =
+                \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+	let g:neocomplete#force_omni_input_patterns.objcpp =
+                \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
     let g:neocomplete#force_omni_input_patterns.python =
-          \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+                \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 endif
 " }}}
 
@@ -1300,27 +1316,34 @@ if neobundle#is_installed("unite.vim")
     let g:unite_winheight = winheight("%") / 2
     let g:unite_winwidth = winwidth("%") / 2
 
-    if s:ag_path != ""
-      " Use ag in unite grep source.
-      let g:unite_source_grep_command = s:ag_path
-      let g:unite_source_grep_default_opts =
-      \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
-      \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
-      let g:unite_source_grep_recursive_opt = ''
-    elseif executable('ack-grep')
-      " Use ack in unite grep source.
-      let g:unite_source_grep_command = 'ack-grep'
-      let g:unite_source_grep_default_opts =
-      \ '--no-heading --no-color -a -H'
-      let g:unite_source_grep_recursive_opt = ''
-    endif
+	if s:ag_path != ""
+        " Use ag in unite grep source.
+        let g:unite_source_grep_command = s:ag_path
+        let g:unite_source_grep_default_opts =
+                    \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
+                    \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+        let g:unite_source_grep_recursive_opt = ''
+	elseif executable('ack-grep')
+        " Use ack in unite grep source.
+        let g:unite_source_grep_command = 'ack-grep'
+        let g:unite_source_grep_default_opts =
+                    \ '--no-heading --no-color -a -H'
+        let g:unite_source_grep_recursive_opt = ''
+	endif
 
-    let g:unite_source_rec_ignore_pattern =
-                \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|a\)$'.
-                \'\|\%(^\|/\)gcc-[0-9]\+\%(\.[0-9]\+\)*/'.
-                \'\|\%(^\|/\)doc/html/'.
-                \'\|\%(^\|/\)boost\(\|_\w\+\)/'.
-                \'\|\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)'
+    " let g:unite_source_rec_ignore_pattern =
+    call unite#custom#source(
+                \ 'file_rec',
+                \ 'ignore_pattern',
+                \ join([
+                \ '\(^\|/\)\.$',
+                \ '\~$',
+                \ '\.\(o\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|a\)$',
+                \ '\(^\|/\)gcc-[0-9]\+\(\.[0-9]\+\)*/',
+                \ '\(^\|/\)doc/html/',
+                \ '\(^\|/\)boost\(\|_\w\+\)/',
+                \ '\(^\|/\)\(\.hg\|\.git\|\.bzr\|\.svn\|tags\(-.*\)\?\)\($\|/\)',
+                \ ], '\|'))
 
     " let g:unite_source_rec_max_cache_files = 0
     " call unite#custom#source('file_rec,file_rec/async', 'max_candidates', 0)
