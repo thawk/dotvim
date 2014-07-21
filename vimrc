@@ -712,7 +712,7 @@ NeoBundleLazy 'jceb/vim-orgmode', {
     \ 'filetypes' : ['org'],
     \ }
 NeoBundleLazy 'Emmet.vim', {
-    \ 'filetypes' : ['html','css','sass','scss','less'],
+    \ 'filetypes' : ['xml','html','css','sass','scss','less'],
     \ }                                             " 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>,
 
 NeoBundleLazy 'wps.vim', {
