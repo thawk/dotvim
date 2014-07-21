@@ -1320,8 +1320,9 @@ if neobundle#is_installed("unite.vim")
         " Use ag in unite grep source.
         let g:unite_source_grep_command = s:ag_path
         let g:unite_source_grep_default_opts =
-                    \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
-                    \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+                    \ '--line-numbers --nocolor --nogroup --hidden --ignore ''.hg''' .
+                    \ ' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr''' .
+                    \ ' --ignore ''gcc-[0-9]+(\.[0-9]+)*'''
         let g:unite_source_grep_recursive_opt = ''
 	elseif executable('ack-grep')
         " Use ack in unite grep source.
@@ -1331,18 +1332,17 @@ if neobundle#is_installed("unite.vim")
         let g:unite_source_grep_recursive_opt = ''
 	endif
 
-    " let g:unite_source_rec_ignore_pattern =
     call unite#custom#source(
-                \ 'file_rec',
+                \ 'file_rec,file_rec/async,grep',
                 \ 'ignore_pattern',
                 \ join([
-                \ '\(^\|/\)\.$',
+                \ '\%(^\|/\)\.$',
                 \ '\~$',
-                \ '\.\(o\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|a\)$',
-                \ '\(^\|/\)gcc-[0-9]\+\(\.[0-9]\+\)*/',
-                \ '\(^\|/\)doc/html/',
-                \ '\(^\|/\)boost\(\|_\w\+\)/',
-                \ '\(^\|/\)\(\.hg\|\.git\|\.bzr\|\.svn\|tags\(-.*\)\?\)\($\|/\)',
+                \ '\.\%(o\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|a\)$',
+                \ '\%(^\|/\)gcc-[0-9]\+\%(\.[0-9]\+\)*/',
+                \ '\%(^\|/\)doc/html/',
+                \ '\%(^\|/\)boost\%(\|_\w\+\)/',
+                \ '\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)',
                 \ ], '\|'))
 
     " let g:unite_source_rec_max_cache_files = 0
