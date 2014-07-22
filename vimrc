@@ -633,6 +633,7 @@ NeoBundleLazy 'Shougo/neosnippet', {
     \ 'insert' : 1,
     \ 'filetypes' : 'neosnippet',
     \ 'commands' : ['NeoSnippetEdit'],
+    \ 'mappings' : ['<Plug>(neosnippet_'],
     \ 'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
     \ }                                             " 代码模板引擎
 NeoBundle 'Shougo/neomru.vim'                       " 代码模板
@@ -723,6 +724,8 @@ NeoBundleLazy 'jceb/vim-orgmode', {
     \ }
 NeoBundleLazy 'Emmet.vim', {
     \ 'filetypes' : ['xml','html','css','sass','scss','less'],
+    \ 'mappings' : ['<Plug>(Emmet'],
+    \ 'commands' : ['EmmetInstall'],
     \ }                                             " 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>,
 
 NeoBundleLazy 'wps.vim', {
@@ -788,7 +791,7 @@ NeoBundleLazy 'Shougo/vimfiler', {
     \               { 'name' : 'Write',
     \                 'complete' : 'customlist,vimfiler#complete' },
     \               'Read', 'Source'],
-    \ 'mappings' : ['<Plug>(vimfiler_switch)'],
+    \ 'mappings' : ['<Plug>(vimfiler_'],
     \ 'explorer' : 1,
     \ }                                             " 文件管理器，:VimFiler
 NeoBundleLazy 'Shougo/vimshell', {
@@ -796,7 +799,7 @@ NeoBundleLazy 'Shougo/vimshell', {
     \                 'complete' : 'customlist,vimshell#complete'},
     \               'VimShellExecute', 'VimShellInteractive',
     \               'VimShellTerminal', 'VimShellPop'],
-    \ 'mappings' : ['<Plug>(vimshell_switch)'],
+    \ 'mappings' : ['<Plug>(vimshell_'],
     \ }                                             " Shell，:VimShell
 NeoBundleLazy 'sudo.vim', {
     \ 'commands' : ['SudoRead','SudoWrite'],
@@ -1291,6 +1294,14 @@ endif
 " }}}
 
 " Plugin 'vinarise' {{{ " Hex Editor
+" }}}
+
+" Plugin 'Emmet.vim' {{{
+if neobundle#is_installed("Emmet.vim")
+    augroup custom_Emmet
+        autocmd FileType {xml,html,css,sass,scss,less} imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+    augroup END
+endif
 " }}}
 
 " unite {{{
