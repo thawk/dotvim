@@ -571,7 +571,7 @@ NeoBundleLazy 'hrsh7th/vim-unite-vcs', {
     \ 'unite_sources' : 'vcs',
     \ }                                             " \fv 看未提交的文件列表，\fl 看更新日志
 NeoBundleLazy 'hewes/unite-gtags', {
-    \ 'unite_sources' : 'gtag',
+    \ 'unite_sources' : ['gtags/completion','gtags/context','gtags/def','gtags/grep','gtags/ref'],
     \ }
 " }}}
 
@@ -680,7 +680,9 @@ NeoBundleLazy 'CodeReviewer.vim', {
     \ }                                             " 记录代码走查意见，\ic激活。可通过 cfile <文件名> 把记录走查意见的文件导入 quickfix 列表
 NeoBundle 'OrelSokolov/HiCursorWords'               " 高亮与光标下word一样的词
 NeoBundle 'tComment'                                " 注释工具。gc{motion}/gcc/<C-_>等
-NeoBundleLazy 'gtags.vim'
+NeoBundleLazy 'gtags.vim', {
+    \ 'commands' : ['Gtags','GtagsCursor','Gozilla'],
+    \ }
 "NeoBundle 'tpope/vim-commentary'
 "NeoBundle 'bahejl/Intelligent_Tags'
 "if executable("ctags")
