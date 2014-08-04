@@ -127,6 +127,7 @@ let &termencoding = &encoding
 if (s:is_windows)
     "set encoding=ucs-4
     "set encoding=utf-8
+    set encoding=utf-8
     "set guifont=Bitstream_Vera_Sans_Mono\ 12
     "set guifont=Courier_New:h12
     set guifont=Powerline_Consolas:h12,Consolas:h12,Courier_New:h12
