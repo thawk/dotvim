@@ -26,6 +26,12 @@ if executable("ag")
     let s:ag_path = "ag"
 endif
 
+if executable("global")
+    let s:has_global = 1
+else
+    let s:has_global = 0
+endif
+
 if s:is_windows
     if filereadable(s:vimrc_path . "\\win32\\libclang.dll")
         let s:libclang_path = s:vimrc_path . "\\win32"
@@ -571,9 +577,11 @@ NeoBundleLazy 'eiiches/unite-tselect'               " 跳转到光标下的tag�
 NeoBundleLazy 'hrsh7th/vim-unite-vcs', {
     \ 'unite_sources' : 'vcs',
     \ }                                             " \fv 看未提交的文件列表，\fl 看更新日志
-NeoBundleLazy 'hewes/unite-gtags', {
-    \ 'unite_sources' : ['gtags/completion','gtags/context','gtags/def','gtags/grep','gtags/ref'],
-    \ }
+if s:has_global
+    NeoBundleLazy 'hewes/unite-gtags', {
+                \ 'unite_sources' : ['gtags/completion','gtags/context','gtags/def','gtags/grep','gtags/ref'],
+                \ }
+endif
 " }}}
 
 " Editing {{{
@@ -681,9 +689,11 @@ NeoBundleLazy 'CodeReviewer.vim', {
     \ }                                             " 记录代码走查意见，\ic激活。可通过 cfile <文件名> 把记录走查意见的文件导入 quickfix 列表
 NeoBundle 'OrelSokolov/HiCursorWords'               " 高亮与光标下word一样的词
 NeoBundle 'tComment'                                " 注释工具。gc{motion}/gcc/<C-_>等
-NeoBundleLazy 'gtags.vim', {
-    \ 'commands' : ['Gtags','GtagsCursor','Gozilla'],
-    \ }
+if s:has_global
+    NeoBundleLazy 'gtags.vim', {
+                \ 'commands' : ['Gtags','GtagsCursor','Gozilla'],
+                \ }
+endif
 "NeoBundle 'tpope/vim-commentary'
 "NeoBundle 'bahejl/Intelligent_Tags'
 "if executable("ctags")
@@ -858,7 +868,7 @@ NeoBundle 'zhaocai/GoldenView.Vim'                  " <C-L>分隔出一个窗口
 " }}}
 
 " 载入manual-bundles下的插件
-call neobundle#local(fnamemodify(finddir("manual-bundles", &runtimepath), ":p"), {})
+call neobundle#local(fnamemodify(finddir("manual-bundles", &runtimepath), ":p"), {}, ['asciidoc', 'my_config'])
 
 " Installation check {{{
 syntax on
@@ -1663,7 +1673,65 @@ if neobundle#is_installed("HiCursorWords")
     let g:HiCursorWords_hiGroupRegexp = ''
     let g:HiCursorWords_debugEchoHiName = 0
 endif
-" " }}}
+" }}}
+
+" Plugin 'gtags.vim' {{{
+if neobundle#is_installed("gtags.vim")
+    " <C-\>小写在当前窗口打开光标下的符号
+    nmap <C-\>s :Gtags -r <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>g :Gtags --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>t :Gtags -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>e :Gtags -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
+
+    " <C-\>大写在当前窗口打开命令行
+    nmap <C-\>S :Gtags -r<SPACE>
+    nmap <C-\>G :Gtags<SPACE>
+    nmap <C-\>T :Gtags -g --literal<SPACE>
+    nmap <C-\>E :Gtags -g<SPACE>
+elseif has("cscope")
+    " use both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
+    set cscopetag
+
+    " check cscope for definition of a symbol before checking ctags: set to 1
+    " if you want the reverse search order.
+    set csto=0
+
+    set nocscopeverbose
+
+    " add any cscope database in current directory
+    if filereadable("cscope.out")
+        cs add cscope.out
+    " else add the database pointed to by environment variable
+    elseif $CSCOPE_DB != ""
+        cs add $CSCOPE_DB
+    endif
+
+    " show msg when any other cscope db added
+    set cscopeverbose
+
+    set cscopequickfix=s-,c-,d-,i-,t-,e-
+
+    " <C-\>小写在当前窗口打开光标下的符号
+    nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+    nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+    nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
+    " <C-\>大写在当前窗口打开命令行
+    nmap <C-\>S :cs find s<SPACE>
+    nmap <C-\>G :cs find g<SPACE>
+    nmap <C-\>C :cs find c<SPACE>
+    nmap <C-\>T :cs find t<SPACE>
+    nmap <C-\>E :cs find e<SPACE>
+    nmap <C-\>F :cs find f<SPACE>
+    nmap <C-\>I :cs find i ^
+    nmap <C-\>D :cs find d<SPACE>
+endif
+" }}}
 
 " Plugin 'syntastic' {{{
 if neobundle#is_installed("syntastic")
