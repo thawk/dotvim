@@ -1678,13 +1678,13 @@ endif
 " Plugin 'gtags.vim' {{{
 if neobundle#is_installed("gtags.vim")
     " <C-\>小写在当前窗口打开光标下的符号
-    nmap <C-\>s :Gtags -r <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>s :Gtags -sr <C-R>=expand("<cword>")<CR><CR>
     nmap <C-\>g :Gtags --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
     nmap <C-\>t :Gtags -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
     nmap <C-\>e :Gtags -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
 
     " <C-\>大写在当前窗口打开命令行
-    nmap <C-\>S :Gtags -r<SPACE>
+    nmap <C-\>S :Gtags -sr<SPACE>
     nmap <C-\>G :Gtags<SPACE>
     nmap <C-\>T :Gtags -g --literal<SPACE>
     nmap <C-\>E :Gtags -g<SPACE>
