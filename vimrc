@@ -1330,6 +1330,11 @@ if neobundle#is_installed("unite.vim")
     nmap <Leader>f [unite]
     xmap <Leader>f [unite]
 
+    nnoremap [unite2] <Nop>
+    xnoremap [unite2] <Nop>
+    nmap <C-\>f [unite2]
+    xmap <C-\>f [unite2]
+
     let g:unite_enable_start_insert = 1
     "let g:unite_enable_short_source_names = 1
 
@@ -1384,9 +1389,11 @@ if neobundle#is_installed("unite.vim")
     " nnoremap <silent> [unite]R :<C-u>Unite -buffer-name=resume resume<CR>
     " nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
     nnoremap <silent> [unite]G :<C-u>Unite grep -buffer-name=search -no-quit<CR>
+    nnoremap <silent> [unite2]G :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit<CR>
     " nnoremap <silent> [unite]G :<C-u>UniteWithCursorWord grep -buffer-name=search -no-quit<CR>
     "nnoremap <silent> [unite]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
     nnoremap <silent> [unite]g :<C-u>Unite grep:! -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
+    nnoremap <silent> [unite2]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert<CR>
 
     nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search -start-insert line<CR>
     "nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
@@ -1672,6 +1679,19 @@ if neobundle#is_installed("HiCursorWords")
     let g:HiCursorWords_delay = 200
     let g:HiCursorWords_hiGroupRegexp = ''
     let g:HiCursorWords_debugEchoHiName = 0
+endif
+" }}}
+
+" Plugin 'unite-gtags' {{{
+if neobundle#is_installed("unite-gtags")
+    nnoremap <C-\><C-\>s :<C-u>Unite gtags/context<CR>
+    nnoremap <C-\><C-\>S :<C-u>Unite gtags/ref:
+    nnoremap <C-\><C-\>g :<C-u>Unite gtags/def<CR>
+    nnoremap <C-\><C-\>G :<C-u>Unite gtags/def:
+    nnoremap <C-\><C-\>t :<C-u>UniteWithCursorWord gtags/grep<CR>
+    nnoremap <C-\><C-\>T :<C-u>Unite gtags/grep:
+    nnoremap <C-\><C-\>e :<C-u>UniteWithCursorWord gtags/grep<CR>
+    nnoremap <C-\><C-\>E :<C-u>Unite gtags/grep:
 endif
 " }}}
 
