@@ -311,7 +311,7 @@ let s:svn_command = 'svn'
 
 function! GetSvnBranchOfPath(path)
     if has_key(s:path_svnbranchinfo, a:path)
-        " return s:path_svnbranchinfo[a:path]
+        return s:path_svnbranchinfo[a:path]
     endif
 
     let command = s:svn_command . ' info --non-interactive "' . a:path . '"'
