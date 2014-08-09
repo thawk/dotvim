@@ -305,6 +305,49 @@ function! CheckFileEncoding()
 endfunction
 " "}}}
 
+" Find SVN branch " {{{
+let s:path_svnbranchinfo = {}
+let s:svn_command = 'svn'
+
+function! GetSvnBranchOfPath(path)
+    if has_key(s:path_svnbranchinfo, a:path)
+        " return s:path_svnbranchinfo[a:path]
+    endif
+
+    let command = s:svn_command . ' info --non-interactive "' . a:path . '"'
+    let result = systemlist(command)
+
+    for line in result
+        let m = matchlist(line, "^Relative URL:\\s*\\(\\^/.*\\)$")
+        if len(m)
+            let branch_info = {}
+            let url = m[1]
+
+            if url =~ ".*/trunk\\($\\|.*\\)"
+                let branch_info["type"] = "trunk"
+                let branch_info["branch"] = ""
+            else
+                let m = matchlist(url, ".*/\\(tags\\|branches\\)/\\([^/]\\+\\).*")
+                if len(m)
+                    if m[1] =~ "tags"
+                        let branch_info["type"] = "tag"
+                    else
+                        let branch_info["type"] = "branch"
+                    endif
+
+                    let branch_info["branch"] = m[2]
+                endif
+            endif
+            let s:path_svnbranchinfo[a:path] = branch_info
+            return branch_info
+        endif
+    endfor
+
+    let s:path_svnbranchinfo[a:path] = {}
+    return {}
+endfunction
+" "}}}
+
 " "}}}
 
 " Command and Auto commands " {{{
@@ -840,7 +883,7 @@ NeoBundleLazy 'sjl/gundo.vim', {
 NeoBundleLazy 'tpope/vim-repeat', {
     \ 'mappings' : ['.'],
     \ }                                           " 把.能重复的操作扩展到一些插件中的操作
-NeoBundle 'AutoFenc.vim'                            " 自动判别文件的编码
+NeoBundle 'AutoFenc'                              " 自动判别文件的编码
 NeoBundle 'Shougo/vimproc', {
     \ 'build' : {
     \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
@@ -1825,10 +1868,59 @@ if neobundle#is_installed("vim-airline")
     " 把section a的第1个part从mode改为bufnr() + mode
     call airline#parts#define_raw('bufnr_mode', '%{bufnr("%") . " " . airline#parts#mode()}')
     let g:airline_section_a = airline#section#create_left(['bufnr_mode', 'paste', 'iminsert'])
+    if executable("svn")
+        call airline#parts#define_function('mybranch', 'MyBranch')
+        let g:airline_section_b = airline#section#create(['hunks', 'mybranch'])
+    endif
 
     let g:unite_force_overwrite_statusline = 0
     let g:vimfiler_force_overwrite_statusline = 0
     let g:vimshell_force_overwrite_statusline = 0
+
+    let s:path_branch = {}
+
+    function! UrlDecode(url)
+        python << EOF
+import urllib
+import vim
+def UrlDecode(url):
+    return urllib.unquote(url)
+EOF
+        exec "python vim.command('return \"' + UrlDecode('" . a:url . "') + '\"')"
+    endfunction
+
+    function! MyBranch()
+        let result = airline#extensions#branch#get_head()
+        if len(result)
+            return result
+        endif
+
+        let path = expand("%:p:h")
+        if has_key(s:path_branch, path)
+            return s:path_branch[path]
+        endif
+
+        let branch = ""
+        let branch_info = GetSvnBranchOfPath(path)
+        if len(branch_info)
+            let b = ""
+            if branch_info["type"] == "trunk"
+                let b = "trunk"
+            elseif branch_info["type"] == "tag"
+                let b = "tag:" . branch_info["branch"]
+            else
+                let b = branch_info["branch"]
+            endif
+
+            if len(b)
+                let b = iconv(UrlDecode(b), "utf-8", &enc)
+                let branch = g:airline_symbols.branch . ' ' . b
+            endif
+        endif
+
+        let s:path_branch[path] = branch
+        return branch
+    endfunction
 endif
 " }}}
 
@@ -1860,7 +1952,7 @@ if neobundle#is_installed("vimproc")
 endif
 " }}}
 
-" Plugin 'vim-airline' {{{
+" Plugin 'vim-indent-guides' {{{
 if neobundle#is_installed("vim-indent-guides")
     let g:indent_guides_auto_colors = 0
     let g:indent_guides_start_level = 2
