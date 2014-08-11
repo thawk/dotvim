@@ -315,37 +315,33 @@ function! GetSvnBranchOfPath(path)
         return s:path_svnbranchinfo[a:path]
     endif
 
-    let command = s:svn_command . ' info --non-interactive "' . a:path . '"'
-    let result = systemlist(command)
+    let command = s:svn_command . ' info --xml --non-interactive "' . a:path . '"'
+    let result = system(command)
+    let branch_info = {}
 
-    for line in result
-        let m = matchlist(line, "^Relative URL:\\s*\\(\\^/.*\\)$")
-        if len(m)
-            let branch_info = {}
-            let url = m[1]
+    let m = matchlist(result, ".*<url>\\(.\\+\\)</url>.*")
+    if len(m)
+        let url = m[1]
 
-            if url =~ ".*/trunk\\($\\|.*\\)"
-                let branch_info["type"] = "trunk"
-                let branch_info["branch"] = ""
-            else
-                let m = matchlist(url, ".*/\\(tags\\|branches\\)/\\([^/]\\+\\).*")
-                if len(m)
-                    if m[1] =~ "tags"
-                        let branch_info["type"] = "tag"
-                    else
-                        let branch_info["type"] = "branch"
-                    endif
-
-                    let branch_info["branch"] = m[2]
+        if url =~ ".*/trunk\\($\\|.*\\)"
+            let branch_info["type"] = "trunk"
+            let branch_info["branch"] = ""
+        else
+            let m = matchlist(url, ".*/\\(tags\\|branches\\)/\\([^/]\\+\\).*")
+            if len(m)
+                if m[1] =~ "tags"
+                    let branch_info["type"] = "tag"
+                else
+                    let branch_info["type"] = "branch"
                 endif
-            endif
-            let s:path_svnbranchinfo[a:path] = branch_info
-            return branch_info
-        endif
-    endfor
 
-    let s:path_svnbranchinfo[a:path] = {}
-    return {}
+                let branch_info["branch"] = m[2]
+            endif
+        endif
+    endif
+
+    let s:path_svnbranchinfo[a:path] = branch_info
+    return branch_info
 endfunction
 " "}}}
 
