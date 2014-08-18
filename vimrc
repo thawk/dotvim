@@ -105,7 +105,7 @@ set fo+=B " 将两行合并为一行的时候， 汉字与汉字之间不要补�
 set nowrap
 set textwidth=0 " Don't wrap lines by default
 "set wildmode=list:longest,full  " 先列出所有候选项，补全候选项的共同前缀，再按wildchar就出现菜单来选择候选项
-set wildmode=longest:full  " 补全候选项的共同前缀，出现菜单来选择候选项
+set wildmode=longest:full,full  " 补全候选项的共同前缀，出现菜单来选择候选项
 set wildmenu    " 用一行菜单显示候选项。<C-P>/<C-N>或<Left>/<Right>为选择上一个/下一个，<Up>返回父目录，<Down>进入子目录
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.idea/*,*/.DS_Store
 
@@ -1356,7 +1356,7 @@ endif
 " Plugin 'Emmet.vim' {{{
 if neobundle#is_installed("Emmet.vim")
     augroup custom_Emmet
-        autocmd FileType {xml,html,css,sass,scss,less} imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+        autocmd FileType {xml,html,css,sass,scss,less} imap <buffer> <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
     augroup END
 endif
 " }}}
@@ -1437,9 +1437,8 @@ if neobundle#is_installed("unite.vim")
 
     nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search -start-insert line<CR>
     "nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
-    nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=files buffer<CR>
-    nnoremap <silent> [unite]b :<C-u>UniteWithBufferDir -buffer-name=files file buffer bookmark file_mru file/new -start-insert<CR>
-    nnoremap <silent> [unite]c :<C-u>UniteWithCurrentDir -buffer-name=files file buffer bookmark file_mru file/new -start-insert<CR>
+    nnoremap <silent> [unite]b :<C-u>Unite -buffer-name=files file:<C-R>=expand("%:p:h")<CR> buffer bookmark file_mru file/new:<C-R>=expand("%:p:h")<CR> -start-insert<CR>
+    nnoremap <silent> [unite]c :<C-u>Unite -buffer-name=files file buffer bookmark file_mru file/new -start-insert<CR>
     nnoremap <silent> [unite]C :<C-u>UniteClose<CR>
     " nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
     nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps -start-insert help<CR>
