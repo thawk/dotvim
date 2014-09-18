@@ -1640,7 +1640,10 @@ if neobundle#is_installed("vim-colors-solarized")
     end
 
     syntax enable
-    set background=dark
+    if $COLORFGBG == ""
+        " 如果没有设置环境变量COLORFGBG，使用深色
+        set background=dark
+    endif
     " let g:solarized_termcolors=256
     colorscheme solarized
 else
