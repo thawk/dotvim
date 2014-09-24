@@ -1744,6 +1744,8 @@ if neobundle#is_installed("gtags.vim")
     nmap <C-\>g :Gtags --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
     nmap <C-\>t :Gtags -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
     nmap <C-\>e :Gtags -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
+    " 如果光标在定义上，就找引用，如果在引用上就找定义
+    nmap <C-\><C-]> :GtagsCursor<CR>
 
     " <C-\>大写在当前窗口打开命令行
     nmap <C-\>S :Gtags -sr<SPACE>
