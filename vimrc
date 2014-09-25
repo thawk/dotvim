@@ -235,6 +235,12 @@ set completeopt=menuone,menu,longest,preview
 set completeopt-=longest
 set showfulltag
 
+if filereadable("/usr/share/dict/words")
+    set dictionary+=/usr/share/dict/words
+elseif filereadable(s:vimrc_path . "\\win32\\words.txt")
+    let &dictionary += s:vimrc_path . "\\win32\\words.txt"
+endif
+
 " Doxygen的出错信息
 set errorformat+=Generating\ code\ for\ file\ %f:%l:%m
 set errorformat+=Generating\ docs\ for\ compound\ %f:%l:%m
@@ -719,7 +725,9 @@ NeoBundle 'thinca/vim-textobj-comment'              " 增加motion: ac ic
 
 " Programming {{{
 " NeoBundle 'tyru/current-func-info.vim'
-NeoBundle 'echofunc.vim'                            " 在插入模式下输入(时，会在statusline显示函数的签名，对于有多个重载的函数，可通过<A-->/<A-=>进行切换
+if ! s:has_global   " 启用global后，将不用ctags，因此echofunc.vim会失效
+    NeoBundle 'echofunc.vim'                        " 在插入模式下输入(时，会在statusline显示函数的签名，对于有多个重载的函数，可通过<A-->/<A-=>进行切换
+endif
 NeoBundleLazy 'DoxygenToolkit.vim', {
     \ 'commands' : ['Dox', 'DoxLic', 'DoxAuthor', 'DoxUndoc', 'DoxBlock'],
     \ }                                             " 为函数插入Doxygen注释。在函数名所在行输入 :Dox 即可
