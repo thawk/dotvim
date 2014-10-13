@@ -391,7 +391,7 @@ au BufRead,BufNewFile *.ipp                       setf cpp
 au FileType jam   if &makeprg=='make' | setlocal makeprg=b2 | endif
 
 au FileType diff  setlocal shiftwidth=4 tabstop=4
-au FileType html  setlocal autoindent indentexpr= shiftwidth=2 tabstop=2
+" au FileType html  setlocal autoindent indentexpr= shiftwidth=2 tabstop=2
 au FileType changelog setlocal textwidth=76
 " 把-等符号也作为xml文件的有效关键字，可以用Ctrl-N补全带-等字符的属性名
 au FileType {xml,xslt} setlocal iskeyword=@,-,\:,48-57,_,128-167,224-235
@@ -585,11 +585,11 @@ nnoremap <Leader>td :<C-U>make doc<CR>
 " Loading NeoBundle {{{
 filetype off                   " Required!
 
-if match("neobundle", &runtimepath) < 0
+if has('vim_starting') && match("neobundle", &runtimepath) < 0
     let &runtimepath .= "," . fnamemodify(finddir("bundle/neobundle.vim", &runtimepath), ":p")
 endif
 
-call neobundle#rc()
+call neobundle#begin()
 
 let g:neobundle_default_git_protocol = 'https'
 
@@ -929,6 +929,7 @@ if neobundle#exists_not_installed_bundles()
   echomsg 'Please execute ":NeoBundleInstall" command.'
   "finish
 endif
+call neobundle#end()
 " }}}
 
 " }}}
