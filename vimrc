@@ -1423,6 +1423,7 @@ if neobundle#is_installed("unite.vim")
                 \ '\.\%(o\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|a\)$',
                 \ '\%(^\|/\)gcc-[0-9]\+\%(\.[0-9]\+\)*/',
                 \ '\%(^\|/\)doc/html/',
+                \ '\%(^\|/\)stage/',
                 \ '\%(^\|/\)boost\%(\|_\w\+\)/',
                 \ '\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)',
                 \ ], '\|'))
