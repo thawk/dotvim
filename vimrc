@@ -642,7 +642,7 @@ NeoBundleLazy 'matchit.zip', {
 NeoBundleLazy 'vis', {
     \ 'commands' : ['B'],
     \ }                                             " 在块选后（<C-V>进行选择），:B cmd在选中内容中执行cmd
-NeoBundle 'kana/vim-operator-user', {
+NeoBundleLazy 'kana/vim-operator-user', {
     \ 'functions' : 'operator#user#define',
     \ }
 NeoBundleLazy 'kana/vim-operator-replace', {
@@ -696,7 +696,9 @@ NeoBundleLazy 'Shougo/neosnippet', {
     \ }                                             " 代码模板引擎
 NeoBundle 'Shougo/neomru.vim'                       " 代码模板
 NeoBundle 'Shougo/neosnippet-snippets'              " 代码模板
-NeoBundle 'ton/vim-bufsurf'                         " g<C-I>/g<C-O>或:BufSurfForward/:BufSurfBack跳转到本窗口的下一个、上一个buffer（增强<C-I>/<C-O>）
+NeoBundleLazy 'ton/vim-bufsurf', {
+            \ 'commands' : ['BufSurfForward', 'BufSurfBack'],
+            \ }                                     " g<C-I>/g<C-O>或:BufSurfForward/:BufSurfBack跳转到本窗口的下一个、上一个buffer（增强<C-I>/<C-O>）
 "NeoBundle 'othree/eregex.vim'                       " 支持Perl风格的正则表达式。:M、:S、:G、:V
 
 "NeoBundle 'VimIM'                                   " 中文输入法
@@ -717,16 +719,27 @@ endif
 
 " Text object {{{
 NeoBundle 'kana/vim-textobj-user'                   " 可自定义motion
-NeoBundle 'lucapette/vim-textobj-underscore'        " 增加motion: a_ i_
-NeoBundle 'kana/vim-textobj-indent'                 " 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进）
-NeoBundle 'kana/vim-textobj-line'                   " 增加motion: al il
-NeoBundle 'thinca/vim-textobj-comment'              " 增加motion: ac ic
+NeoBundleLazy 'lucapette/vim-textobj-underscore', {
+            \ 'mappings' : ['<Plug>(textobj-underscore'],
+            \ }                                     " 增加motion: a_ i_
+NeoBundleLazy 'kana/vim-textobj-indent', {
+            \ 'mappings' : ['<Plug>(textobj-indent'],
+            \ }                                     " 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进）
+NeoBundleLazy 'kana/vim-textobj-line', {
+            \ 'mappings' : ['<Plug>(textobj-line'],
+            \ }                                     " 增加motion: al il
+NeoBundleLazy 'kana/vim-textobj-function', {
+            \ 'mappings' : ['<Plug>(textobj-function'],
+            \ }                                     " 增加motion: if/af/iF/aF 选择一个函数
+NeoBundleLazy 'thinca/vim-textobj-comment', {
+            \ 'mappings' : ['<Plug>(textobj-comment'],
+            \ }                                     " 增加motion: ac ic
 " }}}
 
 " Programming {{{
 " NeoBundle 'tyru/current-func-info.vim'
 if ! s:has_global   " 启用global后，将不用ctags，因此echofunc.vim会失效
-    NeoBundle 'echofunc.vim'                        " 在插入模式下输入(时，会在statusline显示函数的签名，对于有多个重载的函数，可通过<A-->/<A-=>进行切换
+    NeoBundle 'mbbill/echofunc'                     " 在插入模式下输入(时，会在statusline显示函数的签名，对于有多个重载的函数，可通过<A-->/<A-=>进行切换
 endif
 NeoBundleLazy 'DoxygenToolkit.vim', {
     \ 'commands' : ['Dox', 'DoxLic', 'DoxAuthor', 'DoxUndoc', 'DoxBlock'],
@@ -759,9 +772,18 @@ NeoBundle 'tpope/vim-fugitive'                      " GIT前端
 "    \ 'filetypes' : ['c', 'cpp'],
 "    \ }
 
-NeoBundleLazy 'Rip-Rip/clang_complete', {
-    \ 'filetypes' : ['c', 'cpp'],
-    \ }                                             " 使用clang编译器进行上下文补全
+if s:libclang_path != "" || executable('clang')
+    NeoBundleLazy 'Rip-Rip/clang_complete', {
+                \ 'filetypes' : ['c', 'cpp'],
+                \ }                                 " 使用clang编译器进行上下文补全
+endif
+
+if executable('clang-format')
+    NeoBundleLazy 'rhysd/vim-clang-format', {
+                \ 'commands' : ['ClangFormat'],
+                \ 'mappings' : ['<Plug>(operator-clang-format'],
+                \ }                                 " 使用clang编译器进行上下文补全
+endif
 
 NeoBundle 'scrooloose/syntastic'                    " 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表
 if (s:is_windows)
@@ -772,8 +794,13 @@ if executable("cpplint.py")
 endif
 
 NeoBundleLazy 'davidhalter/jedi-vim', {
-    \ 'filetypes' : ['python', 'python3'],
-    \ }                                             " 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置
+            \ 'filetypes' : ['python', 'python3'],
+            \ }                                     " 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置
+
+NeoBundleLazy 'rhysd/wandbox-vim', {
+            \ 'commands' : ['Wandbox', 'WandboxAsync', 'WandboxSync'],
+            \ 'functions' : 'wandbox#',
+            \ }                                     " 在http://melpon.org/wandbox/上运行当前缓冲区的C++代码
 " }}}
 
 " Language {{{
@@ -1115,6 +1142,29 @@ if neobundle#is_installed("clang_complete")
 endif
 " }}}
 
+" Plugin 'vim-clang-format' {{{
+if neobundle#is_installed("vim-clang-format")
+    let g:clang_format#code_style = 'google'
+    let g:clang_format#style_options = {
+                \ "AccessModifierOffset" : -4,
+                \ "AllowShortBlocksOnASingleLine " : "false",
+                \ "AllowShortIfStatementsOnASingleLine" : "false",
+                \ "AlwaysBreakTemplateDeclarations" : "true",
+                \ "BreakBeforeBraces" : "Allman",
+                \ "ColumnLimit" : "0",
+                \ "IndentCaseLabels" : "false",
+                \ "IndentWidth" : "4",
+                \ "ForEachMacros" : "[BOOST_FOREACH, Q_FOREACH]",
+                \ "UseTab" : "Never",
+                \ "Standard" : "C++11"}
+
+    " map to <Leader>cf in C++ code
+    autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+    autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+    " if you install vim-operator-user
+    autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
+endif
+" }}}
 " Plugin 'vim-snowdrop' {{{
 if neobundle#is_installed("vim-snowdrop")
     " set libclang directory path
@@ -1987,6 +2037,36 @@ if neobundle#is_installed("jedi-vim")
 endif
 " }}}
 
+" Plugin 'Wandbox' {{{
+if neobundle#is_installed("wandbox-vim")
+    " Set default compilers for each filetype
+    if ! exists('g:wandbox#default_compiler')
+        let g:wandbox#default_compiler = {}
+    endif
+    let g:wandbox#default_compiler = {
+                \   'cpp' : 'gcc-head',
+                \   'ruby' : 'ruby-1.9.3-p0',
+                \ }
+
+    " Set default options for each filetype.  Type of value is string or list of string
+    if ! exists('g:wandbox#default_options')
+        let g:wandbox#default_options = {}
+    endif
+    let g:wandbox#default_options = {
+                \   'cpp' : 'warning,optimize,boost-1.56',
+                \   'haskell' : [
+                \     'haskell-warning',
+                \     'haskell-optimize',
+                \   ],
+                \ }
+
+    " Set extra options for compilers if you need
+    let g:wandbox#default_extra_options = {
+                \   'clang-head' : '-O3 -Werror',
+                \ }
+endif
+" }}}
+"
 " Plugins depend settings {{{
 
 "set statusline=%<%n:\ %f\ %h%m%r\ %=%k%y[%{&ff},%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
