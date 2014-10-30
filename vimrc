@@ -830,8 +830,10 @@ NeoBundleLazy 'lbdbq', {
 NeoBundleLazy 'othree/xml.vim', {
     \ 'filetypes' : ['xml'],
     \ }                                             " 辅助编写XML文件
-"NeoBundle 'indentpython.vim--nianyang'              " Python的代码缩进插件
 "NeoBundle 'tmhedberg/SimpylFold'
+NeoBundleLazy 'hynek/vim-python-pep8-indent', {
+            \ 'filetypes' : ['python', 'python3'],
+            \ }
 NeoBundleLazy 'gprof.vim', {
     \ 'filetypes' : ['gprof'],
     \ }                                             " 对gprof文件提供语法高亮
