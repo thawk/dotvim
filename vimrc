@@ -1174,16 +1174,16 @@ if neobundle#is_installed("vim-clang-format")
     let g:clang_format#code_style = 'google'
     let g:clang_format#style_options = {
                 \ "AccessModifierOffset" : -4,
-                \ "AllowShortBlocksOnASingleLine " : "false",
                 \ "AllowShortIfStatementsOnASingleLine" : "false",
-                \ "AlwaysBreakTemplateDeclarations" : "true",
+                \ "AllowShortLoopsOnASingleLine" : "false",
+                \ "BreakBeforeBinaryOperators" : "true",
+                \ "BinPackParameters" : "false",
                 \ "BreakBeforeBraces" : "Allman",
                 \ "ColumnLimit" : "90",
+                \ "DerivePointerBinding" : "false",
                 \ "IndentCaseLabels" : "false",
                 \ "IndentWidth" : "4",
-                \ "ForEachMacros" : "[BOOST_FOREACH, Q_FOREACH]",
-                \ "UseTab" : "Never",
-                \ "Standard" : "C++11"}
+                \ }
 
     " map to <Leader>cf in C++ code
     autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
