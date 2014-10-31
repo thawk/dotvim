@@ -26,7 +26,11 @@ if executable("ag")
     let s:ag_path = "ag"
 endif
 
-if executable("global")
+let s:global_command = $GTAGSGLOBAL
+if s:global_command == ''
+    let s:global_command = "global"
+endif
+if executable(s:global_command)
     let s:has_global = 1
 else
     let s:has_global = 0
@@ -1153,7 +1157,7 @@ if neobundle#is_installed("vim-clang-format")
                 \ "AllowShortIfStatementsOnASingleLine" : "false",
                 \ "AlwaysBreakTemplateDeclarations" : "true",
                 \ "BreakBeforeBraces" : "Allman",
-                \ "ColumnLimit" : "0",
+                \ "ColumnLimit" : "90",
                 \ "IndentCaseLabels" : "false",
                 \ "IndentWidth" : "4",
                 \ "ForEachMacros" : "[BOOST_FOREACH, Q_FOREACH]",
@@ -1814,6 +1818,12 @@ if neobundle#is_installed("gtags.vim")
     nmap <C-\>G :Gtags<SPACE>
     nmap <C-\>T :Gtags -g --literal<SPACE>
     nmap <C-\>E :Gtags -g<SPACE>
+
+    function! s:GtagsAutoUpdate()
+        let l:result = system(s:global_command . " -u --single-update=\"" . expand("%") . "\"")
+    endfunction
+
+    autocmd! BufWritePost * call s:GtagsAutoUpdate()
 elseif has("cscope")
     " use both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
     set cscopetag
