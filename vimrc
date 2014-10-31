@@ -87,6 +87,8 @@ if (s:is_windows)
     set shellslash
 endif
 
+set sessionoptions-=options
+
 " Buffers
 set hidden " The current buffer can be put to the background without writing to disk
 
@@ -776,11 +778,11 @@ NeoBundle 'tpope/vim-fugitive'                      " GIT前端
 "    \ 'filetypes' : ['c', 'cpp'],
 "    \ }
 
-if executable('clang')
-    NeoBundleLazy 'justmao945/vim-clang', {
-                \ 'filetypes' : ['c', 'cpp'],
-                \ }                                 " 使用clang编译器进行上下文补全
-elseif s:libclang_path != "" || executable('clang')
+" if executable('clang')    " vim-clang比使用clang_complete慢
+"     NeoBundleLazy 'justmao945/vim-clang', {
+"                 \ 'filetypes' : ['c', 'cpp'],
+"                 \ }                                 " 使用clang编译器进行上下文补全
+if s:libclang_path != "" || executable('clang')
     NeoBundleLazy 'Rip-Rip/clang_complete', {
                 \ 'filetypes' : ['c', 'cpp'],
                 \ }                                 " 使用clang编译器进行上下文补全
@@ -1154,9 +1156,16 @@ endif
 " }}}
 
 " Plugin 'vim-clang' {{{
-if neobundle#is_installed("clang_complete")
+if neobundle#is_installed("vim-clang")
     " 使用NeoComplete触发补全
     let g:clang_auto = 0
+    if s:libclang_path != ""
+        if !exists('g:clang_cpp_options')
+            let g:clang_cpp_options = ''
+        endif
+        let g:clang_cpp_options .= " -I " . s:libclang_path . "/clang/3.4/include/"
+        echomsg g:clang_cpp_options
+    endif
 endif
 " }}}
 

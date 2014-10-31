@@ -65,10 +65,15 @@ function! SetupEnvironment()
     endif
 
     " 加入路径上所有lib/3rd/util/framework目录下的库
-    for l:d in ["lib", "3rd", "util", "framework", "share"]
+    for l:d in ["lib", "3rd", "framework"]
         for l:p in finddir(l:d, '.;' . l:workspace_dir, -1)
             call s:AddComponentsToPath(l:p)
         endfor
+    endfor
+
+    " 加入路径上所有有include子目录的目录
+    for l:p in finddir('include', '*;' . l:workspace_dir, -1)
+        call s:AddPath(l:p)
     endfor
 
     " Boost库
