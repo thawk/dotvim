@@ -776,7 +776,11 @@ NeoBundle 'tpope/vim-fugitive'                      " GIT前端
 "    \ 'filetypes' : ['c', 'cpp'],
 "    \ }
 
-if s:libclang_path != "" || executable('clang')
+if executable('clang')
+    NeoBundleLazy 'justmao945/vim-clang', {
+                \ 'filetypes' : ['c', 'cpp'],
+                \ }                                 " 使用clang编译器进行上下文补全
+elseif s:libclang_path != "" || executable('clang')
     NeoBundleLazy 'Rip-Rip/clang_complete', {
                 \ 'filetypes' : ['c', 'cpp'],
                 \ }                                 " 使用clang编译器进行上下文补全
@@ -1134,6 +1138,7 @@ endif
 " 要把Release/lib/libclang.so和Release/lib/clang目录拷贝到g:clang_library_path
 " 指向的位置，这样clang就可以比较快速地进行补全了。
 if neobundle#is_installed("clang_complete")
+    " 使用NeoComplete触发补全
     let g:clang_complete_auto = 0
     let g:clang_auto_select = 0
     let g:clang_complete_copen = 0  " open quickfix window on error.
@@ -1145,6 +1150,13 @@ if neobundle#is_installed("clang_complete")
         let g:clang_use_library = 1
         let g:clang_library_path = s:libclang_path
     endif
+endif
+" }}}
+
+" Plugin 'vim-clang' {{{
+if neobundle#is_installed("clang_complete")
+    " 使用NeoComplete触发补全
+    let g:clang_auto = 0
 endif
 " }}}
 
