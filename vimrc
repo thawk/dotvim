@@ -725,21 +725,11 @@ endif
 
 " Text object {{{
 NeoBundle 'kana/vim-textobj-user'                   " 可自定义motion
-NeoBundleLazy 'lucapette/vim-textobj-underscore', {
-            \ 'mappings' : ['<Plug>(textobj-underscore'],
-            \ }                                     " 增加motion: a_ i_
-NeoBundleLazy 'kana/vim-textobj-indent', {
-            \ 'mappings' : ['<Plug>(textobj-indent'],
-            \ }                                     " 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进）
-NeoBundleLazy 'kana/vim-textobj-line', {
-            \ 'mappings' : ['<Plug>(textobj-line'],
-            \ }                                     " 增加motion: al il
-NeoBundleLazy 'kana/vim-textobj-function', {
-            \ 'mappings' : ['<Plug>(textobj-function'],
-            \ }                                     " 增加motion: if/af/iF/aF 选择一个函数
-NeoBundleLazy 'thinca/vim-textobj-comment', {
-            \ 'mappings' : ['<Plug>(textobj-comment'],
-            \ }                                     " 增加motion: ac ic
+NeoBundle 'kad/CamelCaseMotion'                     " 增加,w ,b ,e 可以处理大小写混合或下划线分隔两种方式的单词
+NeoBundle 'kana/vim-textobj-indent'                 " 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进）
+NeoBundle 'kana/vim-textobj-line'                   " 增加motion: al il
+NeoBundle 'kana/vim-textobj-function'               " 增加motion: if/af/iF/aF 选择一个函数
+NeoBundle 'thinca/vim-textobj-comment'              " 增加motion: ac ic
 " }}}
 
 " Programming {{{
