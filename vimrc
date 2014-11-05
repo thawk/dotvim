@@ -2025,8 +2025,10 @@ endif
 
 " Plugin 'vimproc' {{{
 if neobundle#is_installed("vimproc")
-    if s:is_windows && filereadable(s:vimrc_path . "\\win32\\vimproc_win32.dll")
+    if has("win32") && filereadable(s:vimrc_path . "\\win32\\vimproc_win32.dll")
         let g:vimproc_dll_path = s:vimrc_path . "\\win32\\vimproc_win32.dll"
+    elseif has("win64") && filereadable(s:vimrc_path . "\\win32\\vimproc_win64.dll")
+        let g:vimproc_dll_path = s:vimrc_path . "\\win32\\vimproc_win64.dll"
     endif
 endif
 " }}}
