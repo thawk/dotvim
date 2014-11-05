@@ -626,9 +626,10 @@ NeoBundleLazy 'thinca/vim-unite-history', {
     \ 'unite_sources' : ['history/command', 'history/search']
     \ }
 NeoBundleLazy 'eiiches/unite-tselect'               " 跳转到光标下的tag。通过g]和g<C-]>访问
-NeoBundleLazy 'hrsh7th/vim-unite-vcs', {
-    \ 'unite_sources' : 'vcs',
-    \ }                                             " \fv 看未提交的文件列表，\fl 看更新日志
+NeoBundleLazy 'hrsh7th/vim-versions', {
+            \ 'commands' : ['UniteVersions'],
+            \ 'unite_sources' : ['versions', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status'],
+            \ }                                     " \fv 看未提交的文件列表，\fl 看更新日志
 if s:has_global
     NeoBundleLazy 'hewes/unite-gtags', {
                 \ 'unite_sources' : ['gtags/completion','gtags/context','gtags/def','gtags/grep','gtags/ref'],
@@ -725,10 +726,10 @@ endif
 
 " Text object {{{
 NeoBundle 'kana/vim-textobj-user'                   " 可自定义motion
-NeoBundle 'kad/CamelCaseMotion'                     " 增加,w ,b ,e 可以处理大小写混合或下划线分隔两种方式的单词
 NeoBundle 'kana/vim-textobj-indent'                 " 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进）
 NeoBundle 'kana/vim-textobj-line'                   " 增加motion: al il
 NeoBundle 'kana/vim-textobj-function'               " 增加motion: if/af/iF/aF 选择一个函数
+NeoBundle 'bkad/CamelCaseMotion'                     " 增加,w ,b ,e 可以处理大小写混合或下划线分隔两种方式的单词
 NeoBundle 'thinca/vim-textobj-comment'              " 增加motion: ac ic
 " }}}
 
@@ -862,9 +863,6 @@ NeoBundleLazy 'FSwitch', {
     \ }                                          " 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示，\of当前窗口
 "NeoBundle 'jceb/vim-editqf'
 NeoBundle 'LargeFile'                               " 在打开大文件时，禁用语法高亮以提供打开速度
-NeoBundleLazy 'rbtnn/hexript.vim', {
-    \ 'commands' : ['HexriptToBinaryFile'],
-    \ }                                             " to generate binary file
 NeoBundleLazy 'Shougo/vinarise', {
     \ 'commands' : ['Vinarise','VinariseDump','VinariseScript2Hex'],
     \ }                                             " Hex Editor
@@ -1423,9 +1421,6 @@ if neobundle#is_installed("neosnippet")
 endif
 " }}}
 
-" Plugin 'hexript.vim' {{{ " Hex Generator
-" }}}
-
 " Plugin 'vinarise' {{{ " Hex Editor
 " }}}
 
@@ -1532,8 +1527,8 @@ if neobundle#is_installed("unite.vim")
     nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
     " nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
     " nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
-    nnoremap <silent> [unite]v :<C-u>Unite vcs/status<CR>
-    nnoremap <silent> [unite]l :<C-u>Unite vcs/log<CR>
+    nnoremap <silent> [unite]v :<C-u>UniteVersions status<CR>
+    nnoremap <silent> [unite]l :<C-u>UniteVersions log<CR>
 
     nnoremap <silent> [unite]r :<C-u>UniteResume<CR>
     " nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files buffer file_rec:! file_mru bookmark<cr><c-u>
