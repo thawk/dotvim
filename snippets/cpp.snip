@@ -55,11 +55,10 @@ snippet mfun
 snippet     helloworld
 abbr        #include<iostream> int main...
     #include <iostream>
+    using namespace std;
 
     int main(int argc, char const* argv[])
     {
-        using namespace std;
-
         ${0:cout << "hello, world!" << endl;}
 
         return 0;
