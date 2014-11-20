@@ -501,10 +501,10 @@ au FileType python setlocal smartindent cinwords=if,elif,else,for,while,try,exce
 
 "用,cd进入当前目录
 nmap ,cd :cd <C-R>=expand("%:p:h")<CR><CR>
-"用,e可以打开当前目录下的文件
-nmap ,e :e <C-R>=escape(expand("%:p:h")."/", ' \')<CR>
-"在命令中，可以用 %/ 得到当前目录。如 :e %/
-cmap %/ <C-R>=escape(expand("%:p:h")."/", ' \')<cr>
+" "用,e可以打开当前目录下的文件
+" nmap ,e :e <C-R>=escape(expand("%:p:h")."/", ' \')<CR>
+" "在命令中，可以用 %/ 得到当前目录。如 :e %/
+" cmap %/ <C-R>=escape(expand("%:p:h")."/", ' \')<cr>
 
 "正常模式下，空格及Shift-空格滚屏
 noremap <SPACE> <C-F>
@@ -1482,7 +1482,7 @@ if neobundle#is_installed("unite.vim")
                 \ join([
                 \ '\%(^\|/\)\.$',
                 \ '\~$',
-                \ '\.\%(o\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|a\)$',
+                \ '\.\%(o\|a\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|gcov\)$',
                 \ '\%(^\|/\)gcc-[0-9]\+\%(\.[0-9]\+\)*/',
                 \ '\%(^\|/\)doc/html/',
                 \ '\%(^\|/\)stage/',
