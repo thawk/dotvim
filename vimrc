@@ -614,18 +614,30 @@ NeoBundleLazy 'Shougo/unite.vim', {
     \ }                                             " Unite主插件，提供\f开头的功能
 "NeoBundle 'Shougo/unite-build'
 "NeoBundle 'h1mesuke/unite-outline'
-NeoBundleLazy 'Shougo/unite-outline'                " 提供代码的大纲。通过\fo访问
-NeoBundleLazy 'tacroe/unite-mark'                   " 列出所有标记点
-NeoBundleLazy 'tsukkee/unite-help'                  " 查找vim的帮助
+NeoBundleLazy 'Shougo/unite-outline', {             " 提供代码的大纲。通过\fo访问
+    \ 'unite_sources' : ['outline'],
+    \ }
+NeoBundleLazy 'tacroe/unite-mark', {                " 列出所有标记点
+    \ 'unite_sources' : ['mark'],
+    \ }
+NeoBundleLazy 'tsukkee/unite-help', {               " 查找vim的帮助
+    \ 'unite_sources' : ['help'],
+    \ }
 NeoBundleLazy 'tsukkee/unite-tag', {
     \ 'unite_sources' : ['tag', 'tag/include', 'tag/file']
     \ }                                             " 跳转到光标下的tag。通过\fT访问
-NeoBundleLazy 'ujihisa/unite-colorscheme'           " 列出所有配色方案
-NeoBundleLazy 'osyo-manga/unite-quickfix'           " 过滤quickfix窗口（如在编译结果中查找）
+NeoBundleLazy 'ujihisa/unite-colorscheme', {        " 列出所有配色方案
+    \ 'unite_sources' : ['colorscheme'],
+    \ }
+NeoBundleLazy 'osyo-manga/unite-quickfix', {        " 过滤quickfix窗口（如在编译结果中查找）
+    \ 'unite_sources' : ['quickfix'],
+    \ }
 NeoBundleLazy 'thinca/vim-unite-history', {
     \ 'unite_sources' : ['history/command', 'history/search']
     \ }
-NeoBundleLazy 'eiiches/unite-tselect'               " 跳转到光标下的tag。通过g]和g<C-]>访问
+NeoBundleLazy 'eiiches/unite-tselect', {            " 跳转到光标下的tag。通过g]和g<C-]>访问
+    \ 'unite_sources' : ['tselect']
+    \ }
 NeoBundleLazy 'hrsh7th/vim-versions', {
             \ 'commands' : ['UniteVersions'],
             \ 'unite_sources' : ['versions', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status'],
@@ -1407,12 +1419,12 @@ if neobundle#is_installed("neosnippet")
     xmap <C-k>     <Plug>(neosnippet_expand_target)
 
     " " SuperTab like snippets behavior.
-    imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-                \ "\<Plug>(neosnippet_expand_or_jump)"
-                \: pumvisible() ? "\<C-n>" : "\<TAB>"
-    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-                \ "\<Plug>(neosnippet_expand_or_jump)"
-                \: "\<TAB>"
+    " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    "             \ "\<Plug>(neosnippet_expand_or_jump)"
+    "             \: pumvisible() ? "\<C-n>" : "\<TAB>"
+    " smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    "             \ "\<Plug>(neosnippet_expand_or_jump)"
+    "             \: "\<TAB>"
 
     " For snippet_complete marker.
     if has('conceal')
