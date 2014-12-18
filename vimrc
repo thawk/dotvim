@@ -604,6 +604,41 @@ let g:neobundle_default_git_protocol = 'https'
 " NeoBundle 'Shougo/neobundle.vim'    " 插件管理软件
 " " }}}
 
+" Misc {{{
+NeoBundleLazy 'sjl/gundo.vim', {
+    \ 'mappings' : [['n','<F5>']],
+    \ 'commands' : ['GundoHide','GundoRenderGraph','GundoShow','GundoToggle'],
+    \ }                                             " 列出修改历史，方便undo到一个特定的位置
+NeoBundleLazy 'tpope/vim-repeat', {
+    \ 'mappings' : ['.'],
+    \ }                                           " 把.能重复的操作扩展到一些插件中的操作
+NeoBundle 'AutoFenc'                              " 自动判别文件的编码
+NeoBundle 'Shougo/vimproc', {
+    \ 'build' : {
+    \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
+    \     'cygwin' : 'make -f make_cygwin.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
+    \     'mac' : 'make -f make_mac.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
+    \     'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
+    \ },
+    \ }
+NeoBundleLazy 'thinca/vim-prettyprint', {
+    \ 'commands' : [
+    \     { 'name' : 'PP', 'complete' : 'expression' },
+    \     { 'name' : 'PrettyPrint', 'complete' : 'expression' },
+    \ ],
+    \ 'functions' : ['PP', 'PrettyPrint'],
+    \ }                                             " PP variable_name，以用户友好的方式打印变量值，调试vim脚本用
+NeoBundle 'bling/vim-airline'                       " 增强的statusline
+"NeoBundle 'itchyny/lightline.vim'
+"NeoBundle 'itchyny/lightline-powerful'
+NeoBundle 'zhaocai/GoldenView.Vim'                  " <C-L>分隔出一个窗口，<F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口
+
+" very slow ?
+"NeoBundle 'xolox/vim-easytags'
+"NeoBundle 'https://bitbucket.org/abudden/taghighlight'
+
+" }}}
+
 " Unite {{{
 NeoBundleLazy 'Shougo/unite.vim', {
     \ 'commands' : [
@@ -614,30 +649,30 @@ NeoBundleLazy 'Shougo/unite.vim', {
     \ }                                             " Unite主插件，提供\f开头的功能
 "NeoBundle 'Shougo/unite-build'
 "NeoBundle 'h1mesuke/unite-outline'
-NeoBundleLazy 'Shougo/unite-outline', {             " 提供代码的大纲。通过\fo访问
+NeoBundleLazy 'Shougo/unite-outline', {
     \ 'unite_sources' : ['outline'],
-    \ }
-NeoBundleLazy 'tacroe/unite-mark', {                " 列出所有标记点
+    \ }                                             " 提供代码的大纲。通过\fo访问
+NeoBundleLazy 'tacroe/unite-mark', {
     \ 'unite_sources' : ['mark'],
-    \ }
-NeoBundleLazy 'tsukkee/unite-help', {               " 查找vim的帮助
+    \ }                                             " 列出所有标记点
+NeoBundleLazy 'tsukkee/unite-help', {
     \ 'unite_sources' : ['help'],
-    \ }
+    \ }                                             " 查找vim的帮助
 NeoBundleLazy 'tsukkee/unite-tag', {
     \ 'unite_sources' : ['tag', 'tag/include', 'tag/file']
     \ }                                             " 跳转到光标下的tag。通过\fT访问
-NeoBundleLazy 'ujihisa/unite-colorscheme', {        " 列出所有配色方案
+NeoBundleLazy 'ujihisa/unite-colorscheme', {
     \ 'unite_sources' : ['colorscheme'],
-    \ }
-NeoBundleLazy 'osyo-manga/unite-quickfix', {        " 过滤quickfix窗口（如在编译结果中查找）
+    \ }                                             " 列出所有配色方案
+NeoBundleLazy 'osyo-manga/unite-quickfix', {
     \ 'unite_sources' : ['quickfix'],
-    \ }
+    \ }                                             " 过滤quickfix窗口（如在编译结果中查找）
 NeoBundleLazy 'thinca/vim-unite-history', {
     \ 'unite_sources' : ['history/command', 'history/search']
     \ }
-NeoBundleLazy 'eiiches/unite-tselect', {            " 跳转到光标下的tag。通过g]和g<C-]>访问
-    \ 'unite_sources' : ['tselect']
-    \ }
+NeoBundleLazy 'eiiches/unite-tselect', {
+            \ 'unite_sources' : 'tselect',
+            \ }                                     " 跳转到光标下的tag。通过g]和g<C-]>访问
 NeoBundleLazy 'hrsh7th/vim-versions', {
             \ 'commands' : ['UniteVersions'],
             \ 'unite_sources' : ['versions', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status'],
@@ -917,41 +952,6 @@ NeoBundleLazy 'mtth/scratch.vim', {
     \ 'commands' : ['Scratch','ScratchInsert','ScratchSelection'],
     \ 'mappings' : [['v','gs'], ['v','gS']],
     \ }                                             " 打开一个临时窗口。gs/gS/:Scratch
-" }}}
-
-" Misc {{{
-NeoBundleLazy 'sjl/gundo.vim', {
-    \ 'mappings' : [['n','<F5>']],
-    \ 'commands' : ['GundoHide','GundoRenderGraph','GundoShow','GundoToggle'],
-    \ }                                             " 列出修改历史，方便undo到一个特定的位置
-NeoBundleLazy 'tpope/vim-repeat', {
-    \ 'mappings' : ['.'],
-    \ }                                           " 把.能重复的操作扩展到一些插件中的操作
-NeoBundle 'AutoFenc'                              " 自动判别文件的编码
-NeoBundle 'Shougo/vimproc', {
-    \ 'build' : {
-    \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
-    \     'cygwin' : 'make -f make_cygwin.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
-    \     'mac' : 'make -f make_mac.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
-    \     'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
-    \ },
-    \ }
-NeoBundleLazy 'thinca/vim-prettyprint', {
-    \ 'commands' : [
-    \     { 'name' : 'PP', 'complete' : 'expression' },
-    \     { 'name' : 'PrettyPrint', 'complete' : 'expression' },
-    \ ],
-    \ 'functions' : ['PP', 'PrettyPrint'],
-    \ }                                             " PP variable_name，以用户友好的方式打印变量值，调试vim脚本用
-NeoBundle 'bling/vim-airline'                       " 增强的statusline
-"NeoBundle 'itchyny/lightline.vim'
-"NeoBundle 'itchyny/lightline-powerful'
-NeoBundle 'zhaocai/GoldenView.Vim'                  " <C-L>分隔出一个窗口，<F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口
-
-" very slow ?
-"NeoBundle 'xolox/vim-easytags'
-"NeoBundle 'https://bitbucket.org/abudden/taghighlight'
-
 " }}}
 
 " 载入manual-bundles下的插件
