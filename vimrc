@@ -241,10 +241,14 @@ set completeopt=menuone,menu,longest,preview
 set completeopt-=longest
 set showfulltag
 
-if filereadable("/usr/share/dict/words")
+if filereadable(s:vimrc_path . "\\win32\\words.txt")
+    if len(&dictionary) > 0
+        let &dictionary .= "," . s:vimrc_path . "\\win32\\words.txt"
+    else
+        let &dictionary = s:vimrc_path . "\\win32\\words.txt"
+    endif
+elseif filereadable("/usr/share/dict/words")
     set dictionary+=/usr/share/dict/words
-elseif filereadable(s:vimrc_path . "\\win32\\words.txt")
-    let &dictionary += s:vimrc_path . "\\win32\\words.txt"
 endif
 
 " Doxygen的出错信息
