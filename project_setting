@@ -63,10 +63,16 @@ function! SetupEnvironment()
     let l:workspace_dir = $HOME
     let l:stop_dir = ''
     while l:parent != l:curr
+        " 如果有多个工作区目录，可以加到这个列表中。遇到这些目录中任意一个时，就
+        " 不会再往上找了。如所有项目都放到$HOME/workspace/下的话，就设置为
+        " workspace。这样，workspace/cs/*就会只查找workspace/cs/及其子目录，不
+        " 会找workspace下的其它项目
         if index(['workspace', 'program'], fnamemodify(l:parent, ':t')) >= 0
             " l:parent目录符合要求的目录名
             let l:workspace_dir = l:parent
-            let l:stop_dir = l:curr
+            " 为路径加上结束的/，这样才能在这层停下来。否则将在workspace_dir才
+            " 停，多了一层
+            let l:stop_dir = fnamemodify(l:curr, ':p')
             break
         endif
 
