@@ -80,7 +80,7 @@ function! SetupEnvironment()
         let l:parent = fnamemodify(l:curr, ':h')
     endwhile
 
-    let l:search_path = l:path . '/*;' . l:stop_dir
+    let l:search_path = l:path . ';' . l:stop_dir
 
     " 加入路径上所有lib/3rd/util/framework目录下的库
     for l:d in ["lib", "3rd", "framework"]
@@ -89,8 +89,8 @@ function! SetupEnvironment()
         endfor
     endfor
 
-    " 加入路径上所有有include子目录的目录
-    for l:p in finddir('include', l:search_path, -1)
+    " 加入路径上所有include目录及有include子目录的目录
+    for l:p in finddir("include", l:path . '/**1;', -1)
         call s:AddPath(l:p)
     endfor
 
@@ -119,11 +119,6 @@ function! SetupEnvironment()
         " 当前在Boost库的目录下
         call s:AddPath(fnamemodify(l:boost_include, ":p:h:h"))
     endif
-
-    " 加入路径上所有include目录
-    for l:p in finddir("include", l:search_path, -1)
-        call s:AddPath(l:p)
-    endfor
 
     call s:AddPath("/usr/include")
 
