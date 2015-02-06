@@ -2073,7 +2073,7 @@ if neobundle#is_installed("jedi-vim")
 endif
 " }}}
 
-" Plugin 'Wandbox' {{{
+" Plugin 'wandbox-vim' {{{
 if neobundle#is_installed("wandbox-vim")
     " Set default compilers for each filetype
     if ! exists('g:wandbox#default_compiler')
@@ -2089,7 +2089,7 @@ if neobundle#is_installed("wandbox-vim")
         let g:wandbox#default_options = {}
     endif
     let g:wandbox#default_options = {
-                \   'cpp' : 'warning,optimize,boost-1.56',
+                \   'cpp' : 'warning,optimize,boost-1.56,c++1y',
                 \   'haskell' : [
                 \     'haskell-warning',
                 \     'haskell-optimize',
