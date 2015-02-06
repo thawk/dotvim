@@ -659,7 +659,7 @@ NeoBundleLazy 'Shougo/unite-outline', {
 NeoBundleLazy 'tacroe/unite-mark', {
     \ 'unite_sources' : ['mark'],
     \ }                                             " 列出所有标记点
-NeoBundleLazy 'tsukkee/unite-help', {
+NeoBundleLazy 'shougo/unite-help', {
     \ 'unite_sources' : ['help'],
     \ }                                             " 查找vim的帮助
 NeoBundleLazy 'tsukkee/unite-tag', {
