@@ -1,3 +1,6 @@
+let s:cpp_include_path_ready = 0
+let s:cpp_include_path = []
+
 function! s:AddComponentsToPath(path)
     let l:path = fnamemodify(a:path, ':p')
 
@@ -45,6 +48,35 @@ function! s:AddPath(path)
         call add(b:proj_processed_paths, l:p)
         exec "setlocal path+=" . l:p
     endif
+endfunction
+
+function! s:AddCppDefaultIncludePath()
+    if !s:cpp_include_path_ready
+        let s:cpp_include_path_ready = 1
+
+        if executable("g++") && executable("sed")
+            let l:output = system("echo '' | g++ -E -x c++ - -v |& sed -e '1,/#include <.*search starts here/d' -e '/End of search list/,$d'")
+            for l:p in split(l:output)
+                call add(s:cpp_include_path, fnamemodify(l:p, ":p"))
+            endfor
+        endif
+
+        " 未能从编译器取得include列表，自行查找
+        let l:cpp_include_path = substitute(substitute(glob("/usr/include/c++/*/"), "^.*\n", "", ""), "/$", "", "")
+        if isdirectory(l:cpp_include_path)
+            call add(s:cpp_include_path, l:cpp_include_path)
+
+            " 在/usr/include/c++/4.4.6/x86_64-redhat-linux/bits有需要的文件，因此
+            " 把/usr/include/c++/4.4.6/x86_64-redhat-linux加入路径中
+            for l:p in finddir("bits", l:cpp_include_path . '/**2', -1)
+                call add(s:cpp_include_path, fnamemodify(l:p, ":p:h:h"))
+            endfor
+        endif
+    endif
+
+    for l:p in s:cpp_include_path
+        call s:AddPath(l:p)
+    endfor
 endfunction
 
 function! SetupEnvironment()
@@ -121,12 +153,7 @@ function! SetupEnvironment()
     endif
 
     call s:AddPath("/usr/include")
-
-    " C++标准库
-    let l:cpp_include_path = substitute(substitute(glob("/usr/include/c++/*/"), "^.*\n", "", ""), "/$", "", "")
-    if isdirectory(l:cpp_include_path)
-        call s:AddPath(l:cpp_include_path)
-    endif
+    call s:AddCppDefaultIncludePath()
 endfunction
 
 augroup vim_project_setting
