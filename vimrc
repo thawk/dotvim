@@ -697,9 +697,9 @@ NeoBundleLazy 'matchit.zip', {
     \ 'mappings' : [['nxo', '%', 'g%']]
     \ }                                             " 将%的功能扩展到多种语言（如对于XML，可以在开始tag和结束tag之间进行跳转）
 "NeoBundle 'YankRing.vim'                            " 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容
-NeoBundleLazy 'vis', {
-    \ 'commands' : ['B'],
-    \ }                                             " 在块选后（<C-V>进行选择），:B cmd在选中内容中执行cmd
+" NeoBundleLazy 'vis', {
+"     \ 'commands' : ['B'],
+"     \ }                                             " 在块选后（<C-V>进行选择），:B cmd在选中内容中执行cmd
 NeoBundleLazy 'kana/vim-operator-user', {
     \ 'functions' : 'operator#user#define',
     \ }
@@ -752,7 +752,7 @@ NeoBundleLazy 'Shougo/neosnippet', {
     \ 'mappings' : ['<Plug>(neosnippet_'],
     \ 'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
     \ }                                             " 代码模板引擎
-NeoBundle 'Shougo/neomru.vim'                       " 代码模板
+NeoBundle 'Shougo/neomru.vim'                       " 最近访问的文件
 NeoBundle 'Shougo/neosnippet-snippets'              " 代码模板
 NeoBundleLazy 'ton/vim-bufsurf', {
             \ 'commands' : ['BufSurfForward', 'BufSurfBack'],
@@ -850,7 +850,15 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
             \ }                                     " 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置
 
 NeoBundleLazy 'rhysd/wandbox-vim', {
-            \ 'commands' : ['Wandbox', 'WandboxAsync', 'WandboxSync'],
+            \ 'commands' : [
+            \    {'name' : 'Wandbox',      'complete' : 'customlist,wandbox#complete_command'}
+            \    {'name' : 'WandboxAsync', 'complete' : 'customlist,wandbox#complete_command'}
+            \    {'name' : 'WandboxSync',  'complete' : 'customlist,wandbox#complete_command'}
+            \    'WandboxAbortAsyncWorks',
+            \    'WandboxOpenBrowser',
+            \    'WandboxOptionList',
+            \    'WandboxOptionListAsync',
+            \ ],
             \ 'functions' : 'wandbox#',
             \ }                                     " 在http://melpon.org/wandbox/上运行当前缓冲区的C++代码
 " }}}
@@ -2075,31 +2083,28 @@ endif
 
 " Plugin 'wandbox-vim' {{{
 if neobundle#is_installed("wandbox-vim")
+    let g:wandbox#echo_command = 'echomsg'
+    noremap <Leader>wb :<C-u>Wandbox<CR>
+
     " Set default compilers for each filetype
-    if ! exists('g:wandbox#default_compiler')
-        let g:wandbox#default_compiler = {}
-    endif
-    let g:wandbox#default_compiler = {
-                \   'cpp' : 'gcc-head',
-                \   'ruby' : 'ruby-1.9.3-p0',
-                \ }
+    let g:wandbox#default_compiler = get(g:, 'wandbox#default_compiler', {
+                \ 'cpp' : 'gcc-head,clang-head',
+                \ 'ruby' : 'mruby'
+                \ })
 
     " Set default options for each filetype.  Type of value is string or list of string
-    if ! exists('g:wandbox#default_options')
-        let g:wandbox#default_options = {}
-    endif
-    let g:wandbox#default_options = {
+    let g:default_options = get(g:, 'wandbox#default_options', {
                 \   'cpp' : 'warning,optimize,boost-1.56,c++1y',
                 \   'haskell' : [
                 \     'haskell-warning',
                 \     'haskell-optimize',
                 \   ],
-                \ }
+                \ })
 
     " Set extra options for compilers if you need
-    let g:wandbox#default_extra_options = {
+    let g:wandbox#default_extra_options = get(g:, 'wandbox#default_extra_options', {
                 \   'clang-head' : '-O3 -Werror',
-                \ }
+                \ })
 endif
 " }}}
 "
