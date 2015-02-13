@@ -851,9 +851,9 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
 
 NeoBundleLazy 'rhysd/wandbox-vim', {
             \ 'commands' : [
-            \    {'name' : 'Wandbox',      'complete' : 'customlist,wandbox#complete_command'}
-            \    {'name' : 'WandboxAsync', 'complete' : 'customlist,wandbox#complete_command'}
-            \    {'name' : 'WandboxSync',  'complete' : 'customlist,wandbox#complete_command'}
+            \    {'name' : 'Wandbox',      'complete' : 'customlist,wandbox#complete_command'},
+            \    {'name' : 'WandboxAsync', 'complete' : 'customlist,wandbox#complete_command'},
+            \    {'name' : 'WandboxSync',  'complete' : 'customlist,wandbox#complete_command'},
             \    'WandboxAbortAsyncWorks',
             \    'WandboxOpenBrowser',
             \    'WandboxOptionList',
