@@ -1980,6 +1980,14 @@ if neobundle#is_installed("vim-airline")
     let g:vimfiler_force_overwrite_statusline = 0
     let g:vimshell_force_overwrite_statusline = 0
 
+    " 显示tabline
+    let g:airline#extensions#tabline#enabled = 1
+    " 只在有多于两个tab时显示tabline，不利用tabline来显示buffer
+    let g:airline#extensions#tabline#tab_min_count = 2
+    let g:airline#extensions#tabline#show_buffers = 0
+    " 不在tabline上显示关闭按钮
+    let g:airline#extensions#tabline#show_close_button = 0
+
     let s:path_branch = {}
 
     function! UrlDecode(url)
