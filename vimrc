@@ -803,6 +803,12 @@ if s:has_global
                 \ 'commands' : ['Gtags','GtagsCursor','Gozilla'],
                 \ }
 endif
+NeoBundleLazy 'epeli/slimux', {
+            \ 'commands' : [
+            \ 'SlimuxREPLSendLine', 'SlimuxREPLSendSelection', 'SlimuxREPLSendLine', 'SlimuxREPLSendBuffer', 'SlimuxREPLConfigure',
+            \ 'SlimuxShellRun', 'SlimuxShellPrompt', 'SlimuxShellLast', 'SlimuxShellConfigure',
+            \ 'SlimuxSendKeysPrompt', 'SlimuxSendKeysLast', 'SlimuxSendKeysConfigure' ],
+            \ }                                     " 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列
 "NeoBundle 'tpope/vim-commentary'
 "NeoBundle 'bahejl/Intelligent_Tags'
 "if executable("ctags")
@@ -1899,6 +1905,21 @@ elseif has("cscope")
 endif
 " }}}
 
+" Plugin 'slimux' {{{
+if neobundle#is_installed("slimux")
+    nnoremap [slimux] <Nop>
+    xnoremap [slimux] <Nop>
+    nmap <Leader>s [slimux]
+    xmap <Leader>s [slimux]
+
+    map  [slimux]s :SlimuxREPLSendLine<CR>
+    vmap [slimut]s :SlimuxREPLSendSelection<CR>
+    map  [slimux]p :SlimuxShellPrompt<CR>
+    map  [slimux]a :SlimuxShellLast<CR>
+    map  [slimux]k :SlimuxSendKeysLast<CR>
+endif
+" }}}
+
 " Plugin 'syntastic' {{{
 if neobundle#is_installed("syntastic")
     " let g:syntastic_mode_map = {
@@ -1910,6 +1931,7 @@ if neobundle#is_installed("syntastic")
     " 0: 不会自动打开、关闭 1: 自动打开及关闭 2: 没错误时自动关闭，但不会自动打开
     let g:syntastic_auto_loc_list=2
 endif
+" }}}
 
 " Plugin 'vimfiler' {{{
 if neobundle#is_installed("vimfiler")
