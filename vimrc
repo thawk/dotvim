@@ -681,10 +681,11 @@ NeoBundleLazy 'hrsh7th/vim-versions', {
             \ 'commands' : ['UniteVersions'],
             \ 'unite_sources' : ['versions', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status'],
             \ }                                     " \fv 看未提交的文件列表，\fl 看更新日志
-if s:has_global
-    NeoBundleLazy 'hewes/unite-gtags', {
-                \ 'unite_sources' : ['gtags/completion','gtags/context','gtags/def','gtags/grep','gtags/ref'],
-                \ }
+NeoBundleLazy 'hewes/unite-gtags', {
+            \ "unite_sources" : ["gtags/completion","gtags/context","gtags/def","gtags/grep","gtags/ref"],
+            \ }
+if !s:has_global
+    NeoBundleDisable 'unite-gtags'
 endif
 " }}}
 
@@ -735,15 +736,14 @@ NeoBundleLazy 'rhysd/clever-f.vim', {
     \ 'mappings' : [['n', 'f', 'F', 't', 'T']],
     \ }                                             " 用f/F代替;来查找下一个字符
 
-if v:version >= '703' && has('lua')
-    NeoBundleLazy 'Shougo/neocomplete', {
-        \ 'insert' : 1,
-        \ }                                         " 代码补全插件
-else
-    NeoBundleLazy 'Shougo/neocomplcache', {
-        \ 'insert' : 1,
-        \ }                                         " 代码补全插件
-endif
+NeoBundleLazy 'Shougo/neocomplete', {
+    \ 'insert' : 1,
+    \ 'disabled' : !(v:version >= '703' && has('lua')),
+    \ }                                         " 代码补全插件
+NeoBundleLazy 'Shougo/neocomplcache', {
+    \ 'insert' : 1,
+    \ 'disabled' : (v:version >= '703' && has('lua')),
+    \ }                                         " 代码补全插件
 
 NeoBundleLazy 'Shougo/neosnippet', {
     \ 'insert' : 1,
@@ -762,17 +762,17 @@ NeoBundleLazy 'ton/vim-bufsurf', {
 "NeoBundle 'VimIM'                                   " 中文输入法
 
 NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
-    \ 'commands':['IndentGuidesToggle','IndentGuidesEnable','IndentGuidesDisable'],
-    \ 'mappings':['<Leader>ig'],
-    \ }                                             " 标记出各缩进块。\ig切换
+            \ 'commands':['IndentGuidesToggle','IndentGuidesEnable','IndentGuidesDisable'],
+            \ 'mappings':['<Leader>ig'],
+            \ }                                      " 标记出各缩进块。\ig切换
 
 NeoBundleLazy 'kana/vim-niceblock', {
-    \ 'mappings' : ['v', 'I', 'A'],
-    \ }
+            \ 'mappings' : ['v', 'I', 'A'],
+            \ }
 
-if v:version >= '701'
-    NeoBundle 'Mark--Karkat'                        " 可同时标记多个mark。\M显示隐，\N清除所有Mark。\m标识当前word
-endif
+NeoBundle 'Mark--Karkat', {
+            \ 'disabled' : !(v:version >= '701'),
+            \ }                                     " 可同时标记多个mark。\M显示隐，\N清除所有Mark。\m标识当前word
 " }}}
 
 " Text object {{{
@@ -786,9 +786,15 @@ NeoBundle 'thinca/vim-textobj-comment'              " 增加motion: ac ic
 
 " Programming {{{
 " NeoBundle 'tyru/current-func-info.vim'
-if ! s:has_global   " 启用global后，将不用ctags，因此echofunc.vim会失效
-    NeoBundle 'mbbill/echofunc'                     " 在插入模式下输入(时，会在statusline显示函数的签名，对于有多个重载的函数，可通过<A-->/<A-=>进行切换
+
+" 启用global后，将不用ctags，因此echofunc.vim会失效
+NeoBundleLazy 'mbbill/echofunc', {
+            \ 'filetypes' : ['c', 'cpp'],
+            \ }                                     " 在插入模式下输入(时，会在statusline显示函数的签名，对于有多个重载的函数，可通过<A-->/<A-=>进行切换
+if s:has_global
+    NeoBundleDisable 'echofunc'
 endif
+
 NeoBundleLazy 'DoxygenToolkit.vim', {
     \ 'commands' : ['Dox', 'DoxLic', 'DoxAuthor', 'DoxUndoc', 'DoxBlock'],
     \ }                                             " 为函数插入Doxygen注释。在函数名所在行输入 :Dox 即可
@@ -798,19 +804,20 @@ NeoBundleLazy 'CodeReviewer.vim', {
     \ }                                             " 记录代码走查意见，\ic激活。可通过 cfile <文件名> 把记录走查意见的文件导入 quickfix 列表
 NeoBundle 'OrelSokolov/HiCursorWords'               " 高亮与光标下word一样的词
 NeoBundle 'tComment'                                " 注释工具。gc{motion}/gcc/<C-_>等
-if s:has_global
-    NeoBundleLazy 'gtags.vim', {
-                \ 'commands' : ['Gtags','GtagsCursor','Gozilla'],
-                \ }
+NeoBundleLazy 'gtags.vim', {
+            \ "commands" : ["Gtags","GtagsCursor","Gozilla"],
+            \ }
+if !s:has_global
+    NeoBundleDisable 'gtags.vim'
 endif
-if executable("tmux")
-    NeoBundleLazy 'epeli/slimux', {
-                \ 'commands' : [
-                \ 'SlimuxREPLSendLine', 'SlimuxREPLSendSelection', 'SlimuxREPLSendLine', 'SlimuxREPLSendBuffer', 'SlimuxREPLConfigure',
-                \ 'SlimuxShellRun', 'SlimuxShellPrompt', 'SlimuxShellLast', 'SlimuxShellConfigure',
-                \ 'SlimuxSendKeysPrompt', 'SlimuxSendKeysLast', 'SlimuxSendKeysConfigure' ],
-                \ }                                  " 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列
-endif
+NeoBundleLazy 'epeli/slimux', {
+            \ 'commands' : [
+            \ 'SlimuxREPLSendLine', 'SlimuxREPLSendSelection', 'SlimuxREPLSendLine', 'SlimuxREPLSendBuffer', 'SlimuxREPLConfigure',
+            \ 'SlimuxShellRun', 'SlimuxShellPrompt', 'SlimuxShellLast', 'SlimuxShellConfigure',
+            \ 'SlimuxSendKeysPrompt', 'SlimuxSendKeysLast', 'SlimuxSendKeysConfigure' ],
+            \ 'disabled' : !executable("tmux"),
+            \ }                                     " 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列
+
 "NeoBundle 'tpope/vim-commentary'
 "NeoBundle 'bahejl/Intelligent_Tags'
 "if executable("ctags")
@@ -832,26 +839,27 @@ NeoBundle 'tpope/vim-fugitive'                      " GIT前端
 "     NeoBundleLazy 'justmao945/vim-clang', {
 "                 \ 'filetypes' : ['c', 'cpp'],
 "                 \ }                                 " 使用clang编译器进行上下文补全
-if s:libclang_path != "" || executable('clang')
-    NeoBundleLazy 'Rip-Rip/clang_complete', {
-                \ 'filetypes' : ['c', 'cpp'],
-                \ }                                 " 使用clang编译器进行上下文补全
+NeoBundleLazy 'Rip-Rip/clang_complete', {
+            \ 'filetypes' : ['c', 'cpp'],
+            \ }                                     " 使用clang编译器进行上下文补全
+if !(s:libclang_path != "" || executable('clang'))
+    NeoBundleDisable 'clang_complete'
 endif
 
-if executable('clang-format')
-    NeoBundleLazy 'rhysd/vim-clang-format', {
-                \ 'commands' : ['ClangFormat'],
-                \ 'mappings' : ['<Plug>(operator-clang-format'],
-                \ }                                 " 使用clang编译器进行上下文补全
-endif
+NeoBundleLazy 'rhysd/vim-clang-format', {
+            \ 'commands' : ['ClangFormat'],
+            \ 'mappings' : ['<Plug>(operator-clang-format'],
+            \ 'disabled' : !executable('clang-format'),
+            \ }                                 " 使用clang编译器进行上下文补全
 
 NeoBundle 'scrooloose/syntastic'                    " 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表
-if (s:is_windows)
-    NeoBundle 'OrangeT/vim-csharp'                  " C#文件的相关
-endif
-if executable("cpplint.py")
-    NeoBundle 'funorpain/vim-cpplint'               " <F7>执行cpplint检查（要求PATH中能找到cpplint.py）
-endif
+NeoBundleLazy 'OrangeT/vim-csharp', {
+            \ 'filetypes' : ['csharp'],
+            \ }                                     " C#文件的相关
+NeoBundleLazy 'funorpain/vim-cpplint', {
+            \ 'filetyhpes' : ['c', 'cpp'],
+            \ 'disabled' : !executable("cpplint.py"),
+            \ }                                     " <F7>执行cpplint检查（要求PATH中能找到cpplint.py）
 
 NeoBundleLazy 'davidhalter/jedi-vim', {
             \ 'filetypes' : ['python', 'python3'],
