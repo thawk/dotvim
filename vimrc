@@ -2,18 +2,12 @@ scriptencoding utf-8
 
 " 判断当前环境 "{{{
 " 判断操作系统
-if (has("win32") || has("win64") || has("win32unix"))
-    let s:is_windows = 1
-else
-    let s:is_windows = 0
-endif
+let s:is_windows = has("win32") || has("win64") || has("win32unix")
+let s:is_cygwin = has('win32unix')
+let s:is_macvim = has('gui_macvim')
 
 " 判断是终端还是gvim
-if has("gui_running")
-    let g:isGUI = 1
-else
-    let g:isGUI = 0
-endif
+let s:is_gui = has("gui_running")
 
 " 当前脚本路径
 let s:vimrc_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
@@ -53,6 +47,11 @@ else
         let s:libclang_path = expand("/usr/lib64")
     endif
 endif
+
+if s:ag_path
+    exec 'set grepprg=' . s:ag_path . '\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
+    set grepformat=%f:%l:%c:%m
+endif
 " "}}}
 
 " General "{{{
@@ -87,7 +86,10 @@ if (s:is_windows)
     set shellslash
 endif
 
+set noshelltemp
+
 set sessionoptions-=options
+set viewoptions-=options
 
 " Buffers
 set hidden " The current buffer can be put to the background without writing to disk
@@ -219,7 +221,7 @@ set splitright
 "endif
 
 " gui相关设置
-if (g:isGUI)
+if (s:is_gui)
     set guioptions-=m " 不显示菜单
     set guioptions-=T " 不显示工具栏
     set guioptions-=b " 不显示水平滚动条
@@ -492,7 +494,7 @@ au FileType python setlocal smartindent cinwords=if,elif,else,for,while,try,exce
 " Key mappings " {{{
 
 " 使用Kitty后，不再需要映射Alt键
-" if !s:is_windows && !g:isGUI
+" if !s:is_windows && !s:is_gui
 "     " 修改对Alt/Meta键的映射
 "     for i in range(33, 126)
 "         let c = nr2char(i)
@@ -740,10 +742,10 @@ NeoBundleLazy 'Shougo/neocomplete', {
     \ 'insert' : 1,
     \ 'disabled' : !(v:version >= '703' && has('lua')),
     \ }                                         " 代码补全插件
-NeoBundleLazy 'Shougo/neocomplcache', {
-    \ 'insert' : 1,
-    \ 'disabled' : (v:version >= '703' && has('lua')),
-    \ }                                         " 代码补全插件
+"NeoBundleLazy 'Shougo/neocomplcache', {
+"    \ 'insert' : 1,
+"    \ 'disabled' : (v:version >= '703' && has('lua')),
+"    \ }                                         " 代码补全插件
 
 NeoBundleLazy 'Shougo/neosnippet', {
     \ 'insert' : 1,
@@ -1747,7 +1749,7 @@ if neobundle#is_installed("vim-colors-solarized")
     let g:solarized_hitrail=1
     " let g:solarized_menu=1
 
-    if !g:isGUI " 在终端模式下，使用16色（终端需要使用solarized配色方案才能得到所要的效果）
+    if !s:is_gui " 在终端模式下，使用16色（终端需要使用solarized配色方案才能得到所要的效果）
         set t_Co=16
     end
 
@@ -1759,7 +1761,7 @@ if neobundle#is_installed("vim-colors-solarized")
     " let g:solarized_termcolors=256
     colorscheme solarized
 else
-    if version >= 700 && &term != 'cygwin' && &term != 'linux' && !(g:isGUI)
+    if version >= 700 && &term != 'cygwin' && &term != 'linux' && !(s:is_gui)
         set t_Co=256
     endif
 
