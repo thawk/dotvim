@@ -639,844 +639,37 @@ NeoBundle 'bling/vim-airline'                       " 增强的statusline
 "NeoBundle 'itchyny/lightline-powerful'
 NeoBundle 'zhaocai/GoldenView.Vim'                  " <C-L>分隔出一个窗口，<F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口
 
-" very slow ?
-"NeoBundle 'xolox/vim-easytags'
-"NeoBundle 'https://bitbucket.org/abudden/taghighlight'
-
 " }}}
 
 " Unite {{{
+" unite.vim: Unite主插件，提供\f开头的功能 {{{
 NeoBundleLazy 'Shougo/unite.vim', {
     \ 'commands' : [
     \     { 'name' : 'Unite',
     \       'complete' : 'customlist,unite#complete_source',
     \     },
     \     'UniteWithCursorWord', 'UniteWithInput'],
-    \ }                                             " Unite主插件，提供\f开头的功能
-"NeoBundle 'Shougo/unite-build'
-"NeoBundle 'h1mesuke/unite-outline'
-NeoBundleLazy 'Shougo/unite-outline', {
-    \ 'unite_sources' : ['outline'],
-    \ }                                             " 提供代码的大纲。通过\fo访问
-NeoBundleLazy 'tacroe/unite-mark', {
-    \ 'unite_sources' : ['mark'],
-    \ }                                             " 列出所有标记点
-NeoBundleLazy 'shougo/unite-help', {
-    \ 'unite_sources' : ['help'],
-    \ }                                             " 查找vim的帮助
-NeoBundleLazy 'tsukkee/unite-tag', {
-    \ 'unite_sources' : ['tag', 'tag/include', 'tag/file']
-    \ }                                             " 跳转到光标下的tag。通过\fT访问
-NeoBundleLazy 'ujihisa/unite-colorscheme', {
-    \ 'unite_sources' : ['colorscheme'],
-    \ }                                             " 列出所有配色方案
-NeoBundleLazy 'osyo-manga/unite-quickfix', {
-    \ 'unite_sources' : ['quickfix'],
-    \ }                                             " 过滤quickfix窗口（如在编译结果中查找）
-NeoBundleLazy 'thinca/vim-unite-history', {
-    \ 'unite_sources' : ['history/command', 'history/search']
     \ }
-NeoBundleLazy 'eiiches/unite-tselect', {
-            \ 'unite_sources' : 'tselect',
-            \ }                                     " 跳转到光标下的tag。通过g]和g<C-]>访问
-NeoBundleLazy 'hrsh7th/vim-versions', {
-            \ 'commands' : ['UniteVersions'],
-            \ 'unite_sources' : ['versions', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status'],
-            \ }                                     " \fv 看未提交的文件列表，\fl 看更新日志
-NeoBundleLazy 'hewes/unite-gtags', {
-            \ "unite_sources" : ["gtags/completion","gtags/context","gtags/def","gtags/grep","gtags/ref"],
-            \ }
-if !s:has_global
-    NeoBundleDisable 'unite-gtags'
-endif
-" }}}
+    let bundle = neobundle#get('unite.vim')
+    function! bundle.hooks.on_source(bundle)
+        call unite#custom#source(
+                    \ 'file_rec,file_rec/async,grep',
+                    \ 'ignore_pattern',
+                    \ join([
+                    \ '\%(^\|/\)\.$',
+                    \ '\~$',
+                    \ '\.\%(o\|a\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|gcov\)$',
+                    \ '\%(^\|/\)gcc-[0-9]\+\%(\.[0-9]\+\)*/',
+                    \ '\%(^\|/\)doc/html/',
+                    \ '\%(^\|/\)stage/',
+                    \ '\%(^\|/\)boost\%(\|_\w\+\)/',
+                    \ '\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)',
+                    \ ], '\|'))
+
+        " let g:unite_source_rec_max_cache_files = 0
+        " call unite#custom#source('file_rec,file_rec/async', 'max_candidates', 0)
+    endfunction
 
-" Editing {{{
-NeoBundleLazy 'h1mesuke/vim-alignta', {
-    \ 'commands' : ['Alignta'],
-    \ 'unite_sources' : 'alignta',
-    \ }                                             " 代码对齐插件。通过\fa访问
-NeoBundleLazy 'matchit.zip', {
-    \ 'mappings' : [['nxo', '%', 'g%']]
-    \ }                                             " 将%的功能扩展到多种语言（如对于XML，可以在开始tag和结束tag之间进行跳转）
-"NeoBundle 'YankRing.vim'                            " 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容
-" NeoBundleLazy 'vis', {
-"     \ 'commands' : ['B'],
-"     \ }                                             " 在块选后（<C-V>进行选择），:B cmd在选中内容中执行cmd
-NeoBundleLazy 'kana/vim-operator-user', {
-    \ 'functions' : 'operator#user#define',
-    \ }
-NeoBundleLazy 'kana/vim-operator-replace', {
-    \ 'depends' : 'vim-operator-user',
-    \ 'mappings' : [
-    \     ['nx', '<Plug>(operator-replace)']
-    \ ],
-    \ }                                             " 双引号x_{motion} : 把{motion}涉及的内容替换为register x的内容
-NeoBundleLazy 'rhysd/vim-operator-surround', {
-    \ 'depends' : 'vim-operator-user',
-    \ 'mappings' : ['<Plug>(operator-surround'],
-    \ }                                             " sa{motion}/sd{motion}/sr{motion}：增/删/改括号、引号等
-NeoBundleLazy 'DrawIt', {
-    \ 'mappings' : [['n', '<Leader>di']],
-    \ 'commands' : ['DIstart', 'DIsngl', 'DIdbl', 'DrawIt'],
-    \ }                                             " 使用横、竖线画图、制表。\di和\ds分别启、停画图模式。在模式中，hjkl移动光标，方向键画线
-if v:version >= '703'
-    NeoBundleLazy 'Lokaltog/vim-easymotion', {
-                \ 'mappings' : [['n'] + map(
-                \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
-                \     '"<Leader><Leader>" . v:val')],
-                \ }                                 " \\w启动word motion，\\f<字符>启动查找模式
-else
-    NeoBundleLazy 'Lokaltog/vim-easymotion', {
-                \ 'rev' : 'e41082',
-                \ 'mappings' : [['n'] + map(
-                \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
-                \     '"<Leader><Leader>" . v:val')],
-                \ }                                 " \\w启动word motion，\\f<字符>启动查找模式
-endif
-NeoBundleLazy 'rhysd/clever-f.vim', {
-    \ 'mappings' : [['n', 'f', 'F', 't', 'T']],
-    \ }                                             " 用f/F代替;来查找下一个字符
-
-NeoBundleLazy 'Shougo/neocomplete', {
-    \ 'insert' : 1,
-    \ 'disabled' : !(v:version >= '703' && has('lua')),
-    \ }                                         " 代码补全插件
-"NeoBundleLazy 'Shougo/neocomplcache', {
-"    \ 'insert' : 1,
-"    \ 'disabled' : (v:version >= '703' && has('lua')),
-"    \ }                                         " 代码补全插件
-
-NeoBundleLazy 'Shougo/neosnippet', {
-    \ 'insert' : 1,
-    \ 'filetypes' : 'neosnippet',
-    \ 'commands' : ['NeoSnippetEdit'],
-    \ 'mappings' : ['<Plug>(neosnippet_'],
-    \ 'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
-    \ }                                             " 代码模板引擎
-NeoBundle 'Shougo/neomru.vim'                       " 最近访问的文件
-NeoBundle 'Shougo/neosnippet-snippets'              " 代码模板
-NeoBundleLazy 'ton/vim-bufsurf', {
-            \ 'commands' : ['BufSurfForward', 'BufSurfBack'],
-            \ }                                     " g<C-I>/g<C-O>或:BufSurfForward/:BufSurfBack跳转到本窗口的下一个、上一个buffer（增强<C-I>/<C-O>）
-"NeoBundle 'othree/eregex.vim'                       " 支持Perl风格的正则表达式。:M、:S、:G、:V
-
-"NeoBundle 'VimIM'                                   " 中文输入法
-
-NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
-            \ 'commands':['IndentGuidesToggle','IndentGuidesEnable','IndentGuidesDisable'],
-            \ 'mappings':['<Leader>ig'],
-            \ }                                      " 标记出各缩进块。\ig切换
-
-NeoBundleLazy 'kana/vim-niceblock', {
-            \ 'mappings' : ['v', 'I', 'A'],
-            \ }
-
-NeoBundle 'Mark--Karkat', {
-            \ 'disabled' : !(v:version >= '701'),
-            \ }                                     " 可同时标记多个mark。\M显示隐，\N清除所有Mark。\m标识当前word
-" }}}
-
-" Text object {{{
-NeoBundle 'kana/vim-textobj-user'                   " 可自定义motion
-NeoBundle 'kana/vim-textobj-indent'                 " 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进）
-NeoBundle 'kana/vim-textobj-line'                   " 增加motion: al il
-NeoBundle 'kana/vim-textobj-function'               " 增加motion: if/af/iF/aF 选择一个函数
-NeoBundle 'bkad/CamelCaseMotion'                     " 增加,w ,b ,e 可以处理大小写混合或下划线分隔两种方式的单词
-NeoBundle 'thinca/vim-textobj-comment'              " 增加motion: ac ic
-" }}}
-
-" Programming {{{
-" NeoBundle 'tyru/current-func-info.vim'
-
-" 启用global后，将不用ctags，因此echofunc.vim会失效
-NeoBundleLazy 'mbbill/echofunc', {
-            \ 'filetypes' : ['c', 'cpp'],
-            \ }                                     " 在插入模式下输入(时，会在statusline显示函数的签名，对于有多个重载的函数，可通过<A-->/<A-=>进行切换
-if s:has_global
-    NeoBundleDisable 'echofunc'
-endif
-
-NeoBundleLazy 'DoxygenToolkit.vim', {
-    \ 'commands' : ['Dox', 'DoxLic', 'DoxAuthor', 'DoxUndoc', 'DoxBlock'],
-    \ }                                             " 为函数插入Doxygen注释。在函数名所在行输入 :Dox 即可
-NeoBundleLazy 'CodeReviewer.vim', {
-    \ 'commands' : ['CheckReview'],
-    \ 'mappings' : ['<Leader>ic'],
-    \ }                                             " 记录代码走查意见，\ic激活。可通过 cfile <文件名> 把记录走查意见的文件导入 quickfix 列表
-NeoBundle 'OrelSokolov/HiCursorWords'               " 高亮与光标下word一样的词
-NeoBundle 'tComment'                                " 注释工具。gc{motion}/gcc/<C-_>等
-NeoBundleLazy 'gtags.vim', {
-            \ "commands" : ["Gtags","GtagsCursor","Gozilla"],
-            \ }
-if !s:has_global
-    NeoBundleDisable 'gtags.vim'
-endif
-NeoBundleLazy 'epeli/slimux', {
-            \ 'commands' : [
-            \ 'SlimuxREPLSendLine', 'SlimuxREPLSendSelection', 'SlimuxREPLSendLine', 'SlimuxREPLSendBuffer', 'SlimuxREPLConfigure',
-            \ 'SlimuxShellRun', 'SlimuxShellPrompt', 'SlimuxShellLast', 'SlimuxShellConfigure',
-            \ 'SlimuxSendKeysPrompt', 'SlimuxSendKeysLast', 'SlimuxSendKeysConfigure' ],
-            \ 'disabled' : !executable("tmux"),
-            \ }                                     " 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列
-
-"NeoBundle 'tpope/vim-commentary'
-"NeoBundle 'bahejl/Intelligent_Tags'
-"if executable("ctags")
-"    NeoBundle 'thawk/Intelligent_Tags'              " 自动扫描所依赖的头文件，生成tags文件
-"    "NeoBundle 'AutoTag'
-"endif
-
-NeoBundleLazy 'majutsushi/tagbar', {
-    \ 'commands' : ['TagbarToggle','TagbarCurrentTag'],
-    \ }                                             " 列出文件中所有类和方法。用<F9>调用
-NeoBundle 'vcscommand.vim'                          " SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件
-NeoBundle 'tpope/vim-fugitive'                      " GIT前端
-
-"NeoBundleLazy 'osyo-manga/vim-snowdrop', {
-"    \ 'filetypes' : ['c', 'cpp'],
-"    \ }
-
-" if executable('clang')    " vim-clang比使用clang_complete慢
-"     NeoBundleLazy 'justmao945/vim-clang', {
-"                 \ 'filetypes' : ['c', 'cpp'],
-"                 \ }                                 " 使用clang编译器进行上下文补全
-NeoBundleLazy 'Rip-Rip/clang_complete', {
-            \ 'filetypes' : ['c', 'cpp'],
-            \ }                                     " 使用clang编译器进行上下文补全
-if !(s:libclang_path != "" || executable('clang'))
-    NeoBundleDisable 'clang_complete'
-endif
-
-NeoBundleLazy 'rhysd/vim-clang-format', {
-            \ 'commands' : ['ClangFormat'],
-            \ 'mappings' : ['<Plug>(operator-clang-format'],
-            \ 'disabled' : !executable('clang-format'),
-            \ }                                 " 使用clang编译器进行上下文补全
-
-NeoBundle 'scrooloose/syntastic'                    " 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表
-NeoBundleLazy 'OrangeT/vim-csharp', {
-            \ 'filetypes' : ['csharp'],
-            \ }                                     " C#文件的相关
-NeoBundleLazy 'funorpain/vim-cpplint', {
-            \ 'filetyhpes' : ['c', 'cpp'],
-            \ 'disabled' : !executable("cpplint.py"),
-            \ }                                     " <F7>执行cpplint检查（要求PATH中能找到cpplint.py）
-
-NeoBundleLazy 'davidhalter/jedi-vim', {
-            \ 'filetypes' : ['python', 'python3'],
-            \ }                                     " 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置
-
-NeoBundleLazy 'rhysd/wandbox-vim', {
-            \ 'commands' : [
-            \    {'name' : 'Wandbox',      'complete' : 'customlist,wandbox#complete_command'},
-            \    {'name' : 'WandboxAsync', 'complete' : 'customlist,wandbox#complete_command'},
-            \    {'name' : 'WandboxSync',  'complete' : 'customlist,wandbox#complete_command'},
-            \    'WandboxAbortAsyncWorks',
-            \    'WandboxOpenBrowser',
-            \    'WandboxOptionList',
-            \    'WandboxOptionListAsync',
-            \ ],
-            \ 'functions' : 'wandbox#',
-            \ }                                     " 在http://melpon.org/wandbox/上运行当前缓冲区的C++代码
-" }}}
-
-" Language {{{
-NeoBundleLazy 'csv.vim', {
-    \ 'filetypes' : ['csv'],
-    \ }                                             " 增加对CSV文件（逗号分隔文件）的支持
-NeoBundleLazy 'jceb/vim-orgmode', {
-    \ 'depends' : [
-    \   'NrrwRgn',
-    \   'speeddating.vim',
-    \ ],
-    \ 'filetypes' : ['org'],
-    \ }
-NeoBundleLazy 'Emmet.vim', {
-    \ 'filetypes' : ['xml','html','css','sass','scss','less'],
-    \ 'mappings' : ['<Plug>(Emmet'],
-    \ 'commands' : ['EmmetInstall'],
-    \ }                                             " 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>,
-
-NeoBundleLazy 'wps.vim', {
-    \ 'filetypes' : ['wps'],
-    \ 'disabled' : !(has("win32") || has("win64")),
-    \ }                                             " syntax highlight for RockBox wps file
-NeoBundleLazy 'lbdbq', {
-    \ 'mappings' : ['<LocalLeader>lb'],
-    \ }                                             " 支持lbdb
-NeoBundleLazy 'othree/xml.vim', {
-    \ 'filetypes' : ['xml'],
-    \ }                                             " 辅助编写XML文件
-"NeoBundle 'tmhedberg/SimpylFold'
-NeoBundleLazy 'hynek/vim-python-pep8-indent', {
-            \ 'filetypes' : ['python', 'python3'],
-            \ }
-NeoBundleLazy 'gprof.vim', {
-    \ 'filetypes' : ['gprof'],
-    \ }                                             " 对gprof文件提供语法高亮
-NeoBundleLazy 'elzr/vim-json', {
-    \ 'filetypes' : ['json'],
-    \ 'filename_patterns' : ['.*\.jsonp\?'],
-    \ }                                             " 对JSON文件提供语法高亮
-NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {
-    \ 'filetypes' : ['javascript', 'js'],
-    \ }                                             " Javascript语法高亮
-NeoBundleLazy 'po.vim', {
-    \ 'filetypes' : ['po'],
-    \ 'filename_patterns' : ['.*\.pot\?'],
-    \ }                                             " 用于编辑PO语言包文件。
-" }}}
-
-" Colors {{{
-NeoBundle 'altercation/vim-colors-solarized'        " Solarized配色方案
-NeoBundle 'Zenburn'                                 " Zenburn配色方案
-" }}}
-
-" Files {{{
-NeoBundleLazy 'FSwitch', {
-    \ 'functions' : ['FSwitch'],
-    \ 'commands' : ['FSHere','FSRight','FSSplitRight','FSLeft','FSSplitLeft','FSAbove','FSSplitAbove','FSBelow','FSSplitBelow'],
-    \ }                                          " 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示，\of当前窗口
-"NeoBundle 'jceb/vim-editqf'
-NeoBundle 'LargeFile'                               " 在打开大文件时，禁用语法高亮以提供打开速度
-NeoBundleLazy 'Shougo/vinarise', {
-    \ 'commands' : ['Vinarise','VinariseDump','VinariseScript2Hex'],
-    \ }                                             " Hex Editor
-" }}}
-
-" Utils {{{
-NeoBundleLazy 'Shougo/vimfiler', {
-    \ 'depends' : 'Shougo/unite.vim',
-    \ 'commands' : [
-    \               { 'name' : 'VimFiler',
-    \                 'complete' : 'customlist,vimfiler#complete' },
-    \               { 'name' : 'VimFilerTab',
-    \                 'complete' : 'customlist,vimfiler#complete' },
-    \               { 'name' : 'VimFilerExplorer',
-    \                 'complete' : 'customlist,vimfiler#complete' },
-    \               { 'name' : 'Edit',
-    \                 'complete' : 'customlist,vimfiler#complete' },
-    \               { 'name' : 'Write',
-    \                 'complete' : 'customlist,vimfiler#complete' },
-    \               'Read', 'Source'],
-    \ 'mappings' : ['<Plug>(vimfiler_'],
-    \ 'explorer' : 1,
-    \ }                                             " 文件管理器，:VimFiler
-NeoBundleLazy 'Shougo/vimshell', {
-    \ 'commands' : [{ 'name' : 'VimShell',
-    \                 'complete' : 'customlist,vimshell#complete'},
-    \               'VimShellExecute', 'VimShellInteractive',
-    \               'VimShellTerminal', 'VimShellPop'],
-    \ 'mappings' : ['<Plug>(vimshell_'],
-    \ }                                             " Shell，:VimShell
-NeoBundleLazy 'sudo.vim', {
-    \ 'commands' : ['SudoRead','SudoWrite'],
-    \ }
-" 通过sudo读、写文件。:SudoRead/:SudoWrite
-NeoBundleLazy 'quickrun.vim', {
-    \ 'mappings' : [['nxo', '<Plug>(quickrun)']],
-    \ 'commands' : ['QuickRun'],
-    \ }                                             " 快速运行代码片段
-NeoBundleLazy 'mtth/scratch.vim', {
-    \ 'commands' : ['Scratch','ScratchInsert','ScratchSelection'],
-    \ 'mappings' : [['v','gs'], ['v','gS']],
-    \ }                                             " 打开一个临时窗口。gs/gS/:Scratch
-" }}}
-
-" 载入manual-bundles下的插件
-call neobundle#local(fnamemodify(finddir("manual-bundles", &runtimepath), ":p"), {}, ['asciidoc', 'my_config'])
-
-" Installation check {{{
-syntax on
-filetype plugin indent on     " Required!
-
-" Installation check.
-if neobundle#exists_not_installed_bundles()
-  echomsg 'Not installed bundles : ' .
-        \ string(neobundle#get_not_installed_bundle_names())
-  echomsg 'Please execute ":NeoBundleInstall" command.'
-  "finish
-endif
-call neobundle#end()
-" }}}
-
-" }}}
-
-" Plugins settings (After load plugins) {{{
-
-" Plugin 'FSwitch' {{{
-if neobundle#is_installed("FSwitch")
-    let g:fsnonewfiles=1
-    " 可以用:A在.h/.cpp间切换
-    command! A :call FSwitch('%', '')
-    augroup fswitch_hack
-        au! BufEnter *.h
-                    \  let b:fswitchdst='cpp,c,ipp,cxx'
-                    \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!\<include/\w\+/!src/!,reg:!\<include/\(\w\+/\)\{2}!src/!,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
-        au! BufEnter *.c,*.cpp,*.ipp
-                    \  let b:fswitchdst='h,hpp'
-                    \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
-        au! BufEnter *.xml
-                    \  let b:fswitchdst='rnc'
-                    \| let b:fswitchlocs='./'
-        au! BufEnter *.rnc
-                    \  let b:fswitchdst='xml'
-                    \| let b:fswitchlocs='./'
-    augroup END
-
-    " Switch to the file and load it into the current window >
-    nmap <silent> <Leader>oo :FSHere<cr>
-    " Switch to the file and load it into the window on the right >
-    nmap <silent> <Leader>ol :FSRight<cr>
-    " Switch to the file and load it into a new window split on the right >
-    nmap <silent> <Leader>oL :FSSplitRight<cr>
-    " Switch to the file and load it into the window on the left >
-    nmap <silent> <Leader>oh :FSLeft<cr>
-    " Switch to the file and load it into a new window split on the left >
-    nmap <silent> <Leader>oH :FSSplitLeft<cr>
-    " Switch to the file and load it into the window above >
-    nmap <silent> <Leader>ok :FSAbove<cr>
-    " Switch to the file and load it into a new window split above >
-    nmap <silent> <Leader>oK :FSSplitAbove<cr>
-    " Switch to the file and load it into the window below >
-    nmap <silent> <Leader>oj :FSBelow<cr>
-    " Switch to the file and load it into a new window split below >
-    nmap <silent> <Leader>oJ :FSSplitBelow<cr>
-endif
-" }}}
-
-" Plugin 'quickrun.vim' {{{
-if neobundle#is_installed("quickrun.vim")
-    nmap ,r <Plug>(quickrun)
-endif
-" }}}
-
-" Plugin 'echofunc.vim' {{{
-" }}}
-
-" Plugin 'LargeFile' {{{
-" 在打开大文件时，自动禁用一些功能，保证大文件可以快速打开
-" }}}
-
-" Plugin 'vim-easymotion' {{{
-if neobundle#is_installed("vim-easymotion")
-    " \\{motion}
-    let g:EasyMotion_startofline = 0
-    let g:EasyMotion_smartcase = 1
-    let g:EasyMotion_do_shade = 1
-
-    if v:version >= '703'
-        let g:EasyMotion_use_upper = 1
-        let g:EasyMotion_keys = 'ASDGHKLQWERTYUIOPZXCVBNMFJ;'
-    endif
-
-    hi link EasyMotionTarget Search
-    hi link EasyMotionTarget2First IncSearch
-    hi link EasyMotionTarget2Second IncSearch
-    hi link EasyMotionShade Comment
-endif
-" }}}
-
-" Plugin 'YankRing.vim' {{{
-if neobundle#is_installed("YankRing.vim")
-    let g:yankring_persist = 0              "不把yankring持久化
-    let g:yankring_share_between_instances = 0
-    let g:yankring_manual_clipboard_check = 1
-endif
-" }}}
-
-" Plugin 'vim-alignta' {{{
-if neobundle#is_installed("vim-alignta")
-    " 对齐
-    " :[range]Alignta [arguments] 或 [range]Align [arguments]
-    " 参数：
-    " g/regex 或 v/regex 过滤行
-    "
-    " :Alignta = 对齐等号
-    " :Alignta = 对齐等号，
-    " :Alignta <- b 对齐b字符
-
-    let s:comment_leadings = '^\s*\("\|#\|/\*\|//\|<!--\)'
-
-    let g:unite_source_alignta_preset_arguments = [
-                \ ["Align at ' '", '\S\+'],
-                \ ["Declaration", 'v/^\w\+:\|' . s:comment_leadings . ' <<1:2 \(\S\+;\|\w\+()\(\s*const\)\?\s*;\|\w\+,\|\w\+);\?\) \(\/\/.*\|\/\*.*\)\?'],
-                \ ["Align at '='", '=>\='],
-                \ ["Align at ':'", '01 :'],
-                \ ["Align at ','", '10 \(,\s*\)\@<=\S'],
-                \ ["Align at '|'", '|'   ],
-                \ ["Align at ')'", '0 )' ],
-                \ ["Align at ']'", '0 ]' ],
-                \ ["Align at '}'", '}'   ],
-                \]
-
-    let g:unite_source_alignta_preset_options = [
-                \ ["Not in comment ".s:comment_leadings, 'v/' . s:comment_leadings],
-                \ ["Justify Left",      '<<' ],
-                \ ["Justify Center",    '||' ],
-                \ ["Justify Right",     '>>' ],
-                \ ["Justify None",      '==' ],
-                \ ["Shift Left",        '<-' ],
-                \ ["Shift Right",       '->' ],
-                \ ["Shift Left  [Tab]", '<--'],
-                \ ["Shift Right [Tab]", '-->'],
-                \ ["Margin 0:0",        '0'  ],
-                \ ["Margin 0:1",        '01' ],
-                \ ["Margin 1:0",        '10' ],
-                \ ["Margin 1:1",        '1'  ],
-                \ ["In comment ".s:comment_leadings, 'g/' . s:comment_leadings],
-                \]
-    unlet s:comment_leadings
-
-    " 在没选中文本时，按[unite]a选择需要用的选项，再选中要操作的文本，[unite]a进行操作
-    nnoremap <silent> [unite]a :<C-u>Unite alignta:options -no-start-insert<CR>
-    xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments -no-start-insert<CR>
-endif
-" }}}
-
-" Plugin 'OmniCppComplete' {{{
-if neobundle#is_installed("OmniCppComplete")
-    let OmniCpp_NamespaceSearch = 1
-    let OmniCpp_GlobalScopeSearch = 1
-    let OmniCpp_DisplayMode = 0
-    let OmniCpp_ShowAccess = 1
-    let OmniCpp_ShowPrototypeInAbbr = 1
-    let OmniCpp_ShowScopeInAbbr = 0
-    let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
-
-    let OmniCpp_MayCompleteDot = 0
-    let OmniCpp_MayCompleteArrow = 0
-    let OmniCpp_MayCompleteScope = 0
-
-    let OmniCpp_SelectFirstItem = 0 " 0 = don't select first popup item
-    " 1 = select first popup item (inserting it to the text)
-    " 2 = select first popup item (without inserting it to the text)
-
-    let OmniCpp_LocalSearchDecl = 1
-endif
-" }}}
-
-" Plugin 'clang_complete' {{{
-"
-" clang编译方法：
-"
-" svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
-" svn co http://llvm.org/svn/llvm-project/cfe/trunk llvm/tools/clang
-" mkdir -p llvm/build && cd llvm/build
-" ../configure
-" make -j9 ENABLE_OPTIMIZED=1 DISABLE_ASSERTIONS=1
-"
-" 要把Release/lib/libclang.so和Release/lib/clang目录拷贝到g:clang_library_path
-" 指向的位置，这样clang就可以比较快速地进行补全了。
-if neobundle#is_installed("clang_complete")
-    " 使用NeoComplete触发补全
-    let g:clang_complete_auto = 0
-    let g:clang_auto_select = 0
-    let g:clang_complete_copen = 0  " open quickfix window on error.
-    let g:clang_hl_errors = 1       " highlight the warnings and errors the same way clang
-    "let g:clang_jumpto_declaration_key = '<C-]>'
-    "let g:clang_jumpto_back_key = '<C-T>'
-
-    if s:libclang_path != ""
-        let g:clang_use_library = 1
-        let g:clang_library_path = s:libclang_path
-    endif
-endif
-" }}}
-
-" Plugin 'vim-clang' {{{
-if neobundle#is_installed("vim-clang")
-    " 使用NeoComplete触发补全
-    let g:clang_auto = 0
-    if s:libclang_path != ""
-        if !exists('g:clang_cpp_options')
-            let g:clang_cpp_options = ''
-        endif
-        let g:clang_cpp_options .= " -I " . s:libclang_path . "/clang/3.4/include/"
-        echomsg g:clang_cpp_options
-    endif
-endif
-" }}}
-
-" Plugin 'vim-clang-format' {{{
-if neobundle#is_installed("vim-clang-format")
-    let g:clang_format#code_style = 'google'
-    let g:clang_format#style_options = {
-                \ "AccessModifierOffset" : -4,
-                \ "AllowShortIfStatementsOnASingleLine" : "false",
-                \ "AllowShortLoopsOnASingleLine" : "false",
-                \ "BreakBeforeBinaryOperators" : "true",
-                \ "BinPackParameters" : "false",
-                \ "BreakBeforeBraces" : "Allman",
-                \ "ColumnLimit" : "90",
-                \ "DerivePointerBinding" : "false",
-                \ "IndentCaseLabels" : "false",
-                \ "IndentWidth" : "4",
-                \ }
-
-    " map to <Leader>cf in C++ code
-    autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
-    autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
-    " if you install vim-operator-user
-    autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
-endif
-" }}}
-" Plugin 'vim-snowdrop' {{{
-if neobundle#is_installed("vim-snowdrop")
-    " set libclang directory path
-    let g:snowdrop#libclang_directory = s:libclang_path
-
-    " Enable code completion in neocomplete.vim.
-    let g:neocomplete#sources#snowdrop#enable = 1
-
-    " Not skip
-    let g:neocomplete#skip_auto_completion_time = ""
-endif
-" }}}
-
-" Plugin 'pydoc.vim' {{{
-let pydoc_perform_mappings = 1
-
-"au FileType python nnoremap <silent> <buffer> <Leader>pw :<C-U>Pydoc <C-R><C-W><CR>
-"au FileType python nnoremap <silent> <buffer> <Leader>pW :<C-U>Pydoc <C-R><C-A><CR>
-"au FileType python nnoremap <silent> <buffer> <Leader>pk :<C-U>PydocSearch <C-R><C-W><CR>
-"au FileType python nnoremap <silent> <buffer> <Leader>pK :<C-U>PydocSearch <C-R><C-A><CR>
-"
-"" remap the K (or 'help') key
-"au FileType python nnoremap <silent> <buffer> K :<C-U>Pydoc <C-R><C-W><CR>
-"  }}}
-
-" Plugin 'Python-2.x-Standard-Library-Reference' {{{
-" Python2的标准库帮助文件
-" :help py2stdlib 显示帮助
-" :help py2stdlib<tab>
-" :help py2stdlib-os
-" }}}
-
-" Plugin 'pydiction' {{{
-if neobundle#is_installed("pydiction")
-    let g:pydiction_location = fnamemodify(findfile("complete-dict",&runtimepath), ":p")
-endif
-"  }}}
-
-" Plugin 'csv.vim' {{{
-"  }}}
-
-" Plugin 'vim-operator-surround' {{{
-if neobundle#is_installed("vim-operator-surround")
-    " operator mappings
-    map <silent>sa <Plug>(operator-surround-append)
-    map <silent>sd <Plug>(operator-surround-delete)
-    map <silent>sr <Plug>(operator-surround-replace)
-endif
-" }}}
-
-" Plugin 'vim-operator-replace' {{{
-if neobundle#is_installed("vim-operator-replace")
-    " operator mappings
-    map _  <Plug>(operator-replace)
-endif
-" }}}
-
-" Plugin 'Mark--Karkat' {{{
-" 代替了 MultipleSearch
-if neobundle#is_installed("Mark--Karkat")
-    nmap <Leader>M <Plug>MarkToggle
-    nmap <Leader>N <Plug>MarkAllClear
-
-    " 在插件载入后再执行修改颜色的操作
-    augroup Mark
-    au VimEnter *
-                \ highlight MarkWord1 ctermbg=DarkCyan    ctermfg=Black guibg=#8CCBEA guifg=Black |
-                \ highlight MarkWord2 ctermbg=DarkBlue    ctermfg=Black guibg=#A4E57E guifg=Black |
-                \ highlight MarkWord3 ctermbg=DarkYellow  ctermfg=Black guibg=#FFDB72 guifg=Black |
-                \ highlight MarkWord4 ctermbg=DarkMagenta ctermfg=Black guibg=#FF7272 guifg=Black |
-                \ highlight MarkWord5 ctermbg=DarkGreen   ctermfg=Black guibg=#FFB3FF guifg=Black |
-                \ highlight MarkWord6 ctermbg=DarkRed     ctermfg=Black guibg=#9999FF guifg=Black
-    augroup END
-endif
-" }}}
-
-" Plugin 'neocomplete' {{{
-if neobundle#is_installed("neocomplete")
-    "let g:neocomplcache_enable_debug = 1
-    let g:neocomplete#enable_at_startup = 1
-    " Disable auto completion, if set to 1, must use <C-x><C-u>
-    let g:neocomplete#disable_auto_complete = 0
-    " Use smartcase.
-    let g:neocomplete#enable_smart_case = 1
-    " Set minimum syntax keyword length.
-    let g:neocomplete#sources#syntax#min_syntax_length = 3
-    let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-    let g:neocomplete#enable_auto_select = 0
-    let g:neocomplete#auto_completion_start_length = 3
-
-    " Define dictionary.
-    let g:neocomplete#sources#dictionary#dictionaries = {
-                \ 'default' : '',
-                \ 'vimshell' : $HOME.'/.vimshell_hist',
-                \ 'scheme' : $HOME.'/.gosh_completions'
-                \ }
-
-    " Plugin key-mappings.
-    inoremap <expr><C-g>     neocomplete#undo_completion()
-    inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-    " Recommended key-mappings.
-    " <CR>: close popup and save indent.
-    inoremap <expr><CR>  neocomplete#smart_close_popup() . "\<CR>"
-    " <TAB>: completion.
-    "inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-    " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-    inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-    inoremap <expr><C-y>  neocomplete#close_popup()
-    inoremap <expr><C-e>  neocomplete#cancel_popup()
-
-    " Enable omni completion.
-    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-    if neobundle#is_installed("jedi-vim")
-        autocmd FileType python setlocal omnifunc=jedi#completions
-        let g:jedi#completions_enabled = 0
-        let g:jedi#auto_vim_configuration = 0 " 解决neocomplete下自动补第一个候选项的问题
-    else
-        autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-    endif
-
-    " 使得neocomplete能和clang_complete共存，见neocomplete帮助的FAQ
-	if !exists('g:neocomplete#force_omni_input_patterns')
-        let g:neocomplete#force_omni_input_patterns = {}
-	endif
-	let g:neocomplete#force_overwrite_completefunc = 1
-	let g:neocomplete#force_omni_input_patterns.c =
-                \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-	let g:neocomplete#force_omni_input_patterns.cpp =
-                \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-	let g:neocomplete#force_omni_input_patterns.objc =
-                \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-	let g:neocomplete#force_omni_input_patterns.objcpp =
-                \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-    let g:neocomplete#force_omni_input_patterns.python =
-                \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-endif
-" }}}
-
-" Plugin 'neocomplcache' {{{
-if neobundle#is_installed("neocomplcache")
-    " Use neocomplcache.
-    "let g:neocomplcache_enable_debug = 1
-    let g:neocomplcache_enable_at_startup = 1
-    " Disable auto completion, if set to 1, must use <C-x><C-u>
-    let g:neocomplcache_disable_auto_complete = 0
-    " Use smartcase.
-    let g:neocomplcache_enable_smart_case = 1
-    " Use camel case completion.
-    let g:neocomplcache_enable_camel_case_completion = 1
-    " Use underbar completion.
-    let g:neocomplcache_enable_underbar_completion = 1
-    " Set minimum syntax keyword length.
-    let g:neocomplcache_min_syntax_length = 3
-    let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-    let g:neocomplcache_enable_auto_select = 0
-    let g:neocomplcache_auto_completion_start_length = 3
-
-    " Define dictionary.
-    let g:neocomplcache_dictionary_filetype_lists = {
-                \ 'default' : '',
-                \ 'vimshell' : $HOME.'/.vimshell_hist',
-                \ 'scheme' : $HOME.'/.gosh_completions'
-                \ }
-
-    inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
-
-    " Plugin key-mappings.
-    inoremap <expr><C-g>     neocomplcache#undo_completion()
-    inoremap <expr><C-l>     neocomplcache#complete_common_string()
-
-    " Recommended key-mappings.
-    " <CR>: close popup and save indent.
-    inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
-    " <TAB>: completion.
-    "inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-    " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-    inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-    inoremap <expr><C-y>  neocomplcache#close_popup()
-    inoremap <expr><C-e>  neocomplcache#cancel_popup()
-
-    " Enable omni completion.
-    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-    if neobundle#is_installed("jedi-vim")
-        autocmd FileType python setlocal omnifunc=jedi#completions
-        let g:jedi#completions_enabled = 0
-        let g:jedi#auto_vim_configuration = 0 " 解决neocomplete下自动补第一个候选项的问题
-    else
-        autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-    endif
-
-    " Enable heavy omni completion.
-    if !exists('g:neocomplcache_force_omni_patterns')
-        let g:neocomplcache_force_omni_patterns = {}
-    endif
-    let g:neocomplcache_force_overwrite_completefunc = 1
-    let g:neocomplcache_force_omni_patterns.c =
-                \ '[^.[:digit:] *\t]\%(\.\|->\)'
-    let g:neocomplcache_force_omni_patterns.cpp =
-                \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-    let g:neocomplcache_force_omni_patterns.objc =
-                \ '[^.[:digit:] *\t]\%(\.\|->\)'
-    let g:neocomplcache_force_omni_patterns.objcpp =
-                \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-    let g:neocomplcache_force_omni_patterns.python =
-          \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-endif
-" }}}
-
-" neosnippet {{{
-if neobundle#is_installed("neosnippet")
-    let g:neosnippet#snippets_directory = fnamemodify(finddir("snippets", &runtimepath), ":p")
-    let g:neosnippet#snippets_directory .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
-
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-    " " SuperTab like snippets behavior.
-    " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-    "             \ "\<Plug>(neosnippet_expand_or_jump)"
-    "             \: pumvisible() ? "\<C-n>" : "\<TAB>"
-    " smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-    "             \ "\<Plug>(neosnippet_expand_or_jump)"
-    "             \: "\<TAB>"
-
-    " For snippet_complete marker.
-    if has('conceal')
-        set conceallevel=2 concealcursor=i
-    endif
-endif
-" }}}
-
-" Plugin 'vinarise' {{{ " Hex Editor
-" }}}
-
-" Plugin 'Emmet.vim' {{{
-if neobundle#is_installed("Emmet.vim")
-    augroup custom_Emmet
-        autocmd FileType {xml,html,css,sass,scss,less} imap <buffer> <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
-    augroup END
-endif
-" }}}
-
-" unite {{{
-if neobundle#is_installed("unite.vim")
-    " 类似Fuzzyfinder的插件
     " The prefix key.
     nnoremap [unite] <Nop>
     xnoremap [unite] <Nop>
@@ -1517,23 +710,6 @@ if neobundle#is_installed("unite.vim")
                     \ '--no-heading --no-color -a -H'
         let g:unite_source_grep_recursive_opt = ''
 	endif
-
-    call unite#custom#source(
-                \ 'file_rec,file_rec/async,grep',
-                \ 'ignore_pattern',
-                \ join([
-                \ '\%(^\|/\)\.$',
-                \ '\~$',
-                \ '\.\%(o\|a\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|gcov\)$',
-                \ '\%(^\|/\)gcc-[0-9]\+\%(\.[0-9]\+\)*/',
-                \ '\%(^\|/\)doc/html/',
-                \ '\%(^\|/\)stage/',
-                \ '\%(^\|/\)boost\%(\|_\w\+\)/',
-                \ '\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)',
-                \ ], '\|'))
-
-    " let g:unite_source_rec_max_cache_files = 0
-    " call unite#custom#source('file_rec,file_rec/async', 'max_candidates', 0)
 
     nnoremap [unite]S :<C-U>Unite source<CR>
 
@@ -1634,11 +810,419 @@ if neobundle#is_installed("unite.vim")
         " Runs "split" action by <C-s>.
         imap <silent><buffer><expr> <C-s>     unite#do_action('split')
     endfunction "}}}
+" }}}
+"NeoBundle 'Shougo/unite-build'
+"NeoBundle 'h1mesuke/unite-outline'
+NeoBundleLazy 'Shougo/unite-outline', {
+    \ 'unite_sources' : ['outline'],
+    \ }                                             " 提供代码的大纲。通过\fo访问
+NeoBundleLazy 'tacroe/unite-mark', {
+    \ 'unite_sources' : ['mark'],
+    \ }                                             " 列出所有标记点
+NeoBundleLazy 'shougo/unite-help', {
+    \ 'unite_sources' : ['help'],
+    \ }                                             " 查找vim的帮助
+NeoBundleLazy 'tsukkee/unite-tag', {
+    \ 'unite_sources' : ['tag', 'tag/include', 'tag/file']
+    \ }                                             " 跳转到光标下的tag。通过\fT访问
+NeoBundleLazy 'ujihisa/unite-colorscheme', {
+    \ 'unite_sources' : ['colorscheme'],
+    \ }                                             " 列出所有配色方案
+NeoBundleLazy 'osyo-manga/unite-quickfix', {
+    \ 'unite_sources' : ['quickfix'],
+    \ }                                             " 过滤quickfix窗口（如在编译结果中查找）
+NeoBundleLazy 'thinca/vim-unite-history', {
+    \ 'unite_sources' : ['history/command', 'history/search']
+    \ }
+" unite-tselect: 跳转到光标下的tag。通过g]和g<C-]>访问 {{{
+NeoBundleLazy 'eiiches/unite-tselect', {
+            \ 'unite_sources' : 'tselect',
+            \ }
+    nnoremap g<C-]> :<C-u>Unite -immediately tselect:<C-r>=expand('<cword>')<CR><CR>
+    nnoremap g] :<C-u>Unite tselect:<C-r>=expand('<cword>')<CR><CR>
+" }}}
+NeoBundleLazy 'hrsh7th/vim-versions', {
+            \ 'commands' : ['UniteVersions'],
+            \ 'unite_sources' : ['versions', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status'],
+            \ }                                     " \fv 看未提交的文件列表，\fl 看更新日志
+NeoBundleLazy 'hewes/unite-gtags', {
+            \ "unite_sources" : ["gtags/completion","gtags/context","gtags/def","gtags/grep","gtags/ref"],
+            \ }
+if !s:has_global
+    NeoBundleDisable 'unite-gtags'
 endif
-" }}} " unite
+" }}}
 
-" Plugin 'CodeReviewer.vim' {{{
-if neobundle#is_installed("CodeReviewer.vim")
+" Editing {{{
+" vim-alignta: 代码对齐插件。通过\fa访问 {{{
+NeoBundleLazy 'h1mesuke/vim-alignta', {
+    \ 'commands' : ['Alignta'],
+    \ 'unite_sources' : 'alignta',
+    \ }
+    " 对齐
+    " :[range]Alignta [arguments] 或 [range]Align [arguments]
+    " 参数：
+    " g/regex 或 v/regex 过滤行
+    "
+    " :Alignta = 对齐等号
+    " :Alignta = 对齐等号，
+    " :Alignta <- b 对齐b字符
+
+    let s:comment_leadings = '^\s*\("\|#\|/\*\|//\|<!--\)'
+
+    let g:unite_source_alignta_preset_arguments = [
+                \ ["Align at ' '", '\S\+'],
+                \ ["Declaration", 'v/^\w\+:\|' . s:comment_leadings . ' <<1:2 \(\S\+;\|\w\+()\(\s*const\)\?\s*;\|\w\+,\|\w\+);\?\) \(\/\/.*\|\/\*.*\)\?'],
+                \ ["Align at '='", '=>\='],
+                \ ["Align at ':'", '01 :'],
+                \ ["Align at ','", '10 \(,\s*\)\@<=\S'],
+                \ ["Align at '|'", '|'   ],
+                \ ["Align at ')'", '0 )' ],
+                \ ["Align at ']'", '0 ]' ],
+                \ ["Align at '}'", '}'   ],
+                \]
+
+    let g:unite_source_alignta_preset_options = [
+                \ ["Not in comment ".s:comment_leadings, 'v/' . s:comment_leadings],
+                \ ["Justify Left",      '<<' ],
+                \ ["Justify Center",    '||' ],
+                \ ["Justify Right",     '>>' ],
+                \ ["Justify None",      '==' ],
+                \ ["Shift Left",        '<-' ],
+                \ ["Shift Right",       '->' ],
+                \ ["Shift Left  [Tab]", '<--'],
+                \ ["Shift Right [Tab]", '-->'],
+                \ ["Margin 0:0",        '0'  ],
+                \ ["Margin 0:1",        '01' ],
+                \ ["Margin 1:0",        '10' ],
+                \ ["Margin 1:1",        '1'  ],
+                \ ["In comment ".s:comment_leadings, 'g/' . s:comment_leadings],
+                \]
+    unlet s:comment_leadings
+
+    " 在没选中文本时，按[unite]a选择需要用的选项，再选中要操作的文本，[unite]a进行操作
+    nnoremap <silent> [unite]a :<C-u>Unite alignta:options -no-start-insert<CR>
+    xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments -no-start-insert<CR>
+" }}}
+NeoBundleLazy 'matchit.zip', {
+    \ 'mappings' : [['nxo', '%', 'g%']]
+    \ }                                             " 将%的功能扩展到多种语言（如对于XML，可以在开始tag和结束tag之间进行跳转）
+" YankRing.vim: 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容 {{{
+"NeoBundle 'YankRing.vim'
+"    let g:yankring_persist = 0              "不把yankring持久化
+"    let g:yankring_share_between_instances = 0
+"    let g:yankring_manual_clipboard_check = 1
+" }}}
+" NeoBundleLazy 'vis', {
+"     \ 'commands' : ['B'],
+"     \ }                                             " 在块选后（<C-V>进行选择），:B cmd在选中内容中执行cmd
+NeoBundleLazy 'kana/vim-operator-user', {
+    \ 'functions' : 'operator#user#define',
+    \ }
+" vim-operator-replace: 双引号x_{motion} : 把{motion}涉及的内容替换为register x的内容 {{{
+NeoBundleLazy 'kana/vim-operator-replace', {
+    \ 'depends' : 'vim-operator-user',
+    \ 'mappings' : [
+    \     ['nx', '<Plug>(operator-replace)']
+    \ ],
+    \ }
+    map _  <Plug>(operator-replace)
+" }}}
+" vim-operator-surround: sa{motion}/sd{motion}/sr{motion}：增/删/改括号、引号等 {{{
+NeoBundleLazy 'rhysd/vim-operator-surround', {
+    \ 'depends' : 'vim-operator-user',
+    \ 'mappings' : ['<Plug>(operator-surround'],
+    \ }
+    " operator mappings
+    map <silent>sa <Plug>(operator-surround-append)
+    map <silent>sd <Plug>(operator-surround-delete)
+    map <silent>sr <Plug>(operator-surround-replace)
+" }}}
+NeoBundleLazy 'DrawIt', {
+    \ 'mappings' : [['n', '<Leader>di']],
+    \ 'commands' : ['DIstart', 'DIsngl', 'DIdbl', 'DrawIt'],
+    \ }                                             " 使用横、竖线画图、制表。\di和\ds分别启、停画图模式。在模式中，hjkl移动光标，方向键画线
+" vim-easymotion: \\w启动word motion，\\f<字符>启动查找模式 {{{
+if v:version >= '703'
+    NeoBundleLazy 'Lokaltog/vim-easymotion', {
+                \ 'mappings' : [['n'] + map(
+                \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
+                \     '"<Leader><Leader>" . v:val')],
+                \ }
+else
+    NeoBundleLazy 'Lokaltog/vim-easymotion', {
+                \ 'rev' : 'e41082',
+                \ 'mappings' : [['n'] + map(
+                \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
+                \     '"<Leader><Leader>" . v:val')],
+                \ }                                 " \\w启动word motion，\\f<字符>启动查找模式
+endif
+    let g:EasyMotion_startofline = 0
+    let g:EasyMotion_smartcase = 1
+    let g:EasyMotion_do_shade = 1
+
+    if v:version >= '703'
+        let g:EasyMotion_use_upper = 1
+        let g:EasyMotion_keys = 'ASDGHKLQWERTYUIOPZXCVBNMFJ;'
+    endif
+
+    hi link EasyMotionTarget Search
+    hi link EasyMotionTarget2First IncSearch
+    hi link EasyMotionTarget2Second IncSearch
+    hi link EasyMotionShade Comment
+" }}}
+NeoBundleLazy 'rhysd/clever-f.vim', {
+    \ 'mappings' : [['n', 'f', 'F', 't', 'T']],
+    \ }                                             " 用f/F代替;来查找下一个字符
+" neocomplete: 代码补全插件 {{{
+NeoBundleLazy 'Shougo/neocomplete', {
+    \ 'insert' : 1,
+    \ }
+    if !(v:version >= '703' && has('lua'))
+        NeoBundleDisable 'neocomplete'
+    else
+        "let g:neocomplcache_enable_debug = 1
+        let g:neocomplete#enable_at_startup = 1
+        " Disable auto completion, if set to 1, must use <C-x><C-u>
+        let g:neocomplete#disable_auto_complete = 0
+        " Use smartcase.
+        let g:neocomplete#enable_smart_case = 1
+        " Set minimum syntax keyword length.
+        let g:neocomplete#sources#syntax#min_syntax_length = 3
+        let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+        let g:neocomplete#enable_auto_select = 0
+        let g:neocomplete#auto_completion_start_length = 3
+
+        " Define dictionary.
+        let g:neocomplete#sources#dictionary#dictionaries = {
+                    \ 'default' : '',
+                    \ 'vimshell' : $HOME.'/.vimshell_hist',
+                    \ 'scheme' : $HOME.'/.gosh_completions'
+                    \ }
+
+        " Plugin key-mappings.
+        inoremap <expr><C-g>     neocomplete#undo_completion()
+        inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+        " Recommended key-mappings.
+        " <CR>: close popup and save indent.
+        inoremap <expr><CR>  neocomplete#smart_close_popup() . "\<CR>"
+        " <TAB>: completion.
+        "inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+        " <C-h>, <BS>: close popup and delete backword char.
+        inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+        inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+        inoremap <expr><C-y>  neocomplete#close_popup()
+        inoremap <expr><C-e>  neocomplete#cancel_popup()
+
+        " Enable omni completion.
+        autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+        autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+        autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+        autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+        if neobundle#is_installed("jedi-vim")
+            autocmd FileType python setlocal omnifunc=jedi#completions
+            let g:jedi#completions_enabled = 0
+            let g:jedi#auto_vim_configuration = 0 " 解决neocomplete下自动补第一个候选项的问题
+        else
+            autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+        endif
+
+        " 使得neocomplete能和clang_complete共存，见neocomplete帮助的FAQ
+        if !exists('g:neocomplete#force_omni_input_patterns')
+            let g:neocomplete#force_omni_input_patterns = {}
+        endif
+        let g:neocomplete#force_overwrite_completefunc = 1
+        let g:neocomplete#force_omni_input_patterns.c =
+                    \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+        let g:neocomplete#force_omni_input_patterns.cpp =
+                    \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+        let g:neocomplete#force_omni_input_patterns.objc =
+                    \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+        let g:neocomplete#force_omni_input_patterns.objcpp =
+                    \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+        let g:neocomplete#force_omni_input_patterns.python =
+                    \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+    endif
+" }}}
+" neocomplcache: 代码补全插件 {{{
+NeoBundleLazy 'Shougo/neocomplcache', {
+    \ 'insert' : 1,
+    \ }
+    if v:version >= '703' && has('lua')
+        NeoBundleDisable 'neocomplete'
+    else
+        "let g:neocomplcache_enable_debug = 1
+        let g:neocomplcache_enable_at_startup = 1
+        " Disable auto completion, if set to 1, must use <C-x><C-u>
+        let g:neocomplcache_disable_auto_complete = 0
+        " Use smartcase.
+        let g:neocomplcache_enable_smart_case = 1
+        " Use camel case completion.
+        let g:neocomplcache_enable_camel_case_completion = 1
+        " Use underbar completion.
+        let g:neocomplcache_enable_underbar_completion = 1
+        " Set minimum syntax keyword length.
+        let g:neocomplcache_min_syntax_length = 3
+        let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+        let g:neocomplcache_enable_auto_select = 0
+        let g:neocomplcache_auto_completion_start_length = 3
+
+        " Define dictionary.
+        let g:neocomplcache_dictionary_filetype_lists = {
+                    \ 'default' : '',
+                    \ 'vimshell' : $HOME.'/.vimshell_hist',
+                    \ 'scheme' : $HOME.'/.gosh_completions'
+                    \ }
+
+        inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
+
+        " Plugin key-mappings.
+        inoremap <expr><C-g>     neocomplcache#undo_completion()
+        inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
+        " Recommended key-mappings.
+        " <CR>: close popup and save indent.
+        inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
+        " <TAB>: completion.
+        "inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+        " <C-h>, <BS>: close popup and delete backword char.
+        inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+        inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+        inoremap <expr><C-y>  neocomplcache#close_popup()
+        inoremap <expr><C-e>  neocomplcache#cancel_popup()
+
+        " Enable omni completion.
+        autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+        autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+        autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+        autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+        if neobundle#is_installed("jedi-vim")
+            autocmd FileType python setlocal omnifunc=jedi#completions
+            let g:jedi#completions_enabled = 0
+            let g:jedi#auto_vim_configuration = 0 " 解决neocomplete下自动补第一个候选项的问题
+        else
+            autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+        endif
+
+        " Enable heavy omni completion.
+        if !exists('g:neocomplcache_force_omni_patterns')
+            let g:neocomplcache_force_omni_patterns = {}
+        endif
+        let g:neocomplcache_force_overwrite_completefunc = 1
+        let g:neocomplcache_force_omni_patterns.c =
+                    \ '[^.[:digit:] *\t]\%(\.\|->\)'
+        let g:neocomplcache_force_omni_patterns.cpp =
+                    \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+        let g:neocomplcache_force_omni_patterns.objc =
+                    \ '[^.[:digit:] *\t]\%(\.\|->\)'
+        let g:neocomplcache_force_omni_patterns.objcpp =
+                    \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+        let g:neocomplcache_force_omni_patterns.python =
+            \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+    endif
+" }}}
+" neosnippet: 代码模板引擎 {{{
+NeoBundleLazy 'Shougo/neosnippet', {
+    \ 'insert' : 1,
+    \ 'filetypes' : 'neosnippet',
+    \ 'commands' : ['NeoSnippetEdit'],
+    \ 'mappings' : ['<Plug>(neosnippet_'],
+    \ 'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
+    \ }
+    let g:neosnippet#snippets_directory = fnamemodify(finddir("snippets", &runtimepath), ":p")
+    let g:neosnippet#snippets_directory .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
+
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+    " " SuperTab like snippets behavior.
+    " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    "             \ "\<Plug>(neosnippet_expand_or_jump)"
+    "             \: pumvisible() ? "\<C-n>" : "\<TAB>"
+    " smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    "             \ "\<Plug>(neosnippet_expand_or_jump)"
+    "             \: "\<TAB>"
+
+    " For snippet_complete marker.
+    if has('conceal')
+        set conceallevel=2 concealcursor=i
+    endif
+" }}}
+NeoBundle 'Shougo/neomru.vim'                       " 最近访问的文件
+NeoBundle 'Shougo/neosnippet-snippets'              " 代码模板
+NeoBundleLazy 'ton/vim-bufsurf', {
+            \ 'commands' : ['BufSurfForward', 'BufSurfBack'],
+            \ }                                     " g<C-I>/g<C-O>或:BufSurfForward/:BufSurfBack跳转到本窗口的下一个、上一个buffer（增强<C-I>/<C-O>）
+"NeoBundle 'othree/eregex.vim'                       " 支持Perl风格的正则表达式。:M、:S、:G、:V
+
+"NeoBundle 'VimIM'                                   " 中文输入法
+
+NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
+            \ 'commands':['IndentGuidesToggle','IndentGuidesEnable','IndentGuidesDisable'],
+            \ 'mappings':['<Leader>ig'],
+            \ }                                      " 标记出各缩进块。\ig切换
+
+NeoBundleLazy 'kana/vim-niceblock', {
+            \ 'mappings' : ['v', 'I', 'A'],
+            \ }
+" 可同时标记多个mark。\M显示隐，\N清除所有Mark。\m标识当前word {{{
+NeoBundleLazy 'vernonrj/Mark--Karkat', {
+            \ 'mappings' : ['<Plug>(Mark', '<Leader>m', '<Leader>r', '<Leader>n', '<Leader>*', '<Leader>#', '<Leader>/', '<Leader>?', '*', '#'],
+            \ }
+    if !(v:version >= '701')
+        NeoBundleDisable 'Mark--Karkat'
+    else
+        nmap <Leader>M <Plug>MarkToggle
+        nmap <Leader>N <Plug>MarkAllClear
+
+        " 在插件载入后再执行修改颜色的操作
+        augroup Mark
+        au VimEnter *
+                    \ highlight MarkWord1 ctermbg=DarkCyan    ctermfg=Black guibg=#8CCBEA guifg=Black |
+                    \ highlight MarkWord2 ctermbg=DarkBlue    ctermfg=Black guibg=#A4E57E guifg=Black |
+                    \ highlight MarkWord3 ctermbg=DarkYellow  ctermfg=Black guibg=#FFDB72 guifg=Black |
+                    \ highlight MarkWord4 ctermbg=DarkMagenta ctermfg=Black guibg=#FF7272 guifg=Black |
+                    \ highlight MarkWord5 ctermbg=DarkGreen   ctermfg=Black guibg=#FFB3FF guifg=Black |
+                    \ highlight MarkWord6 ctermbg=DarkRed     ctermfg=Black guibg=#9999FF guifg=Black
+        augroup END
+    endif
+" }}}
+
+" Text object {{{
+NeoBundle 'kana/vim-textobj-user'                   " 可自定义motion
+NeoBundle 'kana/vim-textobj-indent'                 " 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进）
+NeoBundle 'kana/vim-textobj-line'                   " 增加motion: al il
+NeoBundle 'kana/vim-textobj-function'               " 增加motion: if/af/iF/aF 选择一个函数
+NeoBundle 'bkad/CamelCaseMotion'                     " 增加,w ,b ,e 可以处理大小写混合或下划线分隔两种方式的单词
+NeoBundle 'thinca/vim-textobj-comment'              " 增加motion: ac ic
+" }}}
+
+" Programming {{{
+" NeoBundle 'tyru/current-func-info.vim'
+
+" 启用global后，将不用ctags，因此echofunc.vim会失效
+NeoBundleLazy 'mbbill/echofunc', {
+            \ 'filetypes' : ['c', 'cpp'],
+            \ }                                     " 在插入模式下输入(时，会在statusline显示函数的签名，对于有多个重载的函数，可通过<A-->/<A-=>进行切换
+if s:has_global
+    NeoBundleDisable 'echofunc'
+endif
+
+" 为函数插入Doxygen注释。在函数名所在行输入 :Dox 即可 {{{
+NeoBundleLazy 'DoxygenToolkit.vim', {
+    \ 'commands' : ['Dox', 'DoxLic', 'DoxAuthor', 'DoxUndoc', 'DoxBlock'],
+    \ }
+    let g:DoxygenToolkit_briefTag_pre="@brief "
+    let g:DoxygenToolkit_paramTag_pre="@param[in] "
+    let g:DoxygenToolkit_returnTag="@return "
+" }}}
+" 记录代码走查意见，\ic激活。可通过 cfile <文件名> 把记录走查意见的文件导入 quickfix 列表 {{{
+NeoBundleLazy 'CodeReviewer.vim', {
+    \ 'commands' : ['CheckReview'],
+    \ 'mappings' : ['<Leader>ic'],
+    \ }
     " Typical review session:
     " 1. A reviewer open the code to review, positions the cursor on the line he/she wants to comment on and types "\ic" - this puts the file name, the line number, the reviewer's initials and the defect type in the review file
     " 2. The comment is typed next to the line number and can span multiple lines
@@ -1653,65 +1237,336 @@ if neobundle#is_installed("CodeReviewer.vim")
         let g:CodeReviewer_reviewer = "Unknown"
     endif
     let g:CodeReviewer_reviewFile="review.rev"
-endif
 " }}}
-
-" Plugin 'sudo.vim' {{{
-"   (command line): vim sudo:/etc/passwd
-"   (within vim):   :e sudo:/etc/passwd
-" }}}
-
-" Plugin 'Intelligent_Tags' {{{
-if neobundle#is_installed("Intelligent_Tags")
-    " 自动为当前文件及其包含的文件生成tags
-    let g:Itags_Depth=3    " 缺省是1，当前文件及其包含的文件。-1表示无穷层
-    let g:Itags_Ctags_Flags="--c++-kinds=+p --fields=+iaS --extra=+q -R"
-    let g:Itags_header_mapping= {'h':['c', 'cpp', 'c++']}
+NeoBundle 'OrelSokolov/HiCursorWords'               " 高亮与光标下word一样的词
+NeoBundle 'tComment'                                " 注释工具。gc{motion}/gcc/<C-_>等
+NeoBundleLazy 'gtags.vim', {
+            \ "commands" : ["Gtags","GtagsCursor","Gozilla"],
+            \ }
+if !s:has_global
+    NeoBundleDisable 'gtags.vim'
 endif
-"
-"}}}
+NeoBundleLazy 'epeli/slimux', {
+            \ 'commands' : [
+            \ 'SlimuxREPLSendLine', 'SlimuxREPLSendSelection', 'SlimuxREPLSendLine', 'SlimuxREPLSendBuffer', 'SlimuxREPLConfigure',
+            \ 'SlimuxShellRun', 'SlimuxShellPrompt', 'SlimuxShellLast', 'SlimuxShellConfigure',
+            \ 'SlimuxSendKeysPrompt', 'SlimuxSendKeysLast', 'SlimuxSendKeysConfigure' ],
+            \ 'disabled' : !executable("tmux"),
+            \ }                                     " 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列
 
-" Plugin 'DoxygenToolkit.vim' {{{
-if neobundle#is_installed("DoxygenToolkit.vim")
-    let g:DoxygenToolkit_briefTag_pre="@brief "
-    let g:DoxygenToolkit_paramTag_pre="@param[in] "
-    let g:DoxygenToolkit_returnTag="@return "
-endif
-" }}}
+"NeoBundle 'tpope/vim-commentary'
+"NeoBundle 'bahejl/Intelligent_Tags'
+"    " 自动为当前文件及其包含的文件生成tags
+"    let g:Itags_Depth=3    " 缺省是1，当前文件及其包含的文件。-1表示无穷层
+"    let g:Itags_Ctags_Flags="--c++-kinds=+p --fields=+iaS --extra=+q -R"
+"    let g:Itags_header_mapping= {'h':['c', 'cpp', 'c++']}
+"if executable("ctags")
+"    NeoBundle 'thawk/Intelligent_Tags'              " 自动扫描所依赖的头文件，生成tags文件
+"    "NeoBundle 'AutoTag'
+"endif
 
-" Plugin 'vim-easytags' {{{
-if neobundle#is_installed("vim-easytags")
-    let g:easytags_updatetime_autodisable = 1
-    let g:easytags_updatetime_min = 10000
-    let g:easytags_on_cursorhold = 0
-endif
-" " }}}
-
-" Plugin 'vim-easytags' {{{
-if neobundle#is_installed("unite-tselect")
-    nnoremap g<C-]> :<C-u>Unite -immediately tselect:<C-r>=expand('<cword>')<CR><CR>
-    nnoremap g] :<C-u>Unite tselect:<C-r>=expand('<cword>')<CR><CR>
-endif
-" " }}}
-
-" Plugin 'vim-editqf' {{{
-if neobundle#is_installed("vim-editqf")
-    " 重新定义两个映射，把缺省的<leader>n空出来给mark插件
-    nmap <leader>nn <Plug>QFAddNote
-    nmap <leader>nN <Plug>QFAddNotePattern
-endif
-" " }}}
-
-" Plugin 'vcscommand.vim' {{{
-if neobundle#is_installed("vcscommand.vim")
+NeoBundleLazy 'majutsushi/tagbar', {
+    \ 'commands' : ['TagbarToggle','TagbarCurrentTag'],
+    \ }                                             " 列出文件中所有类和方法。用<F9>调用
+" vcscommand.vim: SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件 {{{
+NeoBundleLazy 'vcscommand.vim', {
+            \ 'mappings' : ['<Plug>VCS'],
+            \ 'commands' : ['VCSAdd', 'VCSAnnotate', 'VCSBlame', 'VCSCommit', 'VCSDelete', 'VCSDiff', 'VCSGotoOriginal', 'VCSInfo', 'VCSLock', 'VCSLog', 'VCSRemove', 'VCSRevert', 'VCSReview', 'VCSStatus', 'VCSUnlock', 'VCSUpdate', 'VCSVimDiff', 'VCSCommandDisableBufferSetup', 'VCSCommandEnableBufferSetup', 'VCSReload'],
+            \ }
     nnoremap <Leader>cp :VCSVimDiff PREV<CR>
-endif
-" " }}}
+" }}}
+NeoBundle 'tpope/vim-fugitive'                      " GIT前端
 
-" Indents & Foldings" {{{
-" Plugin 'indentpython.vim--nianyang'
-" Plugin 'SimpylFold'
-" " }}}
+"" vim-snowdrop: {{{
+"NeoBundleLazy 'osyo-manga/vim-snowdrop', {
+"    \ 'filetypes' : ['c', 'cpp'],
+"    \ }
+"    " set libclang directory path
+"    let g:snowdrop#libclang_directory = s:libclang_path
+"
+"    " Enable code completion in neocomplete.vim.
+"    let g:neocomplete#sources#snowdrop#enable = 1
+"
+"    " Not skip
+"    let g:neocomplete#skip_auto_completion_time = ""
+" }}}
+
+if s:libclang_path != "" || executable('clang')
+    " clang_complete: 使用clang编译器进行上下文补全 {{{
+    NeoBundleLazy 'Rip-Rip/clang_complete', {
+                \ 'filetypes' : ['c', 'cpp'],
+                \ }
+
+    " clang编译方法：
+    "
+    " svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
+    " svn co http://llvm.org/svn/llvm-project/cfe/trunk llvm/tools/clang
+    " mkdir -p llvm/build && cd llvm/build
+    " ../configure
+    " make -j9 ENABLE_OPTIMIZED=1 DISABLE_ASSERTIONS=1
+    "
+    " 要把Release/lib/libclang.so和Release/lib/clang目录拷贝到g:clang_library_path
+    " 指向的位置，这样clang就可以比较快速地进行补全了。
+
+    " 使用NeoComplete触发补全
+    let g:clang_complete_auto = 0
+    let g:clang_auto_select = 0
+    let g:clang_complete_copen = 0  " open quickfix window on error.
+    let g:clang_hl_errors = 1       " highlight the warnings and errors the same way clang
+    "let g:clang_jumpto_declaration_key = '<C-]>'
+    "let g:clang_jumpto_back_key = '<C-T>'
+
+    if s:libclang_path != ""
+        let g:clang_use_library = 1
+        let g:clang_library_path = s:libclang_path
+    endif
+    " }}}
+
+    " if executable('clang')    " vim-clang比使用clang_complete慢
+    "     " vim-clang: 使用clang编译器进行上下文补全 {{{
+    "     NeoBundleLazy 'justmao945/vim-clang', {
+    "                 \ 'filetypes' : ['c', 'cpp'],
+    "                 \ }
+    "     " 使用NeoComplete触发补全
+    "     let g:clang_auto = 0
+    "     if s:libclang_path != ""
+    "         if !exists('g:clang_cpp_options')
+    "             let g:clang_cpp_options = ''
+    "         endif
+    "         let g:clang_cpp_options .= " -I " . s:libclang_path . "/clang/3.4/include/"
+    "         echomsg g:clang_cpp_options
+    "     endif
+    "     " }}}
+    " endif
+endif
+" vim-clang-format: 使用clang编译器进行上下文补全 {{{
+NeoBundleLazy 'rhysd/vim-clang-format', {
+            \ 'commands' : ['ClangFormat'],
+            \ 'mappings' : ['<Plug>(operator-clang-format'],
+            \ }
+    if !executable('clang-format')
+        NeoBundleDisable 'clang-format'
+    else
+        let g:clang_format#code_style = 'google'
+        let g:clang_format#style_options = {
+                    \ "AccessModifierOffset" : -4,
+                    \ "AllowShortIfStatementsOnASingleLine" : "false",
+                    \ "AllowShortLoopsOnASingleLine" : "false",
+                    \ "BreakBeforeBinaryOperators" : "true",
+                    \ "BinPackParameters" : "false",
+                    \ "BreakBeforeBraces" : "Allman",
+                    \ "ColumnLimit" : "90",
+                    \ "DerivePointerBinding" : "false",
+                    \ "IndentCaseLabels" : "false",
+                    \ "IndentWidth" : "4",
+                    \ }
+
+        " map to <Leader>cf in C++ code
+        autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+        autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+        " if you install vim-operator-user
+        autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
+    endif
+" }}}
+
+NeoBundle 'scrooloose/syntastic'                    " 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表
+NeoBundleLazy 'OrangeT/vim-csharp', {
+            \ 'filetypes' : ['csharp'],
+            \ }                                     " C#文件的相关
+NeoBundleLazy 'funorpain/vim-cpplint', {
+            \ 'filetyhpes' : ['c', 'cpp'],
+            \ 'disabled' : !executable("cpplint.py"),
+            \ }                                     " <F7>执行cpplint检查（要求PATH中能找到cpplint.py）
+
+NeoBundleLazy 'davidhalter/jedi-vim', {
+            \ 'filetypes' : ['python', 'python3'],
+            \ }                                     " 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置
+
+NeoBundleLazy 'rhysd/wandbox-vim', {
+            \ 'commands' : [
+            \    {'name' : 'Wandbox',      'complete' : 'customlist,wandbox#complete_command'},
+            \    {'name' : 'WandboxAsync', 'complete' : 'customlist,wandbox#complete_command'},
+            \    {'name' : 'WandboxSync',  'complete' : 'customlist,wandbox#complete_command'},
+            \    'WandboxAbortAsyncWorks',
+            \    'WandboxOpenBrowser',
+            \    'WandboxOptionList',
+            \    'WandboxOptionListAsync',
+            \ ],
+            \ 'functions' : 'wandbox#',
+            \ }                                     " 在http://melpon.org/wandbox/上运行当前缓冲区的C++代码
+" }}}
+
+" Language {{{
+NeoBundleLazy 'csv.vim', {
+    \ 'filetypes' : ['csv'],
+    \ }                                             " 增加对CSV文件（逗号分隔文件）的支持
+NeoBundleLazy 'jceb/vim-orgmode', {
+    \ 'depends' : [
+    \   'NrrwRgn',
+    \   'speeddating.vim',
+    \ ],
+    \ 'filetypes' : ['org'],
+    \ }
+" Emmet.vim: 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>, {{{
+NeoBundleLazy 'Emmet.vim', {
+    \ 'filetypes' : ['xml','html','css','sass','scss','less'],
+    \ 'mappings' : ['<Plug>(Emmet'],
+    \ 'commands' : ['EmmetInstall'],
+    \ }
+    augroup custom_Emmet
+        autocmd FileType {xml,html,css,sass,scss,less} imap <buffer> <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+    augroup END
+" }}}
+NeoBundleLazy 'wps.vim', {
+    \ 'filetypes' : ['wps'],
+    \ 'disabled' : !(has("win32") || has("win64")),
+    \ }                                             " syntax highlight for RockBox wps file
+NeoBundleLazy 'lbdbq', {
+    \ 'mappings' : ['<LocalLeader>lb'],
+    \ }                                             " 支持lbdb
+NeoBundleLazy 'othree/xml.vim', {
+    \ 'filetypes' : ['xml'],
+    \ }                                             " 辅助编写XML文件
+"NeoBundle 'tmhedberg/SimpylFold'
+NeoBundleLazy 'hynek/vim-python-pep8-indent', {
+            \ 'filetypes' : ['python', 'python3'],
+            \ }
+NeoBundleLazy 'gprof.vim', {
+    \ 'filetypes' : ['gprof'],
+    \ }                                             " 对gprof文件提供语法高亮
+NeoBundleLazy 'elzr/vim-json', {
+    \ 'filetypes' : ['json'],
+    \ 'filename_patterns' : ['.*\.jsonp\?'],
+    \ }                                             " 对JSON文件提供语法高亮
+NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {
+    \ 'filetypes' : ['javascript', 'js'],
+    \ }                                             " Javascript语法高亮
+NeoBundleLazy 'po.vim', {
+    \ 'filetypes' : ['po'],
+    \ 'filename_patterns' : ['.*\.pot\?'],
+    \ }                                             " 用于编辑PO语言包文件。
+" }}}
+
+" Colors {{{
+NeoBundle 'altercation/vim-colors-solarized'        " Solarized配色方案
+NeoBundle 'Zenburn'                                 " Zenburn配色方案
+" }}}
+
+" Files {{{
+" FSwitch: 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示，\of当前窗口 {{{
+NeoBundleLazy 'FSwitch', {
+    \ 'functions' : ['FSwitch'],
+    \ 'commands' : ['FSHere','FSRight','FSSplitRight','FSLeft','FSSplitLeft','FSAbove','FSSplitAbove','FSBelow','FSSplitBelow'],
+    \ }
+    let g:fsnonewfiles=1
+    " 可以用:A在.h/.cpp间切换
+    command! A :call FSwitch('%', '')
+    augroup fswitch_hack
+        au! BufEnter *.h
+                    \  let b:fswitchdst='cpp,c,ipp,cxx'
+                    \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!\<include/\w\+/!src/!,reg:!\<include/\(\w\+/\)\{2}!src/!,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
+        au! BufEnter *.c,*.cpp,*.ipp
+                    \  let b:fswitchdst='h,hpp'
+                    \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
+        au! BufEnter *.xml
+                    \  let b:fswitchdst='rnc'
+                    \| let b:fswitchlocs='./'
+        au! BufEnter *.rnc
+                    \  let b:fswitchdst='xml'
+                    \| let b:fswitchlocs='./'
+    augroup END
+
+    " Switch to the file and load it into the current window >
+    nmap <silent> <Leader>oo :FSHere<cr>
+    " Switch to the file and load it into the window on the right >
+    nmap <silent> <Leader>ol :FSRight<cr>
+    " Switch to the file and load it into a new window split on the right >
+    nmap <silent> <Leader>oL :FSSplitRight<cr>
+    " Switch to the file and load it into the window on the left >
+    nmap <silent> <Leader>oh :FSLeft<cr>
+    " Switch to the file and load it into a new window split on the left >
+    nmap <silent> <Leader>oH :FSSplitLeft<cr>
+    " Switch to the file and load it into the window above >
+    nmap <silent> <Leader>ok :FSAbove<cr>
+    " Switch to the file and load it into a new window split above >
+    nmap <silent> <Leader>oK :FSSplitAbove<cr>
+    " Switch to the file and load it into the window below >
+    nmap <silent> <Leader>oj :FSBelow<cr>
+    " Switch to the file and load it into a new window split below >
+    nmap <silent> <Leader>oJ :FSSplitBelow<cr>
+" }}}
+
+NeoBundle 'LargeFile'                               " 在打开大文件时，禁用语法高亮以提供打开速度
+NeoBundleLazy 'Shougo/vinarise', {
+    \ 'commands' : ['Vinarise','VinariseDump','VinariseScript2Hex'],
+    \ }                                             " Hex Editor
+" }}}
+
+" Utils {{{
+NeoBundleLazy 'Shougo/vimfiler', {
+    \ 'depends' : 'Shougo/unite.vim',
+    \ 'commands' : [
+    \               { 'name' : 'VimFiler',
+    \                 'complete' : 'customlist,vimfiler#complete' },
+    \               { 'name' : 'VimFilerTab',
+    \                 'complete' : 'customlist,vimfiler#complete' },
+    \               { 'name' : 'VimFilerExplorer',
+    \                 'complete' : 'customlist,vimfiler#complete' },
+    \               { 'name' : 'Edit',
+    \                 'complete' : 'customlist,vimfiler#complete' },
+    \               { 'name' : 'Write',
+    \                 'complete' : 'customlist,vimfiler#complete' },
+    \               'Read', 'Source'],
+    \ 'mappings' : ['<Plug>(vimfiler_'],
+    \ 'explorer' : 1,
+    \ }                                             " 文件管理器，:VimFiler
+NeoBundleLazy 'Shougo/vimshell', {
+    \ 'commands' : [{ 'name' : 'VimShell',
+    \                 'complete' : 'customlist,vimshell#complete'},
+    \               'VimShellExecute', 'VimShellInteractive',
+    \               'VimShellTerminal', 'VimShellPop'],
+    \ 'mappings' : ['<Plug>(vimshell_'],
+    \ }                                             " Shell，:VimShell
+" sudo.vim: 通过sudo读、写文件。:SudoRead/:SudoWrite {{{
+NeoBundleLazy 'sudo.vim', {
+    \ 'commands' : ['SudoRead','SudoWrite'],
+    \ }
+    "   (command line): vim sudo:/etc/passwd
+    "   (within vim):   :e sudo:/etc/passwd
+" }}}
+" quickrun.vim: 快速运行代码片段 {{{
+NeoBundleLazy 'quickrun.vim', {
+    \ 'mappings' : [['nxo', '<Plug>(quickrun)']],
+    \ 'commands' : ['QuickRun'],
+    \ }
+    nmap ,r <Plug>(quickrun)
+" }}}
+NeoBundleLazy 'mtth/scratch.vim', {
+    \ 'commands' : ['Scratch','ScratchInsert','ScratchSelection'],
+    \ 'mappings' : [['v','gs'], ['v','gS']],
+    \ }                                             " 打开一个临时窗口。gs/gS/:Scratch
+" }}}
+
+" 载入manual-bundles下的插件
+call neobundle#local(fnamemodify(finddir("manual-bundles", &runtimepath), ":p"), {}, ['asciidoc', 'my_config'])
+
+" Installation check {{{
+syntax on
+filetype plugin indent on     " Required!
+
+" Installation check.
+if neobundle#exists_not_installed_bundles()
+  echomsg 'Not installed bundles : ' .
+        \ string(neobundle#get_not_installed_bundle_names())
+  echomsg 'Please execute ":NeoBundleInstall" command.'
+  "finish
+endif
+call neobundle#end()
+" }}}
+
+" }}}
+
+" Plugins settings (After load plugins) {{{
 
 " Syntaxes " {{{
 " Plugin 'asciidoc.vim' "{{{
