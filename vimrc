@@ -100,6 +100,11 @@ set ignorecase " Do case in sensitive matching with
 set smartcase " be sensitive when there's a capital letter
 set incsearch "
 set diffopt+=iwhite
+
+if has("persistent_undo")
+  set undodir='~/.vim_undodir/'
+  set undofile
+endif
 " "}}}
 
 " Formatting "{{{
@@ -601,31 +606,49 @@ let g:neobundle_default_git_protocol = 'https'
 " " }}}
 
 " Misc {{{
-" gundo.vim: 列出修改历史，方便undo到一个特定的位置 {{{
-NeoBundleLazy 'sjl/gundo.vim', {
-    \ 'mappings' : [['n','<F5>']],
-    \ 'commands' : ['GundoHide','GundoRenderGraph','GundoShow','GundoToggle'],
-    \ }
-    nnoremap <F5> :GundoToggle<CR>
+" undotree: 列出修改历史，方便undo到一个特定的位置 {{{
+NeoBundleLazy 'mbbill/undotree', {
+      \ 'commands' : ['UndotreeToggle', 'UndotreeHide', 'UndotreeShow', 'UndotreeFocus'],
+      \ }
+    nnoremap <silent> <F5> :UndotreeToggle<CR>
 " }}}
+" vim-repeat: 把.能重复的操作扩展到一些插件中的操作 {{{
 NeoBundleLazy 'tpope/vim-repeat', {
-    \ 'mappings' : ['.'],
-    \ }                                           " 把.能重复的操作扩展到一些插件中的操作
-NeoBundle 'AutoFenc'                              " 自动判别文件的编码
+            \ 'mappings' : ['.'],
+            \ }
+" }}}
+" AutoFenc: 自动判别文件的编码 {{{
+NeoBundle 'AutoFenc'
+" }}}
+" vim-sleuth: 自动检测文件的'shiftwidth'和'expandtab' {{{
+NeoBundle 'tpope/vim-sleuth'
+" }}}
 " vimproc: 用于异步执行命令的插件，被其它插件依赖 {{{
 NeoBundle 'Shougo/vimproc', {
-    \ 'build' : {
-    \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
-    \     'cygwin' : 'make -f make_cygwin.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
-    \     'mac' : 'make -f make_mac.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
-    \     'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
-    \ },
-    \ }
+            \ 'build' : {
+            \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
+            \     'cygwin' : 'make -f make_cygwin.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
+            \     'mac' : 'make -f make_mac.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
+            \     'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
+            \ },
+            \ }
     if has("win32") && filereadable(s:vimrc_path . "\\win32\\vimproc_win32.dll")
         let g:vimproc_dll_path = s:vimrc_path . "\\win32\\vimproc_win32.dll"
     elseif has("win64") && filereadable(s:vimrc_path . "\\win32\\vimproc_win64.dll")
         let g:vimproc_dll_path = s:vimrc_path . "\\win32\\vimproc_win64.dll"
     endif
+" }}}
+" vim-dispatch: 可以用:Make、:Dispatch等，通过tmux窗口、后台窗口等手段异步执行命令 {{{
+NeoBundleLazy 'tpope/vim-dispatch', {
+            \ 'commands' : [
+            \     { 'name' : 'Dispatch', 'complete' : 'customlist,dispatch#command_complete' },
+            \     { 'name' : 'FocusDispatch', 'complete' : 'customlist,dispatch#command_complete' },
+            \     { 'name' : 'Make', 'complete' : 'customlist,dispatch#make_complete' },
+            \     { 'name' : 'Spawn', 'complete' : 'customlist,dispatch#command_complete' },
+            \     { 'name' : 'Start', 'complete' : 'customlist,dispatch#command_complete' },
+            \     'Copen',
+            \ ],
+            \ }
 " }}}
 NeoBundleLazy 'thinca/vim-prettyprint', {
     \ 'commands' : [
@@ -751,7 +774,9 @@ EOF
         return branch
     endfunction
 " }}}
-NeoBundle 'zhaocai/GoldenView.Vim'                  " <C-L>分隔出一个窗口，<F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口
+" GoldenView.Vim: <C-L>分隔出一个窗口，<F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口 {{{
+NeoBundle 'zhaocai/GoldenView.Vim'
+" }}}
 
 " }}}
 
@@ -780,6 +805,8 @@ NeoBundleLazy 'Shougo/unite.vim', {
                     \ '\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)',
                     \ ], '\|'))
 
+        call unite#filters#matcher_default#use(['matcher_fuzzy'])
+        call unite#filters#sorter_default#use(['sorter_rank'])
         " let g:unite_source_rec_max_cache_files = 0
         " call unite#custom#source('file_rec,file_rec/async', 'max_candidates', 0)
     endfunction
@@ -1275,8 +1302,12 @@ NeoBundleLazy 'Shougo/neosnippet', {
         set conceallevel=2 concealcursor=i
     endif
 " }}}
-NeoBundle 'Shougo/neomru.vim'                       " 最近访问的文件
-NeoBundle 'Shougo/neosnippet-snippets'              " 代码模板
+" neomru.vim: 最近访问的文件 {{{
+NeoBundle 'Shougo/neomru.vim'
+" }}}
+" neosnippet-snippets: 代码模板 {{{
+NeoBundle 'Shougo/neosnippet-snippets'
+" }}}
 " vim-bufsurf: :BufSurfForward/:BufSurfBack跳转到本窗口的下一个、上一个buffer（增强<C-I>/<C-O>） {{{
 NeoBundleLazy 'ton/vim-bufsurf', {
             \ 'commands' : ['BufSurfForward', 'BufSurfBack'],
@@ -1285,7 +1316,6 @@ NeoBundleLazy 'ton/vim-bufsurf', {
     nnoremap <silent> g<C-I> :BufSurfForward<CR>
     nnoremap <silent> g<C-O> :BufSurfBack<CR>
 " }}}
-"NeoBundle 'othree/eregex.vim'                       " 支持Perl风格的正则表达式。:M、:S、:G、:V
 
 "NeoBundle 'VimIM'                                   " 中文输入法
 " vim-indent-guides: 标记出各缩进块。\ig切换 {{{
@@ -1302,7 +1332,7 @@ NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
 NeoBundleLazy 'kana/vim-niceblock', {
             \ 'mappings' : ['v', 'I', 'A'],
             \ }
-" 可同时标记多个mark。\M显示隐，\N清除所有Mark。\m标识当前word {{{
+" Mark--Karkat: 可同时标记多个mark。\M显示隐，\N清除所有Mark。\m标识当前word {{{
 NeoBundleLazy 'vernonrj/Mark--Karkat', {
             \ 'mappings' : ['<Plug>(Mark', '<Leader>m', '<Leader>r', '<Leader>n', '<Leader>*', '<Leader>#', '<Leader>/', '<Leader>?', '*', '#'],
             \ }
@@ -1324,15 +1354,36 @@ NeoBundleLazy 'vernonrj/Mark--Karkat', {
         augroup END
     endif
 " }}}
+" vim-abolish: :%S/box{,es}/bag{,s}/g进行单复数、大小写对应的查找 {{{
+NeoBundleLazy 'tpope/vim-abolish', {
+            \ 'mappings' : [
+            \   ['n', '<Plug>Coerce'],
+            \   ['n', 'cr'],
+            \ ],
+            \ 'commands' : [ 'Abolish', 'Subvert', 'S' ],
+            \ }
+" }}}
 " }}}
 
 " Text object {{{
-NeoBundle 'kana/vim-textobj-user'                   " 可自定义motion
-NeoBundle 'kana/vim-textobj-indent'                 " 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进）
-NeoBundle 'kana/vim-textobj-line'                   " 增加motion: al il
-NeoBundle 'kana/vim-textobj-function'               " 增加motion: if/af/iF/aF 选择一个函数
-NeoBundle 'bkad/CamelCaseMotion'                     " 增加,w ,b ,e 可以处理大小写混合或下划线分隔两种方式的单词
-NeoBundle 'thinca/vim-textobj-comment'              " 增加motion: ac ic
+" vim-textobj-user: 可自定义motion {{{
+NeoBundle 'kana/vim-textobj-user'
+" }}}
+" vim-textobj-indent: 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进） {{{
+NeoBundle 'kana/vim-textobj-indent'
+" }}}
+" vim-textobj-line: 增加motion: al il {{{
+NeoBundle 'kana/vim-textobj-line'
+" }}}
+" vim-textobj-function: 增加motion: if/af/iF/aF 选择一个函数 {{{
+NeoBundle 'kana/vim-textobj-function'
+" }}}
+" CamelCaseMotion: 增加,w ,b ,e 可以处理大小写混合或下划线分隔两种方式的单词 {{{
+NeoBundle 'bkad/CamelCaseMotion'
+" }}}
+" vim-textobj-comment: 增加motion: ac ic {{{
+NeoBundle 'thinca/vim-textobj-comment'
+" }}}
 " }}}
 
 " Programming {{{
@@ -1380,7 +1431,9 @@ NeoBundle 'OrelSokolov/HiCursorWords'
     let g:HiCursorWords_hiGroupRegexp = ''
     let g:HiCursorWords_debugEchoHiName = 0
 " }}}
-NeoBundle 'tComment'                                " 注释工具。gc{motion}/gcc/<C-_>等
+" tcomment_vim: 注释工具。gc{motion}/gcc/<C-_>等 {{{
+NeoBundle 'tomtom/tcomment_vim'
+" }}}
 " gtags.vim: 直接调用gtags查找符号 {{{
 NeoBundleLazy 'gtags.vim', {
             \ "commands" : ["Gtags","GtagsCursor","Gozilla"],
@@ -1861,12 +1914,17 @@ NeoBundleLazy 'Shougo/vimshell', {
     \               'VimShellTerminal', 'VimShellPop'],
     \ 'mappings' : ['<Plug>(vimshell_'],
     \ }                                             " Shell，:VimShell
-" sudo.vim: 通过sudo读、写文件。:SudoRead/:SudoWrite {{{
-NeoBundleLazy 'sudo.vim', {
-    \ 'commands' : ['SudoRead','SudoWrite'],
-    \ }
-    "   (command line): vim sudo:/etc/passwd
-    "   (within vim):   :e sudo:/etc/passwd
+" vim-eunuch: Remove/Unlink/Move/SudoEdit/SudoWrite等UNIX命令 {{{
+NeoBundleLazy 'tpope/vim-eunuch', {
+            \ 'commands' : [
+            \   'Unlink', 'Remove', 'Rename', 'Chmod', 'SudoWrite', 'Wall', 'W',
+            \   { 'name' : 'Move', 'complete' : 'file' },
+            \   { 'name' : 'File', 'complete' : 'file' },
+            \   { 'name' : 'Locate', 'complete' : 'file' },
+            \   { 'name' : 'Mkdir', 'complete' : 'dir' },
+            \   { 'name' : 'SudoEdit', 'complete' : 'file' },
+            \ ],
+            \ }
 " }}}
 " quickrun.vim: 快速运行代码片段 {{{
 NeoBundleLazy 'quickrun.vim', {
