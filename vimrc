@@ -563,9 +563,15 @@ nnoremap <silent> <C-J> gEa<CR><ESC>ew
 
 " nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 
+" folds {{{
 " zJ/zK跳到下个/上个折叠处，并只显示该折叠的内容
-nmap zJ zjzx
-nmap zK zkzx
+nnoremap zJ zjzx
+nnoremap zK zkzx
+nnoremap zr zr:echo &foldlevel<cr>
+nnoremap zm zm:echo &foldlevel<cr>
+nnoremap zR zR:echo &foldlevel<cr>
+nnoremap zM zM:echo &foldlevel<cr>
+" }}}
 
 "map <S-CR> A<CR><ESC>
 
@@ -575,6 +581,7 @@ nnoremap <Leader>tt :<C-U>make unittest<CR>
 nnoremap <Leader>ts :<C-U>make stage<CR>
 nnoremap <Leader>tc :<C-U>make clean<CR>
 nnoremap <Leader>td :<C-U>make doc<CR>
+
 " " }}}
 
 " NeoBundle -- load plugins {{{
