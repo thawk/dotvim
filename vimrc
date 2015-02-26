@@ -1881,8 +1881,42 @@ NeoBundleLazy 'mtth/scratch.vim', {
     \ }                                             " 打开一个临时窗口。gs/gS/:Scratch
 " }}}
 
-" 载入manual-bundles下的插件
-call neobundle#local(fnamemodify(finddir("manual-bundles", &runtimepath), ":p"), {}, ['asciidoc', 'my_config'])
+" 载入manual-bundles下的插件 {{{
+"call neobundle#local(fnamemodify(finddir("manual-bundles", &runtimepath), ":p"), {}, ['asciidoc', 'my_config'])
+let g:local_bundles_path = fnamemodify(finddir("manual-bundles", &runtimepath), ":p")
+" asciidoc: 增加对asciidoc的支持 {{{
+NeoBundleLazy 'asciidoc', {
+            \ 'type' : 'nosync',
+            \ 'base' : g:local_bundles_path,
+            \ 'filetypes' : ['asciidoc'],
+            \ }
+    "au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
+    function! s:MyAsciidocFoldLevel(lnum)
+        let lt = getline(a:lnum)
+        let fh = matchend(lt, '\V\^\(=\+\)\ze\s\+\S')
+        if fh != -1
+            return '>'.fh
+        endif
+        return '='
+    endfunction
+
+    au FileType asciidoc      setlocal shiftwidth=2
+                                \ tabstop=2
+                                \ textwidth=80 wrap formatoptions=cqnmB
+                                \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
+                                \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
+                                \ foldexpr=s:MyAsciidocFoldLevel(v:lnum)
+                                \ foldmethod=expr
+                                \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
+                                \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
+" }}}
+" my_config: 其它的设置 {{{
+NeoBundle 'my_config', {
+            \ 'type' : 'nosync',
+            \ 'base' : g:local_bundles_path,
+            \ }
+" }}}
+" }}}
 
 " Installation check {{{
 syntax on
@@ -1901,28 +1935,6 @@ call neobundle#end()
 " }}}
 
 " }}}
-
-" Plugin 'asciidoc.vim' "{{{
-"au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
-function! s:MyAsciidocFoldLevel(lnum)
-    let lt = getline(a:lnum)
-    let fh = matchend(lt, '\V\^\(=\+\)\ze\s\+\S')
-    if fh != -1
-        return '>'.fh
-    endif
-    return '='
-endfunction
-
-au FileType asciidoc      setlocal shiftwidth=2
-                               \ tabstop=2
-                               \ textwidth=80 wrap formatoptions=cqnmB
-                               \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
-                               \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
-                               \ foldexpr=s:MyAsciidocFoldLevel(v:lnum)
-                               \ foldmethod=expr
-                               \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
-                               \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
-" "}}}
 
 " Plugins depend settings {{{
 
