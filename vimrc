@@ -61,7 +61,7 @@ set autowrite " Writes on make/shell commands
 set autoread     " 当文件在外部被修改时，自动重新读取
 "set timeoutlen=250 " Time to wait after ESC (default causes an annoying delay)
 set clipboard+=unnamed " Yanks go on clipboard instead.
-set pastetoggle=<F10> " toggle between paste and normal: for 'safer' pasting from keyboard
+"set pastetoggle=<F10> " toggle between paste and normal: for 'safer' pasting from keyboard
 set helplang=cn
 "set viminfo+=! " Save and restore global variables
 
@@ -74,6 +74,8 @@ set modelines=5 " default numbers of lines to read for modeline instructions
 " Backup
 set nowritebackup
 set nobackup
+
+" 设置各种目录 {{{2
 " 设置swap-file保存路径
 if (s:is_windows)
     let &directory='$TEMP//,$TMP//,' . &directory
@@ -81,6 +83,13 @@ if (s:is_windows)
 else
     let &backupdir='$HOME/bak//,' . &backupdir
 endif
+
+if has("persistent_undo")
+  set undodir='~/.vim_undodir/'
+  set undofile
+endif
+" }}}2
+
 if (s:is_windows)
     set shellpipe=\|\ tee
     set shellslash
@@ -94,17 +103,13 @@ set viewoptions-=options
 " Buffers
 set hidden " The current buffer can be put to the background without writing to disk
 
-" Match and search
+" Match and search {{{2
 set hlsearch " highlight search
 set ignorecase " Do case in sensitive matching with
 set smartcase " be sensitive when there's a capital letter
 set incsearch "
 set diffopt+=iwhite
-
-if has("persistent_undo")
-  set undodir='~/.vim_undodir/'
-  set undofile
-endif
+" }}}2
 " "}}}1
 
 " Formatting "{{{1
@@ -2051,16 +2056,6 @@ vnoremap > >gv
 vnoremap < <gv
 " }}}2
 
-" 其它 {{{2
-" Split line(opposite to S-J joining line)
-nnoremap <silent> <C-J> gEa<CR><ESC>ew
-
-" map <silent> <C-W>v :vnew<CR>
-" map <silent> <C-W>s :snew<CR>
-
-" nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
-" }}}2
-
 " folds {{{2
 " zJ/zK跳到下个/上个折叠处，并只显示该折叠的内容
 nnoremap zJ zjzx
@@ -2087,10 +2082,20 @@ else
 endif
 " }}}2
 
+" 其它 {{{2
+" Split line(opposite to S-J joining line)
+" nnoremap <silent> <C-J> gEa<CR><ESC>ew
+
+" map <silent> <C-W>v :vnew<CR>
+" map <silent> <C-W>s :snew<CR>
+
+" nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
+" }}}2
+
 " " }}}1
 
 if filereadable(s:vimrc_path . "/project_setting")
     exec "source " . s:vimrc_path . "/project_setting"
 endif
 
-" vim: fileencoding=utf-8 foldmethod=marker:
+" vim: fileencoding=utf-8 foldmethod=marker foldlevel=0:
