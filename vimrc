@@ -488,6 +488,7 @@ au FileType python setlocal smartindent cinwords=if,elif,else,for,while,try,exce
 
 " Key mappings " {{{1
 
+" 支持alt键 {{{2
 " 使用Kitty后，不再需要映射Alt键
 " if !s:is_windows && !s:is_gui
 "     " 修改对Alt/Meta键的映射
@@ -499,33 +500,38 @@ au FileType python setlocal smartindent cinwords=if,elif,else,for,while,try,exce
 "     endfor
 "     set ttimeoutlen=10  " 缩短keycode的timeout
 " endif
+" }}}2
 
+" 简化对常用目录的访问 {{{2
 "用,cd进入当前目录
 nmap ,cd :cd <C-R>=expand("%:p:h")<CR><CR>
 " "用,e可以打开当前目录下的文件
 " nmap ,e :e <C-R>=escape(expand("%:p:h")."/", ' \')<CR>
 " "在命令中，可以用 %/ 得到当前目录。如 :e %/
 " cmap %/ <C-R>=escape(expand("%:p:h")."/", ' \')<cr>
+" }}}2
 
-"正常模式下，空格及Shift-空格滚屏
+" 光标移动 {{{2
+" 正常模式下，空格及Shift-空格滚屏
 noremap <SPACE> <C-F>
 noremap <S-SPACE> <C-B>
 
-"Ctrl-Tab/Ctrl-Shirt-Tab切换Tab
+" Key mappings to ease browsing long lines
+nnoremap <Down>      gj
+nnoremap <Up>        gk
+inoremap <Down> <C-O>gj
+inoremap <Up>   <C-O>gk
+" }}}2
+
+" 操作tab页 {{{2
+" Ctrl-Tab/Ctrl-Shirt-Tab切换Tab
 nmap <C-S-tab> :tabprevious<cr>
 nmap <C-tab> :tabnext<cr>
 map <C-S-tab> :tabprevious<cr>
 map <C-tab> :tabnext<cr>
 imap <C-S-tab> <ESC>:tabprevious<cr>i
 imap <C-tab> <ESC>:tabnext<cr>i
-
-" Key mappings to ease browsing long lines
-nnoremap <C-J>       gj
-nnoremap <C-K>       gk
-nnoremap <Down>      gj
-nnoremap <Up>        gk
-inoremap <Down> <C-O>gj
-inoremap <Up>   <C-O>gk
+" }}}2
 
 " Key mappings for the quickfix commands
 nmap <F11> :cn<CR>
@@ -781,8 +787,16 @@ EOF
         return branch
     endfunction
 " }}}3
-" GoldenView.Vim: <C-L>分隔出一个窗口，<F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口 {{{3
+" GoldenView.Vim: <F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口 {{{3
 NeoBundle 'zhaocai/GoldenView.Vim'
+    let g:goldenview__enable_default_mapping = 0
+    nmap <silent> <C-N>  <Plug>GoldenViewNext
+    nmap <silent> <C-P>  <Plug>GoldenViewPrevious
+
+    nmap <silent> <F8>   <Plug>GoldenViewSwitchMain
+    nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
+
+    " nmap <silent> <C-L>  <Plug>GoldenViewSplit
 " }}}3
 " vim-unimpaired: 增加]及[开头的一系列快捷键，方便进行tab等的切换 {{{3
 NeoBundle'tpope/vim-unimpaired'
@@ -792,6 +806,19 @@ NeoBundle'tpope/vim-unimpaired'
     " [<C-L> : lpfile    ]<C-L> : lnfile
     " [q     : cprevious ]q     : cnext  [Q : cfirst ]Q : clast
     " [t     : tprevious ]t     : tnext  [T : tfirst ]T : tlast
+" }}}3
+" vim-tmux-navigator: 使用ctrl+i/j/k/l在vim及tmux间切换 {{{3
+NeoBundleLazy 'christoomey/vim-tmux-navigator', {
+      \ 'mappings' : [['n', '<C-H>', '<C-J>', '<C-K>', '<C-L>', '<C-\>']],
+      \ }
+    " 需要在tmux.conf中加入下列内容
+    " # Smart pane switching with awareness of vim splits
+    " is_vim='echo "#{pane_current_command}" | grep -iqE "(^|\/)g?(view|n?vim?)(diff)?$"'
+    " bind -n C-h if-shell "$is_vim" "send-keys C-h" "select-pane -L"
+    " bind -n C-j if-shell "$is_vim" "send-keys C-j" "select-pane -D"
+    " bind -n C-k if-shell "$is_vim" "send-keys C-k" "select-pane -U"
+    " bind -n C-l if-shell "$is_vim" "send-keys C-l" "select-pane -R"
+    " bind -n C-\ if-shell "$is_vim" "send-keys C-\\" "select-pane -l"
 " }}}3
 " }}}2
 
