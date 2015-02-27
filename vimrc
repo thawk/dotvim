@@ -568,9 +568,15 @@ nnoremap <silent> <C-J> gEa<CR><ESC>ew
 
 " nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 
+" folds {{{
 " zJ/zK跳到下个/上个折叠处，并只显示该折叠的内容
-nmap zJ zjzx
-nmap zK zkzx
+nnoremap zJ zjzx
+nnoremap zK zkzx
+nnoremap zr zr:echo &foldlevel<cr>
+nnoremap zm zm:echo &foldlevel<cr>
+nnoremap zR zR:echo &foldlevel<cr>
+nnoremap zM zM:echo &foldlevel<cr>
+" }}}
 
 "map <S-CR> A<CR><ESC>
 
@@ -580,6 +586,7 @@ nnoremap <Leader>tt :<C-U>make unittest<CR>
 nnoremap <Leader>ts :<C-U>make stage<CR>
 nnoremap <Leader>tc :<C-U>make clean<CR>
 nnoremap <Leader>td :<C-U>make doc<CR>
+
 " " }}}
 
 " NeoBundle -- load plugins {{{
@@ -1939,8 +1946,42 @@ NeoBundleLazy 'mtth/scratch.vim', {
     \ }                                             " 打开一个临时窗口。gs/gS/:Scratch
 " }}}
 
-" 载入manual-bundles下的插件
-call neobundle#local(fnamemodify(finddir("manual-bundles", &runtimepath), ":p"), {}, ['asciidoc', 'my_config'])
+" 载入manual-bundles下的插件 {{{
+"call neobundle#local(fnamemodify(finddir("manual-bundles", &runtimepath), ":p"), {}, ['asciidoc', 'my_config'])
+let g:local_bundles_path = fnamemodify(finddir("manual-bundles", &runtimepath), ":p")
+" asciidoc: 增加对asciidoc的支持 {{{
+NeoBundleLazy 'asciidoc', {
+            \ 'type' : 'nosync',
+            \ 'base' : g:local_bundles_path,
+            \ 'filetypes' : ['asciidoc'],
+            \ }
+    "au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
+    function! s:MyAsciidocFoldLevel(lnum)
+        let lt = getline(a:lnum)
+        let fh = matchend(lt, '\V\^\(=\+\)\ze\s\+\S')
+        if fh != -1
+            return '>'.fh
+        endif
+        return '='
+    endfunction
+
+    au FileType asciidoc      setlocal shiftwidth=2
+                                \ tabstop=2
+                                \ textwidth=80 wrap formatoptions=cqnmB
+                                \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
+                                \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
+                                \ foldexpr=s:MyAsciidocFoldLevel(v:lnum)
+                                \ foldmethod=expr
+                                \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
+                                \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
+" }}}
+" my_config: 其它的设置 {{{
+NeoBundle 'my_config', {
+            \ 'type' : 'nosync',
+            \ 'base' : g:local_bundles_path,
+            \ }
+" }}}
+" }}}
 
 " Installation check {{{
 syntax on
@@ -1959,28 +2000,6 @@ call neobundle#end()
 " }}}
 
 " }}}
-
-" Plugin 'asciidoc.vim' "{{{
-"au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
-function! s:MyAsciidocFoldLevel(lnum)
-    let lt = getline(a:lnum)
-    let fh = matchend(lt, '\V\^\(=\+\)\ze\s\+\S')
-    if fh != -1
-        return '>'.fh
-    endif
-    return '='
-endfunction
-
-au FileType asciidoc      setlocal shiftwidth=2
-                               \ tabstop=2
-                               \ textwidth=80 wrap formatoptions=cqnmB
-                               \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
-                               \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
-                               \ foldexpr=s:MyAsciidocFoldLevel(v:lnum)
-                               \ foldmethod=expr
-                               \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
-                               \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
-" "}}}
 
 " Plugins depend settings {{{
 
