@@ -51,50 +51,6 @@ let c_comment_strings=1
 let g:load_doxygen_syntax=1
 
 "
-" We want our code to stay within a certain set column length but we don't
-" want to be so brutal as to force an automatic word wrap by setting
-" 'textwidth'.  What we want is to give a gentle reminder that we've gone
-" over our limits.  To do this, we use the following two functions and some
-" colour settings.
-"
-" In addition to the column highlighting we also want to highlight when
-" there are leading tabs in the code - the last thing we want is people not
-" using the equivalent of 'expandtab' in their editors.  When we load the
-" file in Vim we want to know that we've got some obnoxious leading tabs
-" that we should clean up.
-"
-
-" "
-" " DisableErrorHighlights()
-" "
-" " Clear out the highlighting that was done to warn us about the messes.
-" "
-" function! DisableErrorHighlights()
-"     if exists("w:match120")
-"         call matchdelete(w:match120)
-"         unlet w:match120
-"     endif
-"     if exists("w:matchTab")
-"         call matchdelete(w:matchTab)
-"         unlet w:matchTab
-"     endif
-" endfunction
-"
-" "
-" " EnableErrorHighlights()
-" "
-" " Highlight the stuff we are unhappy with.
-" "
-" function! EnableErrorHighlights()
-"     if !exists("w:match120") && &textwidth>0
-"         let w:match120=matchadd('BadInLine', '\%'.string(&textwidth+1).'v.*', -1)
-"     endif
-"     if !exists("w:matchTab")
-"         let w:matchTab=matchadd('BadInLine', '^\t\+', -1)
-"     endif
-" endfunction
-
-"
 " AlterColour() {{{
 "
 " This function is used in setting the error highlighting to compute an
@@ -325,60 +281,5 @@ augroup local_ftplugin_cpp
                 \ shiftwidth=2
                 \ tabstop=8
 augroup END
-
-
-" 设置路径 "{{{
-
-""设置C++搜索路径
-"let s:C_INCLUDE_PATHS = ["*include;/"]
-"
-"" 定位组件库
-"let SSCC_COMPONENT_LIBS_ROOT=""
-"if isdirectory("$SSCC_COMPONENT_LIBS_ROOT")
-"    let SSCC_COMPONENT_LIBS_ROOT = $SSCC_COMPONENT_LIBS_ROOT
-"else
-"    if finddir("program/ComponentsLib", $HOME) != ""
-"        let SSCC_COMPONENT_LIBS_ROOT = substitute(fnamemodify(finddir("program/ComponentsLib", $HOME), ":p"), "/$", "", "")
-"    endif
-"endif
-"
-"" 定位Boost库
-"let BOOST_PATH=""
-"if isdirectory("$BOOST_PATH")
-"    let BOOST_PATH = $BOOST_PATH
-"endif
-"
-"if SSCC_COMPONENT_LIBS_ROOT != ""
-"    if BOOST_PATH == ""     " 没有找到Boost库，使用组件库中的版本
-"        let BOOST_PATH = substitute(substitute(glob(SSCC_COMPONENT_LIBS_ROOT . "/boost_*/"), "^.*\n", "", ""), "/$", "", "")
-"    endif
-"
-"    let ssccLibPath = finddir("sscc-libs", SSCC_COMPONENT_LIBS_ROOT)
-"    if ssccLibPath != ""
-"        call add(s:C_INCLUDE_PATHS, ssccLibPath)
-"    endif
-"
-"    let cLibsPath = finddir("C-libs-prebuilt/include", SSCC_COMPONENT_LIBS_ROOT)
-"    if cLibsPath != ""
-"        call add(s:C_INCLUDE_PATHS, cLibsPath)
-"    endif
-"else    " 没有组件库，看看~/program下有没有boost库，有就使用
-"    if finddir("program", $HOME) != ""
-"        let BOOST_PATHS = sort(split(glob(fnamemodify(finddir("program", $HOME), ":p") . "boost_*/"), "\n"))
-"
-"        if len(BOOST_PATHS) > 0
-"            let BOOST_PATH = BOOST_PATHS[0]
-"        endif
-"    endif
-"endif
-"
-"if BOOST_PATH != ""
-"    call add(s:C_INCLUDE_PATHS, BOOST_PATH)
-"endif
-"
-"echomsg join(s:C_INCLUDE_PATHS)
-"if len(s:C_INCLUDE_PATHS) > 0
-"    au FileType c,cpp let &l:path=join([&path] + s:C_INCLUDE_PATHS, ",")
-"endif
 
 " "}}}

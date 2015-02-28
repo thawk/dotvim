@@ -1009,11 +1009,6 @@ unlet s:comment_leadings
 nnoremap <silent> [unite]a :<C-u>Unite alignta:options -no-start-insert<CR>
 xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments -no-start-insert<CR>
 " }}}3
-" matchit.zip: 将%的功能扩展到多种语言（如对于XML，可以在开始tag和结束tag之间进行跳转） {{{3
-NeoBundleLazy 'matchit.zip', {
-            \ 'mappings' : [['nxo', '%', 'g%']]
-            \ }
-" }}}3
 " YankRing.vim: 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容 {{{3
 "NeoBundle 'YankRing.vim'
 "    let g:yankring_persist = 0              "不把yankring持久化
@@ -2130,6 +2125,9 @@ endif
 " }}}2
 
 " }}}1
+
+" 启用内置的matchit插件
+runtime! macros/matchit.vim
 
 if filereadable(s:vimrc_path . "/project_setting")
     exec "source " . s:vimrc_path . "/project_setting"
