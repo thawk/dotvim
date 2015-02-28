@@ -563,15 +563,6 @@ NeoBundleLazy 'tpope/vim-dispatch', {
             \ ],
             \ }
 " }}}3
-" vim-prettyprint: PP variable_name，以用户友好的方式打印变量值，调试vim脚本用 {{{3
-NeoBundleLazy 'thinca/vim-prettyprint', {
-            \ 'commands' : [
-            \     { 'name' : 'PP', 'complete' : 'expression' },
-            \     { 'name' : 'PrettyPrint', 'complete' : 'expression' },
-            \ ],
-            \ 'functions' : ['PP', 'PrettyPrint'],
-            \ }
-" }}}3
 " vim-airline: 增强的statusline {{{3
 NeoBundle 'bling/vim-airline'
 let bundle = neobundle#get('vim-airline')
@@ -1714,6 +1705,18 @@ let g:default_options = get(g:, 'wandbox#default_options', {
 let g:wandbox#default_extra_options = get(g:, 'wandbox#default_extra_options', {
             \   'clang-head' : '-O3 -Werror',
             \ })
+" }}}3
+" vim-scriptease: 辅助编写vim脚本的工具 {{{3
+NeoBundleLazy 'tpope/vim-scriptease', {
+            \ 'filetypes' : ['vim', 'help'],
+            \ 'commands' : [
+            \     { 'name' : 'PP', 'complete' : 'expression' },
+            \     { 'name' : 'PPmsg', 'complete' : 'expression' },
+            \     { 'name' : 'Verbose', 'complete' : 'command' },
+            \     { 'name' : 'Time', 'complete' : 'command' },
+            \     'Scriptnames', 'Runtime', 'Disarm', 'Ve', 'Vedit', 'Vopen', 'Vsplit', 'Vvsplit', 'Vtabedit', 'Vpedit', 'Vread', 'Console',
+            \ ],
+            \ }
 " }}}3
 " }}}2
 
