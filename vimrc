@@ -1977,19 +1977,14 @@ NeoBundle 'my_config', {
 " }}}2
 
 " 检查有没有需要安装的插件 {{{2
+" Installation check.
+NeoBundleCheck
+
 syntax on
 filetype plugin indent on     " Required!
 
-" Installation check.
-if neobundle#exists_not_installed_bundles()
-    echomsg 'Not installed bundles : ' .
-                \ string(neobundle#get_not_installed_bundle_names())
-    echomsg 'Please execute ":NeoBundleInstall" command.'
-    "finish
-endif
-" }}}2
-
 call neobundle#end()
+" }}}2
 " }}}1
 
 " color scheme and statusline {{{1
