@@ -1780,6 +1780,18 @@ NeoBundleLazy 'po.vim', {
             \ 'filename_patterns' : ['.*\.pot\?'],
             \ }                                             " 用于编辑PO语言包文件。
 " }}}3
+" timl: VimL编写的Clojure语言 {{{3
+NeoBundleLazy 'tpope/timl', {
+            \ 'filetypes' : ['timl'],
+            \ 'filename_patterns' : ['.*\.tim\?'],
+            \ 'commands' : [
+            \     'TLrepl', 'TLscratch', 'TLcopen',
+            \     { 'name' : 'TLinspect', 'complete' : 'expression' },
+            \     { 'name' : 'TLeval', 'complete' : 'customlist,timl#interactive#input_complete' },
+            \     { 'name' : 'TLsource', 'complete' : 'file' },
+            \ ],
+            \ }
+" }}}3
 " }}}2
 
 " Colors {{{2
