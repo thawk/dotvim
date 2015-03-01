@@ -1791,6 +1791,10 @@ NeoBundleLazy 'tpope/timl', {
             \     { 'name' : 'TLsource', 'complete' : 'file' },
             \ ],
             \ }
+if has('win32') && !exists('$APPCACHE')
+    " 设置缓存目录
+    let $APPCACHE=$HOME . '/.vim-timl'
+endif
 " }}}3
 " }}}2
 
