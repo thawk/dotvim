@@ -1793,7 +1793,7 @@ NeoBundleLazy 'tpope/timl', {
             \ }
 if has('win32') && !exists('$APPCACHE')
     " 设置缓存目录
-    let $APPCACHE=$HOME . '/.vim-timl'
+    let $APPCACHE=$HOME . '/.cache'
 endif
 " }}}3
 " }}}2
