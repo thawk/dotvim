@@ -1953,7 +1953,7 @@ NeoBundleLazy 'asciidoc', {
             \ 'filetypes' : ['asciidoc'],
             \ }
 "au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
-function! s:MyAsciidocFoldLevel(lnum)
+function! MyAsciidocFoldLevel(lnum)
     let lt = getline(a:lnum)
     let fh = matchend(lt, '\V\^\(=\+\)\ze\s\+\S')
     if fh != -1
@@ -1967,7 +1967,7 @@ au FileType asciidoc      setlocal shiftwidth=2
             \ textwidth=80 wrap formatoptions=cqnmB
             \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
             \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
-            \ foldexpr=s:MyAsciidocFoldLevel(v:lnum)
+            \ foldexpr=MyAsciidocFoldLevel(v:lnum)
             \ foldmethod=expr
             \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
             \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
