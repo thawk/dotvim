@@ -1993,7 +1993,9 @@ call neobundle#end()
 
 " color scheme and statusline {{{1
 
-colorscheme solarized
+if neobundle#is_installed("vim-colors-solarized")
+    colorscheme solarized
+endif
 
 "set statusline=%<%n:\ %f\ %h%m%r\ %=%k%y[%{&ff},%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
 set statusline=%<%n:                " Buffer number
