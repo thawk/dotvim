@@ -533,9 +533,9 @@ NeoBundleLazy 'tpope/vim-repeat', {
 " AutoFenc: 自动判别文件的编码 {{{3
 NeoBundle 'AutoFenc'
 " }}}3
-" vim-sleuth: 自动检测文件的'shiftwidth'和'expandtab' {{{3
-NeoBundle 'tpope/vim-sleuth'
-" }}}3
+"" vim-sleuth: 自动检测文件的'shiftwidth'和'expandtab' {{{3
+"NeoBundle 'tpope/vim-sleuth'
+"" }}}3
 " vimproc: 用于异步执行命令的插件，被其它插件依赖 {{{3
 NeoBundle 'Shougo/vimproc', {
             \ 'build' : {
