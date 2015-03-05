@@ -1718,6 +1718,10 @@ NeoBundleLazy 'tpope/vim-scriptease', {
             \ ],
             \ }
 " }}}3
+" Conque-GDB: 在vim中进行gdb调试
+NeoBundleLazy 'Conque-GDB', {
+            \ 'commands' : ['ConqueGdb'],
+            \ }
 " }}}2
 
 " Language {{{2
