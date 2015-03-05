@@ -1721,7 +1721,20 @@ NeoBundleLazy 'tpope/vim-scriptease', {
 " }}}3
 " Conque-GDB: 在vim中进行gdb调试
 NeoBundleLazy 'Conque-GDB', {
-            \ 'commands' : ['ConqueGdb'],
+            \ 'disabled' : !executable("gdb"),
+            \ 'commands' : [
+            \     { 'name' : 'ConqueGdb', 'complete' : 'file' },
+            \     { 'name' : 'ConqueGdbSplit', 'complete' : 'file' },
+            \     { 'name' : 'ConqueGdbVSplit', 'complete' : 'file' },
+            \     { 'name' : 'ConqueGdbTab', 'complete' : 'file' },
+            \     { 'name' : 'ConqueGdbExe', 'complete' : 'file' },
+            \     { 'name' : 'ConqueGdbDelete', 'complete' : '' },
+            \     { 'name' : 'ConqueGdbCommand', 'complete' : '' },
+            \     { 'name' : 'ConqueTerm', 'complete' : 'shellcmd' },
+            \     { 'name' : 'ConqueTermSplit', 'complete' : 'shellcmd' },
+            \     { 'name' : 'ConqueTermVSplit', 'complete' : 'shellcmd' },
+            \     { 'name' : 'ConqueTermTab', 'complete' : 'shellcmd' },
+            \ ],
             \ }
 " }}}2
 
