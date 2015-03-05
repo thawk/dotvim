@@ -1736,6 +1736,14 @@ NeoBundleLazy 'Conque-GDB', {
             \     { 'name' : 'ConqueTermTab', 'complete' : 'shellcmd' },
             \ ],
             \ }
+" ,r - run
+" ,c - continue
+" ,n - next
+" ,s - step
+" ,p - print 光标下的标识符
+" ,b - toggle breakpoint
+" ,f - finish
+" ,t - backtrace
 let g:ConqueGdb_Leader = ','
 " }}}3
 " }}}2
