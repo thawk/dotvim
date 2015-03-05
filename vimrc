@@ -138,6 +138,7 @@ set expandtab " Make tabs into spaces (set by tabstop)
 set smarttab " Smarter tab levels
 
 set autoindent
+set nosmartindent
 set cindent
 set cinoptions=:s,ps,ts,cs
 set cinwords=if,else,while,do,for,switch,case

@@ -12,18 +12,18 @@ setlocal textwidth=90
 setlocal comments-=://
 setlocal comments+=:///,://
 
-" Indents are 4 spaces
-setlocal shiftwidth=4
-setlocal tabstop=4
-setlocal softtabstop=4
-
-" And they really are spaces, *not* tabs
-setlocal expandtab
+" " Indents are 4 spaces
+" setlocal shiftwidth=4
+" setlocal tabstop=4
+" setlocal softtabstop=4
+"
+" " And they really are spaces, *not* tabs
+" setlocal expandtab
 
 " Setup for indending
-setlocal nosmartindent
-setlocal autoindent
-setlocal cindent
+" setlocal nosmartindent
+" setlocal autoindent
+" setlocal cindent
 setlocal cinkeys-=0#
 " 缩进设置。下面的s代表一个shiftwidth
 setlocal cinoptions=
@@ -44,61 +44,11 @@ setlocal cinoptions+=Ws     " indent line ended with open parentheses
 
 setlocal list
 
-" Highlight strings inside C comments
+" Highlight strings inside C comments。c.vim中使用
 let c_comment_strings=1
 
-" Load up the doxygen syntax
+" Load up the doxygen syntax。doxygen.vim中使用
 let g:load_doxygen_syntax=1
-
-"
-" AlterColour() {{{
-"
-" This function is used in setting the error highlighting to compute an
-" appropriate colour for the highlighting that is computed independently
-" from the colour scheme itself.  I find this nicer than hard-coding the
-" colour.
-"
-" AlterColour("Normal", "bg", -20)
-"
-function! AlterColour(groupname, attr, shift)
-    let clr = synIDattr(synIDtrans(hlID(a:groupname)), a:attr)
-    if match(clr, '^#') == 0
-        let red   = str2nr(strpart(clr, 1, 2), 16)
-        let green = str2nr(strpart(clr, 3, 2), 16)
-        let blue  = str2nr(strpart(clr, 5, 2), 16)
-        let red = red + a:shift
-        if red <= 0
-            let red = "00"
-        elseif red >= 256
-            let red = "ff"
-        else
-            let red = printf("%02x", red)
-        end
-        let green = green + a:shift
-        if green <= 0
-            let green = "00"
-        elseif green >= 256
-            let green = "ff"
-        else
-            let green = printf("%02x", green)
-        end
-        let blue = blue + a:shift
-        if blue <= 0
-            let blue = "00"
-        elseif blue >= 256
-            let blue = "ff"
-        else
-            let blue = printf("%02x", blue)
-        end
-        return "#" . red . green . blue
-    elseif strlen(clr) != 0
-        echoerr 'Colour is not in hex form (' . clr . ')'
-        return clr
-    else
-        return ''
-    endif
-endfunction
-" }}}
 
 " The syntax highlight we use for the above error highlighting is 'BadInLine'
 " and we set what that colour is right here.
@@ -111,8 +61,8 @@ hi BadInLine gui=underline term=underline cterm=underline
 "nmap <silent> ,ee :call EnableErrorHighlights()<CR>
 "nmap <silent> ,ed :call DisableErrorHighlights()<CR>
 
-" set up retabbing on a source file
-nmap <silent> ,rr :1,$retab<CR>
+" " set up retabbing on a source file
+" nmap <silent> ,rr :1,$retab<CR>
 
 setlocal indentexpr=GoogleCppIndent()
 
