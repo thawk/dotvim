@@ -139,7 +139,7 @@ function! SetupEnvironment()
     endif
 
     " 加入路径上所有Jamroot/Jamfile所在目录，这种目录通常都在include路径中
-    for l:name in ["Jamfile", "Jamfile.v2", "Jamroot", "Jamroot.v2"]
+    for l:name in ["Jamfile", "Jamfile.v2", "Jamfile.jam", "Jamroot", "Jamroot.v2", "Jamroot.jam"]
         for l:p in findfile(l:name, l:search_path, -1)
             call s:AddPath(fnamemodify(l:p, ":p:h"))
         endfor
