@@ -264,26 +264,6 @@ elseif filereadable("/usr/share/dict/words")
     set dictionary+=/usr/share/dict/words
 endif
 
-" Doxygen的出错信息
-set errorformat+=Generating\ code\ for\ file\ %f:%l:%m
-set errorformat+=Generating\ docs\ for\ compound\ %f:%l:%m
-set errorformat+=Generating\ docs\ Error:\ %f:%l:%m
-set errorformat+=Generating\ annotated\ compound\ ind%f:%l:%m
-set errorformat+=Generating\ docs\ %f:%l:%m
-set errorformat+=Generating\ docs\ for\ page\ %\\w%\\+...%f:%l:%m
-set errorformat+=Generating\ Error:\ %f:%l:\ %m
-set errorformat+=Error:\ %f:%l:\ %m
-set errorformat^=Parsing\ file\ %f:%l:%m
-
-" Boost.Assert: common-test_stream_reader: include/common/stream_reader.h:306:...
-set errorformat^=%[a-zA-Z0-9_-]%\\+:\ %f:%l:%m
-
-" 忽略2012-01-18 13:14:15之类的日志行
-set errorformat^=%+G20%\[0-9]%\[0-9]-%\[0-9]%\[0-9]-%\[0-9]%\[0-9]\ %\[0-9]%\[0-9]:%\[0-9]%\[0-9]:%\[0-9]%\[0-9]%m
-
-" xgettext出错信息
-set errorformat+=xgettext:\ %m\ at\ %f:%l.
-
 " Highlight space errors in C/C++ source files (Vim tip #935)
 let c_space_errors=1
 let java_space_errors=1
