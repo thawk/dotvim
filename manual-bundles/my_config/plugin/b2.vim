@@ -8,7 +8,7 @@ set cpo&vim
 
 function s:InsideBoostBuildProj()
     for l:name in ["Jamfile", "Jamfile.v2", "Jamfile.jam", "Jamroot", "Jamroot.v2", "Jamroot.jam"]
-        for l:p in findfile(l:name, l:search_path, -1)
+        for l:p in findfile(l:name, ".;", -1)
             return 1
         endfor
     endfor
@@ -19,7 +19,7 @@ endfunction
 augroup b2_compiler_detect
     " 如果在Boost.Build项目中，则把编译器改为b2
     au!
-    au BufNewFile,BufReadPost * if s:InsideBoostBuildProj() | set compiler=b2 | endif
+    au BufNewFile,BufReadPost * if s:InsideBoostBuildProj() | compiler=b2 | endif
 augroup END
 
 let &cpo = s:save_cpo
