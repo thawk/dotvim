@@ -1051,9 +1051,16 @@ hi link EasyMotionTarget2First IncSearch
 hi link EasyMotionTarget2Second IncSearch
 hi link EasyMotionShade Comment
 " }}}3
-" clever-f.vim: 用f/F代替;来查找下一个字符 {{{3
-NeoBundleLazy 'rhysd/clever-f.vim', {
-            \ 'mappings' : [['n', 'f', 'F', 't', 'T']],
+" " clever-f.vim: 用f/F代替;来查找下一个字符 {{{3
+" NeoBundleLazy 'rhysd/clever-f.vim', {
+"             \ 'mappings' : [['n', 'f', 'F', 't', 'T']],
+"             \ }
+" " }}}3
+" glowshi-ft.vim: 增强的f/t {{{3
+NeoBundleLazy 'saihoooooooo/glowshi-ft.vim', {
+            \ 'mappings' : [
+            \     ['n', '<Plug>', 'f', 'F', 't', 'T', ';', ','],
+            \ ],
             \ }
 " }}}3
 " neocomplete: 代码补全插件 {{{3
@@ -1263,7 +1270,7 @@ NeoBundleLazy 'kana/vim-niceblock', {
             \ 'mappings' : ['v', 'I', 'A'],
             \ }
 " }}}3
-" Mark--Karkat: 可同时标记多个mark。\M显示隐，\N清除所有Mark。\m标识当前word {{{3
+" Mark--Karkat: 可同时标记多个mark。\M显隐所有，\N清除所有Mark。\m标识当前word {{{3
 NeoBundleLazy 'vernonrj/Mark--Karkat', {
             \ 'mappings' : ['<Plug>(Mark', '<Leader>m', '<Leader>r', '<Leader>n', '<Leader>*', '<Leader>#', '<Leader>/', '<Leader>?', '*', '#'],
             \ }
