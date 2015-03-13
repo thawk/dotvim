@@ -500,23 +500,6 @@ let g:neobundle_default_git_protocol = 'https'
 " }}}2
 
 " Misc {{{2
-" undotree: 列出修改历史，方便undo到一个特定的位置 {{{3
-NeoBundleLazy 'mbbill/undotree', {
-            \ 'commands' : ['UndotreeToggle', 'UndotreeHide', 'UndotreeShow', 'UndotreeFocus'],
-            \ }
-nnoremap <silent> <F5> :UndotreeToggle<CR>
-" }}}3
-" vim-repeat: 把.能重复的操作扩展到一些插件中的操作 {{{3
-NeoBundleLazy 'tpope/vim-repeat', {
-            \ 'mappings' : ['.'],
-            \ }
-" }}}3
-" AutoFenc: 自动判别文件的编码 {{{3
-NeoBundle 'AutoFenc'
-" }}}3
-"" vim-sleuth: 自动检测文件的'shiftwidth'和'expandtab' {{{3
-"NeoBundle 'tpope/vim-sleuth'
-"" }}}3
 " vimproc: 用于异步执行命令的插件，被其它插件依赖 {{{3
 NeoBundle 'Shougo/vimproc', {
             \ 'build' : {
@@ -531,163 +514,6 @@ if has("win32") && filereadable(s:vimrc_path . "\\win32\\vimproc_win32.dll")
 elseif has("win64") && filereadable(s:vimrc_path . "\\win32\\vimproc_win64.dll")
     let g:vimproc_dll_path = s:vimrc_path . "\\win32\\vimproc_win64.dll"
 endif
-" }}}3
-" vim-dispatch: 可以用:Make、:Dispatch等，通过tmux窗口、后台窗口等手段异步执行命令 {{{3
-NeoBundleLazy 'tpope/vim-dispatch', {
-            \ 'commands' : [
-            \     { 'name' : 'Dispatch', 'complete' : 'customlist,dispatch#command_complete' },
-            \     { 'name' : 'FocusDispatch', 'complete' : 'customlist,dispatch#command_complete' },
-            \     { 'name' : 'Make', 'complete' : 'customlist,dispatch#make_complete' },
-            \     { 'name' : 'Spawn', 'complete' : 'customlist,dispatch#command_complete' },
-            \     { 'name' : 'Start', 'complete' : 'customlist,dispatch#command_complete' },
-            \     'Copen',
-            \ ],
-            \ }
-" }}}3
-" vim-airline: 增强的statusline {{{3
-NeoBundle 'bling/vim-airline'
-let bundle = neobundle#get('vim-airline')
-function! bundle.hooks.on_source(bundle)
-    " 把section a的第1个part从mode改为bufnr() + mode
-    call airline#parts#define_raw('bufnr_mode', '%{bufnr("%") . " " . airline#parts#mode()}')
-    let g:airline_section_a = airline#section#create_left(['bufnr_mode', 'paste', 'iminsert'])
-    if executable("svn")
-        call airline#parts#define_function('mybranch', 'MyBranch')
-        let g:airline_section_b = airline#section#create(['hunks', 'mybranch'])
-    endif
-endfunction
-
-" if neobundle#is_installed("vcscommand.vim")
-"     let g:airline#extensions#branch#use_vcscommand = 1
-" endif
-
-" let g:airline_left_sep = '\u25ba'
-" let g:airline_right_sep = '\u25c4'
-
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-
-if &encoding == "utf-8"
-    " 开启powerline字体，可在 https://github.com/runsisi/consolas-font-for-powerline
-    " 找到增加了特定字符的Consolas字体。
-    " https://github.com/Lokaltog/powerline-fonts 在更多免费的字体
-    let g:airline_powerline_fonts=1
-
-    if s:is_windows
-        let g:airline_symbols.whitespace = " "
-    else
-        let g:airline_symbols.whitespace = "\u039e"
-        let g:airline_symbols.paste = "\u2225"
-    endif
-else
-    let g:airline_left_sep = " "
-    let g:airline_left_alt_sep = "|"
-    let g:airline_right_sep = " "
-    let g:airline_right_alt_sep = "|"
-    let g:airline_symbols.branch = ""
-    let g:airline_symbols.readonly = "RO"
-    let g:airline_symbols.linenr = "LN"
-    let g:airline_symbols.paste = "PASTE"
-    let g:airline_symbols.whitespace = " "
-
-    " let g:airline_left_sep = "\ue0b0"
-    " let g:airline_left_alt_sep = "\ue0b1"
-    " let g:airline_right_sep = "\ue0b2"
-    " let g:airline_right_alt_sep = "\ue0b3"
-
-    " let g:airline_symbols.branch = "\ue0a0"
-    " let g:airline_symbols.readonly = "\ue0a2"
-    " let g:airline_symbols.linenr = "\ue0a1"
-    " let g:airline_symbols.paste = "\u22256"
-endif
-
-set noshowmode
-
-let g:unite_force_overwrite_statusline = 0
-let g:vimfiler_force_overwrite_statusline = 0
-let g:vimshell_force_overwrite_statusline = 0
-
-" 显示tabline
-let g:airline#extensions#tabline#enabled = 1
-" 只在有多于两个tab时显示tabline，不利用tabline来显示buffer
-let g:airline#extensions#tabline#tab_min_count = 2
-let g:airline#extensions#tabline#show_buffers = 0
-" 不在tabline上显示关闭按钮
-let g:airline#extensions#tabline#show_close_button = 0
-
-let s:path_branch = {}
-
-function! UrlDecode(str)
-    let str = substitute(substitute(substitute(a:str,'%0[Aa]\n$','%0A',''),'%0[Aa]','\n','g'),'+',' ','g')
-    return substitute(str,'%\(\x\x\)','\=nr2char("0x".submatch(1))','g')
-endfunction
-
-function! MyBranch()
-    let result = airline#extensions#branch#get_head()
-    if len(result)
-        return result
-    endif
-
-    let path = expand("%:p:h")
-    if has_key(s:path_branch, path)
-        return s:path_branch[path]
-    endif
-
-    let branch = ""
-    let branch_info = GetSvnBranchOfPath(path)
-    if len(branch_info)
-        let b = ""
-        if branch_info["type"] == "trunk"
-            let b = "trunk"
-        elseif branch_info["type"] == "tag"
-            let b = "tag:" . branch_info["branch"]
-        else
-            let b = branch_info["branch"]
-        endif
-
-        if len(b)
-            let b = iconv(UrlDecode(b), "utf-8", &enc)
-            let branch = g:airline_symbols.branch . ' ' . b
-        endif
-    endif
-
-    let s:path_branch[path] = branch
-    return branch
-endfunction
-" }}}3
-" GoldenView.Vim: <F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口 {{{3
-NeoBundle 'zhaocai/GoldenView.Vim'
-let g:goldenview__enable_default_mapping = 0
-nmap <silent> <C-N>  <Plug>GoldenViewNext
-nmap <silent> <C-P>  <Plug>GoldenViewPrevious
-
-nmap <silent> <F8>   <Plug>GoldenViewSwitchMain
-nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
-
-" nmap <silent> <C-L>  <Plug>GoldenViewSplit
-" }}}3
-" vim-unimpaired: 增加]及[开头的一系列快捷键，方便进行tab等的切换 {{{3
-NeoBundle'tpope/vim-unimpaired'
-" [a     : previous  ]a     : next   [A : first  ]A : last
-" [b     : bprevious ]b     : bnext  [B : bfirst ]B : blast
-" [l     : lprevious ]l     : lnext  [L : lfirst ]L : llast
-" [<C-L> : lpfile    ]<C-L> : lnfile
-" [q     : cprevious ]q     : cnext  [Q : cfirst ]Q : clast
-" [t     : tprevious ]t     : tnext  [T : tfirst ]T : tlast
-" }}}3
-" vim-tmux-navigator: 使用ctrl+i/j/k/l在vim及tmux间切换 {{{3
-NeoBundleLazy 'christoomey/vim-tmux-navigator', {
-            \ 'mappings' : [['n', '<C-H>', '<C-J>', '<C-K>', '<C-L>', '<C-\>']],
-            \ }
-" 需要在tmux.conf中加入下列内容
-" # Smart pane switching with awareness of vim splits
-" is_vim='echo "#{pane_current_command}" | grep -iqE "(^|\/)g?(view|n?vim?)(diff)?$"'
-" bind -n C-h if-shell "$is_vim" "send-keys C-h" "select-pane -L"
-" bind -n C-j if-shell "$is_vim" "send-keys C-j" "select-pane -D"
-" bind -n C-k if-shell "$is_vim" "send-keys C-k" "select-pane -U"
-" bind -n C-l if-shell "$is_vim" "send-keys C-l" "select-pane -R"
-" bind -n C-\ if-shell "$is_vim" "send-keys C-\\" "select-pane -l"
 " }}}3
 " }}}2
 
@@ -1954,6 +1780,185 @@ nmap ,r <Plug>(quickrun)
 NeoBundleLazy 'mtth/scratch.vim', {
             \ 'commands' : ['Scratch','ScratchInsert','ScratchSelection'],
             \ 'mappings' : [['v','gs'], ['v','gS']],
+            \ }
+" }}}3
+" undotree: 列出修改历史，方便undo到一个特定的位置 {{{3
+NeoBundleLazy 'mbbill/undotree', {
+            \ 'commands' : ['UndotreeToggle', 'UndotreeHide', 'UndotreeShow', 'UndotreeFocus'],
+            \ }
+nnoremap <silent> <F5> :UndotreeToggle<CR>
+" }}}3
+" vim-repeat: 把.能重复的操作扩展到一些插件中的操作 {{{3
+NeoBundleLazy 'tpope/vim-repeat', {
+            \ 'mappings' : ['.'],
+            \ }
+" }}}3
+" AutoFenc: 自动判别文件的编码 {{{3
+NeoBundle 'AutoFenc'
+" }}}3
+"" vim-sleuth: 自动检测文件的'shiftwidth'和'expandtab' {{{3
+"NeoBundle 'tpope/vim-sleuth'
+"" }}}3
+" vim-dispatch: 可以用:Make、:Dispatch等，通过tmux窗口、后台窗口等手段异步执行命令 {{{3
+NeoBundleLazy 'tpope/vim-dispatch', {
+            \ 'commands' : [
+            \     { 'name' : 'Dispatch', 'complete' : 'customlist,dispatch#command_complete' },
+            \     { 'name' : 'FocusDispatch', 'complete' : 'customlist,dispatch#command_complete' },
+            \     { 'name' : 'Make', 'complete' : 'customlist,dispatch#make_complete' },
+            \     { 'name' : 'Spawn', 'complete' : 'customlist,dispatch#command_complete' },
+            \     { 'name' : 'Start', 'complete' : 'customlist,dispatch#command_complete' },
+            \     'Copen',
+            \ ],
+            \ }
+" }}}3
+" vim-airline: 增强的statusline {{{3
+NeoBundle 'bling/vim-airline'
+let bundle = neobundle#get('vim-airline')
+function! bundle.hooks.on_source(bundle)
+    " 把section a的第1个part从mode改为bufnr() + mode
+    call airline#parts#define_raw('bufnr_mode', '%{bufnr("%") . " " . airline#parts#mode()}')
+    let g:airline_section_a = airline#section#create_left(['bufnr_mode', 'paste', 'iminsert'])
+    if executable("svn")
+        call airline#parts#define_function('mybranch', 'MyBranch')
+        let g:airline_section_b = airline#section#create(['hunks', 'mybranch'])
+    endif
+endfunction
+
+" if neobundle#is_installed("vcscommand.vim")
+"     let g:airline#extensions#branch#use_vcscommand = 1
+" endif
+
+" let g:airline_left_sep = '\u25ba'
+" let g:airline_right_sep = '\u25c4'
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+if &encoding == "utf-8"
+    " 开启powerline字体，可在 https://github.com/runsisi/consolas-font-for-powerline
+    " 找到增加了特定字符的Consolas字体。
+    " https://github.com/Lokaltog/powerline-fonts 在更多免费的字体
+    let g:airline_powerline_fonts=1
+
+    if s:is_windows
+        let g:airline_symbols.whitespace = " "
+    else
+        let g:airline_symbols.whitespace = "\u039e"
+        let g:airline_symbols.paste = "\u2225"
+    endif
+else
+    let g:airline_left_sep = " "
+    let g:airline_left_alt_sep = "|"
+    let g:airline_right_sep = " "
+    let g:airline_right_alt_sep = "|"
+    let g:airline_symbols.branch = ""
+    let g:airline_symbols.readonly = "RO"
+    let g:airline_symbols.linenr = "LN"
+    let g:airline_symbols.paste = "PASTE"
+    let g:airline_symbols.whitespace = " "
+
+    " let g:airline_left_sep = "\ue0b0"
+    " let g:airline_left_alt_sep = "\ue0b1"
+    " let g:airline_right_sep = "\ue0b2"
+    " let g:airline_right_alt_sep = "\ue0b3"
+
+    " let g:airline_symbols.branch = "\ue0a0"
+    " let g:airline_symbols.readonly = "\ue0a2"
+    " let g:airline_symbols.linenr = "\ue0a1"
+    " let g:airline_symbols.paste = "\u22256"
+endif
+
+set noshowmode
+
+let g:unite_force_overwrite_statusline = 0
+let g:vimfiler_force_overwrite_statusline = 0
+let g:vimshell_force_overwrite_statusline = 0
+
+" 显示tabline
+let g:airline#extensions#tabline#enabled = 1
+" 只在有多于两个tab时显示tabline，不利用tabline来显示buffer
+let g:airline#extensions#tabline#tab_min_count = 2
+let g:airline#extensions#tabline#show_buffers = 0
+" 不在tabline上显示关闭按钮
+let g:airline#extensions#tabline#show_close_button = 0
+
+let s:path_branch = {}
+
+function! UrlDecode(str)
+    let str = substitute(substitute(substitute(a:str,'%0[Aa]\n$','%0A',''),'%0[Aa]','\n','g'),'+',' ','g')
+    return substitute(str,'%\(\x\x\)','\=nr2char("0x".submatch(1))','g')
+endfunction
+
+function! MyBranch()
+    let result = airline#extensions#branch#get_head()
+    if len(result)
+        return result
+    endif
+
+    let path = expand("%:p:h")
+    if has_key(s:path_branch, path)
+        return s:path_branch[path]
+    endif
+
+    let branch = ""
+    let branch_info = GetSvnBranchOfPath(path)
+    if len(branch_info)
+        let b = ""
+        if branch_info["type"] == "trunk"
+            let b = "trunk"
+        elseif branch_info["type"] == "tag"
+            let b = "tag:" . branch_info["branch"]
+        else
+            let b = branch_info["branch"]
+        endif
+
+        if len(b)
+            let b = iconv(UrlDecode(b), "utf-8", &enc)
+            let branch = g:airline_symbols.branch . ' ' . b
+        endif
+    endif
+
+    let s:path_branch[path] = branch
+    return branch
+endfunction
+" }}}3
+" GoldenView.Vim: <F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口 {{{3
+NeoBundle 'zhaocai/GoldenView.Vim'
+let g:goldenview__enable_default_mapping = 0
+nmap <silent> <C-N>  <Plug>GoldenViewNext
+nmap <silent> <C-P>  <Plug>GoldenViewPrevious
+
+nmap <silent> <F8>   <Plug>GoldenViewSwitchMain
+nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
+
+" nmap <silent> <C-L>  <Plug>GoldenViewSplit
+" }}}3
+" vim-unimpaired: 增加]及[开头的一系列快捷键，方便进行tab等的切换 {{{3
+NeoBundle'tpope/vim-unimpaired'
+" [a     : previous  ]a     : next   [A : first  ]A : last
+" [b     : bprevious ]b     : bnext  [B : bfirst ]B : blast
+" [l     : lprevious ]l     : lnext  [L : lfirst ]L : llast
+" [<C-L> : lpfile    ]<C-L> : lnfile
+" [q     : cprevious ]q     : cnext  [Q : cfirst ]Q : clast
+" [t     : tprevious ]t     : tnext  [T : tfirst ]T : tlast
+" }}}3
+" vim-tmux-navigator: 使用ctrl+i/j/k/l在vim及tmux间切换 {{{3
+NeoBundleLazy 'christoomey/vim-tmux-navigator', {
+            \ 'mappings' : [['n', '<C-H>', '<C-J>', '<C-K>', '<C-L>', '<C-\>']],
+            \ }
+" 需要在tmux.conf中加入下列内容
+" # Smart pane switching with awareness of vim splits
+" is_vim='echo "#{pane_current_command}" | grep -iqE "(^|\/)g?(view|n?vim?)(diff)?$"'
+" bind -n C-h if-shell "$is_vim" "send-keys C-h" "select-pane -L"
+" bind -n C-j if-shell "$is_vim" "send-keys C-j" "select-pane -D"
+" bind -n C-k if-shell "$is_vim" "send-keys C-k" "select-pane -U"
+" bind -n C-l if-shell "$is_vim" "send-keys C-l" "select-pane -R"
+" bind -n C-\ if-shell "$is_vim" "send-keys C-\\" "select-pane -l"
+" }}}3
+" capture.vim: Capture命令，把Ex命令的结果捕捉到窗口中 {{{3
+NeoBundleLazy 'tyru/capture.vim', {
+            \ 'commands' : [ { 'name' : 'Capture', 'complete' : 'command' } ],
             \ }
 " }}}3
 " }}}2
