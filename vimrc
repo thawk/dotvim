@@ -381,8 +381,6 @@ au BufRead,BufNewFile *.ipp                       setf cpp
 " }}}2
 
 " Filetype related autosettings " {{{2
-au FileType jam   if &makeprg=='make' | setlocal makeprg=b2 | endif
-
 au FileType diff  setlocal shiftwidth=4 tabstop=4
 " au FileType html  setlocal autoindent indentexpr= shiftwidth=2 tabstop=2
 au FileType changelog setlocal textwidth=76
@@ -882,13 +880,13 @@ hi link EasyMotionShade Comment
 "             \ 'mappings' : [['n', 'f', 'F', 't', 'T']],
 "             \ }
 " " }}}3
-" glowshi-ft.vim: 增强的f/t {{{3
-NeoBundleLazy 'saihoooooooo/glowshi-ft.vim', {
-            \ 'mappings' : [
-            \     ['n', '<Plug>', 'f', 'F', 't', 'T', ';', ','],
-            \ ],
-            \ }
-" }}}3
+" " glowshi-ft.vim: 增强的f/t {{{3
+" NeoBundleLazy 'saihoooooooo/glowshi-ft.vim', {
+"             \ 'mappings' : [
+"             \     ['n', '<Plug>', 'f', 'F', 't', 'T', ';', ','],
+"             \ ],
+"             \ }
+" " }}}3
 " neocomplete: 代码补全插件 {{{3
 NeoBundleLazy 'Shougo/neocomplete', {
             \ 'insert' : 1,
@@ -1350,7 +1348,10 @@ let g:tagbar_type_markdown = {
 " }}}3
 " vcscommand.vim: SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件 {{{3
 NeoBundleLazy 'vcscommand.vim', {
-            \ 'mappings' : ['<Plug>VCS'],
+            \ 'mappings' : [
+            \     '<Plug>VCS',
+            \     [ 'n', '<Leader>ca', '<Leader>cc', '<Leader>cD', '<Leader>cd', '<Leader>cG', '<Leader>cg', '<Leader>ci', '<Leader>cL', '<Leader>cl', '<Leader>cN', '<Leader>cn', '<Leader>cq', '<Leader>cr', '<Leader>cs', '<Leader>cU', '<Leader>cu', '<Leader>cv'],
+            \ ],
             \ 'commands' : ['VCSAdd', 'VCSAnnotate', 'VCSBlame', 'VCSCommit', 'VCSDelete', 'VCSDiff', 'VCSGotoOriginal', 'VCSInfo', 'VCSLock', 'VCSLog', 'VCSRemove', 'VCSRevert', 'VCSReview', 'VCSStatus', 'VCSUnlock', 'VCSUpdate', 'VCSVimDiff', 'VCSCommandDisableBufferSetup', 'VCSCommandEnableBufferSetup', 'VCSReload'],
             \ }
 nnoremap <Leader>cp :VCSVimDiff PREV<CR>
