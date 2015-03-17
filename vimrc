@@ -1461,6 +1461,15 @@ NeoBundle 'scrooloose/syntastic'
 "             \ 'active_filetypes': ['ruby', 'php', 'python'],
 "             \ 'passive_filetypes': ['cpp'] }
 
+let g:syntastic_html_tidy_ignore_errors=[
+            \ " proprietary attribute ",
+            \ "trimming empty <",
+            \ "unescaped &",
+            \ "lacks \"action",
+            \ "attribute \"href\" lacks value",
+            \ "is not recognized!",
+            \ "discarding unexpected"]
+
 let g:syntastic_mode_map = {
             \ "mode": "active",
             \ "active_filetypes": [],
