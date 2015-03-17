@@ -1035,10 +1035,15 @@ else
                 \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 endif
 " }}}3
+" context_filetype.vim: 在文件中根据上下文确定当前的filetype，如识别出html中内嵌js、css {{{3
+NeoBundleLazy 'Shougo/context_filetype.vim', {
+            \ }
+" }}}3
 " neosnippet: 代码模板引擎 {{{3
 NeoBundleLazy 'Shougo/neosnippet', {
             \ 'insert' : 1,
             \ 'filetypes' : 'neosnippet',
+            \ 'depends' : ['context_filetype.vim'],
             \ 'commands' : ['NeoSnippetEdit'],
             \ 'mappings' : ['<Plug>(neosnippet_'],
             \ 'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
