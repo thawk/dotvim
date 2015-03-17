@@ -634,13 +634,13 @@ nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
 if s:is_windows
     nnoremap <silent> [unite]f
                 \ :<C-u>Unite -buffer-name=files -multi-line
-                \ jump_point file_point buffer
-                \ file_rec:! file file_mru file/new<CR>
+                \ file jump_point file_point buffer
+                \ file_rec:! file_mru file/new<CR>
 else
     nnoremap <silent> [unite]f
                 \ :<C-u>Unite -buffer-name=files -multi-line
-                \ jump_point file_point buffer
-                \ file_rec/async:! file file_mru file/new<CR>
+                \ file jump_point file_point buffer
+                \ file_rec/async:! file_mru file/new<CR>
 endif
 
 if neobundle#is_installed("unite-outline")
