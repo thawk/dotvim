@@ -603,7 +603,8 @@ nnoremap <silent> [unite2]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-n
 
 nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search -start-insert line<CR>
 "nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
-nnoremap <silent> [unite]b :<C-u>Unite -buffer-name=files buffer file:<C-R>=expand("%:p:h")<CR> file/new:<C-R>=expand("%:p:h")<CR> -start-insert<CR>
+nnoremap <silent> [unite]b :<C-u>Unite -buffer-name=files file:<C-R>=expand("%:p:h")<CR> buffer file/new:<C-R>=expand("%:p:h")<CR> -start-insert<CR>
+nnoremap <silent> [unite]B :<C-u>Unite -buffer-name=files buffer file:<C-R>=expand("%:p:h")<CR> file/new:<C-R>=expand("%:p:h")<CR> -start-insert<CR>
 nnoremap <silent> [unite]c :<C-u>Unite -buffer-name=files file:<C-R>=expand("%:p:h")<CR> buffer file/new:<C-R>=expand("%:p:h")<CR> -start-insert<CR>
 nnoremap <silent> [unite]C :<C-u>UniteClose<CR>
 " nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
