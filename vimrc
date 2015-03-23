@@ -1807,7 +1807,7 @@ nnoremap <silent> <F5> :UndotreeToggle<CR>
 " }}}3
 " vim-repeat: 把.能重复的操作扩展到一些插件中的操作 {{{3
 NeoBundleLazy 'tpope/vim-repeat', {
-            \ 'mappings' : ['.'],
+            \ 'mappings' : ['n', '.', 'u', 'U', '<C-R>'],
             \ }
 " }}}3
 " AutoFenc: 自动判别文件的编码 {{{3
