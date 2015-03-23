@@ -599,12 +599,13 @@ nnoremap <silent> [unite2]G :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-n
 " nnoremap <silent> [unite]G :<C-u>UniteWithCursorWord grep -buffer-name=search -no-quit<CR>
 "nnoremap <silent> [unite]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
 nnoremap <silent> [unite]g :<C-u>Unite grep:! -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
-nnoremap <silent> [unite2]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert<CR>
+nnoremap <silent> [unite2]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
 
-nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search -start-insert line<CR>
+nnoremap <silent> [unite]/ :<C-U>Unite line -buffer-name=search -start-insert -input=<C-R><C-W><CR>
+nnoremap <silent> [unite]? :<C-U>Unite line -buffer-name=search -start-insert<CR>
 "nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
 nnoremap <silent> [unite]b :<C-u>Unite -buffer-name=files file:<C-R>=expand("%:p:h")<CR> buffer file/new:<C-R>=expand("%:p:h")<CR> -start-insert<CR>
-nnoremap <silent> [unite]B :<C-u>Unite -buffer-name=files buffer file:<C-R>=expand("%:p:h")<CR> file/new:<C-R>=expand("%:p:h")<CR> -start-insert<CR>
+nnoremap <silent> [unite]B :<C-u>Unite -buffer-name=files buffer file:<C-R>=expand("%:p:h")<CR> file_mru file/new:<C-R>=expand("%:p:h")<CR> -start-insert<CR>
 nnoremap <silent> [unite]c :<C-u>Unite -buffer-name=files file buffer file/new -start-insert<CR>
 nnoremap <silent> [unite]C :<C-u>UniteClose<CR>
 " nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
@@ -1698,10 +1699,10 @@ let g:fsnonewfiles=1
 " 可以用:A在.h/.cpp间切换
 command! A :call FSwitch('%', '')
 augroup fswitch_hack
-    au! BufEnter *.h
+    au! BufEnter *.h,*.hpp
                 \  let b:fswitchdst='cpp,c,ipp,cxx'
                 \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!\<include/\w\+/!src/!,reg:!\<include/\(\w\+/\)\{2}!src/!,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
-    au! BufEnter *.c,*.cpp,*.ipp
+    au! BufEnter *.c,*.cpp,cxx,*.ipp
                 \  let b:fswitchdst='h,hpp'
                 \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
     au! BufEnter *.xml
