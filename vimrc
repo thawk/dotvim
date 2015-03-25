@@ -908,6 +908,11 @@ else
     let g:neocomplete#enable_auto_select = 0
     let g:neocomplete#auto_completion_start_length = 3
 
+    if v:version == '704' && !has("patch-7.4.633")
+        " neocomplete issue #332
+        let g:neocomplete#enable_fuzzy_completion = 0
+    endif
+
     " Define dictionary.
     let g:neocomplete#sources#dictionary#dictionaries = {
                 \ 'default' : '',
