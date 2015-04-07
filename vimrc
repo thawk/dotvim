@@ -1409,6 +1409,7 @@ else
     let g:clang_hl_errors = 1       " highlight the warnings and errors the same way clang
     "let g:clang_jumpto_declaration_key = '<C-]>'
     "let g:clang_jumpto_back_key = '<C-T>'
+    let g:clang_default_keymappings = 0
 
     if s:libclang_path != ""
         let g:clang_use_library = 1
