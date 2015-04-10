@@ -739,7 +739,7 @@ NeoBundleLazy 'hrsh7th/vim-versions', {
 " }}}3
 " unite-gtags: Unite下调用gtags {{{3
 NeoBundleLazy 'hewes/unite-gtags', {
-            \ "unite_sources" : ["gtags/completion","gtags/context","gtags/def","gtags/grep","gtags/ref"],
+            \ "unite_sources" : ["gtags/ref","gtags/def","gtags/context","gtags/completion","gtags/grep","gtags/file"],
             \ }
 if !s:has_global
     NeoBundleDisable 'unite-gtags'
@@ -752,6 +752,7 @@ else
     nnoremap <C-\><C-\>T :<C-u>Unite gtags/grep:
     nnoremap <C-\><C-\>e :<C-u>UniteWithCursorWord gtags/grep<CR>
     nnoremap <C-\><C-\>E :<C-u>Unite gtags/grep:
+    nnoremap <C-\><C-\>f :<C-u>Unite gtags/file<CR>
 endif
 " }}}3
 " }}}2
@@ -1268,6 +1269,8 @@ else
     nmap <C-\>e :Gtags -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
     " 如果光标在定义上，就找引用，如果在引用上就找定义
     nmap <C-\><C-]> :GtagsCursor<CR>
+    nmap <C-\>p :Gtags -P<SPACE>
+    nmap <C-\>f :Gtags -f %<CR>
 
     " <C-\>大写在当前窗口打开命令行
     nmap <C-\>S :Gtags -sr<SPACE>
