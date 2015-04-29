@@ -507,10 +507,10 @@ NeoBundle 'Shougo/vimproc', {
             \     'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
             \ },
             \ }
-if has("win32") && filereadable(s:vimrc_path . "\\win32\\vimproc_win32.dll")
-    let g:vimproc_dll_path = s:vimrc_path . "\\win32\\vimproc_win32.dll"
-elseif has("win64") && filereadable(s:vimrc_path . "\\win32\\vimproc_win64.dll")
+if has("win64") && filereadable(s:vimrc_path . "\\win32\\vimproc_win64.dll")
     let g:vimproc_dll_path = s:vimrc_path . "\\win32\\vimproc_win64.dll"
+elseif has("win32") && filereadable(s:vimrc_path . "\\win32\\vimproc_win32.dll")
+    let g:vimproc_dll_path = s:vimrc_path . "\\win32\\vimproc_win32.dll"
 endif
 " }}}3
 " }}}2
