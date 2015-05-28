@@ -857,12 +857,12 @@ if v:version >= '703'
                 \     '"<Leader><Leader>" . v:val')],
                 \ }
 else
-    NeoBundleLazy 'Lokaltog/vim-easymotion', {
-                \ 'rev' : 'e41082',
-                \ 'mappings' : [['n'] + map(
-                \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
-                \     '"<Leader><Leader>" . v:val')],
-                \ }                                 " \\w启动word motion，\\f<字符>启动查找模式
+    " NeoBundleLazy 'Lokaltog/vim-easymotion', {
+    "             \ 'rev' : 'e41082',
+    "             \ 'mappings' : [['n'] + map(
+    "             \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
+    "             \     '"<Leader><Leader>" . v:val')],
+    "             \ }                                 " \\w启动word motion，\\f<字符>启动查找模式
 endif
 let g:EasyMotion_startofline = 0
 let g:EasyMotion_smartcase = 1
@@ -1211,8 +1211,8 @@ let g:HiCursorWords_debugEchoHiName = 0
 NeoBundle 'tomtom/tcomment_vim'
 " }}}3
 " gtags.vim: 直接调用gtags查找符号 {{{3
-NeoBundleLazy 'gtags.vim', {
-            \ "commands" : ["Gtags","GtagsCursor","Gozilla"],
+NeoBundleLazy 'harish2704/gtags.vim', {
+            \ "commands" : ["Gtags","Gtagsa","GtagsCursor","Gozilla","GtagsUpdate"],
             \ }
 if !s:has_global
     NeoBundleDisable 'gtags.vim'
@@ -1262,6 +1262,10 @@ if !s:has_global
         nmap <C-\>D :cs find d<SPACE>
     endif " }}}
 else
+    let g:Gtags_Auto_Update = 1
+    let g:Gtags_Auto_Map = 0
+    let g:Gtags_No_Auto_Jump = 0
+
     " <C-\>小写在当前窗口打开光标下的符号
     nmap <C-\>s :Gtags -sr <C-R>=expand("<cword>")<CR><CR>
     nmap <C-\>g :Gtags --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
@@ -1277,12 +1281,6 @@ else
     nmap <C-\>G :Gtags<SPACE>
     nmap <C-\>T :Gtags -g --literal<SPACE>
     nmap <C-\>E :Gtags -g<SPACE>
-
-    function! s:GtagsAutoUpdate()
-        let l:result = system(s:global_command . " -u --single-update=\"" . expand("%") . "\"")
-    endfunction
-
-    autocmd! BufWritePost * call s:GtagsAutoUpdate()
 endif
 " }}}3
 " slimux: 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列 {{{3
