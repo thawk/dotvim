@@ -183,6 +183,7 @@ set showcmd " Display an incomplete command in the lower right corner of the Vim
 set cmdheight=1
 set winminheight=0  " 最小化窗口的高度为0
 "set shortmess=atI " Shortens messages
+set nostartofline " 翻页时保持光标的水平位置
 
 " 状态栏里显示文字编码和换行符等信息
 " 获取当前路径，将$HOME转化为~
