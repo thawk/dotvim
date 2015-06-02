@@ -1110,6 +1110,7 @@ NeoBundleLazy 'kana/vim-niceblock', {
 " }}}3
 " Mark--Karkat: 可同时标记多个mark。\M显隐所有，\N清除所有Mark。\m标识当前word {{{3
 NeoBundleLazy 'vernonrj/Mark--Karkat', {
+            \ 'commands' : ['Mark', 'MarkClear', 'Marks', 'MarkLoad', 'MarkSave', 'MarkPalette'],
             \ 'mappings' : ['<Plug>(Mark', '<Leader>m', '<Leader>r', '<Leader>n', '<Leader>*', '<Leader>#', '<Leader>/', '<Leader>?', '*', '#'],
             \ }
 if !(v:version >= '701')
@@ -1122,11 +1123,11 @@ else
     augroup Mark
         au VimEnter *
                     \ highlight MarkWord1 ctermbg=DarkCyan    ctermfg=Black guibg=#8CCBEA guifg=Black |
-                    \ highlight MarkWord2 ctermbg=DarkBlue    ctermfg=Black guibg=#A4E57E guifg=Black |
+                    \ highlight MarkWord2 ctermbg=DarkMagenta ctermfg=Black guibg=#FF7272 guifg=Black |
                     \ highlight MarkWord3 ctermbg=DarkYellow  ctermfg=Black guibg=#FFDB72 guifg=Black |
-                    \ highlight MarkWord4 ctermbg=DarkMagenta ctermfg=Black guibg=#FF7272 guifg=Black |
-                    \ highlight MarkWord5 ctermbg=DarkGreen   ctermfg=Black guibg=#FFB3FF guifg=Black |
-                    \ highlight MarkWord6 ctermbg=DarkRed     ctermfg=Black guibg=#9999FF guifg=Black
+                    \ highlight MarkWord4 ctermbg=DarkGreen   ctermfg=Black guibg=#FFB3FF guifg=Black |
+                    \ highlight MarkWord5 ctermbg=DarkRed     ctermfg=Black guibg=#9999FF guifg=Black |
+                    \ highlight MarkWord6 ctermbg=DarkBlue    ctermfg=Black guibg=#A4E57E guifg=Black
     augroup END
 endif
 " }}}3
