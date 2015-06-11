@@ -1217,7 +1217,7 @@ NeoBundleLazy 'harish2704/gtags.vim', {
             \ "commands" : [
             \     { 'name' : 'Gtags', 'complete' : 'custom,GtagsCandidate' },
             \     { 'name' : 'Gtagsa', 'complete' : 'custom,GtagsCandidate' },
-            \     "GtagsCursor","Gozilla","GtagsUpdate"],
+            \     "GtagsCursor","Gozilla","GtagsUpdate","GtagsCscope"],
             \ }
 if !s:has_global
     NeoBundleDisable 'gtags.vim'
@@ -1270,6 +1270,7 @@ else
     let g:Gtags_Auto_Update = 1
     let g:Gtags_Auto_Map = 0
     let g:Gtags_No_Auto_Jump = 0
+    let g:GtagsCscope_Auto_Load = 1
 
     " <C-\>小写在当前窗口打开光标下的符号
     nmap <C-\>s :Gtags -sr <C-R>=expand("<cword>")<CR><CR>
