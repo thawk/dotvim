@@ -20,7 +20,7 @@ snippet main
 	if __name__ == "__main__":
 		sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
 		sys.stderr = codecs.getwriter(locale.getpreferredencoding())(sys.stderr)
-		locale.setlocale(locale.LC_NUMERIC, 'en_US')	# 可以使用带locale.format("%d", 1234567, groupin=True)得到逗号分隔的格式
+                # locale.setlocale(locale.LC_NUMERIC, 'en_US')	# 可以使用带locale.format("%d", 1234567, groupin=True)得到逗号分隔的格式
 
 		optparser = optparse.OptionParser(
 			usage="%prog [options]", 
