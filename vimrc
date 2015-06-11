@@ -514,6 +514,9 @@ elseif has("win32") && filereadable(s:vimrc_path . "\\win32\\vimproc_win32.dll")
     let g:vimproc_dll_path = s:vimrc_path . "\\win32\\vimproc_win32.dll"
 endif
 " }}}3
+" vim-misc: xolox的插件依赖的库 {{{3
+NeoBundleLazy 'xolox/vim-misc'
+" }}}3
 " }}}2
 
 " Unite {{{2
@@ -1139,6 +1142,26 @@ NeoBundleLazy 'tpope/vim-abolish', {
             \ ],
             \ 'commands' : [ 'Abolish', 'Subvert', 'S' ],
             \ }
+" }}}3
+" vim-notes: :Note创建新的笔记 {{{3
+NeoBundleLazy 'xolox/vim-notes', {
+            \ 'commands' : [
+            \     {'name': 'Note', 'complete': 'customlist,xolox#notes#cmd_complete'},
+            \     {'name': 'DeleteNote', 'complete': 'customlist,xolox#notes#cmd_complete'},
+            \     {'name': 'SearchNotes', 'complete': 'customlist,xolox#notes#keyword_complete'},
+            \     'RelatedNotes', 'RecentNotes', 'MostRecentNote', 'ShowTaggedNotes', 'IndexTaggedNotes',
+            \     'NoteToMarkdown', 'NoteToMediawiki', 'NoteToHtml', 'NoteFromSelectedText',
+            \     'SplitNoteFromSelectedText', 'TabNoteFromSelectedText',
+            \ ],
+            \ 'filetypes' : ['notes'],
+            \ 'depends' : [
+            \     'vim-misc',
+            \ ],
+            \ }
+let g:notes_suffix = '.markdown'
+if !exists('g:notes_directories')
+    let g:notes_directories = ['~/vim-notes']
+endif
 " }}}3
 " }}}2
 
