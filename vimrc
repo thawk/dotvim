@@ -1214,7 +1214,10 @@ NeoBundle 'tomtom/tcomment_vim'
 " }}}3
 " gtags.vim: 直接调用gtags查找符号 {{{3
 NeoBundleLazy 'harish2704/gtags.vim', {
-            \ "commands" : ["Gtags","Gtagsa","GtagsCursor","Gozilla","GtagsUpdate"],
+            \ "commands" : [
+            \     { 'name' : 'Gtags', 'complete' : 'custom,GtagsCandidate' },
+            \     { 'name' : 'Gtagsa', 'complete' : 'custom,GtagsCandidate' },
+            \     "GtagsCursor","Gozilla","GtagsUpdate"],
             \ }
 if !s:has_global
     NeoBundleDisable 'gtags.vim'
