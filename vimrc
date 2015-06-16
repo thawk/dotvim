@@ -558,8 +558,8 @@ xmap <Leader>f [unite]
 
 nnoremap [unite2] <Nop>
 xnoremap [unite2] <Nop>
-nmap <C-\>f [unite2]
-xmap <C-\>f [unite2]
+nmap <Leader>F [unite2]
+xmap <Leader>F [unite2]
 
 let g:unite_enable_start_insert = 1
 "let g:unite_enable_short_source_names = 1
