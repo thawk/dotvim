@@ -1614,7 +1614,7 @@ let g:ConqueGdb_Leader = ','
 " }}}3
 " }}}2
 
-" Language {{{2
+" Filetype {{{2
 " csv.vim: 增加对CSV文件（逗号分隔文件）的支持 {{{3
 NeoBundleLazy 'csv.vim', {
             \ 'filetypes' : ['csv'],
@@ -1689,6 +1689,12 @@ if has('win32') && !exists('$APPCACHE')
     " 设置缓存目录
     let $APPCACHE=$HOME . '/.cache'
 endif
+" }}}3
+
+" vim-markdown-concealed: markdown支持，并且利用conceal功能隐藏不需要的字符 {{{3
+NeoBundleLazy 'prurigro/vim-markdown-concealed', {
+            \ 'filetypes' : ['markdown'],
+            \ }
 " }}}3
 " }}}2
 
