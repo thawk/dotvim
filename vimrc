@@ -1163,6 +1163,44 @@ if !exists('g:notes_directories')
     let g:notes_directories = ['~/vim-notes']
 endif
 " }}}3
+" vim-multiple-cursors: 同时编辑多处 {{{3
+NeoBundleLazy 'terryma/vim-multiple-cursors', {
+            \ 'mappings' : [ '<C-N>' ],
+            \ 'commands' : [ 'MultipleCursorsFind' ],
+            \ }
+" 进入multiple cursors时禁用neocomplete
+" Called once right before you start selecting multiple cursors
+function! Multiple_cursors_before()
+  if exists(':NeoCompleteLock')==2
+    exe 'NeoCompleteLock'
+  endif
+endfunction
+
+" Called once only when the multiple selection is canceled (default <Esc>)
+function! Multiple_cursors_after()
+  if exists(':NeoCompleteUnlock')==2
+    exe 'NeoCompleteUnlock'
+  endif
+endfunction
+" }}}3
+" ctrlsf.vim: 快速查找及编辑 {{{3
+NeoBundleLazy 'dyng/ctrlsf.vim', {
+            \ 'mappings' : [ '<Plug>CtrlSF' ],
+            \ 'commands' : [
+            \     {'name': 'CtrlSF', 'complete': 'customlist,ctrlsf#comp#Completion'},
+            \     'CtrlSFOpen', 'CtrlSFUpdate', 'CtrlSFClose', 'CtrlSFClearHL', 'CtrlSFToggle',
+            \ ]}
+nmap     <C-F>f <Plug>CtrlSFPrompt
+vmap     <C-F>f <Plug>CtrlSFVwordPath
+vmap     <C-F>F <Plug>CtrlSFVwordExec
+nmap     <C-F>n <Plug>CtrlSFCwordPath
+nmap     <C-F>N <Plug>CtrlSFCwordExec
+nmap     <C-F>p <Plug>CtrlSFPwordPath
+nmap     <C-F>P <Plug>CtrlSFPwordExec
+nnoremap <C-F>o :CtrlSFOpen<CR>
+nnoremap <C-F>t :CtrlSFToggle<CR>
+inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
+" }}}3
 " }}}2
 
 " Text object {{{2
@@ -1985,8 +2023,8 @@ endfunction
 " GoldenView.Vim: <F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口 {{{3
 NeoBundle 'zhaocai/GoldenView.Vim'
 let g:goldenview__enable_default_mapping = 0
-nmap <silent> <C-N>  <Plug>GoldenViewNext
-nmap <silent> <C-P>  <Plug>GoldenViewPrevious
+" nmap <silent> <C-N>  <Plug>GoldenViewNext
+" nmap <silent> <C-P>  <Plug>GoldenViewPrevious
 
 nmap <silent> <F8>   <Plug>GoldenViewSwitchMain
 nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
