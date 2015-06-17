@@ -517,6 +517,9 @@ endif
 " vim-misc: xolox的插件依赖的库 {{{3
 NeoBundleLazy 'xolox/vim-misc'
 " }}}3
+" tabpagebuffer.vim: 记录一个tab中包含的buffer {{{3
+NeoBundle 'Shougo/tabpagebuffer.vim'
+" }}}3
 " }}}2
 
 " Unite {{{2
@@ -1981,6 +1984,11 @@ let g:airline#extensions#tabline#tab_min_count = 2
 let g:airline#extensions#tabline#show_buffers = 0
 " 不在tabline上显示关闭按钮
 let g:airline#extensions#tabline#show_close_button = 0
+
+let g:airline#extensions#tabline#formatter = 'default'
+let g:airline#extensions#tabline#buffer_nr_show = 0
+let g:airline#extensions#tabline#buffer_nr_format = '%s: '
+let g:airline#extensions#tabline#fnamemod = ':p:t'
 
 let s:path_branch = {}
 
