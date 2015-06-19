@@ -899,6 +899,10 @@ hi link EasyMotionShade Comment
 "             \ ],
 "             \ }
 " " }}}3
+" YouCompleteMe: 代码被全 {{{3
+NeoBundleLazy 'Valloric/YouCompleteMe', {
+            \ }
+" }}}3
 " neocomplete: 代码补全插件 {{{3
 NeoBundleLazy 'Shougo/neocomplete', {
             \ 'insert' : 1,
