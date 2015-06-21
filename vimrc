@@ -492,6 +492,7 @@ endif
 call neobundle#begin()
 
 let g:neobundle_default_git_protocol = 'https'
+let g:neobundle#install_process_timeout = 1500
 
 " 使用submodule管理NeoBundle
 " " Let NeoBundle manage NeoBundle
@@ -899,10 +900,13 @@ hi link EasyMotionShade Comment
 "             \ ],
 "             \ }
 " " }}}3
-" YouCompleteMe: 代码被全 {{{3
-NeoBundleLazy 'Valloric/YouCompleteMe', {
-            \ }
-" }}}3
+" " YouCompleteMe: 代码被全 {{{3
+" NeoBundleLazy 'Valloric/YouCompleteMe', {
+"             \ 'build' : {
+"             \     'unix' : './install.sh --clang-completer',
+"             \    }
+"             \ }
+" " }}}3
 " neocomplete: 代码补全插件 {{{3
 NeoBundleLazy 'Shougo/neocomplete', {
             \ 'insert' : 1,
