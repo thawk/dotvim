@@ -48,6 +48,8 @@ else
     endif
 endif
 
+let s:clang_include_path = fnamemodify(finddir("include",  s:libclang_path . "/clang/**"), ":p")
+
 if s:ag_path
     exec 'set grepprg=' . s:ag_path . '\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
     set grepformat=%f:%l:%c:%m
@@ -1498,22 +1500,21 @@ else
     endif
 endif
 " }}}3
-"" vim-clang: 使用clang编译器进行上下文补全 {{{3
-" if executable('clang')    " vim-clang比使用clang_complete慢
-"     NeoBundleLazy 'justmao945/vim-clang', {
-"                 \ 'filetypes' : ['c', 'cpp'],
-"                 \ }
-"     " 使用NeoComplete触发补全
-"     let g:clang_auto = 0
-"     if s:libclang_path != ""
-"         if !exists('g:clang_cpp_options')
-"             let g:clang_cpp_options = ''
-"         endif
-"         let g:clang_cpp_options .= " -I " . s:libclang_path . "/clang/3.4/include/"
-"         echomsg g:clang_cpp_options
-"     endif
-" endif
-"" }}}3
+" vim-clang: 使用clang编译器进行上下文补全 {{{3
+if executable('clang')    " vim-clang比使用clang_complete慢
+    NeoBundleLazy 'justmao945/vim-clang', {
+                \ }
+                " \ 'filetypes' : ['c', 'cpp'],
+    " 使用NeoComplete触发补全
+    let g:clang_auto = 0
+    if s:libclang_path != ""
+        if !exists('g:clang_cpp_options')
+            let g:clang_cpp_options = ''
+        endif
+        let g:clang_cpp_options .= " -I " . s:clang_include_path
+    endif
+endif
+" }}}3
 " vim-clang-format: 使用clang编译器进行上下文补全 {{{3
 NeoBundleLazy 'rhysd/vim-clang-format', {
             \ 'commands' : ['ClangFormat'],
