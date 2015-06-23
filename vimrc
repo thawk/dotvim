@@ -2051,12 +2051,14 @@ nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
 " }}}3
 " vim-unimpaired: 增加]及[开头的一系列快捷键，方便进行tab等的切换 {{{3
 NeoBundle'tpope/vim-unimpaired'
-" [a     : previous  ]a     : next   [A : first  ]A : last
-" [b     : bprevious ]b     : bnext  [B : bfirst ]B : blast
-" [l     : lprevious ]l     : lnext  [L : lfirst ]L : llast
-" [<C-L> : lpfile    ]<C-L> : lnfile
-" [q     : cprevious ]q     : cnext  [Q : cfirst ]Q : clast
-" [t     : tprevious ]t     : tnext  [T : tfirst ]T : tlast
+" [a     :previous  ]a     :next   [A :first  ]A : last
+" [b     :bprevious ]b     :bnext  [B :bfirst ]B : blast
+" [l     :lprevious ]l     :lnext  [L :lfirst ]L : llast
+" [<C-L> :lpfile    ]<C-L> :lnfile
+" [q     :cprevious ]q     :cnext  [Q :cfirst ]Q : clast
+" [t     :tprevious ]t     :tnext  [T :tfirst ]T : tlast
+" [<C-Q> :cpfile (Note that <C-Q> only works in a terminal if you disable
+" ]<C-Q> :cnfile flow control: stty -ixon)
 " }}}3
 " vim-tmux-navigator: 使用ctrl+i/j/k/l在vim及tmux间切换 {{{3
 NeoBundleLazy 'christoomey/vim-tmux-navigator', {
@@ -2203,13 +2205,6 @@ map <C-S-tab> :tabprevious<cr>
 map <C-tab> :tabnext<cr>
 imap <C-S-tab> <ESC>:tabprevious<cr>i
 imap <C-tab> <ESC>:tabnext<cr>i
-" }}}2
-
-" Key mappings for the quickfix commands {{{2
-nmap <F11> :cn<CR>
-nmap <F12> :cp<CR>
-nmap g<F11> :cnf<CR>
-nmap g<F12> :cpf<CR>
 " }}}2
 
 " 查找 {{{2
