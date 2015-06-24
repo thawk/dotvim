@@ -50,8 +50,8 @@ endif
 
 let s:clang_include_path = fnamemodify(finddir("include",  s:libclang_path . "/clang/**"), ":p")
 
-if s:ag_path
-    exec 'set grepprg=' . s:ag_path . '\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
+if s:ag_path != ""
+    exec 'set grepprg=' . s:ag_path . '\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow'
     set grepformat=%f:%l:%c:%m
 endif
 " }}}1
@@ -94,7 +94,7 @@ endif
 
 if (s:is_windows)
     set shellpipe=\|\ tee
-    set shellslash
+    set noshellslash
 endif
 
 set noshelltemp
@@ -1205,7 +1205,11 @@ NeoBundleLazy 'dyng/ctrlsf.vim', {
             \     {'name': 'CtrlSF', 'complete': 'customlist,ctrlsf#comp#Completion'},
             \     'CtrlSFOpen', 'CtrlSFUpdate', 'CtrlSFClose', 'CtrlSFClearHL', 'CtrlSFToggle',
             \ ]}
-nmap     <C-F>f <Plug>CtrlSFPrompt
+if s:ag_path != ""
+    let g:ctrlsf_ackprg = s:ag_path
+endif
+
+nmap     <C-F>f <Plug>CtrlSFPrompt -regex<SPACE>
 vmap     <C-F>f <Plug>CtrlSFVwordPath
 vmap     <C-F>F <Plug>CtrlSFVwordExec
 nmap     <C-F>n <Plug>CtrlSFCwordPath
