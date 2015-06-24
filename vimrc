@@ -632,7 +632,7 @@ nnoremap <silent> [unite]q :<C-u>Unite quickfix -no-quit<CR>
 "nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag tag/include<CR>
 nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag<CR>
 " nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
-nnoremap <silent> [unite]t :Unite -buffer-name=tabs tab<CR>
+nnoremap <silent> [unite]t :<C-U>Unite -buffer-name=tabs tab<CR>
 " nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
 " nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
 nnoremap <silent> [unite]v :<C-u>UniteVersions status<CR>
@@ -673,8 +673,8 @@ function! s:unite_my_settings() "{{{
     imap <buffer> '     <Plug>(unite_quick_match_default_action)
     nmap <buffer> '     <Plug>(unite_quick_match_default_action)
     imap <buffer><expr> x
-                \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
-    nmap <buffer> x     <Plug>(unite_quick_match_choose_action)
+                \ unite#smart_map('x', "\<Plug>(unite_choose_action)")
+    nmap <buffer> x     <Plug>(unite_choose_action)
     nmap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
     imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
     imap <buffer> <C-y>     <Plug>(unite_narrowing_path)
@@ -1855,13 +1855,18 @@ NeoBundleLazy 'Shougo/vimfiler', {
             \                 'complete' : 'customlist,vimfiler#complete' },
             \               { 'name' : 'Write',
             \                 'complete' : 'customlist,vimfiler#complete' },
-            \               'Read', 'Source'],
+            \               { 'name' : 'Read',
+            \                 'complete' : 'customlist,vimfiler#complete' },
+            \               { 'name' : 'Source',
+            \                 'complete' : 'customlist,vimfiler#complete' },
+            \              ],
             \ 'mappings' : ['<Plug>(vimfiler_'],
             \ 'explorer' : 1,
             \ }
 " 文件管理器，通过 :VimFiler 启动。
 " c : copy, m : move, r : rename,
 let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_define_wrapper_commands = 1
 " }}}3
 " vimshell: Shell，:VimShell {{{3
 NeoBundleLazy 'Shougo/vimshell', {
