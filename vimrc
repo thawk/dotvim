@@ -1511,10 +1511,18 @@ if executable('clang')    " vim-clang比使用clang_complete慢
                 " \ 'filetypes' : ['c', 'cpp'],
     " 使用NeoComplete触发补全
     let g:clang_auto = 0
+    " default 'longest' can not work with neocomplete
+    let g:clang_c_completeopt = 'menuone,preview'
+    let g:clang_cpp_completeopt = 'menuone,preview'
+
+    " disable diagnostics
+    let g:clang_diagsopt = ''
+
     if s:libclang_path != ""
         if !exists('g:clang_cpp_options')
             let g:clang_cpp_options = ''
         endif
+        let g:clang_cpp_options .= ' -std=c++11'
         let g:clang_cpp_options .= " -I " . s:clang_include_path
     endif
 endif
