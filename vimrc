@@ -272,6 +272,135 @@ let c_space_errors=1
 let java_space_errors=1
 " }}}1
 
+" Key mappings " {{{1
+
+" 用于各插件的热键前缀 {{{2
+nnoremap [unite] <Nop>
+xnoremap [unite] <Nop>
+nmap <Leader>f [unite]
+xmap <Leader>f [unite]
+
+nnoremap [unite2] <Nop>
+xnoremap [unite2] <Nop>
+nmap <Leader>F [unite2]
+xmap <Leader>F [unite2]
+
+nnoremap [repl] <Nop>
+xnoremap [repl] <Nop>
+nmap <Leader>s [repl]
+xmap <Leader>s [repl]
+" }}}2
+
+" 支持alt键 {{{2
+" 使用Kitty后，不再需要映射Alt键
+" if !s:is_windows && !s:is_gui
+"     " 修改对Alt/Meta键的映射
+"     for i in range(33, 126)
+"         let c = nr2char(i)
+"         exec "\"map \e".c." <M-".c.">\""
+"         exec "\"map! \e".c." <M-".c.">\""
+"         exec "\"imap \e".c." <M-".toupper(c).">\""
+"     endfor
+"     set ttimeoutlen=10  " 缩短keycode的timeout
+" endif
+" }}}2
+
+" 简化对常用目录的访问 {{{2
+"用,cd进入当前目录
+nmap ,cd :cd <C-R>=expand("%:p:h")<CR><CR>
+" "用,e可以打开当前目录下的文件
+" nmap ,e :e <C-R>=escape(expand("%:p:h")."/", ' \')<CR>
+" "在命令中，可以用 %/ 得到当前目录。如 :e %/
+" cmap %/ <C-R>=escape(expand("%:p:h")."/", ' \')<cr>
+" }}}2
+
+" 光标移动 {{{2
+" 正常模式下，空格及Shift-空格滚屏
+noremap <SPACE> <C-F>
+noremap <S-SPACE> <C-B>
+
+" Key mappings to ease browsing long lines
+nnoremap <Down>      gj
+nnoremap <Up>        gk
+inoremap <Down> <C-O>gj
+inoremap <Up>   <C-O>gk
+" }}}2
+
+" 操作tab页 {{{2
+" Ctrl-Tab/Ctrl-Shirt-Tab切换Tab
+nmap <C-S-tab> :tabprevious<cr>
+nmap <C-tab> :tabnext<cr>
+map <C-S-tab> :tabprevious<cr>
+map <C-tab> :tabnext<cr>
+imap <C-S-tab> <ESC>:tabprevious<cr>i
+imap <C-tab> <ESC>:tabnext<cr>i
+" }}}2
+
+" 查找 {{{2
+" <F3>自动在当前文件中vimgrep当前word，g<F3>在当前目录下，vimgrep_files指定的文件中查找
+"nmap <F3> :exec "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.c **/*.h **/*.php"<CR>:botright copen<CR>
+"nmap <S-F3> :exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR>:botright copen<CR>
+"map <F3> <ESC>:exec "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.php" <CR><ESC>:botright copen<CR>
+nmap g<F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
+"map <S-F3> <ESC>:exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
+nmap <F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
+
+" V模式下，搜索选中的内容而不是当前word
+vnoremap g<F3> :<C-U>
+            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+            \gvy
+            \:exec "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
+            \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <F3> :<C-U>
+            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+            \gvy
+            \:exec "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
+            \gV:call setreg('"', old_reg, old_regtype)<CR>
+" }}}2
+
+" 在VISUAL模式下，缩进后保持原来的选择，以便再次进行缩进 {{{2
+vnoremap > >gv
+vnoremap < <gv
+" }}}2
+
+" folds {{{2
+" zJ/zK跳到下个/上个折叠处，并只显示该折叠的内容
+nnoremap zJ zjzx
+nnoremap zK zkzx
+nnoremap zr zr:echo 'foldlevel: ' . &foldlevel<cr>
+nnoremap zm zm:echo 'foldlevel: ' . &foldlevel<cr>
+nnoremap zR zR:echo 'foldlevel: ' . &foldlevel<cr>
+nnoremap zM zM:echo 'foldlevel: ' . &foldlevel<cr>
+" }}}2
+
+" 一些方便编译的快捷键 {{{2
+if exists(":Make")  " vim-dispatch提供了异步的make
+    nnoremap <Leader>tm :<C-U>Make<CR>
+    nnoremap <Leader>tt :<C-U>Make unittest<CR>
+    nnoremap <Leader>ts :<C-U>Make stage<CR>
+    nnoremap <Leader>tc :<C-U>Make clean<CR>
+    nnoremap <Leader>td :<C-U>Make doc<CR>
+else
+    nnoremap <Leader>tm :<C-U>make<CR>
+    nnoremap <Leader>tt :<C-U>make unittest<CR>
+    nnoremap <Leader>ts :<C-U>make stage<CR>
+    nnoremap <Leader>tc :<C-U>make clean<CR>
+    nnoremap <Leader>td :<C-U>make doc<CR>
+endif
+" }}}2
+
+" 其它 {{{2
+" Split line(opposite to S-J joining line)
+" nnoremap <silent> <C-J> gEa<CR><ESC>ew
+
+" map <silent> <C-W>v :vnew<CR>
+" map <silent> <C-W>s :snew<CR>
+
+" nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
+" }}}2
+
+" }}}1
+
 " Helper Functions {{{1
 " Coding Helper Functions {{{2
 function! s:RemoveTrailingSpace()
@@ -555,17 +684,6 @@ function! bundle.hooks.on_source(bundle)
     " let g:unite_source_rec_max_cache_files = 0
     " call unite#custom#source('file_rec,file_rec/async', 'max_candidates', 0)
 endfunction
-
-" The prefix key.
-nnoremap [unite] <Nop>
-xnoremap [unite] <Nop>
-nmap <Leader>f [unite]
-xmap <Leader>f [unite]
-
-nnoremap [unite2] <Nop>
-xnoremap [unite2] <Nop>
-nmap <Leader>F [unite2]
-xmap <Leader>F [unite2]
 
 let g:unite_enable_start_insert = 1
 "let g:unite_enable_short_source_names = 1
@@ -1369,28 +1487,6 @@ else
     nmap <C-\>E :Gtags -g<SPACE>
 endif
 " }}}3
-" slimux: 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列 {{{3
-NeoBundleLazy 'epeli/slimux', {
-            \ 'commands' : [
-            \ 'SlimuxREPLSendLine', 'SlimuxREPLSendSelection', 'SlimuxREPLSendLine', 'SlimuxREPLSendBuffer', 'SlimuxREPLConfigure',
-            \ 'SlimuxShellRun', 'SlimuxShellPrompt', 'SlimuxShellLast', 'SlimuxShellConfigure',
-            \ 'SlimuxSendKeysPrompt', 'SlimuxSendKeysLast', 'SlimuxSendKeysConfigure' ],
-            \ }
-if !executable("tmux")
-    NeoBundleDisable 'slimux'
-else
-    nnoremap [slimux] <Nop>
-    xnoremap [slimux] <Nop>
-    nmap <Leader>s [slimux]
-    xmap <Leader>s [slimux]
-
-    map  [slimux]s :SlimuxREPLSendLine<CR>
-    vmap [slimut]s :SlimuxREPLSendSelection<CR>
-    map  [slimux]p :SlimuxShellPrompt<CR>
-    map  [slimux]a :SlimuxShellLast<CR>
-    map  [slimux]k :SlimuxSendKeysLast<CR>
-endif
-" }}}3
 "" Intelligent_Tags: 自动为当前文件及其包含的文件生成tags {{{3
 "NeoBundle 'bahejl/Intelligent_Tags'
 "
@@ -1878,13 +1974,49 @@ let g:vimfiler_define_wrapper_commands = 1
 " }}}3
 " vimshell: Shell，:VimShell {{{3
 NeoBundleLazy 'Shougo/vimshell', {
-            \ 'commands' : [{ 'name' : 'VimShell',
-            \                 'complete' : 'customlist,vimshell#complete'},
-            \               'VimShellExecute', 'VimShellInteractive',
-            \               'VimShellTerminal', 'VimShellPop'],
+            \ 'commands' : [
+            \    { 'name' : 'VimShell', 'complete' : 'customlist,vimshell#complete'},
+            \    { 'name' : 'VimShellCreate', 'complete' : 'customlist,vimshell#complete'},
+            \    { 'name' : 'VimShellPop', 'complete' : 'customlist,vimshell#complete'},
+            \    { 'name' : 'VimShellTab', 'complete' : 'customlist,vimshell#complete'},
+            \    { 'name' : 'VimShellCurrentDir', 'complete' : 'customlist,vimshell#complete'},
+            \    { 'name' : 'VimShellBufferDir', 'complete' : 'customlist,vimshell#complete'},
+            \    { 'name' : 'VimShellExecute', 'complete' : 'customlist,vimshell#helpers#vimshell_execute_complete'},
+            \    { 'name' : 'VimShellInteractive', 'complete' : 'customlist,vimshell#helpers#vimshell_execute_complete'},
+            \    'VimShellSendString', 'VimShellSendBuffer', 'VimShellClose',
+            \ ],
             \ 'mappings' : ['<Plug>(vimshell_'],
             \ }
+    " 以当前目录开始vimshell窗口
+    map  [repl]n :<C-U>VimShellPop<CR>
+    " 以当前缓冲区目录打开vimshell窗口
+    map  [repl]b :<C-U>VimShellPop <C-R>=expand("%:p:h")<CR><CR>
+    " 关闭最近一个vimshell窗口
+    map  [repl]c :<C-U>VimShellClose<CR>
+    " 执行当前行
+    map  [repl]s :<C-U>VimShellSendString<CR>
+    " 执行所选内容
+    vmap [repl]s :<C-U>'<,'>VimShellSendString<CR>
+    " 提示执行命令
+    map  [repl]p :<C-U>VimShellSendString<SPACE>
 " }}}3
+" " slimux: 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列 {{{3
+" NeoBundleLazy 'epeli/slimux', {
+"             \ 'commands' : [
+"             \ 'SlimuxREPLSendLine', 'SlimuxREPLSendSelection', 'SlimuxREPLSendLine', 'SlimuxREPLSendBuffer', 'SlimuxREPLConfigure',
+"             \ 'SlimuxShellRun', 'SlimuxShellPrompt', 'SlimuxShellLast', 'SlimuxShellConfigure',
+"             \ 'SlimuxSendKeysPrompt', 'SlimuxSendKeysLast', 'SlimuxSendKeysConfigure' ],
+"             \ }
+" if !executable("tmux")
+"     NeoBundleDisable 'slimux'
+" else
+"     map  [repl]s :SlimuxREPLSendLine<CR>
+"     vmap [repl]s :SlimuxREPLSendSelection<CR>
+"     map  [repl]p :SlimuxShellPrompt<CR>
+"     map  [repl]a :SlimuxShellLast<CR>
+"     map  [repl]k :SlimuxSendKeysLast<CR>
+" endif
+" " }}}3
 " vim-eunuch: Remove/Unlink/Move/SudoEdit/SudoWrite等UNIX命令 {{{3
 NeoBundleLazy 'tpope/vim-eunuch', {
             \ 'commands' : [
@@ -2176,118 +2308,6 @@ set statusline+=\                   " 空格
 set statusline+=%-14.(%l,%c%V%)     " 行号、列号等
 set statusline+=\                   " 空格
 set statusline+=%P
-" }}}1
-
-" Key mappings " {{{1
-
-" 支持alt键 {{{2
-" 使用Kitty后，不再需要映射Alt键
-" if !s:is_windows && !s:is_gui
-"     " 修改对Alt/Meta键的映射
-"     for i in range(33, 126)
-"         let c = nr2char(i)
-"         exec "\"map \e".c." <M-".c.">\""
-"         exec "\"map! \e".c." <M-".c.">\""
-"         exec "\"imap \e".c." <M-".toupper(c).">\""
-"     endfor
-"     set ttimeoutlen=10  " 缩短keycode的timeout
-" endif
-" }}}2
-
-" 简化对常用目录的访问 {{{2
-"用,cd进入当前目录
-nmap ,cd :cd <C-R>=expand("%:p:h")<CR><CR>
-" "用,e可以打开当前目录下的文件
-" nmap ,e :e <C-R>=escape(expand("%:p:h")."/", ' \')<CR>
-" "在命令中，可以用 %/ 得到当前目录。如 :e %/
-" cmap %/ <C-R>=escape(expand("%:p:h")."/", ' \')<cr>
-" }}}2
-
-" 光标移动 {{{2
-" 正常模式下，空格及Shift-空格滚屏
-noremap <SPACE> <C-F>
-noremap <S-SPACE> <C-B>
-
-" Key mappings to ease browsing long lines
-nnoremap <Down>      gj
-nnoremap <Up>        gk
-inoremap <Down> <C-O>gj
-inoremap <Up>   <C-O>gk
-" }}}2
-
-" 操作tab页 {{{2
-" Ctrl-Tab/Ctrl-Shirt-Tab切换Tab
-nmap <C-S-tab> :tabprevious<cr>
-nmap <C-tab> :tabnext<cr>
-map <C-S-tab> :tabprevious<cr>
-map <C-tab> :tabnext<cr>
-imap <C-S-tab> <ESC>:tabprevious<cr>i
-imap <C-tab> <ESC>:tabnext<cr>i
-" }}}2
-
-" 查找 {{{2
-" <F3>自动在当前文件中vimgrep当前word，g<F3>在当前目录下，vimgrep_files指定的文件中查找
-"nmap <F3> :exec "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.c **/*.h **/*.php"<CR>:botright copen<CR>
-"nmap <S-F3> :exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR>:botright copen<CR>
-"map <F3> <ESC>:exec "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.php" <CR><ESC>:botright copen<CR>
-nmap g<F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
-"map <S-F3> <ESC>:exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
-nmap <F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
-
-" V模式下，搜索选中的内容而不是当前word
-vnoremap g<F3> :<C-U>
-            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-            \gvy
-            \:exec "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
-            \gV:call setreg('"', old_reg, old_regtype)<CR>
-vnoremap <F3> :<C-U>
-            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-            \gvy
-            \:exec "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
-            \gV:call setreg('"', old_reg, old_regtype)<CR>
-" }}}2
-
-" 在VISUAL模式下，缩进后保持原来的选择，以便再次进行缩进 {{{2
-vnoremap > >gv
-vnoremap < <gv
-" }}}2
-
-" folds {{{2
-" zJ/zK跳到下个/上个折叠处，并只显示该折叠的内容
-nnoremap zJ zjzx
-nnoremap zK zkzx
-nnoremap zr zr:echo 'foldlevel: ' . &foldlevel<cr>
-nnoremap zm zm:echo 'foldlevel: ' . &foldlevel<cr>
-nnoremap zR zR:echo 'foldlevel: ' . &foldlevel<cr>
-nnoremap zM zM:echo 'foldlevel: ' . &foldlevel<cr>
-" }}}2
-
-" 一些方便编译的快捷键 {{{2
-if exists(":Make")  " vim-dispatch提供了异步的make
-    nnoremap <Leader>tm :<C-U>Make<CR>
-    nnoremap <Leader>tt :<C-U>Make unittest<CR>
-    nnoremap <Leader>ts :<C-U>Make stage<CR>
-    nnoremap <Leader>tc :<C-U>Make clean<CR>
-    nnoremap <Leader>td :<C-U>Make doc<CR>
-else
-    nnoremap <Leader>tm :<C-U>make<CR>
-    nnoremap <Leader>tt :<C-U>make unittest<CR>
-    nnoremap <Leader>ts :<C-U>make stage<CR>
-    nnoremap <Leader>tc :<C-U>make clean<CR>
-    nnoremap <Leader>td :<C-U>make doc<CR>
-endif
-" }}}2
-
-" 其它 {{{2
-" Split line(opposite to S-J joining line)
-" nnoremap <silent> <C-J> gEa<CR><ESC>ew
-
-" map <silent> <C-W>v :vnew<CR>
-" map <silent> <C-W>s :snew<CR>
-
-" nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
-" }}}2
-
 " }}}1
 
 " 启用内置的matchit插件
