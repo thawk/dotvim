@@ -289,6 +289,28 @@ nnoremap [repl] <Nop>
 xnoremap [repl] <Nop>
 nmap <Leader>s [repl]
 xmap <Leader>s [repl]
+
+nnoremap [tag] <Nop>
+nmap <C-\> [tag]
+
+nnoremap [unite-tag] <Nop>
+nmap <C-\><C-\> [unite-tag]
+
+nnoremap [ctrlsf] <Nop>
+vnoremap [ctrlsf] <Nop>
+inoremap [ctrlsf] <Nop>
+nmap <C-F> [ctrlsf]
+vmap <C-F> [ctrlsf]
+imap <C-F> [ctrlsf]
+
+nnoremap [code] <Nop>
+nmap <Leader>c [code]
+
+nnoremap [fswitch] <Nop>
+nmap <Leader>o [fswitch]
+
+nnoremap [make] <Nop>
+nmap <Leader>t [make]
 " }}}2
 
 " 支持alt键 {{{2
@@ -375,17 +397,17 @@ nnoremap zM zM:echo 'foldlevel: ' . &foldlevel<cr>
 
 " 一些方便编译的快捷键 {{{2
 if exists(":Make")  " vim-dispatch提供了异步的make
-    nnoremap <Leader>tm :<C-U>Make<CR>
-    nnoremap <Leader>tt :<C-U>Make unittest<CR>
-    nnoremap <Leader>ts :<C-U>Make stage<CR>
-    nnoremap <Leader>tc :<C-U>Make clean<CR>
-    nnoremap <Leader>td :<C-U>Make doc<CR>
+    nnoremap [make]m :<C-U>Make<CR>
+    nnoremap [make]t :<C-U>Make unittest<CR>
+    nnoremap [make]s :<C-U>Make stage<CR>
+    nnoremap [make]c :<C-U>Make clean<CR>
+    nnoremap [make]d :<C-U>Make doc<CR>
 else
-    nnoremap <Leader>tm :<C-U>make<CR>
-    nnoremap <Leader>tt :<C-U>make unittest<CR>
-    nnoremap <Leader>ts :<C-U>make stage<CR>
-    nnoremap <Leader>tc :<C-U>make clean<CR>
-    nnoremap <Leader>td :<C-U>make doc<CR>
+    nnoremap [make]m :<C-U>make<CR>
+    nnoremap [make]t :<C-U>make unittest<CR>
+    nnoremap [make]s :<C-U>make stage<CR>
+    nnoremap [make]c :<C-U>make clean<CR>
+    nnoremap [make]d :<C-U>make doc<CR>
 endif
 " }}}2
 
@@ -874,15 +896,15 @@ NeoBundleLazy 'hewes/unite-gtags', {
 if !s:has_global
     NeoBundleDisable 'unite-gtags'
 else
-    nnoremap <C-\><C-\>s :<C-u>Unite gtags/context<CR>
-    nnoremap <C-\><C-\>S :<C-u>Unite gtags/ref:
-    nnoremap <C-\><C-\>g :<C-u>Unite gtags/def<CR>
-    nnoremap <C-\><C-\>G :<C-u>Unite gtags/def:
-    nnoremap <C-\><C-\>t :<C-u>UniteWithCursorWord gtags/grep<CR>
-    nnoremap <C-\><C-\>T :<C-u>Unite gtags/grep:
-    nnoremap <C-\><C-\>e :<C-u>UniteWithCursorWord gtags/grep<CR>
-    nnoremap <C-\><C-\>E :<C-u>Unite gtags/grep:
-    nnoremap <C-\><C-\>f :<C-u>Unite gtags/file<CR>
+    nnoremap [unite-tag]s :<C-u>Unite gtags/context<CR>
+    nnoremap [unite-tag]S :<C-u>Unite gtags/ref:
+    nnoremap [unite-tag]g :<C-u>Unite gtags/def<CR>
+    nnoremap [unite-tag]G :<C-u>Unite gtags/def:
+    nnoremap [unite-tag]t :<C-u>UniteWithCursorWord gtags/grep<CR>
+    nnoremap [unite-tag]T :<C-u>Unite gtags/grep:
+    nnoremap [unite-tag]e :<C-u>UniteWithCursorWord gtags/grep<CR>
+    nnoremap [unite-tag]E :<C-u>Unite gtags/grep:
+    nnoremap [unite-tag]f :<C-u>Unite gtags/file<CR>
 endif
 " }}}3
 " }}}2
@@ -959,19 +981,26 @@ NeoBundleLazy 'kana/vim-operator-replace', {
             \ 'depends' : 'vim-operator-user',
             \ 'mappings' : [
             \     ['nx', '<Plug>(operator-replace)']
-            \ ],
-            \ }
-map _  <Plug>(operator-replace)
+            \ ]}
+nmap _  <Plug>(operator-replace)
+xmap _  <Plug>(operator-replace)
 " }}}3
 " vim-operator-surround: sa{motion}/sd{motion}/sr{motion}：增/删/改括号、引号等 {{{3
 NeoBundleLazy 'rhysd/vim-operator-surround', {
             \ 'depends' : 'vim-operator-user',
-            \ 'mappings' : ['<Plug>(operator-surround'],
-            \ }
+            \ 'mappings' : [
+            \     ['nxo', '<Plug>(operator-surround'],
+            \ ]}
 " operator mappings
-map <silent>sa <Plug>(operator-surround-append)
-map <silent>sd <Plug>(operator-surround-delete)
-map <silent>sr <Plug>(operator-surround-replace)
+nmap <silent>sa <Plug>(operator-surround-append)
+nmap <silent>sd <Plug>(operator-surround-delete)
+nmap <silent>sr <Plug>(operator-surround-replace)
+omap <silent>sa <Plug>(operator-surround-append)
+omap <silent>sd <Plug>(operator-surround-delete)
+omap <silent>sr <Plug>(operator-surround-replace)
+xmap <silent>sa <Plug>(operator-surround-append)
+xmap <silent>sd <Plug>(operator-surround-delete)
+xmap <silent>sr <Plug>(operator-surround-replace)
 " }}}3
 " DrawIt: 使用横、竖线画图、制表。\di和\ds分别启、停画图模式。在模式中，hjkl移动光标，方向键画线 {{{3
 NeoBundleLazy 'DrawIt', {
@@ -1228,11 +1257,12 @@ nnoremap <silent> g<C-I> :BufSurfForward<CR>
 nnoremap <silent> g<C-O> :BufSurfBack<CR>
 " }}}3
 "NeoBundle 'VimIM'                                   " 中文输入法
-" vim-indent-guides: 标记出各缩进块。\ig切换 {{{3
+" vim-indent-guides: 标记出各缩进块 {{{3
 NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
             \ 'commands':['IndentGuidesToggle','IndentGuidesEnable','IndentGuidesDisable'],
-            \ 'mappings':['<Leader>ig'],
+            \ 'mappings':['<Plug>IndentGuides'],
             \ }
+let g:indent_guides_default_mapping = 0
 let g:indent_guides_auto_colors = 0
 let g:indent_guides_start_level = 2
 "let g:indent_guides_guide_size = 1
@@ -1327,16 +1357,16 @@ if s:ag_path != ""
     let g:ctrlsf_ackprg = s:ag_path
 endif
 
-nmap     <C-F>f <Plug>CtrlSFPrompt -regex<SPACE>
-vmap     <C-F>f <Plug>CtrlSFVwordPath
-vmap     <C-F>F <Plug>CtrlSFVwordExec
-nmap     <C-F>n <Plug>CtrlSFCwordPath
-nmap     <C-F>N <Plug>CtrlSFCwordExec
-nmap     <C-F>p <Plug>CtrlSFPwordPath
-nmap     <C-F>P <Plug>CtrlSFPwordExec
-nnoremap <C-F>o :CtrlSFOpen<CR>
-nnoremap <C-F>t :CtrlSFToggle<CR>
-inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
+nmap     [ctrlsf]f <Plug>CtrlSFPrompt -regex<SPACE>
+vmap     [ctrlsf]f <Plug>CtrlSFVwordPath
+vmap     [ctrlsf]F <Plug>CtrlSFVwordExec
+nmap     [ctrlsf]n <Plug>CtrlSFCwordPath
+nmap     [ctrlsf]N <Plug>CtrlSFCwordExec
+nmap     [ctrlsf]p <Plug>CtrlSFPwordPath
+nmap     [ctrlsf]P <Plug>CtrlSFPwordExec
+nnoremap [ctrlsf]o :CtrlSFOpen<CR>
+nnoremap [ctrlsf]t :CtrlSFToggle<CR>
+inoremap [ctrlsf]t <Esc>:CtrlSFToggle<CR>
 " }}}3
 " }}}2
 
@@ -1445,46 +1475,46 @@ if !s:has_global
         set cscopequickfix=s-,c-,d-,i-,t-,e-
 
         " <C-\>小写在当前窗口打开光标下的符号
-        nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-        nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-        nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-        nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-        nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-        nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-        nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-        nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+        nmap [tag]s :cs find s <C-R>=expand("<cword>")<CR><CR>
+        nmap [tag]g :cs find g <C-R>=expand("<cword>")<CR><CR>
+        nmap [tag]c :cs find c <C-R>=expand("<cword>")<CR><CR>
+        nmap [tag]t :cs find t <C-R>=expand("<cword>")<CR><CR>
+        nmap [tag]e :cs find e <C-R>=expand("<cword>")<CR><CR>
+        nmap [tag]f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+        nmap [tag]i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+        nmap [tag]d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
         " <C-\>大写在当前窗口打开命令行
-        nmap <C-\>S :cs find s<SPACE>
-        nmap <C-\>G :cs find g<SPACE>
-        nmap <C-\>C :cs find c<SPACE>
-        nmap <C-\>T :cs find t<SPACE>
-        nmap <C-\>E :cs find e<SPACE>
-        nmap <C-\>F :cs find f<SPACE>
-        nmap <C-\>I :cs find i ^
-        nmap <C-\>D :cs find d<SPACE>
+        nmap [tag]S :cs find s<SPACE>
+        nmap [tag]G :cs find g<SPACE>
+        nmap [tag]C :cs find c<SPACE>
+        nmap [tag]T :cs find t<SPACE>
+        nmap [tag]E :cs find e<SPACE>
+        nmap [tag]F :cs find f<SPACE>
+        nmap [tag]I :cs find i ^
+        nmap [tag]D :cs find d<SPACE>
     endif " }}}
-else
+
     let g:Gtags_Auto_Update = 1
     let g:Gtags_Auto_Map = 0
     let g:Gtags_No_Auto_Jump = 0
     let g:GtagsCscope_Auto_Load = 1
 
     " <C-\>小写在当前窗口打开光标下的符号
-    nmap <C-\>s :Gtags -sr <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>g :Gtags --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>t :Gtags -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>e :Gtags -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
+    nmap [tag]s :Gtags -sr <C-R>=expand("<cword>")<CR><CR>
+    nmap [tag]g :Gtags --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
+    nmap [tag]t :Gtags -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
+    nmap [tag]e :Gtags -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
     " 如果光标在定义上，就找引用，如果在引用上就找定义
-    nmap <C-\><C-]> :GtagsCursor<CR>
-    nmap <C-\>p :Gtags -P<SPACE>
-    nmap <C-\>f :Gtags -f %<CR>
+    nmap [tag]<C-]> :GtagsCursor<CR>
+    nmap [tag]p :Gtags -P<SPACE>
+    nmap [tag]f :Gtags -f %<CR>
 
     " <C-\>大写在当前窗口打开命令行
-    nmap <C-\>S :Gtags -sr<SPACE>
-    nmap <C-\>G :Gtags<SPACE>
-    nmap <C-\>T :Gtags -g --literal<SPACE>
-    nmap <C-\>E :Gtags -g<SPACE>
+    nmap [tag]S :Gtags -sr<SPACE>
+    nmap [tag]G :Gtags<SPACE>
+    nmap [tag]T :Gtags -g --literal<SPACE>
+    nmap [tag]E :Gtags -g<SPACE>
 endif
 " }}}3
 "" Intelligent_Tags: 自动为当前文件及其包含的文件生成tags {{{3
@@ -1545,11 +1575,29 @@ let g:tagbar_type_markdown = {
 NeoBundleLazy 'vcscommand.vim', {
             \ 'mappings' : [
             \     '<Plug>VCS',
-            \     [ 'n', '<Leader>ca', '<Leader>cc', '<Leader>cD', '<Leader>cd', '<Leader>cG', '<Leader>cg', '<Leader>ci', '<Leader>cL', '<Leader>cl', '<Leader>cN', '<Leader>cn', '<Leader>cq', '<Leader>cr', '<Leader>cs', '<Leader>cU', '<Leader>cu', '<Leader>cv'],
             \ ],
             \ 'commands' : ['VCSAdd', 'VCSAnnotate', 'VCSBlame', 'VCSCommit', 'VCSDelete', 'VCSDiff', 'VCSGotoOriginal', 'VCSInfo', 'VCSLock', 'VCSLog', 'VCSRemove', 'VCSRevert', 'VCSReview', 'VCSStatus', 'VCSUnlock', 'VCSUpdate', 'VCSVimDiff', 'VCSCommandDisableBufferSetup', 'VCSCommandEnableBufferSetup', 'VCSReload'],
             \ }
-nnoremap <Leader>cp :VCSVimDiff PREV<CR>
+let g:VCSCommandDisableMappings = 1
+
+nnoremap [code]p :VCSVimDiff PREV<CR>
+nnoremap [code]a <Plug>VCSAdd
+nnoremap [code]c <Plug>VCSCommit
+nnoremap [code]D <Plug>VCSDelete
+nnoremap [code]d <Plug>VCSDiff
+nnoremap [code]G <Plug>VCSClearAndGotoOriginal
+nnoremap [code]g <Plug>VCSGotoOriginal
+nnoremap [code]i <Plug>VCSInfo
+nnoremap [code]L <Plug>VCSLock
+nnoremap [code]l <Plug>VCSLog
+nnoremap [code]N <Plug>VCSSplitAnnotate
+nnoremap [code]n <Plug>VCSAnnotate
+nnoremap [code]q <Plug>VCSRevert
+nnoremap [code]r <Plug>VCSReview
+nnoremap [code]s <Plug>VCSStatus
+nnoremap [code]U <Plug>VCSUnlock
+nnoremap [code]u <Plug>VCSUpdate
+nnoremap [code]v <Plug>VCSVimDiff
 " }}}3
 " vim-fugitive: GIT前端 {{{3
 NeoBundle 'tpope/vim-fugitive'
@@ -1646,10 +1694,10 @@ else
                 \ }
 
     " map to <Leader>cf in C++ code
-    autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
-    autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+    autocmd FileType c,cpp,objc nnoremap <buffer>[code]f :<C-u>ClangFormat<CR>
+    autocmd FileType c,cpp,objc vnoremap <buffer>[code]f :ClangFormat<CR>
     " if you install vim-operator-user
-    autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
+    autocmd FileType c,cpp,objc map <buffer><LocalLeader>x <Plug>(operator-clang-format)
 endif
 " }}}3
 " syntastic: 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表 {{{3
@@ -1711,7 +1759,7 @@ NeoBundleLazy 'rhysd/wandbox-vim', {
             \ 'functions' : 'wandbox#',
             \ }
 let g:wandbox#echo_command = 'echomsg'
-noremap <Leader>wb :<C-u>Wandbox<CR>
+noremap [code]w :<C-u>Wandbox<CR>
 
 " Set default compilers for each filetype
 let g:wandbox#default_compiler = get(g:, 'wandbox#default_compiler', {
@@ -1916,23 +1964,23 @@ augroup fswitch_hack
 augroup END
 
 " Switch to the file and load it into the current window >
-nmap <silent> <Leader>oo :FSHere<cr>
+nmap <silent> [fswitch]o :FSHere<cr>
 " Switch to the file and load it into the window on the right >
-nmap <silent> <Leader>ol :FSRight<cr>
+nmap <silent> [fswitch]l :FSRight<cr>
 " Switch to the file and load it into a new window split on the right >
-nmap <silent> <Leader>oL :FSSplitRight<cr>
+nmap <silent> [fswitch]L :FSSplitRight<cr>
 " Switch to the file and load it into the window on the left >
-nmap <silent> <Leader>oh :FSLeft<cr>
+nmap <silent> [fswitch]h :FSLeft<cr>
 " Switch to the file and load it into a new window split on the left >
-nmap <silent> <Leader>oH :FSSplitLeft<cr>
+nmap <silent> [fswitch]H :FSSplitLeft<cr>
 " Switch to the file and load it into the window above >
-nmap <silent> <Leader>ok :FSAbove<cr>
+nmap <silent> [fswitch]k :FSAbove<cr>
 " Switch to the file and load it into a new window split above >
-nmap <silent> <Leader>oK :FSSplitAbove<cr>
+nmap <silent> [fswitch]K :FSSplitAbove<cr>
 " Switch to the file and load it into the window below >
-nmap <silent> <Leader>oj :FSBelow<cr>
+nmap <silent> [fswitch]j :FSBelow<cr>
 " Switch to the file and load it into a new window split below >
-nmap <silent> <Leader>oJ :FSSplitBelow<cr>
+nmap <silent> [fswitch]J :FSSplitBelow<cr>
 " }}}3
 " LargeFile: 在打开大文件时，禁用语法高亮以提供打开速度 {{{3
 NeoBundle 'LargeFile'
@@ -2029,13 +2077,13 @@ NeoBundleLazy 'tpope/vim-eunuch', {
             \ ],
             \ }
 " }}}3
-" quickrun.vim: 快速运行代码片段 {{{3
-NeoBundleLazy 'quickrun.vim', {
-            \ 'mappings' : [['nxo', '<Plug>(quickrun)']],
-            \ 'commands' : ['QuickRun'],
-            \ }
-nmap ,r <Plug>(quickrun)
-" }}}3
+" " quickrun.vim: 快速运行代码片段 {{{3
+" NeoBundleLazy 'quickrun.vim', {
+"             \ 'mappings' : [['nxo', '<Plug>(quickrun)']],
+"             \ 'commands' : ['QuickRun'],
+"             \ }
+" nmap ,r <Plug>(quickrun)
+" " }}}3
 " scratch.vim: 打开一个临时窗口。gs/gS/:Scratch {{{3
 NeoBundleLazy 'mtth/scratch.vim', {
             \ 'commands' : ['Scratch','ScratchInsert','ScratchSelection'],
@@ -2188,7 +2236,7 @@ function! MyBranch()
     return branch
 endfunction
 " }}}3
-" GoldenView.Vim: <F8>/<S-F8>当前窗口与主窗口交换，<C-P>/<C-N>上一个/下一个窗口 {{{3
+" GoldenView.Vim: <F8>/<S-F8>当前窗口与主窗口交换 {{{3
 NeoBundle 'zhaocai/GoldenView.Vim'
 let g:goldenview__enable_default_mapping = 0
 " nmap <silent> <C-N>  <Plug>GoldenViewNext
