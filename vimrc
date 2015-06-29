@@ -503,12 +503,9 @@ endfunction
 
 " }}}1
 
-" Command and Auto commands " {{{1
-" Sudo write
-comm! W exec 'w !sudo tee % > /dev/null' | e!
+" Auto commands " {{{1
 
-"Auto commands
-
+" Misc {{{2
 if (s:is_windows)
     au GUIEnter * simalt ~x " 启动时自动全屏
 endif
@@ -517,6 +514,7 @@ au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "norma
 
 " automatically open and close the popup menu / preview window
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+" }}}2
 
 " Filetype detection " {{{2
 au BufRead,BufNewFile {Gemfile,Rakefile,Capfile,*.rake,config.ru} setf ruby
