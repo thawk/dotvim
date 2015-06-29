@@ -292,6 +292,7 @@ xmap <Leader>s [repl]
 
 nnoremap [tag] <Nop>
 nmap <C-\> [tag]
+nnoremap [tag] <C-\>
 
 nnoremap [unite-tag] <Nop>
 nmap <C-\><C-\> [unite-tag]
@@ -302,6 +303,8 @@ inoremap [ctrlsf] <Nop>
 nmap <C-F> [ctrlsf]
 vmap <C-F> [ctrlsf]
 imap <C-F> [ctrlsf]
+" 单独按<C-F>时，使用原来的含义
+nnoremap [ctrlsf] <C-F>
 
 nnoremap [code] <Nop>
 nmap <Leader>c [code]
@@ -1641,6 +1644,8 @@ else
     "let g:clang_jumpto_declaration_key = '<C-]>'
     "let g:clang_jumpto_back_key = '<C-T>'
     let g:clang_default_keymappings = 0
+    let g:clang_user_options = '-std=c++11 -stdlib=libc++'
+    let g:clang_complete_macros = 1
 
     if s:libclang_path != ""
         let g:clang_use_library = 1
@@ -1666,7 +1671,7 @@ if executable('clang')    " vim-clang比使用clang_complete慢
         if !exists('g:clang_cpp_options')
             let g:clang_cpp_options = ''
         endif
-        let g:clang_cpp_options .= ' -std=c++11'
+        let g:clang_cpp_options .= ' -std=c++11 -stdlib=libc++'
         let g:clang_cpp_options .= " -I " . s:clang_include_path
     endif
 endif
