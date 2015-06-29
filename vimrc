@@ -287,8 +287,8 @@ xmap <Leader>F [unite2]
 
 nnoremap [repl] <Nop>
 xnoremap [repl] <Nop>
-nmap <Leader>s [repl]
-xmap <Leader>s [repl]
+nmap <Leader>r [repl]
+xmap <Leader>r [repl]
 
 nnoremap [tag] <Nop>
 nmap <C-\> [tag]
@@ -300,11 +300,9 @@ nmap <C-\><C-\> [unite-tag]
 nnoremap [ctrlsf] <Nop>
 vnoremap [ctrlsf] <Nop>
 inoremap [ctrlsf] <Nop>
-nmap <C-F> [ctrlsf]
-vmap <C-F> [ctrlsf]
-imap <C-F> [ctrlsf]
-" 单独按<C-F>时，使用原来的含义
-nnoremap [ctrlsf] <C-F>
+nmap \s [ctrlsf]
+vmap \s [ctrlsf]
+imap \s [ctrlsf]
 
 nnoremap [code] <Nop>
 nmap <Leader>c [code]
@@ -1358,8 +1356,8 @@ if s:ag_path != ""
     let g:ctrlsf_ackprg = s:ag_path
 endif
 
-nmap     [ctrlsf]f <Plug>CtrlSFPrompt -regex<SPACE>
-vmap     [ctrlsf]f <Plug>CtrlSFVwordPath
+nmap     [ctrlsf]s <Plug>CtrlSFPrompt -regex<SPACE>
+vmap     [ctrlsf]s <Plug>CtrlSFVwordPath
 vmap     [ctrlsf]F <Plug>CtrlSFVwordExec
 nmap     [ctrlsf]n <Plug>CtrlSFCwordPath
 nmap     [ctrlsf]N <Plug>CtrlSFCwordExec
@@ -1765,7 +1763,7 @@ NeoBundleLazy 'rhysd/wandbox-vim', {
             \ 'functions' : 'wandbox#',
             \ }
 let g:wandbox#echo_command = 'echomsg'
-noremap [code]w :<C-u>Wandbox<CR>
+noremap [make]w :<C-u>Wandbox<CR>
 
 " Set default compilers for each filetype
 let g:wandbox#default_compiler = get(g:, 'wandbox#default_compiler', {
