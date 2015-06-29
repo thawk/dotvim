@@ -1497,7 +1497,7 @@ if !s:has_global
         nmap [tag]I :cs find i ^
         nmap [tag]D :cs find d<SPACE>
     endif " }}}
-
+else
     let g:Gtags_Auto_Update = 1
     let g:Gtags_Auto_Map = 0
     let g:Gtags_No_Auto_Jump = 0
@@ -1577,30 +1577,33 @@ let g:tagbar_type_markdown = {
 " vcscommand.vim: SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件 {{{3
 NeoBundleLazy 'vcscommand.vim', {
             \ 'mappings' : [
-            \     '<Plug>VCS',
+            \     '<Plug>VCSAdd', '<Plug>VCSAnnotate', '<Plug>VCSCommit', '<Plug>VCSDelete', '<Plug>VCSDiff',
+            \     '<Plug>VCSGotoOriginal', '<Plug>VCSClearAndGotoOriginal', '<Plug>VCSInfo', '<Plug>VCSLock',
+            \     '<Plug>VCSLog', '<Plug>VCSRevert', '<Plug>VCSReview', '<Plug>VCSSplitAnnotate', '<Plug>VCSStatus',
+            \     '<Plug>VCSUnlock', '<Plug>VCSUpdate', '<Plug>VCSVimDiff',
             \ ],
             \ 'commands' : ['VCSAdd', 'VCSAnnotate', 'VCSBlame', 'VCSCommit', 'VCSDelete', 'VCSDiff', 'VCSGotoOriginal', 'VCSInfo', 'VCSLock', 'VCSLog', 'VCSRemove', 'VCSRevert', 'VCSReview', 'VCSStatus', 'VCSUnlock', 'VCSUpdate', 'VCSVimDiff', 'VCSCommandDisableBufferSetup', 'VCSCommandEnableBufferSetup', 'VCSReload'],
             \ }
 let g:VCSCommandDisableMappings = 1
 
-nnoremap [code]p :VCSVimDiff PREV<CR>
-nnoremap [code]a <Plug>VCSAdd
-nnoremap [code]c <Plug>VCSCommit
-nnoremap [code]D <Plug>VCSDelete
-nnoremap [code]d <Plug>VCSDiff
-nnoremap [code]G <Plug>VCSClearAndGotoOriginal
-nnoremap [code]g <Plug>VCSGotoOriginal
-nnoremap [code]i <Plug>VCSInfo
-nnoremap [code]L <Plug>VCSLock
-nnoremap [code]l <Plug>VCSLog
-nnoremap [code]N <Plug>VCSSplitAnnotate
-nnoremap [code]n <Plug>VCSAnnotate
-nnoremap [code]q <Plug>VCSRevert
-nnoremap [code]r <Plug>VCSReview
-nnoremap [code]s <Plug>VCSStatus
-nnoremap [code]U <Plug>VCSUnlock
-nnoremap [code]u <Plug>VCSUpdate
-nnoremap [code]v <Plug>VCSVimDiff
+nnoremap [code]p :<C-U>VCSVimDiff PREV<CR>
+nnoremap [code]a :<C-U>VCSAdd<CR>
+nnoremap [code]c :<C-U>VCSCommit<CR>
+nnoremap [code]D :<C-U>VCSDelete<CR>
+nnoremap [code]d :<C-U>VCSDiff<CR>
+nnoremap [code]G :<C-U>VCSGotoOriginal!<CR>
+nnoremap [code]g :<C-U>VCSGotoOriginal<CR>
+nnoremap [code]i :<C-U>VCSInfo<CR>
+nnoremap [code]L :<C-U>VCSLock<CR>
+nnoremap [code]l :<C-U>VCSLog<CR>
+nnoremap [code]N :<C-U>VCSAnnotate! -g<CR>
+nnoremap [code]n :<C-U>VCSAnnotate -g<CR>
+nnoremap [code]q :<C-U>VCSRevert<CR>
+nnoremap [code]r :<C-U>VCSReview<CR>
+nnoremap [code]s :<C-U>VCSStatus<CR>
+nnoremap [code]U :<C-U>VCSUnlock<CR>
+nnoremap [code]u :<C-U>VCSUpdate<CR>
+nnoremap [code]v :<C-U>VCSVimDiff<CR>
 " }}}3
 " vim-fugitive: GIT前端 {{{3
 NeoBundle 'tpope/vim-fugitive'
