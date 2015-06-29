@@ -62,7 +62,7 @@ set history=256 " Number of things to remember in history.
 set autowrite " Writes on make/shell commands
 set autoread     " 当文件在外部被修改时，自动重新读取
 "set timeoutlen=250 " Time to wait after ESC (default causes an annoying delay)
-set clipboard+=unnamed " Yanks go on clipboard instead.
+"set clipboard+=unnamed " Yanks go on clipboard instead.
 "set pastetoggle=<F10> " toggle between paste and normal: for 'safer' pasting from keyboard
 set helplang=cn
 "set viminfo+=! " Save and restore global variables
