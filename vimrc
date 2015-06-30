@@ -1602,6 +1602,9 @@ nnoremap [code]v :<C-U>VCSVimDiff<CR>
 " }}}3
 " vim-fugitive: GIT前端 {{{3
 NeoBundle 'tpope/vim-fugitive'
+if !executable('git')
+    NeoBundleDisable 'vim-fugitive'
+endif
 " }}}3
 "" vim-snowdrop: {{{3
 "NeoBundleLazy 'osyo-manga/vim-snowdrop', {
@@ -2073,6 +2076,17 @@ NeoBundleLazy 'Shougo/vimshell', {
 "     map  [repl]k :SlimuxSendKeysLast<CR>
 " endif
 " " }}}3
+
+" vim-tbone: 可以操作tmux缓冲区，执行tmux命令 {{{3
+NeoBundleLazy 'tpope/vim-tbone', {
+            \ 'commands' : [
+            \   { 'name' : 'Tattach', 'complete' : 'custom,tbone#complete_sessions' },
+            \   { 'name' : 'Tmux', 'complete' : 'custom,tbone#complete_command' },
+            \   { 'name' : 'Tput', 'complete' : 'custom,tbone#complete_buffers' },
+            \   { 'name' : 'Tyank', 'complete' : 'custom,tbone#complete_buffers' },
+            \   { 'name' : 'Twrite', 'complete' : 'custom,tbone#complete_panes' },
+            \ ]}
+" }}}3
 " vim-eunuch: Remove/Unlink/Move/SudoEdit/SudoWrite等UNIX命令 {{{3
 NeoBundleLazy 'tpope/vim-eunuch', {
             \ 'commands' : [
