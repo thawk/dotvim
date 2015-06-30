@@ -1926,11 +1926,11 @@ let g:solarized_termtrans=1
 " let g:solarized_termcolors=16
 " let g:solarized_contrast="normal"
 " let g:solarized_diffmode="normal"
-let g:solarized_hitrail=1
+" let g:solarized_hitrail=1
 " let g:solarized_menu=1
 
 if !s:is_gui " 在终端模式下，使用16色（终端需要使用solarized配色方案才能得到所要的效果）
-    set t_Co=16
+    " set t_Co=16
 end
 
 syntax enable
@@ -1942,6 +1942,19 @@ endif
 " }}}3
 " Zenburn: Zenburn配色方案 {{{3
 NeoBundle 'Zenburn'
+" }}}3
+" molokai: Molokai配色方案 {{{3
+NeoBundle 'tomasr/molokai'
+let g:molokai_original = 1
+let g:rehash256 = 1
+" }}}3
+" base16-vim: Base16配色方案 {{{3
+NeoBundle 'chriskempson/base16-vim'
+let g:base16colorspace=256
+" }}}3
+" base16-shell: Base16配色方案配套使用的shell脚本 {{{3
+NeoBundle 'chriskempson/base16-shell', {
+            \ }
 " }}}3
 " }}}2
 
