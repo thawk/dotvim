@@ -774,9 +774,6 @@ nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag<CR>
 nnoremap <silent> [unite]t :<C-U>Unite -buffer-name=tabs tab<CR>
 " nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
 " nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
-nnoremap <silent> [unite]v :<C-u>UniteVersions status<CR>
-nnoremap <silent> [unite]l :<C-u>UniteVersions log<CR>
-
 nnoremap <silent> [unite]r :<C-u>UniteResume<CR>
 " nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files buffer file_rec:! file_mru bookmark<cr><c-u>
 
@@ -887,6 +884,8 @@ NeoBundleLazy 'hrsh7th/vim-versions', {
             \ 'commands' : ['UniteVersions'],
             \ 'unite_sources' : ['versions', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status'],
             \ }
+nnoremap <silent> [unite]v :<C-u>UniteVersions status<CR>
+nnoremap <silent> [unite]l :<C-u>UniteVersions log<CR>
 " }}}3
 " unite-gtags: Unite下调用gtags {{{3
 NeoBundleLazy 'hewes/unite-gtags', {
@@ -2023,6 +2022,11 @@ NeoBundleLazy 'Shougo/vimfiler', {
 " c : copy, m : move, r : rename,
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_define_wrapper_commands = 1
+
+" 切换侧边栏
+nnoremap <silent> [unite]ee :<C-u>VimFilerExplorer<CR>
+nnoremap <silent> [unite]ec :<C-u>VimFiler<CR>
+nnoremap <silent> [unite]eb :<C-u>VimFiler <C-R>=expand("%:p:h")<CR><CR>
 " }}}3
 " vimshell: Shell，:VimShell {{{3
 NeoBundleLazy 'Shougo/vimshell', {
