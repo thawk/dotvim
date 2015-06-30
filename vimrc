@@ -2076,7 +2076,6 @@ NeoBundleLazy 'Shougo/vimshell', {
 "     map  [repl]k :SlimuxSendKeysLast<CR>
 " endif
 " " }}}3
-
 " vim-tbone: 可以操作tmux缓冲区，执行tmux命令 {{{3
 NeoBundleLazy 'tpope/vim-tbone', {
             \ 'commands' : [
@@ -2086,6 +2085,12 @@ NeoBundleLazy 'tpope/vim-tbone', {
             \   { 'name' : 'Tyank', 'complete' : 'custom,tbone#complete_buffers' },
             \   { 'name' : 'Twrite', 'complete' : 'custom,tbone#complete_panes' },
             \ ]}
+" }}}3
+" tpope/vim-characterize: ga会显示当前字符的更多信息 {{{3
+NeoBundleLazy 'tpope/vim-characterize', {
+            \     'mappings' : ['<Plug>'],
+            \ }
+nmap ga <Plug>(characterize)
 " }}}3
 " vim-eunuch: Remove/Unlink/Move/SudoEdit/SudoWrite等UNIX命令 {{{3
 NeoBundleLazy 'tpope/vim-eunuch', {
