@@ -656,7 +656,7 @@ let g:neobundle#install_process_timeout = 1500
 NeoBundle 'Shougo/vimproc', {
             \ 'build' : {
             \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
-            \     'cygwin' : 'make -f make_cygwin.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
+            \     'cygwin' : 'make -f make_cygwin.mak && touch -t 200001010000.00 autoload/vimproc_cygwin.dll',
             \     'mac' : 'make -f make_mac.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
             \     'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
             \ },
@@ -1950,6 +1950,7 @@ let g:rehash256 = 1
 " }}}3
 " base16-vim: Base16配色方案 {{{3
 NeoBundle 'chriskempson/base16-vim'
+let g:base16_shell_path=s:vimrc_path . '/bundle/base16-shell'
 let g:base16colorspace=256
 " }}}3
 " base16-shell: Base16配色方案配套使用的shell脚本 {{{3
