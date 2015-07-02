@@ -1655,26 +1655,27 @@ else
 endif
 " }}}3
 " vim-clang: 使用clang编译器进行上下文补全 {{{3
-if executable('clang')    " vim-clang比使用clang_complete慢
-    NeoBundleLazy 'justmao945/vim-clang', {
-                \ }
-                " \ 'filetypes' : ['c', 'cpp'],
-    " 使用NeoComplete触发补全
-    let g:clang_auto = 0
-    " default 'longest' can not work with neocomplete
-    let g:clang_c_completeopt = 'menuone,preview'
-    let g:clang_cpp_completeopt = 'menuone,preview'
+NeoBundleLazy 'justmao945/vim-clang', {
+            \ }
+" \ 'filetypes' : ['c', 'cpp'],
+if !executable('clang')    " vim-clang比使用clang_complete慢
+    NeoBundleDisable 'vim-clang'
+endif
+" 使用NeoComplete触发补全
+let g:clang_auto = 0
+" default 'longest' can not work with neocomplete
+let g:clang_c_completeopt = 'menuone,preview'
+let g:clang_cpp_completeopt = 'menuone,preview'
 
-    " disable diagnostics
-    let g:clang_diagsopt = ''
+" disable diagnostics
+let g:clang_diagsopt = ''
 
-    if s:libclang_path != ""
-        if !exists('g:clang_cpp_options')
-            let g:clang_cpp_options = ''
-        endif
-        let g:clang_cpp_options .= ' -std=c++11 -stdlib=libc++'
-        let g:clang_cpp_options .= " -I " . s:clang_include_path
+if s:libclang_path != ""
+    if !exists('g:clang_cpp_options')
+        let g:clang_cpp_options = ''
     endif
+    let g:clang_cpp_options .= ' -std=c++11 -stdlib=libc++'
+    let g:clang_cpp_options .= " -I " . s:clang_include_path
 endif
 " }}}3
 " vim-clang-format: 使用clang编译器进行上下文补全 {{{3
@@ -1739,12 +1740,12 @@ NeoBundleLazy 'OrangeT/vim-csharp', {
             \ 'filetypes' : ['csharp'],
             \ }
 " }}}3
-" vim-cpplint: <F7>执行cpplint检查（要求PATH中能找到cpplint.py） {{{3
-NeoBundleLazy 'funorpain/vim-cpplint', {
-            \ 'filetyhpes' : ['c', 'cpp'],
-            \ 'disabled' : !executable("cpplint.py"),
-            \ }
-" }}}3
+" " vim-cpplint: <F7>执行cpplint检查（要求PATH中能找到cpplint.py） {{{3
+" NeoBundleLazy 'funorpain/vim-cpplint', {
+"             \ 'filetyhpes' : ['c', 'cpp'],
+"             \ 'disabled' : !executable("cpplint.py"),
+"             \ }
+" " }}}3
 " jedi-vim: 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置 {{{3
 NeoBundleLazy 'davidhalter/jedi-vim', {
             \ 'filetypes' : ['python', 'python3'],
