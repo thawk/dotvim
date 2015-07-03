@@ -581,6 +581,7 @@ au FileType vim           let b:vimgrep_files="**/*.vim"
 au FileType javascript    let b:vimgrep_files="**/*.js **/*.htm **/*.html"
 au FileType python        let b:vimgrep_files="**/*.py"
 au FileType xml           let b:vimgrep_files="**/*.xml"
+au FileType jam           let b:vimgrep_files="**/*.jam **/Jam*"
 " }}}2
 
 " 自动打开quickfix窗口 {{{2

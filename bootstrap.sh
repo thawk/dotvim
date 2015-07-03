@@ -9,7 +9,26 @@ vim_path=$(dirname $(readlink -f "$0"))
 if [ -d "${vim_path}/bundle/vimproc" ]
 then
     cd "${vim_path}/bundle/vimproc"
-    find -name "*.so" | xargs --no-run-if-empty touch -t 200001010000.00
-    make -f make_unix.mak
+    find -name "*.so" -o -name "*.dll" | xargs --no-run-if-empty touch -t 200001010000.00
+    case "$(uname -s)" in
+        Darwin)
+            make -f make_mac.mak
+            ;;
+        CYGWIN*)
+            make -f make_cygwin.mak
+            ;;
+        MINGW32*)
+            make -f make_mingw32.mak
+            ;;
+        MINGW64*)
+            make -f make_mingw64.mak
+            ;;
+        Linux|MSYS*)
+            make -f make_unix.mak
+            ;;
+        *)
+            make -f make_unix.mak
+            ;;
+    esac
     cd ${OLDPWD}
 fi
