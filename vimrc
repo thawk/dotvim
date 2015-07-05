@@ -56,6 +56,68 @@ if s:ag_path != ""
 endif
 " }}}1
 
+" 缺省设置 {{{1
+" Impacted by https://github.com/bling/dotvim
+if !exists('g:dotvim_settings')
+    let g:dotvim_settings = {}
+endif
+let s:settings = {}
+let s:settings.default_indent = 4
+let s:settings.max_column = 120
+let s:settings.autocomplete_method = 'neocomplcache'
+let s:settings.enable_cursorcolumn = 0
+let s:settings.colorscheme = 'jellybeans'
+if has('lua')
+let s:settings.autocomplete_method = 'neocomplete'
+elseif filereadable(expand("~/.vim/bundle/YouCompleteMe/python/ycm_core.*"))
+let s:settings.autocomplete_method = 'ycm'
+endif
+if exists('g:dotvim_settings.plugin_groups')
+let s:settings.plugin_groups = g:dotvim_settings.plugin_groups
+else
+let s:settings.plugin_groups = []
+call add(s:settings.plugin_groups, 'core')
+call add(s:settings.plugin_groups, 'web')
+call add(s:settings.plugin_groups, 'javascript')
+call add(s:settings.plugin_groups, 'ruby')
+call add(s:settings.plugin_groups, 'python')
+call add(s:settings.plugin_groups, 'scala')
+call add(s:settings.plugin_groups, 'go')
+call add(s:settings.plugin_groups, 'scm')
+call add(s:settings.plugin_groups, 'editing')
+call add(s:settings.plugin_groups, 'indents')
+call add(s:settings.plugin_groups, 'navigation')
+call add(s:settings.plugin_groups, 'unite')
+call add(s:settings.plugin_groups, 'autocomplete')
+" call add(s:settings.plugin_groups, 'textobj')
+call add(s:settings.plugin_groups, 'misc')
+if s:is_windows
+call add(s:settings.plugin_groups, 'windows')
+endif
+" exclude all language-specific plugins by default
+if !exists('g:dotvim_settings.plugin_groups_exclude')
+let g:dotvim_settings.plugin_groups_exclude = ['web','javascript','ruby','python','go','scala']
+endif
+for group in g:dotvim_settings.plugin_groups_exclude
+let i = index(s:settings.plugin_groups, group)
+if i != -1
+call remove(s:settings.plugin_groups, i)
+endif
+endfor
+if exists('g:dotvim_settings.plugin_groups_include')
+for group in g:dotvim_settings.plugin_groups_include
+call add(s:settings.plugin_groups, group)
+endfor
+endif
+endif
+" override defaults with the ones specified in g:dotvim_settings
+for key in keys(s:settings)
+if has_key(g:dotvim_settings, key)
+let s:settings[key] = g:dotvim_settings[key]
+endif
+endfor
+" }}}1
+
 " General {{{1
 set nocompatible " disable vi compatibility.
 set history=256 " Number of things to remember in history.
@@ -132,9 +194,10 @@ set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.idea/*,*/.DS_Store
 set backspace=indent,eol,start " more powerful backspacing
 set whichwrap+=b,s,<,>,h,l " 退格键和方向键可以换行
 
-set tabstop=4 " Set the default tabstop
-set softtabstop=4
-set shiftwidth=4 " Set the default shift width for indents
+let &tabstop=s:settings.default_indent "number of spaces per tab for display
+let &softtabstop=s:settings.default_indent "number of spaces per tab in insert mode
+let &shiftwidth=s:settings.default_indent "number of spaces when indenting
+
 set shiftround   " <</>>等缩进位置不是+/-4空格，而是对齐到下个'shiftwidth'位置
 set expandtab " Make tabs into spaces (set by tabstop)
 set smarttab " Smarter tab levels
@@ -628,6 +691,10 @@ au FileType task call ForceFileEncoding('utf-8')
 
 " }}}1
 
+if filereadable(s:vimrc_path . "/vimrc.local")
+    exec "source " . s:vimrc_path . "/vimrc.local"
+endif
+
 " Plugins {{{1
 
 " Brief help
@@ -1048,13 +1115,13 @@ hi link EasyMotionShade Comment
 "             \ ],
 "             \ }
 " " }}}3
-" " YouCompleteMe: 代码被全 {{{3
+" " " YouCompleteMe: 代码补全 {{{3
 " NeoBundleLazy 'Valloric/YouCompleteMe', {
 "             \ 'build' : {
 "             \     'unix' : './install.sh --clang-completer',
 "             \    }
 "             \ }
-" " }}}3
+" " " }}}3
 " neocomplete: 代码补全插件 {{{3
 NeoBundleLazy 'Shougo/neocomplete', {
             \ 'insert' : 1,
