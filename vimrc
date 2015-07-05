@@ -31,12 +31,12 @@ else
 endif
 
 if s:is_windows
-    if filereadable(s:vimrc_path . "\\win32\\libclang.dll")
-        let s:libclang_path = s:vimrc_path . "\\win32"
+    if filereadable(s:vimrc_path . "/win32/libclang.dll")
+        let s:libclang_path = s:vimrc_path . "/win32"
     endif
 
-    if !s:ag_path && executable(s:vimrc_path . "\\win32\\ag")
-        let s:ag_path = s:vimrc_path . "\\win32\\ag"
+    if !s:ag_path && executable(s:vimrc_path . "/win32/ag")
+        let s:ag_path = s:vimrc_path . "/win32/ag"
     endif
 else
     if filereadable(expand("~/libexec/libclang.so"))
@@ -257,11 +257,11 @@ set completeopt=menuone,menu,longest,preview
 set completeopt-=longest
 set showfulltag
 
-if filereadable(s:vimrc_path . "\\win32\\words.txt")
+if filereadable(s:vimrc_path . "/win32/words.txt")
     if len(&dictionary) > 0
-        let &dictionary .= "," . s:vimrc_path . "\\win32\\words.txt"
+        let &dictionary .= "," . s:vimrc_path . "/win32/words.txt"
     else
-        let &dictionary = s:vimrc_path . "\\win32\\words.txt"
+        let &dictionary = s:vimrc_path . "/win32/words.txt"
     endif
 elseif filereadable("/usr/share/dict/words")
     set dictionary+=/usr/share/dict/words
@@ -662,10 +662,10 @@ NeoBundle 'Shougo/vimproc', {
             \     'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
             \ },
             \ }
-if has("win64") && filereadable(s:vimrc_path . "\\win32\\vimproc_win64.dll")
-    let g:vimproc_dll_path = s:vimrc_path . "\\win32\\vimproc_win64.dll"
-elseif has("win32") && filereadable(s:vimrc_path . "\\win32\\vimproc_win32.dll")
-    let g:vimproc_dll_path = s:vimrc_path . "\\win32\\vimproc_win32.dll"
+if has("win64") && filereadable(s:vimrc_path . "/win32/vimproc_win64.dll")
+    let g:vimproc_dll_path = s:vimrc_path . "/win32/vimproc_win64.dll"
+elseif has("win32") && filereadable(s:vimrc_path . "/win32/vimproc_win32.dll")
+    let g:vimproc_dll_path = s:vimrc_path . "/win32/vimproc_win32.dll"
 endif
 " }}}3
 " vim-misc: xolox的插件依赖的库 {{{3
