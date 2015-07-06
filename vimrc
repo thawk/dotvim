@@ -1320,7 +1320,7 @@ NeoBundleLazy 'xolox/vim-notes', {
             \     'vim-misc',
             \ ],
             \ }
-let g:notes_suffix = '.markdown'
+" let g:notes_suffix = '.markdown'
 if !exists('g:notes_directories')
     let g:notes_directories = ['~/vim-notes']
 endif
