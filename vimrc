@@ -1279,11 +1279,13 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
         let g:ctrlsf_ackprg = s:ag_path
     endif
 
-    nmap     [ctrlsf]s <Plug>CtrlSFPrompt -regex<SPACE>
-    vmap     [ctrlsf]s <Plug>CtrlSFVwordPath
-    vmap     [ctrlsf]F <Plug>CtrlSFVwordExec
+    vmap     [ctrlsf]s <Plug>CtrlSFVwordExec
+    nmap     [ctrlsf]s <Plug>CtrlSFCwordExec
+    vmap     [ctrlsf]b :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
+    nmap     [ctrlsf]b :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=expand('%:p:h')<CR><CR>
+    nmap     [ctrlsf]S <Plug>CtrlSFPrompt -regex<SPACE>
+    vmap     [ctrlsf]n <Plug>CtrlSFVwordPath
     nmap     [ctrlsf]n <Plug>CtrlSFCwordPath
-    nmap     [ctrlsf]N <Plug>CtrlSFCwordExec
     nmap     [ctrlsf]p <Plug>CtrlSFPwordPath
     nmap     [ctrlsf]P <Plug>CtrlSFPwordExec
     nnoremap [ctrlsf]o :CtrlSFOpen<CR>
@@ -2467,8 +2469,8 @@ NeoBundle 'my_config', {
 " }}}2
 
 " 禁用部分插件 {{{2
-for name in s:settings.disabled_plugins
-    NeoBundleDisable name
+for plugin in s:settings.disabled_plugins
+    exec 'NeoBundleDisable '.plugin
 endfor
 " }}}2
 
