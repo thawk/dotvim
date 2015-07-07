@@ -67,11 +67,12 @@ if !exists('g:dotvim_settings')
 endif
 let s:settings = {}
 let s:settings.default_indent = 4
-let s:settings.max_column = 120
 let s:settings.autocomplete_method = 'neocomplcache'
 let s:settings.enable_cursorcolumn = 0
-let s:settings.colorscheme = 'jellybeans'
-if has('lua')
+let s:settings.background = 'dark'
+let s:settings.colorscheme = 'solarized'
+let s:settings.notes_directory = ['~/vim-notes']
+if v:version >= '703' && has('lua')
     let s:settings.autocomplete_method = 'neocomplete'
 elseif filereadable(expand(s:vimrc_path . "/bundle/YouCompleteMe/python/ycm_core.*"))
     let s:settings.autocomplete_method = 'ycm'
@@ -111,6 +112,11 @@ else
             call add(s:settings.plugin_groups, group)
         endfor
     endif
+endif
+if exists('g:dotvim_settings.disabled_plugins')
+    let s:settings.disabled_plugins = g:dotvim_settings.disabled_plugins
+else
+    let s:settings.disabled_plugins = []
 endif
 " override defaults with the ones specified in g:dotvim_settings
 for key in keys(s:settings)
@@ -426,23 +432,23 @@ imap <C-tab> <ESC>:tabnext<cr>i
 
 " 查找 {{{2
 " <F3>自动在当前文件中vimgrep当前word，g<F3>在当前目录下，vimgrep_files指定的文件中查找
-"nmap <F3> :exec "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.c **/*.h **/*.php"<CR>:botright copen<CR>
-"nmap <S-F3> :exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR>:botright copen<CR>
-"map <F3> <ESC>:exec "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.php" <CR><ESC>:botright copen<CR>
+"nmap <F3> :execute "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.c **/*.h **/*.php"<CR>:botright copen<CR>
+"nmap <S-F3> :execute "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR>:botright copen<CR>
+"map <F3> <ESC>:execute "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.php" <CR><ESC>:botright copen<CR>
 nmap g<F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
-"map <S-F3> <ESC>:exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
+"map <S-F3> <ESC>:execute "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
 nmap <F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
 
 " V模式下，搜索选中的内容而不是当前word
 vnoremap g<F3> :<C-U>
             \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
             \gvy
-            \:exec "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
+            \:execute "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
             \gV:call setreg('"', old_reg, old_regtype)<CR>
 vnoremap <F3> :<C-U>
             \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
             \gvy
-            \:exec "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
+            \:execute "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
             \gV:call setreg('"', old_reg, old_regtype)<CR>
 " }}}2
 
@@ -1093,8 +1099,12 @@ if count(s:settings.plugin_groups, 'editing') "{{{2
                 \ ],
                 \ }
     " let g:notes_suffix = '.markdown'
-    if !exists('g:notes_directories')
-        let g:notes_directories = ['~/vim-notes']
+    if exists('s:settings.notes_directory')
+        if type(s:settings.notes_directory) == type([])
+            let g:notes_directories = s:settings.notes_directory
+        else
+            let g:notes_directories = [s:settings.notes_directory]
+        endif
     endif
     " }}}3
     " vim-multiple-cursors: 同时编辑多处 {{{3
@@ -2398,10 +2408,6 @@ if !s:is_gui " 在终端模式下，使用16色（终端需要使用solarized配
 end
 
 syntax enable
-if $COLORFGBG == ""
-    " 如果没有设置环境变量COLORFGBG，使用深色
-    set background=dark
-endif
 " let g:solarized_termcolors=256
 " }}}3
 " Zenburn: Zenburn配色方案 {{{3
@@ -2460,6 +2466,12 @@ NeoBundle 'my_config', {
 " }}}3
 " }}}2
 
+" 禁用部分插件 {{{2
+for name in s:settings.disabled_plugins
+    NeoBundleDisable name
+endfor
+" }}}2
+
 " 检查有没有需要安装的插件 {{{2
 " Installation check.
 NeoBundleCheck
@@ -2472,10 +2484,8 @@ call neobundle#end()
 " }}}1
 
 " color scheme and statusline {{{1
-
-if neobundle#is_installed("vim-colors-solarized")
-    colorscheme solarized
-endif
+let &background=s:settings.background
+execute "colorscheme " . s:settings.colorscheme
 
 "set statusline=%<%n:\ %f\ %h%m%r\ %=%k%y[%{&ff},%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
 set statusline=%<%n:                " Buffer number
