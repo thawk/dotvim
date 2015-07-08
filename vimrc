@@ -14,8 +14,9 @@ let s:vimrc_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
 " 确定libclang的位置
 let s:libclang_path = ""
-let s:ag_path = ""
 
+" 确定ag可执行程序
+let s:ag_path = ""
 if executable("ag")
     let s:ag_path = "ag"
 endif
@@ -65,6 +66,9 @@ endif
 if !exists('g:dotvim_settings')
     let g:dotvim_settings = {}
 endif
+
+let s:cache_dir = get(g:dotvim_settings, 'cache_dir', '~/.vim_cache')
+
 let s:settings = {}
 let s:settings.default_indent = 4
 let s:settings.autocomplete_method = 'neocomplcache'
@@ -126,6 +130,17 @@ for key in keys(s:settings)
 endfor
 " }}}1
 
+function! s:get_cache_dir(suffix) "{{{
+    let path = resolve(expand(s:cache_dir . '/' . a:suffix))
+    if !isdirectory(expand(s:cache_dir))
+        call mkdir(expand(s:cache_dir))
+    endif
+    if !isdirectory(expand(path))
+        call mkdir(expand(path))
+    endif
+    return path
+endfunction "}}}
+
 " General {{{1
 set nocompatible " disable vi compatibility.
 set history=256 " Number of things to remember in history.
@@ -148,16 +163,16 @@ set nowritebackup
 set nobackup
 
 " 设置各种目录 {{{2
-" 设置swap-file保存路径
-if (s:is_windows)
-    let &directory='$TEMP//,$TMP//,' . &directory
-    let &backupdir='$TEMP//,$TMP//,' . &backupdir
-else
-    let &backupdir='$HOME/bak//,' . &backupdir
-endif
+" backups
+set backup
+let &backupdir = s:get_cache_dir('backup')
+
+" swap files
+let &directory = s:get_cache_dir('swap')
+set noswapfile
 
 if has("persistent_undo")
-    set undodir='~/.vim_undodir/'
+    let &undodir = s:get_cache_dir('undo')
     set undofile
 endif
 " }}}2
@@ -257,13 +272,6 @@ set cmdheight=1
 set winminheight=0  " 最小化窗口的高度为0
 "set shortmess=atI " Shortens messages
 set nostartofline " 翻页时保持光标的水平位置
-
-" 状态栏里显示文字编码和换行符等信息
-" 获取当前路径，将$HOME转化为~
-function! CurDir()
-    let curdir = substitute(getcwd(), "^".$HOME, "~", "")
-    return curdir
-endfunction
 
 set nolist " Don't display unprintable characters
 "let &listchars="tab:\u2192 ,eol:\u00b6,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
@@ -370,10 +378,13 @@ nmap <C-\><C-\> [unite-tag]
 
 nnoremap [ctrlsf] <Nop>
 vnoremap [ctrlsf] <Nop>
-inoremap [ctrlsf] <Nop>
 nmap \s [ctrlsf]
 vmap \s [ctrlsf]
-imap \s [ctrlsf]
+
+nnoremap [ack] <Nop>
+vnoremap [ack] <Nop>
+nmap \S [ack]
+vmap \S [ack]
 
 nnoremap [code] <Nop>
 nmap <Leader>c [code]
@@ -782,7 +793,8 @@ if count(s:settings.plugin_groups, 'unite') "{{{2
     let g:unite_enable_ignore_case = 1
     let g:unite_enable_smart_case = 1
 
-    let g:unite_source_session_path = expand('~/.vim/session/')
+    let g:unite_data_directory = s:get_cache_dir('unite')
+    let g:unite_source_session_path = s:get_cache_dir('session')
     let g:unite_source_grep_default_opts = "-iHn --color=never"
 
     let g:unite_source_history_yank_enable = 1
@@ -1268,6 +1280,41 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
     "             \ ],
     "             \ }
     " " }}}3
+    " ack.vim: 用ack/ag快速查找文件 "{{{3
+    NeoBundleLazy 'mileszs/ack.vim', {
+                \ 'commands' : [
+                \     {'name': 'Ack', 'complete': 'file'},
+                \     {'name': 'AckAdd', 'complete': 'file'},
+                \     {'name': 'AckFromSearch', 'complete': 'file'},
+                \     {'name': 'LAck', 'complete': 'file'},
+                \     {'name': 'LAckAdd', 'complete': 'file'},
+                \     {'name': 'AckFile', 'complete': 'file'},
+                \     {'name': 'AckHelp', 'complete': 'help'},
+                \     {'name': 'LAckHelp', 'complete': 'help'},
+                \     'AckWindow', 'LAckWindow',
+                \ ]}
+    if s:ag_path != ""
+        let g:ackprg = s:ag_path . " --nogroup --column --smart-case --follow"
+    endif
+
+    " let g:ackhighlight = 1
+    " let g:ack_autoclose = 1
+    " let g:ack_autofold_results = 1
+    " let g:ackpreview = 1
+    let g:ack_use_dispatch = 1
+
+    " 在当前文件目录下找
+    nmap     [ack]S :<C-U>Ack!<SPACE>
+
+    " 在当前文件目录下找
+    vmap     [ack]b :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
+    nmap     [ack]b :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=expand('%:p:h')<CR><CR>
+
+    " 在当前目录下找
+    vmap     [ack]c :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=getcwd()<CR><CR>
+    nmap     [ack]c :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=getcwd()<CR><CR>
+    "}}}
+
     " ctrlsf.vim: 快速查找及编辑 {{{3
     NeoBundleLazy 'dyng/ctrlsf.vim', {
                 \ 'mappings' : [ '<Plug>CtrlSF' ],
@@ -1279,18 +1326,25 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
         let g:ctrlsf_ackprg = s:ag_path
     endif
 
+    let g:ctrlsf_default_root = 'project'
+
+    " 在project下找
     vmap     [ctrlsf]s <Plug>CtrlSFVwordExec
     nmap     [ctrlsf]s <Plug>CtrlSFCwordExec
+    nmap     [ctrlsf]S <Plug>CtrlSFPrompt -regex<SPACE>
+
+    " 在当前文件目录下找
     vmap     [ctrlsf]b :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
     nmap     [ctrlsf]b :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=expand('%:p:h')<CR><CR>
-    nmap     [ctrlsf]S <Plug>CtrlSFPrompt -regex<SPACE>
-    vmap     [ctrlsf]n <Plug>CtrlSFVwordPath
-    nmap     [ctrlsf]n <Plug>CtrlSFCwordPath
+
+    " 在当前目录下找
+    vmap     [ctrlsf]c :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=getcwd()<CR><CR>
+    nmap     [ctrlsf]c :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=getcwd()<CR><CR>
+
     nmap     [ctrlsf]p <Plug>CtrlSFPwordPath
     nmap     [ctrlsf]P <Plug>CtrlSFPwordExec
     nnoremap [ctrlsf]o :CtrlSFOpen<CR>
     nnoremap [ctrlsf]t :CtrlSFToggle<CR>
-    inoremap [ctrlsf]t <Esc>:CtrlSFToggle<CR>
     " }}}3
     " Mark--Karkat: 可同时标记多个mark。\M显隐所有，\N清除所有Mark。\m标识当前word {{{3
     NeoBundleLazy 'vernonrj/Mark--Karkat', {
@@ -1604,6 +1658,7 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{2
             let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
             let g:neocomplete#enable_auto_select = 0
             let g:neocomplete#auto_completion_start_length = 3
+            let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
 
             if v:version == '704' && !has("patch-7.4.633")
                 " neocomplete issue #332
@@ -1613,8 +1668,8 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{2
             " Define dictionary.
             let g:neocomplete#sources#dictionary#dictionaries = {
                         \ 'default' : '',
-                        \ 'vimshell' : $HOME.'/.vimshell_hist',
-                        \ 'scheme' : $HOME.'/.gosh_completions'
+                        \ 'vimshell' : expand(s:cache_dir.'/.vimshell_hist'),
+                        \ 'scheme' : expand(s:cache_dir.'/.gosh_completions')
                         \ }
 
             " Plugin key-mappings.
@@ -1684,12 +1739,13 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{2
             let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
             let g:neocomplcache_enable_auto_select = 0
             let g:neocomplcache_auto_completion_start_length = 3
+            let g:neocomplcache_temporary_dir=s:get_cache_dir('neocomplete')
 
             " Define dictionary.
             let g:neocomplcache_dictionary_filetype_lists = {
                         \ 'default' : '',
-                        \ 'vimshell' : $HOME.'/.vimshell_hist',
-                        \ 'scheme' : $HOME.'/.gosh_completions'
+                        \ 'vimshell' : expand(s:cache_dir.'/.vimshell_hist'),
+                        \ 'scheme' : expand(s:cache_dir.'/.gosh_completions')
                         \ }
 
             inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
@@ -2052,6 +2108,7 @@ if count(s:settings.plugin_groups, 'shell') "{{{2
                 \ ],
                 \ 'mappings' : ['<Plug>(vimshell_'],
                 \ }
+    let g:vimshell_data_directory=s:get_cache_dir('vimshell')
     " 以当前目录开始vimshell窗口
     map  [repl]n :<C-U>VimShellPop<CR>
     " 以当前缓冲区目录打开vimshell窗口
@@ -2135,7 +2192,7 @@ if count(s:settings.plugin_groups, 'doc') "{{{2
                 \ }
     if has('win32') && !exists('$APPCACHE')
         " 设置缓存目录
-        let $APPCACHE=$HOME . '/.cache'
+        let $APPCACHE=s:get_cache_dir('timl')
     endif
     " }}}3
     " vim-markdown-concealed: markdown支持，并且利用conceal功能隐藏不需要的字符 {{{3
