@@ -1625,6 +1625,13 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
     " bind -n C-k if-shell "$is_vim" "send-keys C-k" "select-pane -U"
     " bind -n C-l if-shell "$is_vim" "send-keys C-l" "select-pane -R"
     " bind -n C-\ if-shell "$is_vim" "send-keys C-\\" "select-pane -l"
+
+    " 不希望map <C-\>，因此自行map
+    let g:tmux_navigator_no_mappings = 1
+    nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
+    nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
+    nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
+    nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
     " }}}3
 endif
 "}}}2
