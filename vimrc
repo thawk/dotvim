@@ -1566,7 +1566,7 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
     "endif
     "" }}}3
     " FSwitch: 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示，\of当前窗口 {{{3
-    NeoBundleLazy 'FSwitch', {
+    NeoBundleLazy 'derekwyatt/vim-fswitch', {
                 \ 'functions' : ['FSwitch'],
                 \ 'commands' : ['FSHere','FSRight','FSSplitRight','FSLeft','FSSplitLeft','FSAbove','FSSplitAbove','FSBelow','FSSplitBelow'],
                 \ }
