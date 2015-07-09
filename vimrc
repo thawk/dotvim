@@ -1615,7 +1615,7 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
     " }}}3
     " vim-tmux-navigator: 使用ctrl+i/j/k/l在vim及tmux间切换 {{{3
     NeoBundleLazy 'christoomey/vim-tmux-navigator', {
-                \ 'mappings' : [['n', '<C-H>', '<C-J>', '<C-K>', '<C-L>', '<C-\>']],
+                \ 'commands' : ['TmuxNavigateLeft', 'TmuxNavigateDown', 'TmuxNavigateUp', 'TmuxNavigateRight', 'TmuxNavigatePrevious'],
                 \ }
     " 需要在tmux.conf中加入下列内容
     " # Smart pane switching with awareness of vim splits
