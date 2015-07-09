@@ -1833,6 +1833,11 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{2
                         \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
         endif
         " }}}
+        " neocomplcache: 代码补全插件 {{{
+        NeoBundleLazy 'Shougo/echodoc', {
+                    \ 'insert' : 1,
+                    \ }
+        " }}}
     endif
     "}}}
 endif
