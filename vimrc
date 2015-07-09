@@ -215,17 +215,18 @@ function! s:get_cache_dir(suffix) "{{{
     return path
 endfunction "}}}
 
-function! s:FindVcsRoot(path) " {{{
+function! FindVcsRoot(path) " {{{
     let vcs_folder = ['.git', '.hg', '.svn', '.bzr', '_darcs']
 
-    if empty(a:path)
-        let a:path = expand('%:p:h')
+    let path = a:path
+    if empty(path)
+        let path = expand('%:p:h')
     endif
 
-    let vsc_dir = ''
-    for vcs in s:vcs_folder
-        let vsc_dir = finddir(vcs, a:path.';')
-        if !empty(vsc_dir)
+    let vcs_dir = ''
+    for vcs in vcs_folder
+        let vcs_dir = finddir(vcs, path.';')
+        if !empty(vcs_dir)
             if vcs == '.svn' " 对于旧svn版本，可能连续多层目录都有.svn，以最上层的为根
                 let root = fnamemodify(vcs_dir, ':h')
                 let parent = fnamemodify(root, ':h')
@@ -242,7 +243,7 @@ function! s:FindVcsRoot(path) " {{{
         endif
     endfor
 
-    return a:path
+    return path
 endfunction " }}}
 " }}}1
 
@@ -1329,11 +1330,11 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
     " let g:ack_autoclose = 1
     " let g:ack_autofold_results = 1
     " let g:ackpreview = 1
-    let g:ack_use_dispatch = 1
+    " let g:ack_use_dispatch = 1
 
     " 在项目目录下找，可能退化为当前目录
-    vmap     [ack]s :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=s:FindVcsRoot('')<CR><CR>
-    nmap     [ack]s :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=s:FindVcsRoot('')<CR><CR>
+    vmap     [ack]s :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=FindVcsRoot('')<CR><CR>
+    nmap     [ack]s :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=FindVcsRoot('')<CR><CR>
     nmap     [ack]S :<C-U>Ack!<SPACE>
 
     " 在当前文件目录下找
