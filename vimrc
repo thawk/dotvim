@@ -130,6 +130,80 @@ for key in keys(s:settings)
 endfor
 " }}}1
 
+" Helper Functions {{{1
+function! s:RemoveTrailingSpace() "{{{2
+    if $VIM_HATE_SPACE_ERRORS != '0' &&
+                \(&filetype == 'c' || &filetype == 'cpp' || &filetype == 'vim')
+        normal m`
+        silent! :%s/\s\+$//e
+        normal ``
+    endif
+endfunction
+" }}}2
+
+" Encoding Helper Utilities " {{{2
+function! ForceFileEncoding(encoding)
+    if a:encoding != '' && &fileencoding != a:encoding
+        exec 'e! ++enc=' . a:encoding
+    endif
+endfunction
+
+function! SetFileEncodings(encodings)
+    let b:my_fileencodings_bak=&fileencodings
+    let &fileencodings=a:encodings
+endfunction
+
+function! RestoreFileEncodings()
+    let &fileencodings=b:my_fileencodings_bak
+    unlet b:my_fileencodings_bak
+endfunction
+
+function! CheckFileEncoding()
+    if &modified && &fileencoding != ''
+        exec 'e! ++enc=' . &fileencoding
+    endif
+endfunction
+" }}}2
+
+" Find SVN branch " {{{2
+let s:path_svnbranchinfo = {}
+let s:svn_command = 'svn'
+
+function! GetSvnBranchOfPath(path)
+    if has_key(s:path_svnbranchinfo, a:path)
+        return s:path_svnbranchinfo[a:path]
+    endif
+
+    let command = s:svn_command . ' info --xml --non-interactive "' . a:path . '"'
+    let result = system(command)
+    let branch_info = {}
+
+    let m = matchlist(result, ".*<url>\\(.\\+\\)</url>.*")
+    if len(m)
+        let url = m[1]
+
+        if url =~ ".*/trunk\\($\\|.*\\)"
+            let branch_info["type"] = "trunk"
+            let branch_info["branch"] = ""
+        else
+            let m = matchlist(url, ".*/\\(tags\\|branches\\)/\\([^/]\\+\\).*")
+            if len(m)
+                if m[1] =~ "tags"
+                    let branch_info["type"] = "tag"
+                else
+                    let branch_info["type"] = "branch"
+                endif
+
+                let branch_info["branch"] = m[2]
+            endif
+        endif
+    endif
+
+    let s:path_svnbranchinfo[a:path] = branch_info
+    return branch_info
+endfunction
+" }}}2
+
 function! s:get_cache_dir(suffix) "{{{
     let path = resolve(expand(s:cache_dir . '/' . a:suffix))
     if !isdirectory(expand(s:cache_dir))
@@ -140,6 +214,37 @@ function! s:get_cache_dir(suffix) "{{{
     endif
     return path
 endfunction "}}}
+
+function! s:FindVcsRoot(path) " {{{
+    let vcs_folder = ['.git', '.hg', '.svn', '.bzr', '_darcs']
+
+    if empty(a:path)
+        let a:path = expand('%:p:h')
+    endif
+
+    let vsc_dir = ''
+    for vcs in s:vcs_folder
+        let vsc_dir = finddir(vcs, a:path.';')
+        if !empty(vsc_dir)
+            if vcs == '.svn' " 对于旧svn版本，可能连续多层目录都有.svn，以最上层的为根
+                let root = fnamemodify(vcs_dir, ':h')
+                let parent = fnamemodify(root, ':h')
+                while parent != root
+                    if !isdirectory(parent . "/" . vcs) " 上层目录没有.svn子目录
+                        break
+                    endif
+                    let root = parent
+                endwhile
+                return root
+            else
+                return fnamemodify(vcs_dir, ':h')
+            endif
+        endif
+    endfor
+
+    return a:path
+endfunction " }}}
+" }}}1
 
 " General {{{1
 set nocompatible " disable vi compatibility.
@@ -241,7 +346,7 @@ let &termencoding = &encoding
 if (s:is_windows)
     "set encoding=ucs-4
     "set encoding=utf-8
-    set encoding=utf-8
+    " set encoding=utf-8
     "set guifont=Bitstream_Vera_Sans_Mono\ 12
     "set guifont=Courier_New:h12
     set guifont=Powerline_Consolas:h12,Consolas:h12,Courier_New:h12
@@ -502,83 +607,6 @@ endif
 " map <silent> <C-W>s :snew<CR>
 
 " nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
-" }}}2
-
-" }}}1
-
-" Helper Functions {{{1
-" Coding Helper Functions {{{2
-function! s:RemoveTrailingSpace()
-    if $VIM_HATE_SPACE_ERRORS != '0' &&
-                \(&filetype == 'c' || &filetype == 'cpp' || &filetype == 'vim')
-        normal m`
-        silent! :%s/\s\+$//e
-        normal ``
-    endif
-endfunction
-" }}}2
-
-" Encoding Helper Utilities " {{{2
-function! ForceFileEncoding(encoding)
-    if a:encoding != '' && &fileencoding != a:encoding
-        exec 'e! ++enc=' . a:encoding
-    endif
-endfunction
-
-function! SetFileEncodings(encodings)
-    let b:my_fileencodings_bak=&fileencodings
-    let &fileencodings=a:encodings
-endfunction
-
-function! RestoreFileEncodings()
-    let &fileencodings=b:my_fileencodings_bak
-    unlet b:my_fileencodings_bak
-endfunction
-
-function! CheckFileEncoding()
-    if &modified && &fileencoding != ''
-        exec 'e! ++enc=' . &fileencoding
-    endif
-endfunction
-" }}}2
-
-" Find SVN branch " {{{2
-let s:path_svnbranchinfo = {}
-let s:svn_command = 'svn'
-
-function! GetSvnBranchOfPath(path)
-    if has_key(s:path_svnbranchinfo, a:path)
-        return s:path_svnbranchinfo[a:path]
-    endif
-
-    let command = s:svn_command . ' info --xml --non-interactive "' . a:path . '"'
-    let result = system(command)
-    let branch_info = {}
-
-    let m = matchlist(result, ".*<url>\\(.\\+\\)</url>.*")
-    if len(m)
-        let url = m[1]
-
-        if url =~ ".*/trunk\\($\\|.*\\)"
-            let branch_info["type"] = "trunk"
-            let branch_info["branch"] = ""
-        else
-            let m = matchlist(url, ".*/\\(tags\\|branches\\)/\\([^/]\\+\\).*")
-            if len(m)
-                if m[1] =~ "tags"
-                    let branch_info["type"] = "tag"
-                else
-                    let branch_info["type"] = "branch"
-                endif
-
-                let branch_info["branch"] = m[2]
-            endif
-        endif
-    endif
-
-    let s:path_svnbranchinfo[a:path] = branch_info
-    return branch_info
-endfunction
 " }}}2
 
 " }}}1
@@ -1303,7 +1331,9 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
     " let g:ackpreview = 1
     let g:ack_use_dispatch = 1
 
-    " 在当前文件目录下找
+    " 在项目目录下找，可能退化为当前目录
+    vmap     [ack]s :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=s:FindVcsRoot('')<CR><CR>
+    nmap     [ack]s :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=s:FindVcsRoot('')<CR><CR>
     nmap     [ack]S :<C-U>Ack!<SPACE>
 
     " 在当前文件目录下找
