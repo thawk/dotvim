@@ -2548,7 +2548,9 @@ let g:rehash256 = 1
 " base16-vim: Base16配色方案 {{{
 NeoBundle 'chriskempson/base16-vim'
 let g:base16_shell_path=s:vimrc_path . '/bundle/base16-shell'
-let g:base16colorspace=256
+if !s:is_gui
+    let g:base16colorspace=256
+endif
 " }}}
 " base16-shell: Base16配色方案配套使用的shell脚本 {{{
 NeoBundle 'chriskempson/base16-shell', {
