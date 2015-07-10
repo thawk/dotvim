@@ -1,6 +1,6 @@
 scriptencoding utf-8
 
-" 判断当前环境 {{{1
+" 判断当前环境 {{{
 " 判断操作系统
 let s:is_windows = has("win32") || has("win64") || has("win32unix")
 let s:is_cygwin = has('win32unix')
@@ -55,9 +55,9 @@ if s:ag_path != ""
     exec 'set grepprg=' . s:ag_path . '\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow'
     set grepformat=%f:%l:%c:%m
 endif
-" }}}1
+" }}}
 
-" 缺省设置 {{{1
+" 缺省设置 {{{
 " Impacted by https://github.com/bling/dotvim
 if filereadable(s:vimrc_path . "/vimrc.local")
     exec "source " . s:vimrc_path . "/vimrc.local"
@@ -128,10 +128,10 @@ for key in keys(s:settings)
         let s:settings[key] = g:dotvim_settings[key]
     endif
 endfor
-" }}}1
+" }}}
 
-" Helper Functions {{{1
-function! s:RemoveTrailingSpace() "{{{2
+" Helper Functions {{{
+function! s:RemoveTrailingSpace() "{{{
     if $VIM_HATE_SPACE_ERRORS != '0' &&
                 \(&filetype == 'c' || &filetype == 'cpp' || &filetype == 'vim')
         normal m`
@@ -139,9 +139,9 @@ function! s:RemoveTrailingSpace() "{{{2
         normal ``
     endif
 endfunction
-" }}}2
+" }}}
 
-" Encoding Helper Utilities " {{{2
+" Encoding Helper Utilities " {{{
 function! ForceFileEncoding(encoding)
     if a:encoding != '' && &fileencoding != a:encoding
         exec 'e! ++enc=' . a:encoding
@@ -163,9 +163,9 @@ function! CheckFileEncoding()
         exec 'e! ++enc=' . &fileencoding
     endif
 endfunction
-" }}}2
+" }}}
 
-" Find SVN branch " {{{2
+" Find SVN branch " {{{
 let s:path_svnbranchinfo = {}
 let s:svn_command = 'svn'
 
@@ -202,7 +202,7 @@ function! GetSvnBranchOfPath(path)
     let s:path_svnbranchinfo[a:path] = branch_info
     return branch_info
 endfunction
-" }}}2
+" }}}
 
 function! s:get_cache_dir(suffix) "{{{
     let path = resolve(expand(s:cache_dir . '/' . a:suffix))
@@ -245,9 +245,9 @@ function! FindVcsRoot(path) " {{{
 
     return path
 endfunction " }}}
-" }}}1
+" }}}
 
-" General {{{1
+" General {{{
 set nocompatible " disable vi compatibility.
 set history=256 " Number of things to remember in history.
 set autowrite " Writes on make/shell commands
@@ -268,7 +268,7 @@ set modelines=5 " default numbers of lines to read for modeline instructions
 set nowritebackup
 set nobackup
 
-" 设置各种目录 {{{2
+" 设置各种目录 {{{
 " backups
 set backup
 let &backupdir = s:get_cache_dir('backup')
@@ -281,7 +281,7 @@ if has("persistent_undo")
     let &undodir = s:get_cache_dir('undo')
     set undofile
 endif
-" }}}2
+" }}}
 
 if (s:is_windows)
     set shellpipe=\|\ tee
@@ -296,16 +296,16 @@ set viewoptions-=options
 " Buffers
 set hidden " The current buffer can be put to the background without writing to disk
 
-" Match and search {{{2
+" Match and search {{{
 set hlsearch " highlight search
 set ignorecase " Do case in sensitive matching with
 set smartcase " be sensitive when there's a capital letter
 set incsearch "
 set diffopt+=iwhite
-" }}}2
-" }}}1
+" }}}
+" }}}
 
-" Formatting {{{1
+" Formatting {{{
 "set fo+=o " Automatically insert the current comment leader after hitting 'o' or 'O' in Normal mode.
 "set fo-=r " Do not automatically insert a comment leader after an enter
 set fo-=t " Do no auto-wrap text using textwidth (does not apply to comments)
@@ -340,9 +340,9 @@ set cinwords=if,else,while,do,for,switch,case
 syntax on " enable syntax
 filetype plugin on " 使用filetype插件
 filetype plugin indent on " Automatically detect file types.
-" }}}1
+" }}}
 
-" Visual {{{1
+" Visual {{{
 let &termencoding = &encoding
 if (s:is_windows)
     "set encoding=ucs-4
@@ -433,9 +433,9 @@ if has('multi_byte_ime')
     highlight CursorIM guifg=NONE guibg=Purple
 endif
 
-" }}}1
+" }}}
 
-" Coding {{{1
+" Coding {{{
 set tags+=./tags;/ " walk directory tree upto / looking for tags
 
 set completeopt=menuone,menu,longest,preview
@@ -455,11 +455,11 @@ endif
 " Highlight space errors in C/C++ source files (Vim tip #935)
 let c_space_errors=1
 let java_space_errors=1
-" }}}1
+" }}}
 
-" Key mappings " {{{1
+" Key mappings " {{{
 
-" 用于各插件的热键前缀 {{{2
+" 用于各插件的热键前缀 {{{
 nnoremap [unite] <Nop>
 xnoremap [unite] <Nop>
 nmap <Leader>f [unite]
@@ -500,9 +500,9 @@ nmap <Leader>o [fswitch]
 
 nnoremap [make] <Nop>
 nmap <Leader>t [make]
-" }}}2
+" }}}
 
-" 支持alt键 {{{2
+" 支持alt键 {{{
 " 使用Kitty后，不再需要映射Alt键
 " if !s:is_windows && !s:is_gui
 "     " 修改对Alt/Meta键的映射
@@ -514,18 +514,18 @@ nmap <Leader>t [make]
 "     endfor
 "     set ttimeoutlen=10  " 缩短keycode的timeout
 " endif
-" }}}2
+" }}}
 
-" 简化对常用目录的访问 {{{2
+" 简化对常用目录的访问 {{{
 "用,cd进入当前目录
 nmap ,cd :cd <C-R>=expand("%:p:h")<CR><CR>
 " "用,e可以打开当前目录下的文件
 " nmap ,e :e <C-R>=escape(expand("%:p:h")."/", ' \')<CR>
 " "在命令中，可以用 %/ 得到当前目录。如 :e %/
 " cmap %/ <C-R>=escape(expand("%:p:h")."/", ' \')<cr>
-" }}}2
+" }}}
 
-" 光标移动 {{{2
+" 光标移动 {{{
 " 正常模式下，空格及Shift-空格滚屏
 noremap <SPACE> <C-F>
 noremap <S-SPACE> <C-B>
@@ -535,9 +535,9 @@ nnoremap <Down>      gj
 nnoremap <Up>        gk
 inoremap <Down> <C-O>gj
 inoremap <Up>   <C-O>gk
-" }}}2
+" }}}
 
-" 操作tab页 {{{2
+" 操作tab页 {{{
 " Ctrl-Tab/Ctrl-Shirt-Tab切换Tab
 nmap <C-S-tab> :tabprevious<cr>
 nmap <C-tab> :tabnext<cr>
@@ -545,9 +545,9 @@ map <C-S-tab> :tabprevious<cr>
 map <C-tab> :tabnext<cr>
 imap <C-S-tab> <ESC>:tabprevious<cr>i
 imap <C-tab> <ESC>:tabnext<cr>i
-" }}}2
+" }}}
 
-" 查找 {{{2
+" 查找 {{{
 " <F3>自动在当前文件中vimgrep当前word，g<F3>在当前目录下，vimgrep_files指定的文件中查找
 "nmap <F3> :execute "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.c **/*.h **/*.php"<CR>:botright copen<CR>
 "nmap <S-F3> :execute "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR>:botright copen<CR>
@@ -567,14 +567,14 @@ vnoremap <F3> :<C-U>
             \gvy
             \:execute "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
             \gV:call setreg('"', old_reg, old_regtype)<CR>
-" }}}2
+" }}}
 
-" 在VISUAL模式下，缩进后保持原来的选择，以便再次进行缩进 {{{2
+" 在VISUAL模式下，缩进后保持原来的选择，以便再次进行缩进 {{{
 vnoremap > >gv
 vnoremap < <gv
-" }}}2
+" }}}
 
-" folds {{{2
+" folds {{{
 " zJ/zK跳到下个/上个折叠处，并只显示该折叠的内容
 nnoremap zJ zjzx
 nnoremap zK zkzx
@@ -582,9 +582,9 @@ nnoremap zr zr:echo 'foldlevel: ' . &foldlevel<cr>
 nnoremap zm zm:echo 'foldlevel: ' . &foldlevel<cr>
 nnoremap zR zR:echo 'foldlevel: ' . &foldlevel<cr>
 nnoremap zM zM:echo 'foldlevel: ' . &foldlevel<cr>
-" }}}2
+" }}}
 
-" 一些方便编译的快捷键 {{{2
+" 一些方便编译的快捷键 {{{
 if exists(":Make")  " vim-dispatch提供了异步的make
     nnoremap [make]m :<C-U>Make<CR>
     nnoremap [make]t :<C-U>Make unittest<CR>
@@ -598,9 +598,9 @@ else
     nnoremap [make]c :<C-U>make clean<CR>
     nnoremap [make]d :<C-U>make doc<CR>
 endif
-" }}}2
+" }}}
 
-" 其它 {{{2
+" 其它 {{{
 " Split line(opposite to S-J joining line)
 " nnoremap <silent> <C-J> gEa<CR><ESC>ew
 
@@ -608,13 +608,13 @@ endif
 " map <silent> <C-W>s :snew<CR>
 
 " nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
-" }}}2
+" }}}
 
-" }}}1
+" }}}
 
-" Auto commands " {{{1
+" Auto commands " {{{
 
-" Misc {{{2
+" Misc {{{
 if (s:is_windows)
     au GUIEnter * simalt ~x " 启动时自动全屏
 endif
@@ -623,9 +623,9 @@ au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "norma
 
 " automatically open and close the popup menu / preview window
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-" }}}2
+" }}}
 
-" Filetype detection " {{{2
+" Filetype detection " {{{
 au BufRead,BufNewFile {Gemfile,Rakefile,Capfile,*.rake,config.ru} setf ruby
 au BufRead,BufNewFile {*.md,*.mkd,*.markdown} setf markdown
 au BufRead,BufNewFile {COMMIT_EDITMSG}  setf gitcommit
@@ -642,9 +642,9 @@ au BufRead,BufNewFile *.proto                     setf proto
 au BufRead,BufNewFile Jamfile*,Jamroot*,*.jam     setf jam
 au BufRead,BufNewFile pending.data,completed.data setf task
 au BufRead,BufNewFile *.ipp                       setf cpp
-" }}}2
+" }}}
 
-" Filetype related autosettings " {{{2
+" Filetype related autosettings " {{{
 au FileType diff  setlocal shiftwidth=4 tabstop=4
 " au FileType html  setlocal autoindent indentexpr= shiftwidth=2 tabstop=2
 au FileType changelog setlocal textwidth=76
@@ -681,9 +681,9 @@ if executable("jing")
         au FileType rnc call s:jing_settings("rnc")
     augroup END
 endif
-" }}}2
+" }}}
 
-" 根据不同的文件类型设定g<F3>时应该查找的文件 {{{2
+" 根据不同的文件类型设定g<F3>时应该查找的文件 {{{
 au FileType *             let b:vimgrep_files=expand("%:e") == "" ? "**/*" : "**/*." . expand("%:e")
 au FileType c,cpp         let b:vimgrep_files="**/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.ipp"
 au FileType php           let b:vimgrep_files="**/*.php **/*.htm **/*.html"
@@ -693,9 +693,9 @@ au FileType javascript    let b:vimgrep_files="**/*.js **/*.htm **/*.html"
 au FileType python        let b:vimgrep_files="**/*.py"
 au FileType xml           let b:vimgrep_files="**/*.xml"
 au FileType jam           let b:vimgrep_files="**/*.jam **/Jam*"
-" }}}2
+" }}}
 
-" 自动打开quickfix窗口 {{{2
+" 自动打开quickfix窗口 {{{
 " Automatically open, but do not go to (if there are errors) the quickfix /
 " location list window, or close it when is has become empty.
 "
@@ -706,9 +706,9 @@ au FileType jam           let b:vimgrep_files="**/*.jam **/Jam*"
 " seem to happen.
 autocmd QuickFixCmdPost [^l]* nested botright cwindow
 autocmd QuickFixCmdPost    l* nested botright lwindow
-" }}}2
+" }}}
 
-" python autocommands {{{2
+" python autocommands {{{
 " 设定python的makeprg
 if executable("python2")
     au FileType python setlocal makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
@@ -719,9 +719,9 @@ endif
 "au FileType python set errorformat=%C\ %.%#,%A\ \ File\ \"%f\"\\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 au FileType python setlocal errorformat=%[%^(]%\\+('%m'\\,\ ('%f'\\,\ %l\\,\ %v\\,%.%#
 au FileType python setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-" }}}2
+" }}}
 
-" Text file encoding autodetection {{{2
+" Text file encoding autodetection {{{
 au BufReadPre  *.gb               call SetFileEncodings('gbk')
 au BufReadPre  *.big5             call SetFileEncodings('big5')
 au BufReadPre  *.nfo              call SetFileEncodings('cp437')
@@ -735,18 +735,18 @@ au BufWinEnter *.txt              call CheckFileEncoding()
 au BufReadPost  .vimrc,*.vim nested     call ForceFileEncoding('utf-8')
 
 au FileType task call ForceFileEncoding('utf-8')
-" }}}2
+" }}}
 
-" }}}1
+" }}}
 
-" Plugins {{{1
+" Plugins {{{
 
 " Brief help
 " :NeoBundleList          - list configured bundles
 " :NeoBundleInstall(!)    - install(update) bundles
 " :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 
-" Loading NeoBundle {{{2
+" Loading NeoBundle {{{
 filetype off                   " Required!
 
 if has('vim_starting') && match("neobundle", &runtimepath) < 0
@@ -761,10 +761,10 @@ let g:neobundle#install_process_timeout = 1500
 " 使用submodule管理NeoBundle
 " " Let NeoBundle manage NeoBundle
 " NeoBundle 'Shougo/neobundle.vim'    " 插件管理软件
-" }}}2
+" }}}
 
-if count(s:settings.plugin_groups, 'core') "{{{2
-    " vimproc: 用于异步执行命令的插件，被其它插件依赖 {{{3
+if count(s:settings.plugin_groups, 'core') "{{{
+    " vimproc: 用于异步执行命令的插件，被其它插件依赖 {{{
     NeoBundle 'Shougo/vimproc', {
                 \ 'build' : {
                 \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
@@ -778,15 +778,15 @@ if count(s:settings.plugin_groups, 'core') "{{{2
     elseif has("win32") && filereadable(s:vimrc_path . "/win32/vimproc_win32.dll")
         let g:vimproc_dll_path = s:vimrc_path . "/win32/vimproc_win32.dll"
     endif
-    " }}}3
-    " vim-misc: xolox的插件依赖的库 {{{3
+    " }}}
+    " vim-misc: xolox的插件依赖的库 {{{
     NeoBundleLazy 'xolox/vim-misc'
-    " }}}3
+    " }}}
 endif
-" }}}2
+" }}}
 
-if count(s:settings.plugin_groups, 'unite') "{{{2
-    " unite.vim: Unite主插件，提供\f开头的功能 {{{3
+if count(s:settings.plugin_groups, 'unite') "{{{
+    " unite.vim: Unite主插件，提供\f开头的功能 {{{
     NeoBundleLazy 'Shougo/unite.vim', {
                 \ 'commands' : [
                 \     { 'name' : 'Unite',
@@ -947,58 +947,58 @@ if count(s:settings.plugin_groups, 'unite') "{{{2
         " Runs "split" action by <C-s>.
         imap <silent><buffer><expr> <C-s>     unite#do_action('split')
     endfunction "}}}
-    " }}}3
-    " unite-outline: 提供代码的大纲。通过\fo访问 {{{3
+    " }}}
+    " unite-outline: 提供代码的大纲。通过\fo访问 {{{
     NeoBundleLazy 'Shougo/unite-outline', {
                 \ 'unite_sources' : ['outline'],
                 \ }
-    " }}}3
-    " unite-mark: 列出所有标记点 {{{3
+    " }}}
+    " unite-mark: 列出所有标记点 {{{
     NeoBundleLazy 'tacroe/unite-mark', {
                 \ 'unite_sources' : ['mark'],
                 \ }
-    " }}}3
-    " unite-help: 查找vim的帮助 {{{3
+    " }}}
+    " unite-help: 查找vim的帮助 {{{
     NeoBundleLazy 'shougo/unite-help', {
                 \ 'unite_sources' : ['help'],
                 \ }
-    " }}}3
-    " unite-tag: 跳转到光标下的tag。通过\fT访问 {{{3
+    " }}}
+    " unite-tag: 跳转到光标下的tag。通过\fT访问 {{{
     NeoBundleLazy 'tsukkee/unite-tag', {
                 \ 'unite_sources' : ['tag', 'tag/include', 'tag/file']
                 \ }
-    " }}}3
-    " unite-colorscheme: 列出所有配色方案 {{{3
+    " }}}
+    " unite-colorscheme: 列出所有配色方案 {{{
     NeoBundleLazy 'ujihisa/unite-colorscheme', {
                 \ 'unite_sources' : ['colorscheme'],
                 \ }
-    " }}}3
-    " unite-quickfix: 过滤quickfix窗口（如在编译结果中查找） {{{3
+    " }}}
+    " unite-quickfix: 过滤quickfix窗口（如在编译结果中查找） {{{
     NeoBundleLazy 'osyo-manga/unite-quickfix', {
                 \ 'unite_sources' : ['quickfix'],
                 \ }
-    " }}}3
-    " vim-unite-history: 搜索命令历史 {{{3
+    " }}}
+    " vim-unite-history: 搜索命令历史 {{{
     NeoBundleLazy 'thinca/vim-unite-history', {
                 \ 'unite_sources' : ['history/command', 'history/search']
                 \ }
-    " }}}3
-    " unite-tselect: 跳转到光标下的tag。通过g]和g<C-]>访问 {{{3
+    " }}}
+    " unite-tselect: 跳转到光标下的tag。通过g]和g<C-]>访问 {{{
     NeoBundleLazy 'eiiches/unite-tselect', {
                 \ 'unite_sources' : 'tselect',
                 \ }
     nnoremap g<C-]> :<C-u>Unite -immediately tselect:<C-r>=expand('<cword>')<CR><CR>
     nnoremap g] :<C-u>Unite tselect:<C-r>=expand('<cword>')<CR><CR>
-    " }}}3
-    " vim-versions: 支持svn/git，\fv 看未提交的文件列表，\fl 看更新日志 {{{3
+    " }}}
+    " vim-versions: 支持svn/git，\fv 看未提交的文件列表，\fl 看更新日志 {{{
     NeoBundleLazy 'hrsh7th/vim-versions', {
                 \ 'commands' : ['UniteVersions'],
                 \ 'unite_sources' : ['versions', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status'],
                 \ }
     nnoremap <silent> [unite]v :<C-u>UniteVersions status<CR>
     nnoremap <silent> [unite]l :<C-u>UniteVersions log<CR>
-    " }}}3
-    " unite-gtags: Unite下调用gtags {{{3
+    " }}}
+    " unite-gtags: Unite下调用gtags {{{
     NeoBundleLazy 'hewes/unite-gtags', {
                 \ "unite_sources" : ["gtags/ref","gtags/def","gtags/context","gtags/completion","gtags/grep","gtags/file"],
                 \ }
@@ -1015,18 +1015,18 @@ if count(s:settings.plugin_groups, 'unite') "{{{2
         nnoremap [unite-tag]E :<C-u>Unite gtags/grep:
         nnoremap [unite-tag]f :<C-u>Unite gtags/file<CR>
     endif
-    " }}}3
-    " tabpagebuffer.vim: 记录一个tab中包含的buffer {{{3
+    " }}}
+    " tabpagebuffer.vim: 记录一个tab中包含的buffer {{{
     NeoBundle 'Shougo/tabpagebuffer.vim'
-    " }}}3
-    " neomru.vim: 最近访问的文件 {{{3
+    " }}}
+    " neomru.vim: 最近访问的文件 {{{
     NeoBundle 'Shougo/neomru.vim'
-    " }}}3
+    " }}}
 endif
-" }}}2
+" }}}
 
-if count(s:settings.plugin_groups, 'editing') "{{{2
-    " vim-alignta: 代码对齐插件。通过\fa访问 {{{3
+if count(s:settings.plugin_groups, 'editing') "{{{
+    " vim-alignta: 代码对齐插件。通过\fa访问 {{{
     NeoBundleLazy 'h1mesuke/vim-alignta', {
                 \ 'commands' : ['Alignta'],
                 \ 'unite_sources' : 'alignta',
@@ -1075,24 +1075,24 @@ if count(s:settings.plugin_groups, 'editing') "{{{2
     " 在没选中文本时，按[unite]a选择需要用的选项，再选中要操作的文本，[unite]a进行操作
     nnoremap <silent> [unite]a :<C-u>Unite alignta:options -no-start-insert<CR>
     xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments -no-start-insert<CR>
-    " }}}3
-    " YankRing.vim: 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容 {{{3
+    " }}}
+    " YankRing.vim: 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容 {{{
     "NeoBundle 'YankRing.vim'
     "    let g:yankring_persist = 0              "不把yankring持久化
     "    let g:yankring_share_between_instances = 0
     "    let g:yankring_manual_clipboard_check = 1
-    " }}}3
-    "" vis: 在块选后（<C-V>进行选择），:B cmd在选中内容中执行cmd {{{3
+    " }}}
+    "" vis: 在块选后（<C-V>进行选择），:B cmd在选中内容中执行cmd {{{
     "NeoBundleLazy 'vis', {
     "    \ 'commands' : ['B'],
     "    \ }
-    "" }}}3
-    " vim-operator-user: 被多个vim-operator插件依赖的插件 {{{3
+    "" }}}
+    " vim-operator-user: 被多个vim-operator插件依赖的插件 {{{
     NeoBundleLazy 'kana/vim-operator-user', {
                 \ 'functions' : 'operator#user#define',
                 \ }
-    " }}}3
-    " vim-operator-replace: 双引号x_{motion} : 把{motion}涉及的内容替换为register x的内容 {{{3
+    " }}}
+    " vim-operator-replace: 双引号x_{motion} : 把{motion}涉及的内容替换为register x的内容 {{{
     NeoBundleLazy 'kana/vim-operator-replace', {
                 \ 'depends' : 'vim-operator-user',
                 \ 'mappings' : [
@@ -1100,8 +1100,8 @@ if count(s:settings.plugin_groups, 'editing') "{{{2
                 \ ]}
     nmap _  <Plug>(operator-replace)
     xmap _  <Plug>(operator-replace)
-    " }}}3
-    " vim-operator-surround: sa{motion}/sd{motion}/sr{motion}：增/删/改括号、引号等 {{{3
+    " }}}
+    " vim-operator-surround: sa{motion}/sd{motion}/sr{motion}：增/删/改括号、引号等 {{{
     NeoBundleLazy 'rhysd/vim-operator-surround', {
                 \ 'depends' : 'vim-operator-user',
                 \ 'mappings' : [
@@ -1117,14 +1117,14 @@ if count(s:settings.plugin_groups, 'editing') "{{{2
     xmap <silent>sa <Plug>(operator-surround-append)
     xmap <silent>sd <Plug>(operator-surround-delete)
     xmap <silent>sr <Plug>(operator-surround-replace)
-    " }}}3
-    " DrawIt: 使用横、竖线画图、制表。\di和\ds分别启、停画图模式。在模式中，hjkl移动光标，方向键画线 {{{3
+    " }}}
+    " DrawIt: 使用横、竖线画图、制表。\di和\ds分别启、停画图模式。在模式中，hjkl移动光标，方向键画线 {{{
     NeoBundleLazy 'DrawIt', {
                 \ 'mappings' : [['n', '<Leader>di']],
                 \ 'commands' : ['DIstart', 'DIsngl', 'DIdbl', 'DrawIt'],
                 \ }
-    " }}}3
-    " vim-notes: :Note创建新的笔记 {{{3
+    " }}}
+    " vim-notes: :Note创建新的笔记 {{{
     NeoBundleLazy 'xolox/vim-notes', {
                 \ 'commands' : [
                 \     {'name': 'Note', 'complete': 'customlist,xolox#notes#cmd_complete'},
@@ -1147,8 +1147,8 @@ if count(s:settings.plugin_groups, 'editing') "{{{2
             let g:notes_directories = [s:settings.notes_directory]
         endif
     endif
-    " }}}3
-    " vim-multiple-cursors: 同时编辑多处 {{{3
+    " }}}
+    " vim-multiple-cursors: 同时编辑多处 {{{
     NeoBundleLazy 'terryma/vim-multiple-cursors', {
                 \ 'mappings' : [ '<C-N>' ],
                 \ 'commands' : [ 'MultipleCursorsFind' ],
@@ -1167,8 +1167,8 @@ if count(s:settings.plugin_groups, 'editing') "{{{2
             exe 'NeoCompleteUnlock'
         endif
     endfunction
-    " }}}3
-    " echofunc: 在插入模式下输入(时，会在statusline显示函数的签名，对于有多个重载的函数，可通过<A-->/<A-=>进行切换 {{{3
+    " }}}
+    " echofunc: 在插入模式下输入(时，会在statusline显示函数的签名，对于有多个重载的函数，可通过<A-->/<A-=>进行切换 {{{
     NeoBundleLazy 'mbbill/echofunc', {
                 \ 'filetypes' : ['c', 'cpp'],
                 \ }
@@ -1176,16 +1176,16 @@ if count(s:settings.plugin_groups, 'editing') "{{{2
         " 启用global后，将不用ctags，因此echofunc.vim会失效
         NeoBundleDisable 'echofunc'
     endif
-    " }}}3
-    " 为函数插入Doxygen注释。在函数名所在行输入 :Dox 即可 {{{3
+    " }}}
+    " 为函数插入Doxygen注释。在函数名所在行输入 :Dox 即可 {{{
     NeoBundleLazy 'DoxygenToolkit.vim', {
                 \ 'commands' : ['Dox', 'DoxLic', 'DoxAuthor', 'DoxUndoc', 'DoxBlock'],
                 \ }
     let g:DoxygenToolkit_briefTag_pre="@brief "
     let g:DoxygenToolkit_paramTag_pre="@param[in] "
     let g:DoxygenToolkit_returnTag="@return "
-    " }}}3
-    " 记录代码走查意见，\ic激活。可通过 cfile <文件名> 把记录走查意见的文件导入 quickfix 列表 {{{3
+    " }}}
+    " 记录代码走查意见，\ic激活。可通过 cfile <文件名> 把记录走查意见的文件导入 quickfix 列表 {{{
     NeoBundleLazy 'CodeReviewer.vim', {
                 \ 'commands' : ['CheckReview'],
                 \ 'mappings' : ['<Leader>ic'],
@@ -1204,17 +1204,17 @@ if count(s:settings.plugin_groups, 'editing') "{{{2
         let g:CodeReviewer_reviewer = "Unknown"
     endif
     let g:CodeReviewer_reviewFile="review.rev"
-    " }}}3
-    " HiCursorWords: 高亮与光标下word一样的词 {{{3
+    " }}}
+    " HiCursorWords: 高亮与光标下word一样的词 {{{
     NeoBundle 'OrelSokolov/HiCursorWords'
     let g:HiCursorWords_delay = 200
     let g:HiCursorWords_hiGroupRegexp = ''
     let g:HiCursorWords_debugEchoHiName = 0
-    " }}}3
-    " tcomment_vim: 注释工具。gc{motion}/gcc/<C-_>等 {{{3
+    " }}}
+    " tcomment_vim: 注释工具。gc{motion}/gcc/<C-_>等 {{{
     NeoBundle 'tomtom/tcomment_vim'
-    " }}}3
-    " syntastic: 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表 {{{3
+    " }}}
+    " syntastic: 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表 {{{
     NeoBundle 'scrooloose/syntastic'
     " let g:syntastic_mode_map = {
     "             \ 'mode': 'active',
@@ -1241,8 +1241,8 @@ if count(s:settings.plugin_groups, 'editing') "{{{2
     if executable('python2')
         let g:syntastic_python_python_exec = 'python2'
     endif
-    " }}}3
-    " vim-scriptease: 辅助编写vim脚本的工具 {{{3
+    " }}}
+    " vim-scriptease: 辅助编写vim脚本的工具 {{{
     NeoBundleLazy 'tpope/vim-scriptease', {
                 \ 'filetypes' : ['vim', 'help'],
                 \ 'commands' : [
@@ -1253,22 +1253,22 @@ if count(s:settings.plugin_groups, 'editing') "{{{2
                 \     'Scriptnames', 'Runtime', 'Disarm', 'Ve', 'Vedit', 'Vopen', 'Vsplit', 'Vvsplit', 'Vtabedit', 'Vpedit', 'Vread', 'Console',
                 \ ],
                 \ }
-    " }}}3
-    " vim-repeat: 把.能重复的操作扩展到一些插件中的操作 {{{3
+    " }}}
+    " vim-repeat: 把.能重复的操作扩展到一些插件中的操作 {{{
     NeoBundleLazy 'tpope/vim-repeat', {
                 \ 'mappings' : ['n', '.', 'u', 'U', '<C-R>'],
                 \ }
-    " }}}3
-    " vinarise: Hex Editor {{{3
+    " }}}
+    " vinarise: Hex Editor {{{
     NeoBundleLazy 'Shougo/vinarise', {
                 \ 'commands' : ['Vinarise','VinariseDump','VinariseScript2Hex'],
                 \ }
-    " }}}3
+    " }}}
 endif
-" }}}2
+" }}}
 
-if count(s:settings.plugin_groups, 'navigation') "{{{2
-    " vim-easymotion: \\w启动word motion，\\f<字符>启动查找模式 {{{3
+if count(s:settings.plugin_groups, 'navigation') "{{{
+    " vim-easymotion: \\w启动word motion，\\f<字符>启动查找模式 {{{
     if v:version >= '703'
         NeoBundleLazy 'Lokaltog/vim-easymotion', {
                     \ 'mappings' : [['n'] + map(
@@ -1296,20 +1296,20 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
     hi link EasyMotionTarget2First IncSearch
     hi link EasyMotionTarget2Second IncSearch
     hi link EasyMotionShade Comment
-    " }}}3
-    " " clever-f.vim: 用f/F代替;来查找下一个字符 {{{3
+    " }}}
+    " " clever-f.vim: 用f/F代替;来查找下一个字符 {{{
     " NeoBundleLazy 'rhysd/clever-f.vim', {
     "             \ 'mappings' : [['n', 'f', 'F', 't', 'T']],
     "             \ }
-    " " }}}3
-    " " glowshi-ft.vim: 增强的f/t {{{3
+    " " }}}
+    " " glowshi-ft.vim: 增强的f/t {{{
     " NeoBundleLazy 'saihoooooooo/glowshi-ft.vim', {
     "             \ 'mappings' : [
     "             \     ['n', '<Plug>', 'f', 'F', 't', 'T', ';', ','],
     "             \ ],
     "             \ }
-    " " }}}3
-    " ack.vim: 用ack/ag快速查找文件 "{{{3
+    " " }}}
+    " ack.vim: 用ack/ag快速查找文件 "{{{
     NeoBundleLazy 'mileszs/ack.vim', {
                 \ 'commands' : [
                 \     {'name': 'Ack', 'complete': 'file'},
@@ -1345,8 +1345,7 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
     vmap     [ack]c :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=getcwd()<CR><CR>
     nmap     [ack]c :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=getcwd()<CR><CR>
     "}}}
-
-    " ctrlsf.vim: 快速查找及编辑 {{{3
+    " ctrlsf.vim: 快速查找及编辑 {{{
     NeoBundleLazy 'dyng/ctrlsf.vim', {
                 \ 'mappings' : [ '<Plug>CtrlSF' ],
                 \ 'commands' : [
@@ -1376,8 +1375,8 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
     nmap     [ctrlsf]P <Plug>CtrlSFPwordExec
     nnoremap [ctrlsf]o :CtrlSFOpen<CR>
     nnoremap [ctrlsf]t :CtrlSFToggle<CR>
-    " }}}3
-    " Mark--Karkat: 可同时标记多个mark。\M显隐所有，\N清除所有Mark。\m标识当前word {{{3
+    " }}}
+    " Mark--Karkat: 可同时标记多个mark。\M显隐所有，\N清除所有Mark。\m标识当前word {{{
     NeoBundleLazy 'vernonrj/Mark--Karkat', {
                 \ 'commands' : ['Mark', 'MarkClear', 'Marks', 'MarkLoad', 'MarkSave', 'MarkPalette'],
                 \ 'mappings' : ['<Plug>(Mark', '<Leader>m', '<Leader>r', '<Leader>n', '<Leader>*', '<Leader>#', '<Leader>/', '<Leader>?', '*', '#'],
@@ -1399,8 +1398,8 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
                         \ highlight MarkWord6 ctermbg=DarkBlue    ctermfg=Black guibg=#A4E57E guifg=Black
         augroup END
     endif
-    " }}}3
-    " vim-abolish: :%S/box{,es}/bag{,s}/g进行单复数、大小写对应的查找 {{{3
+    " }}}
+    " vim-abolish: :%S/box{,es}/bag{,s}/g进行单复数、大小写对应的查找 {{{
     NeoBundleLazy 'tpope/vim-abolish', {
                 \ 'mappings' : [
                 \   ['n', '<Plug>Coerce'],
@@ -1408,16 +1407,16 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
                 \ ],
                 \ 'commands' : [ 'Abolish', 'Subvert', 'S' ],
                 \ }
-    " }}}3
-    " vim-bufsurf: :BufSurfForward/:BufSurfBack跳转到本窗口的下一个、上一个buffer（增强<C-I>/<C-O>） {{{3
+    " }}}
+    " vim-bufsurf: :BufSurfForward/:BufSurfBack跳转到本窗口的下一个、上一个buffer（增强<C-I>/<C-O>） {{{
     NeoBundleLazy 'ton/vim-bufsurf', {
                 \ 'commands' : ['BufSurfForward', 'BufSurfBack'],
                 \ }
     " g<C-I>/g<C-O>直接跳到不同的buffer
     nnoremap <silent> g<C-I> :BufSurfForward<CR>
     nnoremap <silent> g<C-O> :BufSurfBack<CR>
-    " }}}3
-    " vim-indent-guides: 标记出各缩进块 {{{3
+    " }}}
+    " vim-indent-guides: 标记出各缩进块 {{{
     NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
                 \ 'commands':['IndentGuidesToggle','IndentGuidesEnable','IndentGuidesDisable'],
                 \ 'mappings':['<Plug>IndentGuides'],
@@ -1428,13 +1427,13 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
     "let g:indent_guides_guide_size = 1
     autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=black
     autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=darkgray ctermbg=8
-    " }}}3
-    " vim-niceblock: 增强对块选操作的支持 {{{3
+    " }}}
+    " vim-niceblock: 增强对块选操作的支持 {{{
     NeoBundleLazy 'kana/vim-niceblock', {
                 \ 'mappings' : ['v', 'I', 'A'],
                 \ }
-    " }}}3
-    " tagbar: 列出文件中所有类和方法。用<F9>调用 {{{3
+    " }}}
+    " tagbar: 列出文件中所有类和方法。用<F9>调用 {{{
     NeoBundleLazy 'majutsushi/tagbar', {
                 \ 'commands' : ['TagbarToggle','TagbarCurrentTag'],
                 \ }
@@ -1476,8 +1475,8 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
                 \ 'sort' : 0,
                 \ 'deffile' : expand('<sfile>:p:h') . '/ctags/markdown.cnf',
                 \ }
-    " }}}3
-    " gtags.vim: 直接调用gtags查找符号 {{{3
+    " }}}
+    " gtags.vim: 直接调用gtags查找符号 {{{
     NeoBundleLazy 'harish2704/gtags.vim', {
                 \ "commands" : [
                 \     { 'name' : 'Gtags', 'complete' : 'custom,GtagsCandidate' },
@@ -1553,8 +1552,8 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
         nmap [tag]T :Gtags -g --literal<SPACE>
         nmap [tag]E :Gtags -g<SPACE>
     endif
-    " }}}3
-    "" Intelligent_Tags: 自动为当前文件及其包含的文件生成tags {{{3
+    " }}}
+    "" Intelligent_Tags: 自动为当前文件及其包含的文件生成tags {{{
     "NeoBundle 'bahejl/Intelligent_Tags'
     "
     "    let g:Itags_Depth=3    " 缺省是1，当前文件及其包含的文件。-1表示无穷层
@@ -1564,8 +1563,8 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
     "    NeoBundle 'thawk/Intelligent_Tags'              " 自动扫描所依赖的头文件，生成tags文件
     "    "NeoBundle 'AutoTag'
     "endif
-    "" }}}3
-    " FSwitch: 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示，\of当前窗口 {{{3
+    "" }}}
+    " FSwitch: 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示，\of当前窗口 {{{
     NeoBundleLazy 'derekwyatt/vim-fswitch', {
                 \ 'functions' : ['FSwitch'],
                 \ 'commands' : ['FSHere','FSRight','FSSplitRight','FSLeft','FSSplitLeft','FSAbove','FSSplitAbove','FSBelow','FSSplitBelow'],
@@ -1606,14 +1605,14 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
     nmap <silent> [fswitch]j :FSBelow<cr>
     " Switch to the file and load it into a new window split below >
     nmap <silent> [fswitch]J :FSSplitBelow<cr>
-    " }}}3
-    " undotree: 列出修改历史，方便undo到一个特定的位置 {{{3
+    " }}}
+    " undotree: 列出修改历史，方便undo到一个特定的位置 {{{
     NeoBundleLazy 'mbbill/undotree', {
                 \ 'commands' : ['UndotreeToggle', 'UndotreeHide', 'UndotreeShow', 'UndotreeFocus'],
                 \ }
     nnoremap <silent> <F5> :UndotreeToggle<CR>
-    " }}}3
-    " vim-tmux-navigator: 使用ctrl+i/j/k/l在vim及tmux间切换 {{{3
+    " }}}
+    " vim-tmux-navigator: 使用ctrl+i/j/k/l在vim及tmux间切换 {{{
     NeoBundleLazy 'christoomey/vim-tmux-navigator', {
                 \ 'commands' : ['TmuxNavigateLeft', 'TmuxNavigateDown', 'TmuxNavigateUp', 'TmuxNavigateRight', 'TmuxNavigatePrevious'],
                 \ }
@@ -1632,11 +1631,14 @@ if count(s:settings.plugin_groups, 'navigation') "{{{2
     nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
     nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
     nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
-    " }}}3
+    " }}}
+    " 启用内置的matchit插件 {{{
+    runtime! macros/matchit.vim
+    "}}}
 endif
-"}}}2
+"}}}
 
-if count(s:settings.plugin_groups, 'autocomplete') "{{{2
+if count(s:settings.plugin_groups, 'autocomplete') "{{{
     if s:settings.autocomplete_method == 'ycm' "{{{
         " " " YouCompleteMe: 代码补全 {{{
         " NeoBundleLazy 'Valloric/YouCompleteMe', {
@@ -1841,32 +1843,32 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{2
     endif
     "}}}
 endif
-"}}}2
+"}}}
 
-if count(s:settings.plugin_groups, 'textobj') "{{{2
-    " vim-textobj-user: 可自定义motion {{{3
+if count(s:settings.plugin_groups, 'textobj') "{{{
+    " vim-textobj-user: 可自定义motion {{{
     NeoBundle 'kana/vim-textobj-user'
-    " }}}3
-    " vim-textobj-indent: 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进） {{{3
+    " }}}
+    " vim-textobj-indent: 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进） {{{
     NeoBundle 'kana/vim-textobj-indent'
-    " }}}3
-    " vim-textobj-line: 增加motion: al il {{{3
+    " }}}
+    " vim-textobj-line: 增加motion: al il {{{
     NeoBundle 'kana/vim-textobj-line'
-    " }}}3
-    " vim-textobj-function: 增加motion: if/af/iF/aF 选择一个函数 {{{3
+    " }}}
+    " vim-textobj-function: 增加motion: if/af/iF/aF 选择一个函数 {{{
     NeoBundle 'kana/vim-textobj-function'
-    " }}}3
-    " CamelCaseMotion: 增加,w ,b ,e 可以处理大小写混合或下划线分隔两种方式的单词 {{{3
+    " }}}
+    " CamelCaseMotion: 增加,w ,b ,e 可以处理大小写混合或下划线分隔两种方式的单词 {{{
     NeoBundle 'bkad/CamelCaseMotion'
-    " }}}3
-    " vim-textobj-comment: 增加motion: ac ic {{{3
+    " }}}
+    " vim-textobj-comment: 增加motion: ac ic {{{
     NeoBundle 'thinca/vim-textobj-comment'
-    " }}}3
+    " }}}
 endif
-" }}}2
+" }}}
 
-if count(s:settings.plugin_groups, 'scm') "{{{2
-    " vcscommand.vim: SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件 {{{3
+if count(s:settings.plugin_groups, 'scm') "{{{
+    " vcscommand.vim: SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件 {{{
     NeoBundleLazy 'vcscommand.vim', {
                 \ 'mappings' : [
                 \     '<Plug>VCSAdd', '<Plug>VCSAnnotate', '<Plug>VCSCommit', '<Plug>VCSDelete', '<Plug>VCSDiff',
@@ -1896,18 +1898,18 @@ if count(s:settings.plugin_groups, 'scm') "{{{2
     nnoremap [code]U :<C-U>VCSUnlock<CR>
     nnoremap [code]u :<C-U>VCSUpdate<CR>
     nnoremap [code]v :<C-U>VCSVimDiff<CR>
-    " }}}3
-    " vim-fugitive: GIT前端 {{{3
+    " }}}
+    " vim-fugitive: GIT前端 {{{
     NeoBundle 'tpope/vim-fugitive'
     if !executable('git')
         NeoBundleDisable 'vim-fugitive'
     endif
-    " }}}3
+    " }}}
 endif
-" }}}2
+" }}}
 
-if count(s:settings.plugin_groups, 'cpp') "{{{2
-    "" vim-snowdrop: {{{3
+if count(s:settings.plugin_groups, 'cpp') "{{{
+    "" vim-snowdrop: {{{
     "NeoBundleLazy 'osyo-manga/vim-snowdrop', {
     "    \ 'filetypes' : ['c', 'cpp'],
     "    \ }
@@ -1919,8 +1921,8 @@ if count(s:settings.plugin_groups, 'cpp') "{{{2
     "
     "    " Not skip
     "    let g:neocomplete#skip_auto_completion_time = ""
-    " }}}3
-    " clang_complete: 使用clang编译器进行上下文补全 {{{3
+    " }}}
+    " clang_complete: 使用clang编译器进行上下文补全 {{{
     NeoBundleLazy 'Rip-Rip/clang_complete', {
                 \ 'filetypes' : ['c', 'cpp'],
                 \ }
@@ -1954,8 +1956,8 @@ if count(s:settings.plugin_groups, 'cpp') "{{{2
             let g:clang_library_path = s:libclang_path
         endif
     endif
-    " }}}3
-    " vim-clang: 使用clang编译器进行上下文补全 {{{3
+    " }}}
+    " vim-clang: 使用clang编译器进行上下文补全 {{{
     NeoBundleLazy 'justmao945/vim-clang', {
                 \ }
     " \ 'filetypes' : ['c', 'cpp'],
@@ -1978,8 +1980,8 @@ if count(s:settings.plugin_groups, 'cpp') "{{{2
         let g:clang_cpp_options .= ' -std=c++11 -stdlib=libc++'
         let g:clang_cpp_options .= " -I " . s:clang_include_path
     endif
-    " }}}3
-    " vim-clang-format: 使用clang编译器进行上下文补全 {{{3
+    " }}}
+    " vim-clang-format: 使用clang编译器进行上下文补全 {{{
     NeoBundleLazy 'rhysd/vim-clang-format', {
                 \ 'commands' : ['ClangFormat'],
                 \ 'mappings' : ['<Plug>(operator-clang-format'],
@@ -2007,14 +2009,14 @@ if count(s:settings.plugin_groups, 'cpp') "{{{2
         " if you install vim-operator-user
         autocmd FileType c,cpp,objc map <buffer><LocalLeader>x <Plug>(operator-clang-format)
     endif
-    " }}}3
-    " " vim-cpplint: <F7>执行cpplint检查（要求PATH中能找到cpplint.py） {{{3
+    " }}}
+    " " vim-cpplint: <F7>执行cpplint检查（要求PATH中能找到cpplint.py） {{{
     " NeoBundleLazy 'funorpain/vim-cpplint', {
     "             \ 'filetyhpes' : ['c', 'cpp'],
     "             \ 'disabled' : !executable("cpplint.py"),
     "             \ }
-    " " }}}3
-    " wandbox-vim: 在http://melpon.org/wandbox/上运行当前缓冲区的C++代码 {{{3
+    " " }}}
+    " wandbox-vim: 在http://melpon.org/wandbox/上运行当前缓冲区的C++代码 {{{
     NeoBundleLazy 'rhysd/wandbox-vim', {
                 \ 'commands' : [
                 \    {'name' : 'Wandbox',      'complete' : 'customlist,wandbox#complete_command'},
@@ -2049,35 +2051,35 @@ if count(s:settings.plugin_groups, 'cpp') "{{{2
     let g:wandbox#default_extra_options = get(g:, 'wandbox#default_extra_options', {
                 \   'clang-head' : '-O3 -Werror',
                 \ })
-    " }}}3
+    " }}}
 endif
-" }}}2
+" }}}
 
-if count(s:settings.plugin_groups, 'python') "{{{2
-    " jedi-vim: 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置 {{{3
+if count(s:settings.plugin_groups, 'python') "{{{
+    " jedi-vim: 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置 {{{
     NeoBundleLazy 'davidhalter/jedi-vim', {
                 \ 'filetypes' : ['python', 'python3'],
                 \ }
     let g:jedi#popup_select_first = 0   " 不要自动选择第一个候选项
-    " }}}3
+    " }}}
     "NeoBundle 'tmhedberg/SimpylFold'
     NeoBundleLazy 'hynek/vim-python-pep8-indent', {
                 \ 'filetypes' : ['python', 'python3'],
                 \ }
 endif
-" }}}2
+" }}}
 
-if count(s:settings.plugin_groups, 'csharp') "{{{2
-    " vim-csharp: C#文件的支持 {{{3
+if count(s:settings.plugin_groups, 'csharp') "{{{
+    " vim-csharp: C#文件的支持 {{{
     NeoBundleLazy 'OrangeT/vim-csharp', {
                 \ 'filetypes' : ['csharp'],
                 \ }
-    " }}}3
+    " }}}
 endif
-" }}}2
+" }}}
 
-if count(s:settings.plugin_groups, 'web') "{{{2
-    " Emmet.vim: 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>, {{{3
+if count(s:settings.plugin_groups, 'web') "{{{
+    " Emmet.vim: 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>, {{{
     NeoBundleLazy 'Emmet.vim', {
                 \ 'filetypes' : ['xml','html','css','sass','scss','less'],
                 \ 'mappings' : ['<Plug>(Emmet'],
@@ -2086,7 +2088,7 @@ if count(s:settings.plugin_groups, 'web') "{{{2
     augroup custom_Emmet
         autocmd FileType {xml,html,css,sass,scss,less} imap <buffer> <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
     augroup END
-    " }}}3
+    " }}}
     NeoBundleLazy 'othree/xml.vim', {
                 \ 'filetypes' : ['xml'],
                 \ }                                             " 辅助编写XML文件
@@ -2104,12 +2106,11 @@ if count(s:settings.plugin_groups, 'web') "{{{2
                 \ 'filetypes' : ['po'],
                 \ 'filename_patterns' : ['.*\.pot\?'],
                 \ }                                             " 用于编辑PO语言包文件。
-    " }}}3
 endif
-" }}}2
+" }}}
 
-if count(s:settings.plugin_groups, 'shell') "{{{2
-    " Conque-GDB: 在vim中进行gdb调试 {{{3
+if count(s:settings.plugin_groups, 'shell') "{{{
+    " Conque-GDB: 在vim中进行gdb调试 {{{
     NeoBundleLazy 'Conque-GDB', {
                 \ 'disabled' : !executable("gdb"),
                 \ 'commands' : [
@@ -2135,8 +2136,8 @@ if count(s:settings.plugin_groups, 'shell') "{{{2
     " ,f - finish
     " ,t - backtrace
     let g:ConqueGdb_Leader = ','
-    " }}}3
-    " vimshell: Shell，:VimShell {{{3
+    " }}}
+    " vimshell: Shell，:VimShell {{{
     NeoBundleLazy 'Shougo/vimshell', {
                 \ 'commands' : [
                 \    { 'name' : 'VimShell', 'complete' : 'customlist,vimshell#complete'},
@@ -2164,8 +2165,8 @@ if count(s:settings.plugin_groups, 'shell') "{{{2
     vmap [repl]s :<C-U>'<,'>VimShellSendString<CR>
     " 提示执行命令
     map  [repl]p :<C-U>VimShellSendString<SPACE>
-    " }}}3
-    " " slimux: 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列 {{{3
+    " }}}
+    " " slimux: 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列 {{{
     " NeoBundleLazy 'epeli/slimux', {
     "             \ 'commands' : [
     "             \ 'SlimuxREPLSendLine', 'SlimuxREPLSendSelection', 'SlimuxREPLSendLine', 'SlimuxREPLSendBuffer', 'SlimuxREPLConfigure',
@@ -2181,8 +2182,8 @@ if count(s:settings.plugin_groups, 'shell') "{{{2
     "     map  [repl]a :SlimuxShellLast<CR>
     "     map  [repl]k :SlimuxSendKeysLast<CR>
     " endif
-    " " }}}3
-    " vim-tbone: 可以操作tmux缓冲区，执行tmux命令 {{{3
+    " " }}}
+    " vim-tbone: 可以操作tmux缓冲区，执行tmux命令 {{{
     NeoBundleLazy 'tpope/vim-tbone', {
                 \ 'commands' : [
                 \   { 'name' : 'Tattach', 'complete' : 'custom,tbone#complete_sessions' },
@@ -2191,8 +2192,8 @@ if count(s:settings.plugin_groups, 'shell') "{{{2
                 \   { 'name' : 'Tyank', 'complete' : 'custom,tbone#complete_buffers' },
                 \   { 'name' : 'Twrite', 'complete' : 'custom,tbone#complete_panes' },
                 \ ]}
-    " }}}3
-    " vim-dispatch: 可以用:Make、:Dispatch等，通过tmux窗口、后台窗口等手段异步执行命令 {{{3
+    " }}}
+    " vim-dispatch: 可以用:Make、:Dispatch等，通过tmux窗口、后台窗口等手段异步执行命令 {{{
     NeoBundleLazy 'tpope/vim-dispatch', {
                 \ 'commands' : [
                 \     { 'name' : 'Dispatch', 'complete' : 'customlist,dispatch#command_complete' },
@@ -2203,17 +2204,17 @@ if count(s:settings.plugin_groups, 'shell') "{{{2
                 \     'Copen',
                 \ ],
                 \ }
-    " }}}3
-    " capture.vim: Capture命令，把Ex命令的结果捕捉到窗口中 {{{3
+    " }}}
+    " capture.vim: Capture命令，把Ex命令的结果捕捉到窗口中 {{{
     NeoBundleLazy 'tyru/capture.vim', {
                 \ 'commands' : [ { 'name' : 'Capture', 'complete' : 'command' } ],
                 \ }
-    " }}}3
+    " }}}
 endif
-" }}}2
+" }}}
 
-if count(s:settings.plugin_groups, 'doc') "{{{2
-    " vim-orgmode: 对emacs的org文件的支持 {{{3
+if count(s:settings.plugin_groups, 'doc') "{{{
+    " vim-orgmode: 对emacs的org文件的支持 {{{
     NeoBundleLazy 'jceb/vim-orgmode', {
                 \ 'depends' : [
                 \   'NrrwRgn',
@@ -2221,8 +2222,8 @@ if count(s:settings.plugin_groups, 'doc') "{{{2
                 \ ],
                 \ 'filetypes' : ['org'],
                 \ }
-    " }}}3
-    " timl: VimL编写的Clojure语言 {{{3
+    " }}}
+    " timl: VimL编写的Clojure语言 {{{
     NeoBundleLazy 'tpope/timl', {
                 \ 'filetypes' : ['timl'],
                 \ 'filename_patterns' : ['.*\.tim\?'],
@@ -2237,22 +2238,46 @@ if count(s:settings.plugin_groups, 'doc') "{{{2
         " 设置缓存目录
         let $APPCACHE=s:get_cache_dir('timl')
     endif
-    " }}}3
-    " vim-markdown-concealed: markdown支持，并且利用conceal功能隐藏不需要的字符 {{{3
+    " }}}
+    " vim-markdown-concealed: markdown支持，并且利用conceal功能隐藏不需要的字符 {{{
     NeoBundleLazy 'prurigro/vim-markdown-concealed', {
                 \ 'filetypes' : ['markdown'],
                 \ }
-    " }}}3
-endif
-" }}}2
+    " }}}
+    " vim-asciidoc: AsciiDoc的语法高亮 {{{
+    NeoBundleLazy 'asciidoc/vim-asciidoc', {
+                \ 'filetypes' : ['asciidoc'],
+                \ }
+    "au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
+    function! MyAsciidocFoldLevel(lnum)
+        let lt = getline(a:lnum)
+        let fh = matchend(lt, '\V\^\(=\+\)\ze\s\+\S')
+        if fh != -1
+            return '>'.fh
+        endif
+        return '='
+    endfunction
 
-if count(s:settings.plugin_groups, 'syntax') "{{{2
-    " csv.vim: 增加对CSV文件（逗号分隔文件）的支持 {{{3
+    au FileType asciidoc setlocal shiftwidth=2
+                \ tabstop=2
+                \ textwidth=80 wrap formatoptions=cqnmB
+                \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
+                \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
+                \ foldexpr=MyAsciidocFoldLevel(v:lnum)
+                \ foldmethod=expr
+                \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
+                \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
+    " }}}
+endif
+" }}}
+
+if count(s:settings.plugin_groups, 'syntax') "{{{
+    " csv.vim: 增加对CSV文件（逗号分隔文件）的支持 {{{
     NeoBundleLazy 'csv.vim', {
                 \ 'filetypes' : ['csv'],
                 \ }
-    " }}}3
-    " wps.vim: syntax highlight for RockBox wps file {{{3
+    " }}}
+    " wps.vim: syntax highlight for RockBox wps file {{{
     NeoBundleLazy 'wps.vim', {
                 \ 'filetypes' : ['wps'],
                 \ }
@@ -2261,18 +2286,18 @@ if count(s:settings.plugin_groups, 'syntax') "{{{2
     else
         au BufRead,BufNewFile *.wps,*.sbs,*.fms setf wps
     endif
-    " }}}3
+    " }}}
     NeoBundleLazy 'lbdbq', {
                 \ 'mappings' : ['<LocalLeader>lb'],
                 \ }                                             " 支持lbdb
 endif
-" }}}2
+" }}}
 
-if count(s:settings.plugin_groups, 'misc') "{{{2
-    " LargeFile: 在打开大文件时，禁用语法高亮以提供打开速度 {{{3
+if count(s:settings.plugin_groups, 'misc') "{{{
+    " LargeFile: 在打开大文件时，禁用语法高亮以提供打开速度 {{{
     NeoBundle 'LargeFile'
-    " }}}3
-    " vimfiler: 文件管理器 {{{3
+    " }}}
+    " vimfiler: 文件管理器 {{{
     NeoBundleLazy 'Shougo/vimfiler', {
                 \ 'depends' : 'Shougo/unite.vim',
                 \ 'commands' : [
@@ -2303,14 +2328,14 @@ if count(s:settings.plugin_groups, 'misc') "{{{2
     nnoremap <silent> [unite]ee :<C-u>VimFilerExplorer<CR>
     nnoremap <silent> [unite]ec :<C-u>VimFiler<CR>
     nnoremap <silent> [unite]eb :<C-u>VimFiler <C-R>=expand("%:p:h")<CR><CR>
-    " }}}3
-    " tpope/vim-characterize: ga会显示当前字符的更多信息 {{{3
+    " }}}
+    " tpope/vim-characterize: ga会显示当前字符的更多信息 {{{
     NeoBundleLazy 'tpope/vim-characterize', {
                 \     'mappings' : ['<Plug>'],
                 \ }
     nmap ga <Plug>(characterize)
-    " }}}3
-    " vim-eunuch: Remove/Unlink/Move/SudoEdit/SudoWrite等UNIX命令 {{{3
+    " }}}
+    " vim-eunuch: Remove/Unlink/Move/SudoEdit/SudoWrite等UNIX命令 {{{
     NeoBundleLazy 'tpope/vim-eunuch', {
                 \ 'commands' : [
                 \   'Unlink', 'Remove', 'Rename', 'Chmod', 'SudoWrite', 'Wall', 'W',
@@ -2321,27 +2346,27 @@ if count(s:settings.plugin_groups, 'misc') "{{{2
                 \   { 'name' : 'SudoEdit', 'complete' : 'file' },
                 \ ],
                 \ }
-    " }}}3
-    " " quickrun.vim: 快速运行代码片段 {{{3
+    " }}}
+    " " quickrun.vim: 快速运行代码片段 {{{
     " NeoBundleLazy 'quickrun.vim', {
     "             \ 'mappings' : [['nxo', '<Plug>(quickrun)']],
     "             \ 'commands' : ['QuickRun'],
     "             \ }
     " nmap ,r <Plug>(quickrun)
-    " " }}}3
-    " scratch.vim: 打开一个临时窗口。gs/gS/:Scratch {{{3
+    " " }}}
+    " scratch.vim: 打开一个临时窗口。gs/gS/:Scratch {{{
     NeoBundleLazy 'mtth/scratch.vim', {
                 \ 'commands' : ['Scratch','ScratchInsert','ScratchSelection'],
                 \ 'mappings' : [['v','gs'], ['v','gS']],
                 \ }
-    " }}}3
-    " AutoFenc: 自动判别文件的编码 {{{3
+    " }}}
+    " AutoFenc: 自动判别文件的编码 {{{
     NeoBundle 'AutoFenc'
-    " }}}3
-    "" vim-sleuth: 自动检测文件的'shiftwidth'和'expandtab' {{{3
+    " }}}
+    "" vim-sleuth: 自动检测文件的'shiftwidth'和'expandtab' {{{
     "NeoBundle 'tpope/vim-sleuth'
-    "" }}}3
-    " vim-airline: 增强的statusline {{{3
+    "" }}}
+    " vim-airline: 增强的statusline {{{
     NeoBundle 'bling/vim-airline'
     let bundle = neobundle#get('vim-airline')
     function! bundle.hooks.on_source(bundle)
@@ -2457,8 +2482,8 @@ if count(s:settings.plugin_groups, 'misc') "{{{2
         let s:path_branch[path] = branch
         return branch
     endfunction
-    " }}}3
-    " GoldenView.Vim: <F8>/<S-F8>当前窗口与主窗口交换 {{{3
+    " }}}
+    " GoldenView.Vim: <F8>/<S-F8>当前窗口与主窗口交换 {{{
     NeoBundle 'zhaocai/GoldenView.Vim'
     let g:goldenview__enable_default_mapping = 0
     " nmap <silent> <C-N>  <Plug>GoldenViewNext
@@ -2468,8 +2493,8 @@ if count(s:settings.plugin_groups, 'misc') "{{{2
     nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
 
     " nmap <silent> <C-L>  <Plug>GoldenViewSplit
-    " }}}3
-    " vim-unimpaired: 增加]及[开头的一系列快捷键，方便进行tab等的切换 {{{3
+    " }}}
+    " vim-unimpaired: 增加]及[开头的一系列快捷键，方便进行tab等的切换 {{{
     NeoBundle'tpope/vim-unimpaired'
     " [a     :previous  ]a     :next   [A :first  ]A : last
     " [b     :bprevious ]b     :bnext  [B :bfirst ]B : blast
@@ -2479,17 +2504,17 @@ if count(s:settings.plugin_groups, 'misc') "{{{2
     " [t     :tprevious ]t     :tnext  [T :tfirst ]T : tlast
     " [<C-Q> :cpfile (Note that <C-Q> only works in a terminal if you disable
     " ]<C-Q> :cnfile flow control: stty -ixon)
-    " }}}3
-    " context_filetype.vim: 在文件中根据上下文确定当前的filetype，如识别出html中内嵌js、css {{{3
+    " }}}
+    " context_filetype.vim: 在文件中根据上下文确定当前的filetype，如识别出html中内嵌js、css {{{
     NeoBundleLazy 'Shougo/context_filetype.vim', {
                 \ }
-    " }}}3
+    " }}}
     " NeoBundle 'tyru/current-func-info.vim'
 endif
-" }}}2
+" }}}
 
-" Colors {{{2
-" vim-colors-solarized: Solarized配色方案 {{{3
+" Colors {{{
+" vim-colors-solarized: Solarized配色方案 {{{
 NeoBundle 'altercation/vim-colors-solarized'
 " 可以使用:SolarizedOptions生成solarized所需的参数
 " let g:solarized_visibility="low"    "default value is normal
@@ -2511,70 +2536,44 @@ end
 
 syntax enable
 " let g:solarized_termcolors=256
-" }}}3
-" Zenburn: Zenburn配色方案 {{{3
+" }}}
+" Zenburn: Zenburn配色方案 {{{
 NeoBundle 'Zenburn'
-" }}}3
-" molokai: Molokai配色方案 {{{3
+" }}}
+" molokai: Molokai配色方案 {{{
 NeoBundle 'tomasr/molokai'
 let g:molokai_original = 1
 let g:rehash256 = 1
-" }}}3
-" base16-vim: Base16配色方案 {{{3
+" }}}
+" base16-vim: Base16配色方案 {{{
 NeoBundle 'chriskempson/base16-vim'
 let g:base16_shell_path=s:vimrc_path . '/bundle/base16-shell'
 let g:base16colorspace=256
-" }}}3
-" base16-shell: Base16配色方案配套使用的shell脚本 {{{3
+" }}}
+" base16-shell: Base16配色方案配套使用的shell脚本 {{{
 NeoBundle 'chriskempson/base16-shell', {
             \ }
-" }}}3
-" }}}2
+" }}}
+" }}}
 
-" 载入manual-bundles下的插件 {{{2
+" 载入manual-bundles下的插件 {{{
 "call neobundle#local(fnamemodify(finddir("manual-bundles", &runtimepath), ":p"), {}, ['asciidoc', 'my_config'])
 let g:local_bundles_path = fnamemodify(finddir("manual-bundles", &runtimepath), ":p")
-" asciidoc: 增加对asciidoc的支持 {{{3
-NeoBundleLazy 'asciidoc', {
-            \ 'type' : 'nosync',
-            \ 'base' : g:local_bundles_path,
-            \ 'filetypes' : ['asciidoc'],
-            \ }
-"au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
-function! MyAsciidocFoldLevel(lnum)
-    let lt = getline(a:lnum)
-    let fh = matchend(lt, '\V\^\(=\+\)\ze\s\+\S')
-    if fh != -1
-        return '>'.fh
-    endif
-    return '='
-endfunction
-
-au FileType asciidoc      setlocal shiftwidth=2
-            \ tabstop=2
-            \ textwidth=80 wrap formatoptions=cqnmB
-            \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
-            \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
-            \ foldexpr=MyAsciidocFoldLevel(v:lnum)
-            \ foldmethod=expr
-            \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
-            \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
-" }}}3
-" my_config: 其它的设置 {{{3
+" my_config: 其它的设置 {{{
 NeoBundle 'my_config', {
             \ 'type' : 'nosync',
             \ 'base' : g:local_bundles_path,
             \ }
-" }}}3
-" }}}2
+" }}}
+" }}}
 
-" 禁用部分插件 {{{2
+" 禁用部分插件 {{{
 for plugin in s:settings.disabled_plugins
     exec 'NeoBundleDisable '.plugin
 endfor
-" }}}2
+" }}}
 
-" 检查有没有需要安装的插件 {{{2
+" 检查有没有需要安装的插件 {{{
 " Installation check.
 NeoBundleCheck
 
@@ -2582,10 +2581,10 @@ syntax on
 filetype plugin indent on     " Required!
 
 call neobundle#end()
-" }}}2
-" }}}1
+" }}}
+" }}}
 
-" color scheme and statusline {{{1
+" color scheme and statusline {{{
 let &background=s:settings.background
 execute "colorscheme " . s:settings.colorscheme
 
@@ -2613,10 +2612,7 @@ set statusline+=\                   " 空格
 set statusline+=%-14.(%l,%c%V%)     " 行号、列号等
 set statusline+=\                   " 空格
 set statusline+=%P
-" }}}1
-
-" 启用内置的matchit插件
-runtime! macros/matchit.vim
+" }}}
 
 if filereadable(s:vimrc_path . "/project_setting")
     exec "source " . s:vimrc_path . "/project_setting"
