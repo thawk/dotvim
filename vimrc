@@ -2275,6 +2275,7 @@ if count(s:settings.plugin_groups, 'syntax') "{{{
     " csv.vim: 增加对CSV文件（逗号分隔文件）的支持 {{{
     NeoBundleLazy 'csv.vim', {
                 \ 'filetypes' : ['csv'],
+                \ 'filename_patterns' : '.*\.csv',
                 \ }
     " }}}
     " wps.vim: syntax highlight for RockBox wps file {{{
@@ -2442,6 +2443,8 @@ if count(s:settings.plugin_groups, 'misc') "{{{
     let g:airline#extensions#tabline#buffer_nr_show = 0
     let g:airline#extensions#tabline#buffer_nr_format = '%s: '
     let g:airline#extensions#tabline#fnamemod = ':p:t'
+
+    let g:airline#extensions#csv#column_display = 'Name'
 
     let s:path_branch = {}
 

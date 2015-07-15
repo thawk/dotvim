@@ -1,52 +1,53 @@
 snippet modeline
+options head
     #!/usr/bin/python
-    # vim: set fileencoding=utf-8 tabstop=8 expandtab shiftwidth=4 softtabstop=4:
+    # vim: set fileencoding=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4:
 
     ${0}
 
 snippet main
+options head
     #!/usr/bin/python
     # vim: set fileencoding=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4:
 
     # Imports
+    import argparse
     import codecs
     import locale
     import logging
-    import argparse
     import sys
 
     VERSION=u"`strftime("%Y%m%d")`"
 
     if __name__ == "__main__":
-            sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
-            sys.stderr = codecs.getwriter(locale.getpreferredencoding())(sys.stderr)
-            # locale.setlocale(locale.LC_NUMERIC, 'en_US')  # 可以使用带locale.format("%d", 1234567, groupin=True)得到逗号分隔的格式
-
-            parser = argparse.ArgumentParser(
-                    description=u"""\
-            ${1:description}""")
-
-            parser.add_argument('-v', '--verbose', action="store_true", dest="verbose", default=False, help=u"Be moderatery verbose")
-            parser.add_argument('-s', '--silent',  action="store_true", dest="silent", default=False, help=u"Only show warning and errors")
-            parser.add_argument('--version',  action="version", version=VERSION, help=u"Show version and quit")
-            parser.add_argument('gateway_id', nargs=1, help=u"Gateway ID")
-
-            args = parser.parse_args()
-
-            # 对解释出来的参数进行编码转换
-            for k in vars(args):
-                    if isinstance(getattr(args, k), str):
-                            setattr(args, k, unicode(getattr(args, k), locale.getpreferredencoding()).strip())
-
-            # 日志初始化
-            log_format = u"%(asctime)s %(levelname)s %(message)s"
-
-            if args.silent:
-                    logging.basicConfig(level=logging.WARNING, format=log_format)
-            elif args.verbose:
-                    logging.basicConfig(level=logging.DEBUG, format=log_format)
-            else:
-                    logging.basicConfig(level=logging.INFO, format=log_format)
-
-            ${0}
+    	sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
+    	sys.stderr = codecs.getwriter(locale.getpreferredencoding())(sys.stderr)
+    
+    	parser = argparse.ArgumentParser(
+            description=u"""\
+   	${1:description}""")
+    
+    	parser.add_argument('-v', '--verbose', action="store_true", dest="verbose", default=False, help=u"Be moderatery verbose")
+    	parser.add_argument('-s', '--silent',  action="store_true", dest="silent", default=False, help=u"Only show warning and errors")
+    	parser.add_argument('--version',  action="version", version=VERSION, help=u"Show version and quit")
+    	parser.add_argument('gateway_id', nargs=1, help=u"Gateway ID")
+    
+    	args = parser.parse_args()
+    
+    	# 对解释出来的参数进行编码转换
+    	for k in vars(args):
+    		if isinstance(getattr(args, k), str):
+    			setattr(args, k, unicode(getattr(args, k), locale.getpreferredencoding()).strip())
+    
+    	# 日志初始化
+    	log_format = u"%(asctime)s %(levelname)s %(message)s"
+    
+    	if args.silent:
+    		logging.basicConfig(level=logging.WARNING, format=log_format)
+    	elif args.verbose:
+    		logging.basicConfig(level=logging.DEBUG, format=log_format)
+    	else:
+    		logging.basicConfig(level=logging.INFO, format=log_format)
+    
+    	${0}
 
