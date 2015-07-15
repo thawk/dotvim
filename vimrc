@@ -1660,6 +1660,13 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
         let g:neosnippet#snippets_directory = fnamemodify(finddir("snippets", &runtimepath), ":p")
         let g:neosnippet#snippets_directory .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
 
+        if !exists('g:neosnippet#scope_aliases')
+            let g:neosnippet#scope_aliases = {}
+        endif
+
+        " mako模板也可以使用html
+        let g:neosnippet#scope_aliases['mako'] = 'html'
+
         imap <C-k>     <Plug>(neosnippet_expand_or_jump)
         smap <C-k>     <Plug>(neosnippet_expand_or_jump)
         xmap <C-k>     <Plug>(neosnippet_expand_target)
@@ -2106,6 +2113,11 @@ if count(s:settings.plugin_groups, 'web') "{{{
                 \ 'filetypes' : ['po'],
                 \ 'filename_patterns' : ['.*\.pot\?'],
                 \ }                                             " 用于编辑PO语言包文件。
+    NeoBundleLazy 'sophacles/vim-bundle-mako', {
+                \ 'filetypes' : ['mako'],
+                \ 'filename_patterns' : ['.*\.mako'],
+                \ }                                             " python的Mako模板支持
+
 endif
 " }}}
 
