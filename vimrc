@@ -500,6 +500,11 @@ nmap <Leader>o [fswitch]
 
 nnoremap [make] <Nop>
 nmap <Leader>t [make]
+
+nnoremap [mark] <Nop>
+vnoremap [mark] <Nop>
+nmap <Leader>m [mark]
+vmap <Leader>m [mark]
 " }}}
 
 " 支持alt键 {{{
@@ -1384,8 +1389,13 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
     if !(v:version >= '701')
         NeoBundleDisable 'Mark--Karkat'
     else
-        nmap <Leader>M <Plug>MarkToggle
-        nmap <Leader>N <Plug>MarkAllClear
+        nmap <unique> [mark]m <Plug>MarkSet
+        xmap <unique> [mark]m <Plug>MarkSet
+        nmap <unique> [mark]r <Plug>MarkRegex
+        xmap <unique> [mark]r <Plug>MarkRegex
+        nmap <unique> [mark]c <Plug>MarkClear
+        nmap [mark]M <Plug>MarkToggle
+        nmap [mark]C <Plug>MarkAllClear
 
         " 在插件载入后再执行修改颜色的操作
         augroup Mark
