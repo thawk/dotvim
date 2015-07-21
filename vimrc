@@ -1129,30 +1129,30 @@ if count(s:settings.plugin_groups, 'editing') "{{{
                 \ 'commands' : ['DIstart', 'DIsngl', 'DIdbl', 'DrawIt'],
                 \ }
     " }}}
-    " vim-notes: :Note创建新的笔记 {{{
-    NeoBundleLazy 'xolox/vim-notes', {
-                \ 'commands' : [
-                \     {'name': 'Note', 'complete': 'customlist,xolox#notes#cmd_complete'},
-                \     {'name': 'DeleteNote', 'complete': 'customlist,xolox#notes#cmd_complete'},
-                \     {'name': 'SearchNotes', 'complete': 'customlist,xolox#notes#keyword_complete'},
-                \     'RelatedNotes', 'RecentNotes', 'MostRecentNote', 'ShowTaggedNotes', 'IndexTaggedNotes',
-                \     'NoteToMarkdown', 'NoteToMediawiki', 'NoteToHtml', 'NoteFromSelectedText',
-                \     'SplitNoteFromSelectedText', 'TabNoteFromSelectedText',
-                \ ],
-                \ 'filetypes' : ['notes'],
-                \ 'depends' : [
-                \     'vim-misc',
-                \ ],
-                \ }
-    " let g:notes_suffix = '.markdown'
-    if exists('s:settings.notes_directory')
-        if type(s:settings.notes_directory) == type([])
-            let g:notes_directories = s:settings.notes_directory
-        else
-            let g:notes_directories = [s:settings.notes_directory]
-        endif
-    endif
-    " }}}
+    " " vim-notes: :Note创建新的笔记 {{{
+    " NeoBundleLazy 'xolox/vim-notes', {
+    "             \ 'commands' : [
+    "             \     {'name': 'Note', 'complete': 'customlist,xolox#notes#cmd_complete'},
+    "             \     {'name': 'DeleteNote', 'complete': 'customlist,xolox#notes#cmd_complete'},
+    "             \     {'name': 'SearchNotes', 'complete': 'customlist,xolox#notes#keyword_complete'},
+    "             \     'RelatedNotes', 'RecentNotes', 'MostRecentNote', 'ShowTaggedNotes', 'IndexTaggedNotes',
+    "             \     'NoteToMarkdown', 'NoteToMediawiki', 'NoteToHtml', 'NoteFromSelectedText',
+    "             \     'SplitNoteFromSelectedText', 'TabNoteFromSelectedText',
+    "             \ ],
+    "             \ 'filetypes' : ['notes'],
+    "             \ 'depends' : [
+    "             \     'vim-misc',
+    "             \ ],
+    "             \ }
+    " " let g:notes_suffix = '.markdown'
+    " if exists('s:settings.notes_directory')
+    "     if type(s:settings.notes_directory) == type([])
+    "         let g:notes_directories = s:settings.notes_directory
+    "     else
+    "         let g:notes_directories = [s:settings.notes_directory]
+    "     endif
+    " endif
+    " " }}}
     " vim-multiple-cursors: 同时编辑多处 {{{
     NeoBundleLazy 'terryma/vim-multiple-cursors', {
                 \ 'mappings' : [ '<C-N>' ],
@@ -2232,15 +2232,15 @@ endif
 " }}}
 
 if count(s:settings.plugin_groups, 'doc') "{{{
-    " vim-orgmode: 对emacs的org文件的支持 {{{
-    NeoBundleLazy 'jceb/vim-orgmode', {
-                \ 'depends' : [
-                \   'NrrwRgn',
-                \   'speeddating.vim',
-                \ ],
-                \ 'filetypes' : ['org'],
-                \ }
-    " }}}
+    " " vim-orgmode: 对emacs的org文件的支持 {{{
+    " NeoBundleLazy 'jceb/vim-orgmode', {
+    "             \ 'depends' : [
+    "             \   'NrrwRgn',
+    "             \   'speeddating.vim',
+    "             \ ],
+    "             \ 'filetypes' : ['org'],
+    "             \ }
+    " " }}}
     " timl: VimL编写的Clojure语言 {{{
     NeoBundleLazy 'tpope/timl', {
                 \ 'filetypes' : ['timl'],
@@ -2283,6 +2283,7 @@ if count(s:settings.plugin_groups, 'doc') "{{{
                 \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
                 \ foldexpr=MyAsciidocFoldLevel(v:lnum)
                 \ foldmethod=expr
+                \ suffixesadd=.asciidoc,.adoc
                 \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
                 \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
     " }}}
