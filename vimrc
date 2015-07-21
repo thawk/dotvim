@@ -2109,9 +2109,6 @@ if count(s:settings.plugin_groups, 'web') "{{{
     NeoBundleLazy 'othree/xml.vim', {
                 \ 'filetypes' : ['xml'],
                 \ }                                             " 辅助编写XML文件
-    NeoBundleLazy 'gprof.vim', {
-                \ 'filetypes' : ['gprof'],
-                \ }                                             " 对gprof文件提供语法高亮
     NeoBundleLazy 'elzr/vim-json', {
                 \ 'filetypes' : ['json'],
                 \ 'filename_patterns' : ['.*\.jsonp\?'],
@@ -2119,10 +2116,6 @@ if count(s:settings.plugin_groups, 'web') "{{{
     NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {
                 \ 'filetypes' : ['javascript', 'js'],
                 \ }                                             " Javascript语法高亮
-    NeoBundleLazy 'po.vim', {
-                \ 'filetypes' : ['po'],
-                \ 'filename_patterns' : ['.*\.pot\?'],
-                \ }                                             " 用于编辑PO语言包文件。
     NeoBundleLazy 'sophacles/vim-bundle-mako', {
                 \ 'filetypes' : ['mako'],
                 \ 'filename_patterns' : ['.*\.mako'],
@@ -2313,6 +2306,13 @@ if count(s:settings.plugin_groups, 'syntax') "{{{
     NeoBundleLazy 'lbdbq', {
                 \ 'mappings' : ['<LocalLeader>lb'],
                 \ }                                             " 支持lbdb
+    NeoBundleLazy 'gprof.vim', {
+                \ 'filetypes' : ['gprof'],
+                \ }                                             " 对gprof文件提供语法高亮
+    NeoBundleLazy 'po.vim', {
+                \ 'filetypes' : ['po'],
+                \ 'filename_patterns' : ['.*\.pot\?'],
+                \ }                                             " 用于编辑PO语言包文件。
 endif
 " }}}
 
