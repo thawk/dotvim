@@ -15,6 +15,10 @@ let s:vimrc_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 " 确定libclang的位置
 let s:libclang_path = ""
 
+if s:is_windows " windows下把vimrc目录下的win32加入到路径中，以便使用该目录下的工具
+    let $PATH = $PATH . ";" . s:vimrc_path . '\win32'
+endif
+
 " 确定ag可执行程序
 let s:ag_path = ""
 if executable("ag")
@@ -39,14 +43,6 @@ endif
 if s:is_windows
     if filereadable(s:vimrc_path . "/win32/libclang.dll")
         let s:libclang_path = s:vimrc_path . "/win32"
-    endif
-
-    if !s:ag_path && executable(s:vimrc_path . "/win32/ag")
-        let s:ag_path = s:vimrc_path . "/win32/ag"
-    endif
-
-    if !s:ctags_path && executable(s:vimrc_path . "/win32/ctags")
-        let s:ctags_path = s:vimrc_path . "/win32/ctags"
     endif
 else
     if filereadable(expand("~/libexec/libclang.so"))
@@ -294,7 +290,7 @@ endif
 
 if (s:is_windows)
     set shellpipe=\|\ tee
-    set noshellslash
+    set shellslash
 endif
 
 set noshelltemp
@@ -695,6 +691,28 @@ if executable("jing")
         au FileType rnc call s:jing_settings("rnc")
     augroup END
 endif
+
+"au BufRead,BufNewFile *.adoc,*.asciidoc  set filetype=asciidoc
+function! MyAsciidocFoldLevel(lnum)
+    let lt = getline(a:lnum)
+    let fh = matchend(lt, '\V\^\(=\+\)\ze\s\+\S')
+    if fh != -1
+        return '>'.fh
+    endif
+    return '='
+endfunction
+
+au FileType asciidoc setlocal shiftwidth=2
+            \ tabstop=2
+            \ textwidth=0 wrap formatoptions=cqnmB
+            \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
+            \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
+            \ foldexpr=MyAsciidocFoldLevel(v:lnum)
+            \ foldmethod=expr
+            \ nospell
+            \ suffixesadd=.asciidoc,.adoc
+            \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
+            \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
 " }}}
 
 " 根据不同的文件类型设定g<F3>时应该查找的文件 {{{
@@ -795,6 +813,9 @@ if count(s:settings.plugin_groups, 'core') "{{{
     " }}}
     " vim-misc: xolox的插件依赖的库 {{{
     NeoBundleLazy 'xolox/vim-misc'
+    " }}}
+    " ingo-library: Ingo Karkat的插件依赖的库 {{{
+    NeoBundleLazy 'ingo-library'
     " }}}
 endif
 " }}}
@@ -1275,8 +1296,29 @@ if count(s:settings.plugin_groups, 'editing') "{{{
     " }}}
     " vinarise: Hex Editor {{{
     NeoBundleLazy 'Shougo/vinarise', {
-                \ 'commands' : ['Vinarise','VinariseDump','VinariseScript2Hex'],
+                \ 'commands' : ['Vinarise', 'VinariseDump', 'VinariseScript2Hex'],
                 \ }
+    " }}}
+    " vimple: :View查看ex命令输出等辅助功能 {{{
+    NeoBundleLazy 'dahu/vimple', {
+                \ 'mappings': [
+                \     ['n',
+                \       '<plug>vimple_ident_search', '<plug>vimple_ident_search_forward',
+                \       '[I', ']I',
+                \       '<plug>vimple_spell_suggest', 'z=',
+                \       '<plug>vimple_filter',
+                \     ],
+                \ ],
+                \ 'commands': [
+                \     'G', 'StringScanner', 'Mkvimrc', 'BufTypeDo', 'BufMatchDo',
+                \     'QFargs', 'QFargslocal', 'LLargs', 'LLargslocal',
+                \     'QFbufs', 'LLbufs', 'QFdo', 'LLdo', 'Filter',
+                \     {'name': 'ReadIntoBuffer', 'complete': 'file'},
+                \     {'name': 'View', 'complete': 'command'},
+                \     {'name': 'ViewExpr', 'complete': 'command'},
+                \     {'name': 'ViewSys', 'complete': 'command'},
+                \     'Collect', 'Silently',
+                \ ]}
     " }}}
 endif
 " }}}
@@ -2234,11 +2276,6 @@ if count(s:settings.plugin_groups, 'shell') "{{{
                 \ ],
                 \ }
     " }}}
-    " capture.vim: Capture命令，把Ex命令的结果捕捉到窗口中 {{{
-    NeoBundleLazy 'tyru/capture.vim', {
-                \ 'commands' : [ { 'name' : 'Capture', 'complete' : 'command' } ],
-                \ }
-    " }}}
 endif
 " }}}
 
@@ -2277,31 +2314,51 @@ if count(s:settings.plugin_groups, 'doc') "{{{
     NeoBundleLazy 'asciidoc/vim-asciidoc', {
                 \ 'filetypes' : ['asciidoc'],
                 \ }
-    "au BufRead,BufNewFile */viki/*.txt,*/pkm/*.txt,*/blog/*.txt,*.asciidoc  set filetype=asciidoc
-    function! MyAsciidocFoldLevel(lnum)
-        let lt = getline(a:lnum)
-        let fh = matchend(lt, '\V\^\(=\+\)\ze\s\+\S')
-        if fh != -1
-            return '>'.fh
-        endif
-        return '='
-    endfunction
-
-    au FileType asciidoc setlocal shiftwidth=2
-                \ tabstop=2
-                \ textwidth=0 wrap formatoptions=cqnmB
-                \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
-                \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
-                \ foldexpr=MyAsciidocFoldLevel(v:lnum)
-                \ foldmethod=expr
-                \ suffixesadd=.asciidoc,.adoc
-                \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
-                \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
     " }}}
 endif
 " }}}
 
 if count(s:settings.plugin_groups, 'syntax') "{{{
+    " SyntaxRange: 在一段文字中使用特别的语法高亮 {{{
+    NeoBundleLazy 'SyntaxRange', {
+                \ 'depends': ['ingo-library'],
+                \ 'filetypes': ['asciidoc', 'markdown', 'mkdc'],
+                \ 'commands': [
+                \     'SyntaxIgnore',
+                \     {'name': 'SyntaxInclude', 'complete': 'syntax'},
+                \ ]}
+
+    function! AsciidocEnableSyntaxRanges()
+        " source block syntax highlighting
+        if exists('g:loaded_SyntaxRange')
+            for lang in ['c', 'python', 'vim', 'javascript', 'cucumber', 'xml', 'typescript', 'sh', 'java', 'cpp']
+                if !empty(findfile("syntax/" . lang . ".vim", &runtimepath))
+                    call SyntaxRange#Include(
+                                \  '\c\[source\s*,\s*' . lang . '.*\]\s*\n[=-]\{4,\}\n'
+                                \, '\]\@<!\n[=-]\{4,\}\n'
+                                \, lang, 'NonText')
+                endif
+            endfor
+        endif
+    endfunction
+
+    function! MarkdownEnableSyntaxRanges()
+        " source block syntax highlighting
+        if exists('g:loaded_SyntaxRange')
+            for lang in ['c', 'python', 'vim', 'javascript', 'cucumber', 'xml', 'typescript', 'sh', 'java', 'cpp']
+                if !empty(findfile("syntax/" . lang . ".vim", &runtimepath))
+                    call SyntaxRange#Include(
+                                \ '^```' . lang . '$'
+                                \, '^```$'
+                                \, lang, 'NonText')
+                endif
+            endfor
+        endif
+    endfunction
+
+    autocmd filetype asciidoc :call AsciidocEnableSyntaxRanges()
+    autocmd filetype markdown,mkdc :call MarkdownEnableSyntaxRanges()
+    " }}}
     " csv.vim: 增加对CSV文件（逗号分隔文件）的支持 {{{
     NeoBundleLazy 'csv.vim', {
                 \ 'filetypes' : ['csv'],
