@@ -21,6 +21,11 @@ if executable("ag")
     let s:ag_path = "ag"
 endif
 
+let s:ctags_path = ""
+if executable("ctags")
+    let s:ctags_path = "ctags"
+endif
+
 let s:global_command = $GTAGSGLOBAL
 if s:global_command == ''
     let s:global_command = "global"
@@ -38,6 +43,10 @@ if s:is_windows
 
     if !s:ag_path && executable(s:vimrc_path . "/win32/ag")
         let s:ag_path = s:vimrc_path . "/win32/ag"
+    endif
+
+    if !s:ctags_path && executable(s:vimrc_path . "/win32/ctags")
+        let s:ctags_path = s:vimrc_path . "/win32/ctags"
     endif
 else
     if filereadable(expand("~/libexec/libclang.so"))
@@ -1455,6 +1464,8 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
     nnoremap <silent> g<F9> :<C-U>TagbarCurrentTag fs<CR>
     nnoremap <silent> <F9> :<C-U>TagbarToggle<CR>
 
+    let g:tagbar_ctags_bin = s:ctags_path
+
     let g:tagbar_type_jam = {
                 \ 'ctagstype' : 'jam',
                 \ 'kinds' : [
@@ -1470,7 +1481,7 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
                 \ 's:snippet',
                 \ ],
                 \ 'sort' : 1,
-                \ 'deffile' : expand('<sfile>:p:h') . '/ctags/neosnippet.cnf',
+                \ 'deffile' : s:vimrc_path . '/ctags/neosnippet.cnf',
                 \ }
     let g:tagbar_type_asciidoc = {
                 \ 'ctagstype' : 'asciidoc',
@@ -1478,7 +1489,7 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
                 \ 's:Table of Contents'
                 \ ],
                 \ 'sort' : 0,
-                \ 'deffile' : expand('<sfile>:p:h') . '/ctags/asciidoc.cnf',
+                \ 'deffile' : s:vimrc_path . '/ctags/asciidoc.cnf',
                 \ }
     let g:tagbar_type_markdown = {
                 \ 'ctagstype' : 'markdown',
@@ -1486,7 +1497,7 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
                 \ 's:Table of Contents'
                 \ ],
                 \ 'sort' : 0,
-                \ 'deffile' : expand('<sfile>:p:h') . '/ctags/markdown.cnf',
+                \ 'deffile' : s:vimrc_path . '/ctags/markdown.cnf',
                 \ }
     " }}}
     " gtags.vim: 直接调用gtags查找符号 {{{
