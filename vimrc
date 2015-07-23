@@ -2327,37 +2327,6 @@ if count(s:settings.plugin_groups, 'syntax') "{{{
                 \     'SyntaxIgnore',
                 \     {'name': 'SyntaxInclude', 'complete': 'syntax'},
                 \ ]}
-
-    function! AsciidocEnableSyntaxRanges()
-        " source block syntax highlighting
-        if exists('g:loaded_SyntaxRange')
-            for lang in ['c', 'python', 'vim', 'javascript', 'cucumber', 'xml', 'typescript', 'sh', 'java', 'cpp']
-                if !empty(findfile("syntax/" . lang . ".vim", &runtimepath))
-                    call SyntaxRange#Include(
-                                \  '\c\[source\s*,\s*' . lang . '.*\]\s*\n[=-]\{4,\}\n'
-                                \, '\]\@<!\n[=-]\{4,\}\n'
-                                \, lang, 'NonText')
-                endif
-            endfor
-        endif
-    endfunction
-
-    function! MarkdownEnableSyntaxRanges()
-        " source block syntax highlighting
-        if exists('g:loaded_SyntaxRange')
-            for lang in ['c', 'python', 'vim', 'javascript', 'cucumber', 'xml', 'typescript', 'sh', 'java', 'cpp']
-                if !empty(findfile("syntax/" . lang . ".vim", &runtimepath))
-                    call SyntaxRange#Include(
-                                \ '^```' . lang . '$'
-                                \, '^```$'
-                                \, lang, 'NonText')
-                endif
-            endfor
-        endif
-    endfunction
-
-    autocmd filetype asciidoc :call AsciidocEnableSyntaxRanges()
-    autocmd filetype markdown,mkdc :call MarkdownEnableSyntaxRanges()
     " }}}
     " csv.vim: 增加对CSV文件（逗号分隔文件）的支持 {{{
     NeoBundleLazy 'csv.vim', {
