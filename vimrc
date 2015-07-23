@@ -2289,7 +2289,7 @@ if count(s:settings.plugin_groups, 'doc') "{{{
 
     au FileType asciidoc setlocal shiftwidth=2
                 \ tabstop=2
-                \ textwidth=80 wrap formatoptions=cqnmB
+                \ textwidth=0 wrap formatoptions=cqnmB
                 \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
                 \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
                 \ foldexpr=MyAsciidocFoldLevel(v:lnum)
