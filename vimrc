@@ -939,10 +939,6 @@ if count(s:settings.plugin_groups, 'unite') "{{{
                     \ file_rec/async:! file_mru file/new<CR>
     endif
 
-    if neobundle#is_installed("unite-outline")
-        nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
-    endif
-
     autocmd! FileType unite call s:unite_my_settings()
     function! s:unite_my_settings() "{{{
         nmap <buffer> <ESC>      <Plug>(unite_exit)
@@ -987,6 +983,7 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     NeoBundleLazy 'Shougo/unite-outline', {
                 \ 'unite_sources' : ['outline'],
                 \ }
+    nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
     " }}}
     " unite-mark: 列出所有标记点 {{{
     NeoBundleLazy 'tacroe/unite-mark', {
