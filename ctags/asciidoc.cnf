@@ -1,5 +1,13 @@
 --langdef=asciidoc
---langmap=asciidoc:.adoc.asciidoc
---regex-asciidoc=/^==[ \t]+(.*)/\1/s,Section_L0/
---regex-asciidoc=/^===[ \t]+(.*)/. \1/s,Section_L1/
---regex-asciidoc=/^====[ \t]+(.*)/. . \1/s,Section_L2/
+--langmap=asciidoc:.ad.adoc.asciidoc
+--regex-asciidoc=/^=[ \t]+(.*)/# \1/h,Table of content/
+--regex-asciidoc=/^==[ \t]+(.*)/. \1/h,Table of content/
+--regex-asciidoc=/^===[ \t]+(.*)/. . \1/h,Table of content/
+--regex-asciidoc=/^====[ \t]+(.*)/. . . \1/h,Table of content/
+--regex-asciidoc=/^=====[ \t]+(.*)/. . . . \1/h,Table of content/
+--regex-asciidoc=/^======[ \t]+(.*)/. . . . \1/h,Table of content/
+--regex-asciidoc=/\[\[([^]]+)\]\]/\1/a/
+--regex-asciidoc=/^\.([^ \t].+)/\1/t/
+--regex-asciidoc=/image::([^\[]+)/\1/i/
+--regex-asciidoc=/image:([^:][^\[]+)/\1/I/
+--regex-asciidoc=/include::([^\[]+)/\1/n/

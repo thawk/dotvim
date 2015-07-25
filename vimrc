@@ -920,7 +920,7 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     nnoremap <silent> [unite]t :<C-U>Unite -buffer-name=tabs tab<CR>
     " nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
     " nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
-    nnoremap <silent> [unite]r :<C-u>UniteResume<CR>
+    nnoremap <silent> [unite]r :<C-u>UniteResume -no-start-insert<CR>
     " nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files buffer file_rec:! file_mru bookmark<cr><c-u>
 
     nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
@@ -980,7 +980,8 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     endfunction "}}}
     " }}}
     " unite-outline: 提供代码的大纲。通过\fo访问 {{{
-    NeoBundleLazy 'Shougo/unite-outline', {
+    " NeoBundleLazy 'Shougo/unite-outline', {
+    NeoBundleLazy 'thawk/unite-outline', {
                 \ 'unite_sources' : ['outline'],
                 \ }
     nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
@@ -1508,7 +1509,7 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
     let g:tagbar_type_jam = {
                 \ 'ctagstype' : 'jam',
                 \ 'kinds' : [
-                \ 's:Table of Contents',
+                \ 's:Table of Contents:1:1',
                 \ ],
                 \ 'sort' : 0,
                 \ 'deffile' : expand('<sfile>:p:h') . '/ctags/jam.cnf',
@@ -1525,7 +1526,12 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
     let g:tagbar_type_asciidoc = {
                 \ 'ctagstype' : 'asciidoc',
                 \ 'kinds' : [
-                \ 's:Table of Contents'
+                \   'h:Table of content',
+                \   'a:anchors:1',
+                \   't:titles:1',
+                \   'n:includes:1',
+                \   'i:images:1',
+                \   'I:inline images:1'
                 \ ],
                 \ 'sort' : 0,
                 \ 'deffile' : s:vimrc_path . '/ctags/asciidoc.cnf',
@@ -1533,7 +1539,7 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
     let g:tagbar_type_markdown = {
                 \ 'ctagstype' : 'markdown',
                 \ 'kinds' : [
-                \ 's:Table of Contents'
+                \   'h:Table of content',
                 \ ],
                 \ 'sort' : 0,
                 \ 'deffile' : s:vimrc_path . '/ctags/markdown.cnf',
