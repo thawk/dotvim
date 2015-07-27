@@ -1550,8 +1550,11 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
                 \ "commands" : [
                 \     { 'name' : 'Gtags', 'complete' : 'custom,GtagsCandidate' },
                 \     { 'name' : 'Gtagsa', 'complete' : 'custom,GtagsCandidate' },
-                \     "GtagsCursor","Gozilla","GtagsUpdate","GtagsCscope"],
-                \ }
+                \     "GtagsCursor","Gozilla","GtagsUpdate","GtagsCscope"
+                \ ],
+                \ 'functoins' : [
+                \     'GtagsCandidate',
+                \ ]}
     if !s:has_global
         NeoBundleDisable 'gtags.vim'
 
