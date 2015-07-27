@@ -811,7 +811,7 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     nnoremap <silent> [unite]r :<C-u>UniteResume -no-start-insert<CR>
     " nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files buffer file_rec:! file_mru bookmark<cr><c-u>
 
-    nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+    nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=open bookmark directory_mru<CR>
     nnoremap <silent> [unite]ma :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
     nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
 
@@ -2119,6 +2119,7 @@ if count(s:settings.plugin_groups, 'shell') "{{{
                 \    'VimShellSendString', 'VimShellSendBuffer', 'VimShellClose',
                 \ ],
                 \ 'mappings' : ['<Plug>(vimshell_'],
+                \ 'unite_sources' : ['bookmark', 'directory', 'directory_mru', 'directory_rec',],
                 \ }
     let g:vimshell_data_directory=s:get_cache_dir('vimshell')
     " 以当前目录开始vimshell窗口
@@ -2279,6 +2280,7 @@ if count(s:settings.plugin_groups, 'misc') "{{{
                 \              ],
                 \ 'mappings' : ['<Plug>(vimfiler_'],
                 \ 'explorer' : 1,
+                \ 'unite_sources' : ['bookmark', 'directory', 'directory_mru', 'directory_rec',],
                 \ }
     " 文件管理器，通过 :VimFiler 启动。
     " c : copy, m : move, r : rename,
