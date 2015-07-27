@@ -1384,8 +1384,12 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
     " }}}
     " tagbar: 列出文件中所有类和方法。用<F9>调用 {{{
     NeoBundleLazy 'majutsushi/tagbar', {
-                \ 'commands' : ['TagbarToggle','TagbarCurrentTag'],
-                \ }
+                \ 'commands' : [
+                \     'TagbarToggle', 'TagbarCurrentTag', 'Tagbar',
+                \     'TagbarOpen', 'TagbarOpenAutoClose', 'TagbarClose',
+                \     'TagbarSetFoldlevel', 'TagbarShowTag', 'TagbarGetTypeConfig',
+                \     'TagbarDebug', 'TagbarDebugEnd', 'TagbarTogglePause',
+                \ ]}
     let g:tagbar_left = 1
 
     nnoremap <silent> g<F9> :<C-U>TagbarCurrentTag fs<CR>
