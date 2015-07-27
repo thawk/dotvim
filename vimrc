@@ -462,166 +462,6 @@ let c_space_errors=1
 let java_space_errors=1
 " }}}
 
-" Key mappings " {{{
-
-" 用于各插件的热键前缀 {{{
-nnoremap [unite] <Nop>
-xnoremap [unite] <Nop>
-nmap <Leader>f [unite]
-xmap <Leader>f [unite]
-
-nnoremap [unite2] <Nop>
-xnoremap [unite2] <Nop>
-nmap <Leader>F [unite2]
-xmap <Leader>F [unite2]
-
-nnoremap [repl] <Nop>
-xnoremap [repl] <Nop>
-nmap <Leader>r [repl]
-xmap <Leader>r [repl]
-
-nnoremap [tag] <Nop>
-nmap <C-\> [tag]
-nnoremap [tag] <C-\>
-
-nnoremap [unite-tag] <Nop>
-nmap <C-\><C-\> [unite-tag]
-
-nnoremap [ctrlsf] <Nop>
-vnoremap [ctrlsf] <Nop>
-nmap \s [ctrlsf]
-vmap \s [ctrlsf]
-
-nnoremap [ack] <Nop>
-vnoremap [ack] <Nop>
-nmap \S [ack]
-vmap \S [ack]
-
-nnoremap [code] <Nop>
-nmap <Leader>c [code]
-
-nnoremap [fswitch] <Nop>
-nmap <Leader>o [fswitch]
-
-nnoremap [make] <Nop>
-nmap <Leader>t [make]
-
-nnoremap [mark] <Nop>
-vnoremap [mark] <Nop>
-nmap <Leader>m [mark]
-vmap <Leader>m [mark]
-" }}}
-
-" 支持alt键 {{{
-" 使用Kitty后，不再需要映射Alt键
-" if !s:is_windows && !s:is_gui
-"     " 修改对Alt/Meta键的映射
-"     for i in range(33, 126)
-"         let c = nr2char(i)
-"         exec "\"map \e".c." <M-".c.">\""
-"         exec "\"map! \e".c." <M-".c.">\""
-"         exec "\"imap \e".c." <M-".toupper(c).">\""
-"     endfor
-"     set ttimeoutlen=10  " 缩短keycode的timeout
-" endif
-" }}}
-
-" 简化对常用目录的访问 {{{
-"用,cd进入当前目录
-nmap ,cd :cd <C-R>=expand("%:p:h")<CR><CR>
-" "用,e可以打开当前目录下的文件
-" nmap ,e :e <C-R>=escape(expand("%:p:h")."/", ' \')<CR>
-" "在命令中，可以用 %/ 得到当前目录。如 :e %/
-" cmap %/ <C-R>=escape(expand("%:p:h")."/", ' \')<cr>
-" }}}
-
-" 光标移动 {{{
-" 正常模式下，空格及Shift-空格滚屏
-noremap <SPACE> <C-F>
-noremap <S-SPACE> <C-B>
-
-" Key mappings to ease browsing long lines
-nnoremap <Down>      gj
-nnoremap <Up>        gk
-inoremap <Down> <C-O>gj
-inoremap <Up>   <C-O>gk
-" }}}
-
-" 操作tab页 {{{
-" Ctrl-Tab/Ctrl-Shirt-Tab切换Tab
-nmap <C-S-tab> :tabprevious<cr>
-nmap <C-tab> :tabnext<cr>
-map <C-S-tab> :tabprevious<cr>
-map <C-tab> :tabnext<cr>
-imap <C-S-tab> <ESC>:tabprevious<cr>i
-imap <C-tab> <ESC>:tabnext<cr>i
-" }}}
-
-" 查找 {{{
-" <F3>自动在当前文件中vimgrep当前word，g<F3>在当前目录下，vimgrep_files指定的文件中查找
-"nmap <F3> :execute "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.c **/*.h **/*.php"<CR>:botright copen<CR>
-"nmap <S-F3> :execute "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR>:botright copen<CR>
-"map <F3> <ESC>:execute "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.php" <CR><ESC>:botright copen<CR>
-nmap g<F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
-"map <S-F3> <ESC>:execute "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
-nmap <F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
-
-" V模式下，搜索选中的内容而不是当前word
-vnoremap g<F3> :<C-U>
-            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-            \gvy
-            \:execute "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
-            \gV:call setreg('"', old_reg, old_regtype)<CR>
-vnoremap <F3> :<C-U>
-            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-            \gvy
-            \:execute "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
-            \gV:call setreg('"', old_reg, old_regtype)<CR>
-" }}}
-
-" 在VISUAL模式下，缩进后保持原来的选择，以便再次进行缩进 {{{
-vnoremap > >gv
-vnoremap < <gv
-" }}}
-
-" folds {{{
-" zJ/zK跳到下个/上个折叠处，并只显示该折叠的内容
-nnoremap zJ zjzx
-nnoremap zK zkzx
-nnoremap zr zr:echo 'foldlevel: ' . &foldlevel<cr>
-nnoremap zm zm:echo 'foldlevel: ' . &foldlevel<cr>
-nnoremap zR zR:echo 'foldlevel: ' . &foldlevel<cr>
-nnoremap zM zM:echo 'foldlevel: ' . &foldlevel<cr>
-" }}}
-
-" 一些方便编译的快捷键 {{{
-if exists(":Make")  " vim-dispatch提供了异步的make
-    nnoremap [make]m :<C-U>Make<CR>
-    nnoremap [make]t :<C-U>Make unittest<CR>
-    nnoremap [make]s :<C-U>Make stage<CR>
-    nnoremap [make]c :<C-U>Make clean<CR>
-    nnoremap [make]d :<C-U>Make doc<CR>
-else
-    nnoremap [make]m :<C-U>make<CR>
-    nnoremap [make]t :<C-U>make unittest<CR>
-    nnoremap [make]s :<C-U>make stage<CR>
-    nnoremap [make]c :<C-U>make clean<CR>
-    nnoremap [make]d :<C-U>make doc<CR>
-endif
-" }}}
-
-" 其它 {{{
-" Split line(opposite to S-J joining line)
-" nnoremap <silent> <C-J> gEa<CR><ESC>ew
-
-" map <silent> <C-W>v :vnew<CR>
-" map <silent> <C-W>s :snew<CR>
-
-" nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
-" }}}
-
-" }}}
-
 " Auto commands " {{{
 
 " Misc {{{
@@ -769,6 +609,54 @@ au BufReadPost  .vimrc,*.vim nested     call ForceFileEncoding('utf-8')
 au FileType task call ForceFileEncoding('utf-8')
 " }}}
 
+" }}}
+
+" 用于各插件的热键前缀 {{{
+nnoremap [unite] <Nop>
+xnoremap [unite] <Nop>
+nmap <Leader>f [unite]
+xmap <Leader>f [unite]
+
+nnoremap [unite2] <Nop>
+xnoremap [unite2] <Nop>
+nmap <Leader>F [unite2]
+xmap <Leader>F [unite2]
+
+nnoremap [repl] <Nop>
+xnoremap [repl] <Nop>
+nmap <Leader>r [repl]
+xmap <Leader>r [repl]
+
+nnoremap [tag] <Nop>
+nmap <C-\> [tag]
+nnoremap [tag] <C-\>
+
+nnoremap [unite-tag] <Nop>
+nmap <C-\><C-\> [unite-tag]
+
+nnoremap [ctrlsf] <Nop>
+vnoremap [ctrlsf] <Nop>
+nmap \s [ctrlsf]
+vmap \s [ctrlsf]
+
+nnoremap [ack] <Nop>
+vnoremap [ack] <Nop>
+nmap \S [ack]
+vmap \S [ack]
+
+nnoremap [code] <Nop>
+nmap <Leader>c [code]
+
+nnoremap [fswitch] <Nop>
+nmap <Leader>o [fswitch]
+
+nnoremap [make] <Nop>
+nmap <Leader>t [make]
+
+nnoremap [mark] <Nop>
+vnoremap [mark] <Nop>
+nmap <Leader>m [mark]
+vmap <Leader>m [mark]
 " }}}
 
 " Plugins {{{
@@ -980,8 +868,7 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     endfunction "}}}
     " }}}
     " unite-outline: 提供代码的大纲。通过\fo访问 {{{
-    " NeoBundleLazy 'Shougo/unite-outline', {
-    NeoBundleLazy 'thawk/unite-outline', {
+    NeoBundleLazy 'Shougo/unite-outline', {
                 \ 'unite_sources' : ['outline'],
                 \ }
     nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
@@ -2656,6 +2543,118 @@ filetype plugin indent on     " Required!
 
 call neobundle#end()
 " }}}
+" }}}
+
+" Key mappings " {{{
+
+" 支持alt键 {{{
+" 使用Kitty后，不再需要映射Alt键
+" if !s:is_windows && !s:is_gui
+"     " 修改对Alt/Meta键的映射
+"     for i in range(33, 126)
+"         let c = nr2char(i)
+"         exec "\"map \e".c." <M-".c.">\""
+"         exec "\"map! \e".c." <M-".c.">\""
+"         exec "\"imap \e".c." <M-".toupper(c).">\""
+"     endfor
+"     set ttimeoutlen=10  " 缩短keycode的timeout
+" endif
+" }}}
+
+" 简化对常用目录的访问 {{{
+"用,cd进入当前目录
+nmap ,cd :cd <C-R>=expand("%:p:h")<CR><CR>
+" "用,e可以打开当前目录下的文件
+" nmap ,e :e <C-R>=escape(expand("%:p:h")."/", ' \')<CR>
+" "在命令中，可以用 %/ 得到当前目录。如 :e %/
+" cmap %/ <C-R>=escape(expand("%:p:h")."/", ' \')<cr>
+" }}}
+
+" 光标移动 {{{
+" 正常模式下，空格及Shift-空格滚屏
+noremap <SPACE> <C-F>
+noremap <S-SPACE> <C-B>
+
+" Key mappings to ease browsing long lines
+nnoremap <Down>      gj
+nnoremap <Up>        gk
+inoremap <Down> <C-O>gj
+inoremap <Up>   <C-O>gk
+" }}}
+
+" 操作tab页 {{{
+" Ctrl-Tab/Ctrl-Shirt-Tab切换Tab
+nmap <C-S-tab> :tabprevious<cr>
+nmap <C-tab> :tabnext<cr>
+map <C-S-tab> :tabprevious<cr>
+map <C-tab> :tabnext<cr>
+imap <C-S-tab> <ESC>:tabprevious<cr>i
+imap <C-tab> <ESC>:tabnext<cr>i
+" }}}
+
+" 查找 {{{
+" <F3>自动在当前文件中vimgrep当前word，g<F3>在当前目录下，vimgrep_files指定的文件中查找
+"nmap <F3> :execute "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.c **/*.h **/*.php"<CR>:botright copen<CR>
+"nmap <S-F3> :execute "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR>:botright copen<CR>
+"map <F3> <ESC>:execute "vimgrep /\\<" . expand("<cword>") . "\\>/j **/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.php" <CR><ESC>:botright copen<CR>
+nmap g<F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
+"map <S-F3> <ESC>:execute "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
+nmap <F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
+
+" V模式下，搜索选中的内容而不是当前word
+vnoremap g<F3> :<C-U>
+            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+            \gvy
+            \:execute "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
+            \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <F3> :<C-U>
+            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+            \gvy
+            \:execute "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
+            \gV:call setreg('"', old_reg, old_regtype)<CR>
+" }}}
+
+" 在VISUAL模式下，缩进后保持原来的选择，以便再次进行缩进 {{{
+vnoremap > >gv
+vnoremap < <gv
+" }}}
+
+" folds {{{
+" zJ/zK跳到下个/上个折叠处，并只显示该折叠的内容
+nnoremap zJ zjzx
+nnoremap zK zkzx
+nnoremap zr zr:echo 'foldlevel: ' . &foldlevel<cr>
+nnoremap zm zm:echo 'foldlevel: ' . &foldlevel<cr>
+nnoremap zR zR:echo 'foldlevel: ' . &foldlevel<cr>
+nnoremap zM zM:echo 'foldlevel: ' . &foldlevel<cr>
+" }}}
+
+" 一些方便编译的快捷键 {{{
+if exists(":Make")  " vim-dispatch提供了异步的make
+    nnoremap [make]m :<C-U>Make<CR>
+    nnoremap [make]t :<C-U>Make unittest<CR>
+    nnoremap [make]s :<C-U>Make stage<CR>
+    nnoremap [make]c :<C-U>Make clean<CR>
+    nnoremap [make]d :<C-U>Make doc<CR>
+else
+    nnoremap [make]m :<C-U>make<CR>
+    nnoremap [make]t :<C-U>make unittest<CR>
+    nnoremap [make]s :<C-U>make stage<CR>
+    nnoremap [make]c :<C-U>make clean<CR>
+    nnoremap [make]d :<C-U>make doc<CR>
+endif
+" }}}
+
+" 其它 {{{
+" Split line(opposite to S-J joining line)
+" nnoremap <silent> <C-J> gEa<CR><ESC>ew
+
+" map <silent> <C-W>v :vnew<CR>
+" map <silent> <C-W>s :snew<CR>
+
+" nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
+" }}}
+
 " }}}
 
 " color scheme and statusline {{{
