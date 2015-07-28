@@ -845,11 +845,14 @@ if count(s:settings.plugin_groups, 'unite') "{{{
         imap <buffer><expr> j unite#smart_map('j', '')
         imap <buffer> <TAB>   <Plug>(unite_select_next_line)
         imap <buffer> <S-TAB>   <Plug>(unite_select_previous_line)
+
         imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
         imap <buffer> '     <Plug>(unite_quick_match_default_action)
         nmap <buffer> '     <Plug>(unite_quick_match_default_action)
         imap <buffer><expr> x
                     \ unite#smart_map('x', "\<Plug>(unite_choose_action)")
+        nmap <buffer> <C-n>	<Plug>(unite_rotate_next_source)
+        nmap <buffer> <C-p>	<Plug>(unite_rotate_previous_source)
         nmap <buffer> x     <Plug>(unite_choose_action)
         nmap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
         imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
@@ -881,7 +884,7 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     NeoBundleLazy 'Shougo/unite-outline', {
                 \ 'unite_sources' : ['outline'],
                 \ }
-    nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
+    nnoremap <silent> [unite]o  :<C-u>Unite fold outline -start-insert<CR>
     " }}}
     " unite-mark: 列出所有标记点 {{{
     NeoBundleLazy 'tacroe/unite-mark', {
@@ -952,6 +955,10 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     " neomru.vim: 最近访问的文件 {{{
     NeoBundle 'Shougo/neomru.vim'
     " }}}
+    " unite-fold: fold {{{
+    NeoBundle 'osyo-manga/unite-fold'
+    " }}}
+
 endif
 " }}}
 
@@ -1620,7 +1627,8 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
         "             \    }
         "             \ }
         " " " }}}
-    else
+        " }}}
+    else " neocomplete {{{
         " neosnippet: 代码模板引擎 {{{
         NeoBundleLazy 'Shougo/neosnippet', {
                     \ 'insert' : 1,
@@ -1815,9 +1823,19 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
                         \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
         endif
         " }}}
-        " neocomplcache: 代码补全插件 {{{
+        " echodoc: 代码补全插件 {{{
         NeoBundleLazy 'Shougo/echodoc', {
                     \ 'insert' : 1,
+                    \ }
+        " }}}
+        " neco-syntax: 利用syntax文件进行补全 {{{
+        NeoBundleLazy 'Shougo/neco-syntax', {
+                    \ 'insert' : 1,
+                    \ }
+        " }}}
+        " neco-vim: 对vim文件进行补全 {{{
+        NeoBundleLazy 'Shougo/neco-vim', {
+                    \ 'filetypes' : ['vim',],
                     \ }
         " }}}
     endif
