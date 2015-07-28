@@ -1863,6 +1863,9 @@ if count(s:settings.plugin_groups, 'textobj') "{{{
     " vim-textobj-comment: 增加motion: ac ic {{{
     NeoBundle 'thinca/vim-textobj-comment'
     " }}}
+    " vim-pairs: ci/, di;, yi*, vi@, ca/, da;, ya*, va@ ... {{{
+    NeoBundle 'kurkale6ka/vim-pairs'
+    " }}}
 endif
 " }}}
 
