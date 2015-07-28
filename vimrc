@@ -712,11 +712,21 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     " unite.vim: Unite主插件，提供\f开头的功能 {{{
     NeoBundleLazy 'Shougo/unite.vim', {
                 \ 'commands' : [
-                \     { 'name' : 'Unite',
-                \       'complete' : 'customlist,unite#complete_source',
-                \     },
-                \     'UniteWithCursorWord', 'UniteWithInput'],
-                \ }
+                \     {'name' : 'Unite', 'complete' : 'customlist,unite#complete#source'},
+                \     {'name' : 'UniteWithCurrentDir', 'complete' : 'customlist,unite#complete#source'},
+                \     {'name' : 'UniteWithBufferDir', 'complete' : 'customlist,unite#complete#source'},
+                \     {'name' : 'UniteWithProjectDir', 'complete' : 'customlist,unite#complete#source'},
+                \     {'name' : 'UniteWithInputDirectory', 'complete' : 'customlist,unite#complete#source'},
+                \     {'name' : 'UniteWithCursorWord', 'complete' : 'customlist,unite#complete#source'},
+                \     {'name' : 'UniteWithInput', 'complete' : 'customlist,unite#complete#source'},
+                \     {'name' : 'UniteResume', 'complete' : 'customlist,unite#complete#buffer_name'},
+                \     {'name' : 'UniteClose', 'complete' : 'customlist,unite#complete#buffer_name'},
+                \     {'name' : 'UniteNext', 'complete' : 'customlist,unite#complete#buffer_name'},
+                \     {'name' : 'UnitePrevious', 'complete' : 'customlist,unite#complete#buffer_name'},
+                \     {'name' : 'UniteFirst', 'complete' : 'customlist,unite#complete#buffer_name'},
+                \     {'name' : 'UniteLast', 'complete' : 'customlist,unite#complete#buffer_name'},
+                \     {'name' : 'UniteBookmarkAdd', 'complete' : 'file'},
+                \ ]}
     let bundle = neobundle#get('unite.vim')
     function! bundle.hooks.on_source(bundle)
         call unite#custom#source(
