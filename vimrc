@@ -296,6 +296,7 @@ endif
 set noshelltemp
 
 set sessionoptions-=options
+set sessionoptions+=tabpages,globals
 set viewoptions-=options
 
 " Buffers
@@ -2357,6 +2358,13 @@ if count(s:settings.plugin_groups, 'misc') "{{{
     "" vim-sleuth: 自动检测文件的'shiftwidth'和'expandtab' {{{
     "NeoBundle 'tpope/vim-sleuth'
     "" }}}
+    " taboo.vim: 为TAB起名 {{{
+    NeoBundle 'gcmt/taboo.vim', {
+                \ 'commands': [
+                \     'TabooRename', 'TabooOpen', 'TabooReset',
+                \ ]}
+    let g:taboo_tabline = 0 " 使用vim-airline进行显示
+    " }}}
     " vim-airline: 增强的statusline {{{
     NeoBundle 'bling/vim-airline'
     let bundle = neobundle#get('vim-airline')
@@ -2433,6 +2441,10 @@ if count(s:settings.plugin_groups, 'misc') "{{{
     let g:airline#extensions#tabline#buffer_nr_show = 0
     let g:airline#extensions#tabline#buffer_nr_format = '%s: '
     let g:airline#extensions#tabline#fnamemod = ':p:t'
+
+    let g:airline#extensions#taboo#enabled = 1
+    " show tab number instead of number of splits
+    let g:airline#extensions#tabline#tab_nr_type = 1
 
     let g:airline#extensions#csv#column_display = 'Name'
 
