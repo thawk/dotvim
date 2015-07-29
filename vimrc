@@ -643,10 +643,10 @@ vnoremap [ctrlsf] <Nop>
 nmap \s [ctrlsf]
 vmap \s [ctrlsf]
 
-nnoremap [ack] <Nop>
-vnoremap [ack] <Nop>
-nmap \S [ack]
-vmap \S [ack]
+nnoremap [grep] <Nop>
+vnoremap [grep] <Nop>
+nmap \S [grep]
+vmap \S [grep]
 
 nnoremap [code] <Nop>
 nmap <Leader>c [code]
@@ -1295,17 +1295,17 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
     " let g:ack_use_dispatch = 1
 
     " 在项目目录下找，可能退化为当前目录
-    vmap     [ack]s :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=FindVcsRoot('')<CR><CR>
-    nmap     [ack]s :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=FindVcsRoot('')<CR><CR>
-    nmap     [ack]S :<C-U>Ack!<SPACE>
+    vmap     [grep]s :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=FindVcsRoot('')<CR><CR>
+    nmap     [grep]s :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=FindVcsRoot('')<CR><CR>
+    nmap     [grep]S :<C-U>Ack!<SPACE>
 
     " 在当前文件目录下找
-    vmap     [ack]b :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
-    nmap     [ack]b :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=expand('%:p:h')<CR><CR>
+    vmap     [grep]b :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
+    nmap     [grep]b :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=expand('%:p:h')<CR><CR>
 
     " 在当前目录下找
-    vmap     [ack]c :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=getcwd()<CR><CR>
-    nmap     [ack]c :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=getcwd()<CR><CR>
+    vmap     [grep]c :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=getcwd()<CR><CR>
+    nmap     [grep]c :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=getcwd()<CR><CR>
     "}}}
     " ctrlsf.vim: 快速查找及编辑 {{{
     NeoBundleLazy 'dyng/ctrlsf.vim', {
