@@ -104,6 +104,7 @@ else
     call add(s:settings.plugin_groups, 'shell')
     call add(s:settings.plugin_groups, 'doc')
     call add(s:settings.plugin_groups, 'syntax')
+    call add(s:settings.plugin_groups, 'visual')
     call add(s:settings.plugin_groups, 'misc')
 
     " exclude all language-specific plugins by default
@@ -2306,80 +2307,7 @@ if count(s:settings.plugin_groups, 'syntax') "{{{
 endif
 " }}}
 
-if count(s:settings.plugin_groups, 'misc') "{{{
-    " LargeFile: 在打开大文件时，禁用语法高亮以提供打开速度 {{{
-    NeoBundle 'LargeFile'
-    " }}}
-    " vimfiler: 文件管理器 {{{
-    NeoBundleLazy 'Shougo/vimfiler', {
-                \ 'depends' : 'Shougo/unite.vim',
-                \ 'commands' : [
-                \               { 'name' : 'VimFiler',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'VimFilerTab',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'VimFilerExplorer',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'Edit',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'Write',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'Read',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'Source',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \              ],
-                \ 'mappings' : ['<Plug>(vimfiler_'],
-                \ 'explorer' : 1,
-                \ 'unite_sources' : ['bookmark', 'directory', 'directory_mru', 'directory_rec',],
-                \ }
-    " 文件管理器，通过 :VimFiler 启动。
-    " c : copy, m : move, r : rename,
-    let g:vimfiler_as_default_explorer = 1
-    let g:vimfiler_define_wrapper_commands = 1
-
-    " 切换侧边栏
-    nnoremap <silent> [unite]ee :<C-u>VimFilerExplorer<CR>
-    nnoremap <silent> [unite]ec :<C-u>VimFiler<CR>
-    nnoremap <silent> [unite]eb :<C-u>VimFiler <C-R>=expand("%:p:h")<CR><CR>
-    " }}}
-    " tpope/vim-characterize: ga会显示当前字符的更多信息 {{{
-    NeoBundleLazy 'tpope/vim-characterize', {
-                \     'mappings' : ['<Plug>'],
-                \ }
-    nmap ga <Plug>(characterize)
-    " }}}
-    " vim-eunuch: Remove/Unlink/Move/SudoEdit/SudoWrite等UNIX命令 {{{
-    NeoBundleLazy 'tpope/vim-eunuch', {
-                \ 'commands' : [
-                \   'Unlink', 'Remove', 'Rename', 'Chmod', 'SudoWrite', 'Wall', 'W',
-                \   { 'name' : 'Move', 'complete' : 'file' },
-                \   { 'name' : 'File', 'complete' : 'file' },
-                \   { 'name' : 'Locate', 'complete' : 'file' },
-                \   { 'name' : 'Mkdir', 'complete' : 'dir' },
-                \   { 'name' : 'SudoEdit', 'complete' : 'file' },
-                \ ],
-                \ }
-    " }}}
-    " " quickrun.vim: 快速运行代码片段 {{{
-    " NeoBundleLazy 'quickrun.vim', {
-    "             \ 'mappings' : [['nxo', '<Plug>(quickrun)']],
-    "             \ 'commands' : ['QuickRun'],
-    "             \ }
-    " nmap ,r <Plug>(quickrun)
-    " " }}}
-    " scratch.vim: 打开一个临时窗口。gs/gS/:Scratch {{{
-    NeoBundleLazy 'mtth/scratch.vim', {
-                \ 'commands' : ['Scratch','ScratchInsert','ScratchSelection'],
-                \ 'mappings' : [['v','gs'], ['v','gS']],
-                \ }
-    " }}}
-    " AutoFenc: 自动判别文件的编码 {{{
-    NeoBundle 'AutoFenc'
-    " }}}
-    "" vim-sleuth: 自动检测文件的'shiftwidth'和'expandtab' {{{
-    "NeoBundle 'tpope/vim-sleuth'
-    "" }}}
+if count(s:settings.plugin_groups, 'visual') "{{{
     " taboo.vim: 为TAB起名 {{{
     NeoBundle 'gcmt/taboo.vim', {
                 \ 'commands': [
@@ -2521,6 +2449,83 @@ if count(s:settings.plugin_groups, 'misc') "{{{
 
     " nmap <silent> <C-L>  <Plug>GoldenViewSplit
     " }}}
+endif
+" }}}
+
+if count(s:settings.plugin_groups, 'misc') "{{{
+    " LargeFile: 在打开大文件时，禁用语法高亮以提供打开速度 {{{
+    NeoBundle 'LargeFile'
+    " }}}
+    " vimfiler: 文件管理器 {{{
+    NeoBundleLazy 'Shougo/vimfiler', {
+                \ 'depends' : 'Shougo/unite.vim',
+                \ 'commands' : [
+                \               { 'name' : 'VimFiler',
+                \                 'complete' : 'customlist,vimfiler#complete' },
+                \               { 'name' : 'VimFilerTab',
+                \                 'complete' : 'customlist,vimfiler#complete' },
+                \               { 'name' : 'VimFilerExplorer',
+                \                 'complete' : 'customlist,vimfiler#complete' },
+                \               { 'name' : 'Edit',
+                \                 'complete' : 'customlist,vimfiler#complete' },
+                \               { 'name' : 'Write',
+                \                 'complete' : 'customlist,vimfiler#complete' },
+                \               { 'name' : 'Read',
+                \                 'complete' : 'customlist,vimfiler#complete' },
+                \               { 'name' : 'Source',
+                \                 'complete' : 'customlist,vimfiler#complete' },
+                \              ],
+                \ 'mappings' : ['<Plug>(vimfiler_'],
+                \ 'explorer' : 1,
+                \ 'unite_sources' : ['bookmark', 'directory', 'directory_mru', 'directory_rec',],
+                \ }
+    " 文件管理器，通过 :VimFiler 启动。
+    " c : copy, m : move, r : rename,
+    let g:vimfiler_as_default_explorer = 1
+    let g:vimfiler_define_wrapper_commands = 1
+
+    " 切换侧边栏
+    nnoremap <silent> [unite]ee :<C-u>VimFilerExplorer<CR>
+    nnoremap <silent> [unite]ec :<C-u>VimFiler<CR>
+    nnoremap <silent> [unite]eb :<C-u>VimFiler <C-R>=expand("%:p:h")<CR><CR>
+    " }}}
+    " tpope/vim-characterize: ga会显示当前字符的更多信息 {{{
+    NeoBundleLazy 'tpope/vim-characterize', {
+                \     'mappings' : ['<Plug>'],
+                \ }
+    nmap ga <Plug>(characterize)
+    " }}}
+    " vim-eunuch: Remove/Unlink/Move/SudoEdit/SudoWrite等UNIX命令 {{{
+    NeoBundleLazy 'tpope/vim-eunuch', {
+                \ 'commands' : [
+                \   'Unlink', 'Remove', 'Rename', 'Chmod', 'SudoWrite', 'Wall', 'W',
+                \   { 'name' : 'Move', 'complete' : 'file' },
+                \   { 'name' : 'File', 'complete' : 'file' },
+                \   { 'name' : 'Locate', 'complete' : 'file' },
+                \   { 'name' : 'Mkdir', 'complete' : 'dir' },
+                \   { 'name' : 'SudoEdit', 'complete' : 'file' },
+                \ ],
+                \ }
+    " }}}
+    " " quickrun.vim: 快速运行代码片段 {{{
+    " NeoBundleLazy 'quickrun.vim', {
+    "             \ 'mappings' : [['nxo', '<Plug>(quickrun)']],
+    "             \ 'commands' : ['QuickRun'],
+    "             \ }
+    " nmap ,r <Plug>(quickrun)
+    " " }}}
+    " scratch.vim: 打开一个临时窗口。gs/gS/:Scratch {{{
+    NeoBundleLazy 'mtth/scratch.vim', {
+                \ 'commands' : ['Scratch','ScratchInsert','ScratchSelection'],
+                \ 'mappings' : [['v','gs'], ['v','gS']],
+                \ }
+    " }}}
+    " AutoFenc: 自动判别文件的编码 {{{
+    NeoBundle 'AutoFenc'
+    " }}}
+    "" vim-sleuth: 自动检测文件的'shiftwidth'和'expandtab' {{{
+    "NeoBundle 'tpope/vim-sleuth'
+    "" }}}
     " vim-unimpaired: 增加]及[开头的一系列快捷键，方便进行tab等的切换 {{{
     NeoBundle'tpope/vim-unimpaired'
     " [a     :previous  ]a     :next   [A :first  ]A : last
