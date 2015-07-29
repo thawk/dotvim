@@ -226,6 +226,8 @@ function! FindVcsRoot(path) " {{{
     let path = a:path
     if empty(path)
         let path = expand('%:p:h')
+    else
+        let path = fnamemodify(path, ':p')
     endif
 
     let vcs_dir = ''
@@ -233,13 +235,14 @@ function! FindVcsRoot(path) " {{{
         let vcs_dir = finddir(vcs, path.';')
         if !empty(vcs_dir)
             if vcs == '.svn' " 对于旧svn版本，可能连续多层目录都有.svn，以最上层的为根
-                let root = fnamemodify(vcs_dir, ':h')
+                let root = fnamemodify(vcs_dir, ':p:h')
                 let parent = fnamemodify(root, ':h')
                 while parent != root
                     if !isdirectory(parent . "/" . vcs) " 上层目录没有.svn子目录
                         break
                     endif
                     let root = parent
+                    let parent = fnamemodify(root, ':h')
                 endwhile
                 return root
             else
@@ -1318,8 +1321,8 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
     let g:ctrlsf_default_root = 'project'
 
     " 在project下找
-    vmap     [ctrlsf]s <Plug>CtrlSFVwordExec
-    nmap     [ctrlsf]s <Plug>CtrlSFCwordExec
+    vmap     [ctrlsf]s :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=FindVcsRoot('')<CR><CR>
+    nmap     [ctrlsf]s :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=FindVcsRoot('')<CR><CR>
     nmap     [ctrlsf]S <Plug>CtrlSFPrompt -regex<SPACE>
 
     " 在当前文件目录下找
@@ -1975,12 +1978,11 @@ if count(s:settings.plugin_groups, 'cpp') "{{{
     " disable diagnostics
     let g:clang_diagsopt = ''
 
-    if !exists('g:clang_cpp_options')
-        let g:clang_cpp_options = ''
-    endif
-    let g:clang_cpp_options .= ' -std=c++11 -stdlib=libc++'
-
-    if s:clang_include_path != ""
+    if s:libclang_path != ""
+        if !exists('g:clang_cpp_options')
+            let g:clang_cpp_options = ''
+        endif
+        let g:clang_cpp_options .= ' -std=c++11 -stdlib=libc++'
         let g:clang_cpp_options .= " -I " . s:clang_include_path
     endif
     " }}}
