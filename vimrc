@@ -324,10 +324,19 @@ set fo+=B " 将两行合并为一行的时候， 汉字与汉字之间不要补�
 
 set nowrap
 set textwidth=0 " Don't wrap lines by default
+
 "set wildmode=list:longest,full  " 先列出所有候选项，补全候选项的共同前缀，再按wildchar就出现菜单来选择候选项
 set wildmode=longest:full,full  " 补全候选项的共同前缀，出现菜单来选择候选项
 set wildmenu    " 用一行菜单显示候选项。<C-P>/<C-N>或<Left>/<Right>为选择上一个/下一个，<Up>返回父目录，<Down>进入子目录
-set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.idea/*,*/.DS_Store
+set wildignore+=.hg,.git,.svn                    " Version control
+" set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg   " binary images
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
+set wildignore+=*.spl                            " compiled spelling word lists
+set wildignore+=*.pyc                            " Python byte code
+set wildignore+=*.luac                           " Lua byte code
+set wildignore+=*.sw?                            " Vim swap files
+set wildignore+=.idea,.DS_Store                  " others
 
 set backspace=indent,eol,start " more powerful backspacing
 set whichwrap+=b,s,<,>,h,l " 退格键和方向键可以换行
@@ -1198,6 +1207,13 @@ if count(s:settings.plugin_groups, 'editing') "{{{
     " vim-repeat: 把.能重复的操作扩展到一些插件中的操作 {{{
     NeoBundleLazy 'tpope/vim-repeat', {
                 \ 'mappings' : ['n', '.', 'u', 'U', '<C-R>'],
+                \ 'function_prefix' : 'repeat',
+                \ }
+    " }}}
+    " visualrepeat: visual下使用.重复上次操作 {{{
+    NeoBundleLazy 'visualrepeat', {
+                \ 'mappings' : ['x', '.'],
+                \ 'function_prefix' : 'visualrepeat',
                 \ }
     " }}}
     " vinarise: Hex Editor {{{
