@@ -1975,11 +1975,12 @@ if count(s:settings.plugin_groups, 'cpp') "{{{
     " disable diagnostics
     let g:clang_diagsopt = ''
 
-    if s:libclang_path != ""
-        if !exists('g:clang_cpp_options')
-            let g:clang_cpp_options = ''
-        endif
-        let g:clang_cpp_options .= ' -std=c++11 -stdlib=libc++'
+    if !exists('g:clang_cpp_options')
+        let g:clang_cpp_options = ''
+    endif
+    let g:clang_cpp_options .= ' -std=c++11 -stdlib=libc++'
+
+    if s:clang_include_path != ""
         let g:clang_cpp_options .= " -I " . s:clang_include_path
     endif
     " }}}
