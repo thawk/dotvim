@@ -895,6 +895,8 @@ if count(s:settings.plugin_groups, 'unite') "{{{
                     \ empty(unite#mappings#get_current_filters()) ?
                     \ ['sorter_reverse'] : [])
 
+        nnoremap <silent><buffer><expr> v     unite#do_action('vimfiler')
+
         " Runs "split" action by <C-s>.
         imap <silent><buffer><expr> <C-s>     unite#do_action('split')
     endfunction "}}}
