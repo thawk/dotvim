@@ -77,6 +77,9 @@ let s:cache_dir = get(g:dotvim_settings, 'cache_dir', '~/.vim_cache')
 let s:settings = {}
 let s:settings.default_indent = 4
 let s:settings.autocomplete_method = 'neocomplcache'
+let s:settings.cpp_complete_method = 'marching'
+" let s:settings.cpp_complete_method = 'clang_complete'
+" let s:settings.cpp_complete_method = 'vim-clang'
 let s:settings.enable_cursorcolumn = 0
 let s:settings.background = 'dark'
 let s:settings.colorscheme = 'solarized'
@@ -714,7 +717,9 @@ if count(s:settings.plugin_groups, 'core') "{{{
     endif
     " }}}
     " vim-misc: xolox的插件依赖的库 {{{
-    NeoBundleLazy 'xolox/vim-misc'
+    NeoBundleLazy 'xolox/vim-misc', {
+                \ 'function_prefix' : 'xolox',
+                \ }
     " }}}
     " ingo-library: Ingo Karkat的插件依赖的库 {{{
     NeoBundleLazy 'ingo-library'
@@ -1636,6 +1641,16 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
     " 启用内置的matchit插件 {{{
     runtime! macros/matchit.vim
     "}}}
+    " vim-gf-user: 扩展gf {{{
+    NeoBundleLazy 'kana/vim-gf-user', {
+                \ 'commands' : 'GfUserDefaultKeyMappings',
+                \ 'mappings' : [['nv', '<Plug>(gf-user-']],
+                \ 'depends' : [
+                \     'sgur/vim-gf-autoload',
+                \     'kana/vim-gf-diff',
+                \     'hujo/gf-user-vimfn',
+                \ ]}
+    " }}}
 endif
 "}}}
 
@@ -1749,7 +1764,6 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
                 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
             endif
 
-            " 使得neocomplete能和clang_complete共存，见neocomplete帮助的FAQ
             if !exists('g:neocomplete#force_omni_input_patterns')
                 let g:neocomplete#force_omni_input_patterns = {}
             endif
@@ -1846,6 +1860,7 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
         " }}}
         " echodoc: 代码补全插件 {{{
         NeoBundleLazy 'Shougo/echodoc', {
+                    \ 'commands' : ['EchoDocEnable', 'EchoDocDisable'],
                     \ 'insert' : 1,
                     \ }
         " }}}
@@ -1948,9 +1963,11 @@ if count(s:settings.plugin_groups, 'cpp') "{{{
     NeoBundleLazy 'Rip-Rip/clang_complete', {
                 \ 'filetypes' : ['c', 'cpp'],
                 \ }
-    if s:libclang_path == "" && !executable('clang')
-        NeoBundleDisable 'clang_complete'
-    else
+    call neobundle#config('clang_complete', {
+                \ 'disabled' : (s:settings.cpp_complete_method != 'clang_complete'
+                \           || (s:libclang_path == "" && !executable('clang'))),
+                \ })
+    if neobundle#tap('clang_complete')
         " clang编译方法：
         "
         " svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
@@ -1981,26 +1998,71 @@ if count(s:settings.plugin_groups, 'cpp') "{{{
     " }}}
     " vim-clang: 使用clang编译器进行上下文补全 {{{
     NeoBundleLazy 'justmao945/vim-clang', {
+                \ 'filetypes' : ['c', 'cpp'],
                 \ }
-    " \ 'filetypes' : ['c', 'cpp'],
-    if !executable('clang')    " vim-clang比使用clang_complete慢
-        NeoBundleDisable 'vim-clang'
-    endif
-    " 使用NeoComplete触发补全
-    let g:clang_auto = 0
-    " default 'longest' can not work with neocomplete
-    let g:clang_c_completeopt = 'menuone,preview'
-    let g:clang_cpp_completeopt = 'menuone,preview'
+    call neobundle#config('vim-clang', {
+                \ 'disabled' : s:settings.cpp_complete_method != 'vim-clang'
+                \           || !executable('clang'),
+                \ })
+    if neobundle#tap('vim-clang')
+        " 使用NeoComplete触发补全
+        let g:clang_auto = 0
+        " default 'longest' can not work with neocomplete
+        let g:clang_c_completeopt = 'menuone,preview'
+        let g:clang_cpp_completeopt = 'menuone,preview'
 
-    " disable diagnostics
-    let g:clang_diagsopt = ''
+        " disable diagnostics
+        let g:clang_diagsopt = ''
 
-    if s:libclang_path != ""
         if !exists('g:clang_cpp_options')
             let g:clang_cpp_options = ''
         endif
         let g:clang_cpp_options .= ' -std=c++11 -stdlib=libc++'
-        let g:clang_cpp_options .= " -I " . s:clang_include_path
+
+        if s:clang_include_path != ""
+            let g:clang_cpp_options .= " -I " . s:clang_include_path
+        endif
+    endif
+    " }}}
+    " vim-marching: 使用clang进行补全 {{{
+    NeoBundleLazy 'osyo-manga/vim-marching', {
+                \ 'commands' : [
+                \     'MarchingBufferClearCache', 'MarchingDebugLog'],
+                \ 'mappings' : [['i', '<Plug>(marching_']],
+                \ }
+    call neobundle#config('vim-marching', {
+                \ 'disabled' : s:settings.cpp_complete_method != 'marching'
+                \           || (s:libclang_path == "" && !executable('clang')),
+                \ })
+    if neobundle#tap('vim-marching')
+        let g:marching_enable_neocomplete = 1
+        " let g:marching_backend = 'sync_clang_command'   " 同步调用
+
+        if s:libclang_path != ""
+            let g:marching_backend = 'snowdrop'             " 通过vim-snowdrop调用libclang
+        else
+            let g:marching_backend = 'clang_command'        " 异步
+        endif
+
+        " call extend(s:neocompl_force_omni_patterns, {
+        "             \ 'marching#complete' : '\%(\.\|->\|::\)\h\w*'})
+    endif
+    " }}}
+    " vim-snowdrop: libclang的python封装 {{{
+    NeoBundleLazy 'osyo-manga/vim-snowdrop', {
+                \ 'filetypes' : ['c', 'cpp'],
+                \ 'commands' : [
+                \     'SnowdropVerify', 'SnowdropEchoClangVersion'],
+                \ 'unite_sources' : ['snowdrop/includes', 'snowdrop/outline'],
+                \ 'depends' : ['vim-marching'],
+                \ }
+    call neobundle#config('vim-marching', {
+                \ 'disabled' : s:settings.cpp_complete_method != 'marching'
+                \           || s:libclang_path == "",
+                \ })
+    if neobundle#tap('vim-snowdrop')
+        let g:snowdrop#libclang_directory = fnamemodify(s:libclang_path, ':p:h')
+        let g:snowdrop#libclang_file      = fnamemodify(s:libclang_path, ':p:t')
     endif
     " }}}
     " vim-clang-format: 使用clang编译器进行上下文补全 {{{
@@ -2102,7 +2164,7 @@ endif
 
 if count(s:settings.plugin_groups, 'web') "{{{
     " Emmet.vim: 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>, {{{
-    NeoBundleLazy 'Emmet.vim', {
+    NeoBundleLazy 'mattn/emmet-vim', {
                 \ 'filetypes' : ['xml','html','css','sass','scss','less'],
                 \ 'mappings' : ['<Plug>(Emmet'],
                 \ 'commands' : ['EmmetInstall'],

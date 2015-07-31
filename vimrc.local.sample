@@ -7,3 +7,6 @@ let g:dotvim_settings.plugin_groups_include = []
 "let g:dotvim_settings.default_indent = 4
 "let g:dotvim_settings.background = 'light'
 "let g:dotvim_settings.colorscheme = 'base16-solarized'
+" let s:settings.cpp_complete_method = 'marching'
+" let s:settings.cpp_complete_method = 'clang_complete'
+" let s:settings.cpp_complete_method = 'vim-clang'
