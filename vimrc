@@ -1948,19 +1948,6 @@ endif
 " }}}
 
 if count(s:settings.plugin_groups, 'cpp') "{{{
-    "" vim-snowdrop: {{{
-    "NeoBundleLazy 'osyo-manga/vim-snowdrop', {
-    "    \ 'filetypes' : ['c', 'cpp'],
-    "    \ }
-    "    " set libclang directory path
-    "    let g:snowdrop#libclang_directory = s:libclang_path
-    "
-    "    " Enable code completion in neocomplete.vim.
-    "    let g:neocomplete#sources#snowdrop#enable = 1
-    "
-    "    " Not skip
-    "    let g:neocomplete#skip_auto_completion_time = ""
-    " }}}
     " clang_complete: 使用clang编译器进行上下文补全 {{{
     NeoBundleLazy 'Rip-Rip/clang_complete', {
                 \ 'filetypes' : ['c', 'cpp'],
@@ -2028,6 +2015,7 @@ if count(s:settings.plugin_groups, 'cpp') "{{{
     " }}}
     " vim-marching: 使用clang进行补全 {{{
     NeoBundleLazy 'osyo-manga/vim-marching', {
+                \ 'filetypes' : ['c', 'cpp'],
                 \ 'commands' : [
                 \     'MarchingBufferClearCache', 'MarchingDebugLog'],
                 \ 'mappings' : [['i', '<Plug>(marching_']],
@@ -2041,6 +2029,10 @@ if count(s:settings.plugin_groups, 'cpp') "{{{
         " let g:marching_backend = 'sync_clang_command'   " 同步调用
 
         if s:libclang_path != ""
+            " 使用vim-snowdrop
+            call neobundle#config({
+                        \ 'depends' : 'vim-snowdrop',
+                        \ })
             let g:marching_backend = 'snowdrop'             " 通过vim-snowdrop调用libclang
         else
             let g:marching_backend = 'clang_command'        " 异步
@@ -2052,19 +2044,27 @@ if count(s:settings.plugin_groups, 'cpp') "{{{
     " }}}
     " vim-snowdrop: libclang的python封装 {{{
     NeoBundleLazy 'osyo-manga/vim-snowdrop', {
-                \ 'filetypes' : ['c', 'cpp'],
                 \ 'commands' : [
-                \     'SnowdropVerify', 'SnowdropEchoClangVersion'],
+                \     'SnowdropVerify', 'SnowdropEchoClangVersion',
+                \     'SnowdropLogs', 'SnowdropClearLogs',
+                \     'SnowdropEchoIncludes', 'SnowdropErrorCheck',
+                \     'SnowdropGotoDefinition', 'SnowdropEchoTypeof',
+                \     'SnowdropEchoResultTypeof', 'SnowdropFixit',
+                \ ],
                 \ 'unite_sources' : ['snowdrop/includes', 'snowdrop/outline'],
-                \ 'depends' : ['vim-marching'],
                 \ }
-    call neobundle#config('vim-marching', {
-                \ 'disabled' : s:settings.cpp_complete_method != 'marching'
-                \           || s:libclang_path == "",
+    call neobundle#config('vim-snowdrop', {
+                \ 'disabled' : s:libclang_path == "",
                 \ })
     if neobundle#tap('vim-snowdrop')
         let g:snowdrop#libclang_directory = fnamemodify(s:libclang_path, ':p:h')
         let g:snowdrop#libclang_file      = fnamemodify(s:libclang_path, ':p:t')
+
+        " Enable code completion in neocomplete.vim.
+        let g:neocomplete#sources#snowdrop#enable = 1
+
+        " Not skip
+        let g:neocomplete#skip_auto_completion_time = ""
     endif
     " }}}
     " vim-clang-format: 使用clang编译器进行上下文补全 {{{
