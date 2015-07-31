@@ -77,7 +77,13 @@ let s:cache_dir = get(g:dotvim_settings, 'cache_dir', '~/.vim_cache')
 let s:settings = {}
 let s:settings.default_indent = 4
 let s:settings.autocomplete_method = 'neocomplcache'
+
+" marching有三种backend，不指定则自动选一种
 let s:settings.cpp_complete_method = 'marching'
+" let s:settings.cpp_complete_method = 'marching.snowdrop'
+" let s:settings.cpp_complete_method = 'marching.sync'
+" let s:settings.cpp_complete_method = 'marching.async'
+
 " let s:settings.cpp_complete_method = 'clang_complete'
 " let s:settings.cpp_complete_method = 'vim-clang'
 let s:settings.enable_cursorcolumn = 0
@@ -2019,23 +2025,35 @@ if count(s:settings.plugin_groups, 'cpp') "{{{
                 \ 'commands' : [
                 \     'MarchingBufferClearCache', 'MarchingDebugLog'],
                 \ 'mappings' : [['i', '<Plug>(marching_']],
+                \ 'depends' : ['osyo-manga/vim-reunions', ],
                 \ }
     call neobundle#config('vim-marching', {
-                \ 'disabled' : s:settings.cpp_complete_method != 'marching'
+                \ 'disabled' : s:settings.cpp_complete_method !~ 'marching.*'
                 \           || (s:libclang_path == "" && !executable('clang')),
                 \ })
     if neobundle#tap('vim-marching')
         let g:marching_enable_neocomplete = 1
         " let g:marching_backend = 'sync_clang_command'   " 同步调用
 
-        if s:libclang_path != ""
+        if s:settings.cpp_complete_method == 'marching' " 自动选择方式
+            if s:libclang_path != ""
+                let s:settings.cpp_complete_method = 'marching.snowdrop'
+            else
+                let s:settings.cpp_complete_method = 'marching.async'
+            endif
+        endif
+
+        " 选择一个backend
+        if s:settings.cpp_complete_method == 'marching.snowdrop'
             " 使用vim-snowdrop
-            call neobundle#config({
-                        \ 'depends' : 'vim-snowdrop',
-                        \ })
+            function! neobundle#tapped.hooks.on_source(bundle)
+                NeoBundleSource 'vim-snowdrop'
+            endfunction
             let g:marching_backend = 'snowdrop'             " 通过vim-snowdrop调用libclang
-        else
+        elseif s:settings.cpp_complete_method == 'marching.async'
             let g:marching_backend = 'clang_command'        " 异步
+        else
+            let g:marching_backend = 'sync_clang_command'   " 同步
         endif
 
         " call extend(s:neocompl_force_omni_patterns, {
