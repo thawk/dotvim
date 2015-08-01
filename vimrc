@@ -2033,7 +2033,7 @@ if count(s:settings.plugin_groups, 'cpp') "{{{
                 \ })
     if neobundle#tap('vim-marching')
         let g:marching_enable_neocomplete = 1
-        " let g:marching_backend = 'sync_clang_command'   " 同步调用
+        let g:marching_clang_command_option = ' -std=c++11 -stdlib=libc++'
 
         if s:settings.cpp_complete_method == 'marching' " 自动选择方式
             if s:libclang_path != ""
@@ -2080,6 +2080,10 @@ if count(s:settings.plugin_groups, 'cpp') "{{{
 
         " Enable code completion in neocomplete.vim.
         let g:neocomplete#sources#snowdrop#enable = 1
+
+        let g:snowdrop#command_options = {
+                    \ "cpp" : "-std=c++1y",
+                    \ }
 
         " Not skip
         let g:neocomplete#skip_auto_completion_time = ""
