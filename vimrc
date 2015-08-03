@@ -2046,8 +2046,8 @@ if count(s:settings.plugin_groups, 'cpp') "{{{
         " 选择一个backend
         if s:settings.cpp_complete_method == 'marching.snowdrop'
             " 使用vim-snowdrop
-            function! neobundle#tapped.hooks.on_source(bundle)
-                NeoBundleSource 'vim-snowdrop'
+            function! neobundle#tapped.hooks.on_post_source(bundle)
+                NeoBundleSource "vim-snowdrop"
             endfunction
             let g:marching_backend = 'snowdrop'             " 通过vim-snowdrop调用libclang
         elseif s:settings.cpp_complete_method == 'marching.async'
