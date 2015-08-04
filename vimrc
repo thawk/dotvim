@@ -869,7 +869,7 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     nnoremap <silent> [unite]r :<C-u>UniteResume -no-start-insert<CR>
     " nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files buffer file_rec:! file_mru bookmark<cr><c-u>
 
-    nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=open bookmark directory_mru<CR>
+    nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files bookmark directory_mru<CR>
     nnoremap <silent> [unite]ma :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
     nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
 
