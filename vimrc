@@ -219,48 +219,71 @@ function! GetSvnBranchOfPath(path)
 endfunction
 " }}}
 
-function! s:get_cache_dir(suffix) "{{{
-    let path = resolve(expand(s:cache_dir . '/' . a:suffix))
-    if !isdirectory(expand(s:cache_dir))
-        call mkdir(expand(s:cache_dir))
+function! s:path_join(...) "{{{
+    if a:0 <= 0
+        return ""
     endif
-    if !isdirectory(expand(path))
-        call mkdir(expand(path))
+
+    let path = a:000[0]
+    let i = 1
+    while i < a:0
+        let path = path . '/' . a:000[i]
+        let i = i + 1
+    endwhile
+
+    return path
+endfunction "}}}
+
+function! s:get_cache_dir(...) "{{{
+    let i = 0
+    let path = resolve(expand(s:cache_dir))
+    if !isdirectory(path)
+        call mkdir(path)
     endif
+
+    while i < a:0
+        let d = a:000[i]
+        let path = resolve(s:path_join(path, d))
+        if !isdirectory(path)
+            call mkdir(path)
+        endif
+        let i = i + 1
+    endwhile
+
     return path
 endfunction "}}}
 
 function! FindVcsRoot(path) " {{{
-    let vcs_folder = ['.git', '.hg', '.svn', '.bzr', '_darcs']
-
-    let path = a:path
-    if empty(path)
-        let path = expand('%:p:h')
-    else
-        let path = fnamemodify(path, ':p')
-    endif
-
-    let vcs_dir = ''
-    for vcs in vcs_folder
-        let vcs_dir = finddir(vcs, path.';')
-        if !empty(vcs_dir)
-            if vcs == '.svn' " 对于旧svn版本，可能连续多层目录都有.svn，以最上层的为根
-                let root = fnamemodify(vcs_dir, ':p:h')
-                let parent = fnamemodify(root, ':h')
-                while parent != root
-                    if !isdirectory(parent . "/" . vcs) " 上层目录没有.svn子目录
-                        break
-                    endif
-                    let root = parent
-                    let parent = fnamemodify(root, ':h')
-                endwhile
-                return root
-            else
-                return fnamemodify(vcs_dir, ':h')
-            endif
-        endif
-    endfor
-
+    " let vcs_folder = ['.git', '.hg', '.svn', '.bzr', '_darcs']
+    "
+    " let path = a:path
+    " if empty(path)
+    "     let path = expand('%:p:h')
+    " else
+    "     let path = fnamemodify(path, ':p')
+    " endif
+    "
+    " let vcs_dir = ''
+    " for vcs in vcs_folder
+    "     let vcs_dir = finddir(vcs, path.';')
+    "     if !empty(vcs_dir)
+    "         if vcs == '.svn' " 对于旧svn版本，可能连续多层目录都有.svn，以最上层的为根
+    "             let root = fnamemodify(vcs_dir, ':p:h')
+    "             let parent = fnamemodify(root, ':h')
+    "             while parent != root
+    "                 if !isdirectory(parent . "/" . vcs) " 上层目录没有.svn子目录
+    "                     break
+    "                 endif
+    "                 let root = parent
+    "                 let parent = fnamemodify(root, ':h')
+    "             endwhile
+    "             return root
+    "         else
+    "             return fnamemodify(vcs_dir, ':h')
+    "         endif
+    "     endif
+    " endfor
+    "
     return path
 endfunction " }}}
 " }}}
@@ -981,6 +1004,8 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     " }}}
     " neomru.vim: 最近访问的文件 {{{
     NeoBundle 'Shougo/neomru.vim'
+    let g:neomru#file_mru_path = s:get_cache_dir('neomru', 'file')
+    let g:neomru#directory_mru_path = s:get_cache_dir('neomru', 'directory')
     " }}}
     " unite-fold: fold {{{
     NeoBundle 'osyo-manga/unite-fold'
