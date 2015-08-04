@@ -1004,8 +1004,8 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     " }}}
     " neomru.vim: 最近访问的文件 {{{
     NeoBundle 'Shougo/neomru.vim'
-    let g:neomru#file_mru_path = s:get_cache_dir('neomru', 'file')
-    let g:neomru#directory_mru_path = s:get_cache_dir('neomru', 'directory')
+    let g:neomru#file_mru_path = s:path_join(s:get_cache_dir('neomru'), 'file')
+    let g:neomru#directory_mru_path = s:path_join(s:get_cache_dir('neomru'), 'directory')
     " }}}
     " unite-fold: fold {{{
     NeoBundle 'osyo-manga/unite-fold'
