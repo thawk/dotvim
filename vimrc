@@ -1685,6 +1685,8 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
         let g:neosnippet#snippets_directory = fnamemodify(finddir("snippets", &runtimepath), ":p")
         let g:neosnippet#snippets_directory .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
 
+        let g:neosnippet#data_directory = s:get_cache_dir('neosnippet')
+
         if !exists('g:neosnippet#scope_aliases')
             let g:neosnippet#scope_aliases = {}
         endif
@@ -2569,6 +2571,7 @@ if count(s:settings.plugin_groups, 'misc') "{{{
     " c : copy, m : move, r : rename,
     let g:vimfiler_as_default_explorer = 1
     let g:vimfiler_define_wrapper_commands = 1
+    let g:vimfiler_data_directory = s:get_cache_dir('vimfiler')
 
     " 切换侧边栏
     nnoremap <silent> [unite]ee :<C-u>VimFilerExplorer<CR>
