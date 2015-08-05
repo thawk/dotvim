@@ -254,36 +254,36 @@ function! s:get_cache_dir(...) "{{{
 endfunction "}}}
 
 function! FindVcsRoot(path) " {{{
-    " let vcs_folder = ['.git', '.hg', '.svn', '.bzr', '_darcs']
-    "
-    " let path = a:path
-    " if empty(path)
-    "     let path = expand('%:p:h')
-    " else
-    "     let path = fnamemodify(path, ':p')
-    " endif
-    "
-    " let vcs_dir = ''
-    " for vcs in vcs_folder
-    "     let vcs_dir = finddir(vcs, path.';')
-    "     if !empty(vcs_dir)
-    "         if vcs == '.svn' " 对于旧svn版本，可能连续多层目录都有.svn，以最上层的为根
-    "             let root = fnamemodify(vcs_dir, ':p:h')
-    "             let parent = fnamemodify(root, ':h')
-    "             while parent != root
-    "                 if !isdirectory(parent . "/" . vcs) " 上层目录没有.svn子目录
-    "                     break
-    "                 endif
-    "                 let root = parent
-    "                 let parent = fnamemodify(root, ':h')
-    "             endwhile
-    "             return root
-    "         else
-    "             return fnamemodify(vcs_dir, ':h')
-    "         endif
-    "     endif
-    " endfor
-    "
+    let vcs_folder = ['.git', '.hg', '.svn', '.bzr', '_darcs']
+
+    let path = a:path
+    if empty(path)
+        let path = expand('%:p:h')
+    else
+        let path = fnamemodify(path, ':p')
+    endif
+
+    let vcs_dir = ''
+    for vcs in vcs_folder
+        let vcs_dir = finddir(vcs, path.';')
+        if !empty(vcs_dir)
+            if vcs == '.svn' " 对于旧svn版本，可能连续多层目录都有.svn，以最上层的为根
+                let root = fnamemodify(vcs_dir, ':p:h')
+                let parent = fnamemodify(root, ':h')
+                while parent != root
+                    if !isdirectory(parent . "/" . vcs) " 上层目录没有.svn子目录
+                        break
+                    endif
+                    let root = parent
+                    let parent = fnamemodify(root, ':h')
+                endwhile
+                return root
+            else
+                return fnamemodify(vcs_dir, ':h')
+            endif
+        endif
+    endfor
+
     return path
 endfunction " }}}
 " }}}
@@ -934,7 +934,7 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     NeoBundleLazy 'Shougo/unite-outline', {
                 \ 'unite_sources' : ['outline'],
                 \ }
-    nnoremap <silent> [unite]o  :<C-u>Unite fold outline -start-insert<CR>
+    nnoremap <silent> [unite]o  :<C-u>Unite fold outline -no-quit -vertical -toggle<CR>
     " }}}
     " unite-mark: 列出所有标记点 {{{
     NeoBundleLazy 'tacroe/unite-mark', {
