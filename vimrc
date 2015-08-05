@@ -811,6 +811,7 @@ if count(s:settings.plugin_groups, 'unite') "{{{
 
     let g:unite_winheight = winheight("%") / 2
     " let g:unite_winwidth = winwidth("%") / 2
+    let g:unite_winwidth = 40
 
     if s:ag_path != ""
         " Use ag in unite grep source.
@@ -826,63 +827,6 @@ if count(s:settings.plugin_groups, 'unite') "{{{
         let g:unite_source_grep_default_opts =
                     \ '--no-heading --no-color -a -H'
         let g:unite_source_grep_recursive_opt = ''
-    endif
-
-    nnoremap [unite]S :<C-U>Unite source<CR>
-
-    nnoremap <silent> [unite]y :<C-U>Unite -buffer-name=yanks history/yank register<CR>
-    nnoremap <silent> [unite]w :<C-u>UniteWithCursorWord -buffer-name=register buffer file_mru bookmark file<CR>
-    " nnoremap <silent> [unite]c :<C-u>Unite change jump<CR>
-    " nnoremap <silent> [unite]R :<C-u>Unite -buffer-name=resume resume<CR>
-    " nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
-    nnoremap <silent> [unite]G :<C-u>Unite grep -buffer-name=search -no-quit<CR>
-    nnoremap <silent> [unite2]G :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit<CR>
-    " nnoremap <silent> [unite]G :<C-u>UniteWithCursorWord grep -buffer-name=search -no-quit<CR>
-    "nnoremap <silent> [unite]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
-    nnoremap <silent> [unite]g :<C-u>Unite grep:! -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
-    nnoremap <silent> [unite2]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
-
-    nnoremap <silent> [unite]/ :<C-U>Unite line -buffer-name=search -start-insert -input=<C-R><C-W><CR>
-    nnoremap <silent> [unite]? :<C-U>Unite line -buffer-name=search -start-insert<CR>
-    "nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
-    nnoremap <silent> [unite]f :<C-u>Unite -buffer-name=files file:<C-R>=expand("%:p:h")<CR> buffer file/new:<C-R>=expand("%:p:h")<CR> -start-insert<CR>
-    nnoremap <silent> [unite]b :<C-u>Unite -buffer-name=files buffer_tab -start-insert<CR>
-    nnoremap <silent> [unite]B :<C-u>Unite -buffer-name=files buffer file_mru -start-insert<CR>
-    nnoremap <silent> [unite]c :<C-u>Unite -buffer-name=files file buffer file/new -start-insert<CR>
-    nnoremap <silent> [unite]C :<C-u>UniteClose<CR>
-    " nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
-    nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps -start-insert help<CR>
-    nnoremap <silent> [unite]H :<C-U>UniteWithCursorWord -buffer-name=helps help<CR>
-    nnoremap <silent> [unite]M :<C-U>Unite mark<CR>
-    " nnoremap <silent> [unite]m :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build<CR>
-    nnoremap <silent> [unite]Q :<C-u>Unite poslist<CR>
-    nnoremap <silent> [unite]q :<C-u>Unite quickfix -no-quit<CR>
-    " nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
-    " nnoremap <silent> [unite]s :<C-u>Unite -start-insert session<CR>
-    "nnoremap <silent> [unite]T :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
-    "nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag tag/include<CR>
-    nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag<CR>
-    " nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
-    nnoremap <silent> [unite]t :<C-U>Unite -buffer-name=tabs tab<CR>
-    " nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
-    " nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
-    nnoremap <silent> [unite]r :<C-u>UniteResume -no-start-insert<CR>
-    " nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files buffer file_rec:! file_mru bookmark<cr><c-u>
-
-    nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files bookmark directory_mru<CR>
-    nnoremap <silent> [unite]ma :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
-    nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
-
-    if s:is_windows
-        nnoremap <silent> [unite]F
-                    \ :<C-u>Unite -buffer-name=files -multi-line
-                    \ file jump_point file_point buffer
-                    \ file_rec:! file_mru file/new<CR>
-    else
-        nnoremap <silent> [unite]F
-                    \ :<C-u>Unite -buffer-name=files -multi-line
-                    \ file jump_point file_point buffer
-                    \ file_rec/async:! file_mru file/new<CR>
     endif
 
     autocmd! FileType unite call s:unite_my_settings()
@@ -936,7 +880,6 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     NeoBundleLazy 'Shougo/unite-outline', {
                 \ 'unite_sources' : ['outline'],
                 \ }
-    nnoremap <silent> [unite]o  :<C-u>Unite fold outline -no-quit -no-start-insert -vertical -toggle -winwidth=40<CR>
     " }}}
     " unite-mark: 列出所有标记点 {{{
     NeoBundleLazy 'tacroe/unite-mark', {
@@ -972,24 +915,22 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     NeoBundleLazy 'eiiches/unite-tselect', {
                 \ 'unite_sources' : 'tselect',
                 \ }
-    nnoremap g<C-]> :<C-u>Unite -immediately tselect:<C-r>=expand('<cword>')<CR><CR>
-    nnoremap g] :<C-u>Unite tselect:<C-r>=expand('<cword>')<CR><CR>
     " }}}
     " vim-versions: 支持svn/git，\fv 看未提交的文件列表，\fl 看更新日志 {{{
     NeoBundleLazy 'hrsh7th/vim-versions', {
                 \ 'commands' : ['UniteVersions'],
                 \ 'unite_sources' : ['versions', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status', 'versions/svn/branch', 'versions/svn/log', 'versions/svn/status'],
                 \ }
-    nnoremap <silent> [unite]v :<C-u>UniteVersions status<CR>
-    nnoremap <silent> [unite]l :<C-u>UniteVersions log<CR>
     " }}}
     " unite-gtags: Unite下调用gtags {{{
     NeoBundleLazy 'hewes/unite-gtags', {
                 \ "unite_sources" : ["gtags/ref","gtags/def","gtags/context","gtags/completion","gtags/grep","gtags/file"],
                 \ }
-    if !s:has_global
-        NeoBundleDisable 'unite-gtags'
-    else
+    call neobundle#config('unite-gtags', {
+                \ 'disabled' : !s:has_global,
+                \ })
+
+    if neobundle#tap('unite-gtags')
         nnoremap [unite-tag]s :<C-u>Unite gtags/context<CR>
         nnoremap [unite-tag]S :<C-u>Unite gtags/ref:
         nnoremap [unite-tag]g :<C-u>Unite gtags/def<CR>
@@ -1012,7 +953,77 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     " unite-fold: fold {{{
     NeoBundle 'osyo-manga/unite-fold'
     " }}}
+    " unite的key binding {{{
+    nnoremap [unite]S :<C-U>Unite source<CR>
 
+    nnoremap <silent> [unite]y :<C-U>Unite -buffer-name=yanks history/yank register<CR>
+    nnoremap <silent> [unite]w :<C-u>UniteWithCursorWord -buffer-name=register buffer file_mru bookmark file<CR>
+    " nnoremap <silent> [unite]c :<C-u>Unite change jump<CR>
+    " nnoremap <silent> [unite]R :<C-u>Unite -buffer-name=resume resume<CR>
+    " nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+    nnoremap <silent> [unite]G :<C-u>Unite grep -buffer-name=search -no-quit<CR>
+    nnoremap <silent> [unite2]G :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit<CR>
+    " nnoremap <silent> [unite]G :<C-u>UniteWithCursorWord grep -buffer-name=search -no-quit<CR>
+    "nnoremap <silent> [unite]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
+    nnoremap <silent> [unite]g :<C-u>Unite grep:! -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
+    nnoremap <silent> [unite2]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
+
+    nnoremap <silent> [unite]/ :<C-U>Unite line -buffer-name=search -start-insert -input=<C-R><C-W><CR>
+    nnoremap <silent> [unite]? :<C-U>Unite line -buffer-name=search -start-insert<CR>
+    "nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
+    nnoremap <silent> [unite]f :<C-u>Unite -buffer-name=files file:<C-R>=expand("%:p:h")<CR> buffer file/new:<C-R>=expand("%:p:h")<CR> -start-insert<CR>
+    nnoremap <silent> [unite]b :<C-u>Unite -buffer-name=files buffer_tab -start-insert<CR>
+    nnoremap <silent> [unite]B :<C-u>Unite -buffer-name=files buffer file_mru -start-insert<CR>
+    nnoremap <silent> [unite]c :<C-u>Unite -buffer-name=files file buffer file/new -start-insert<CR>
+    nnoremap <silent> [unite]C :<C-u>UniteClose<CR>
+    " nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
+    nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps -start-insert help<CR>
+    nnoremap <silent> [unite]H :<C-U>UniteWithCursorWord -buffer-name=helps help<CR>
+    nnoremap <silent> [unite]M :<C-U>Unite mark<CR>
+    " nnoremap <silent> [unite]m :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build<CR>
+    nnoremap <silent> [unite]Q :<C-u>Unite poslist<CR>
+    nnoremap <silent> [unite]q :<C-u>Unite quickfix -no-quit<CR>
+    " nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
+    " nnoremap <silent> [unite]s :<C-u>Unite -start-insert session<CR>
+    "nnoremap <silent> [unite]T :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
+    "nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag tag/include<CR>
+    nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag<CR>
+    " nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
+    nnoremap <silent> [unite]t :<C-U>Unite -buffer-name=tabs tab<CR>
+    " nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
+    " nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
+    nnoremap <silent> [unite]r :<C-u>UniteResume -no-start-insert<CR>
+    " nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files buffer file_rec:! file_mru bookmark<cr><c-u>
+    nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files bookmark directory_mru<CR>
+    nnoremap <silent> [unite]ma :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
+    nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
+
+    if s:is_windows
+        nnoremap <silent> [unite]F
+                    \ :<C-u>Unite -buffer-name=files -multi-line
+                    \ file jump_point file_point buffer
+                    \ file_rec:! file_mru file/new<CR>
+    else
+        nnoremap <silent> [unite]F
+                    \ :<C-u>Unite -buffer-name=files -multi-line
+                    \ file jump_point file_point buffer
+                    \ file_rec/async:! file_mru file/new<CR>
+    endif
+
+    if neobundle#tap('unite-outline') && neobundle#tap('unite-fold')
+        nnoremap <silent> [unite]o  :<C-u>Unite fold outline -no-quit -no-start-insert -vertical -toggle -winwidth=40<CR>
+    endif
+
+    if neobundle#tap('unite-tselect')
+        nnoremap g<C-]> :<C-u>Unite -immediately tselect:<C-r>=expand('<cword>')<CR><CR>
+        nnoremap g] :<C-u>Unite tselect:<C-r>=expand('<cword>')<CR><CR>
+    endif
+
+    if neobundle#tap('vim-versions')
+        nnoremap <silent> [unite]v :<C-u>UniteVersions status<CR>
+        nnoremap <silent> [unite]l :<C-u>UniteVersions log<CR>
+    endif
+    " }}}
 endif
 " }}}
 
@@ -1163,10 +1174,10 @@ if count(s:settings.plugin_groups, 'editing') "{{{
     NeoBundleLazy 'mbbill/echofunc', {
                 \ 'filetypes' : ['c', 'cpp'],
                 \ }
-    if s:has_global
-        " 启用global后，将不用ctags，因此echofunc.vim会失效
-        NeoBundleDisable 'echofunc'
-    endif
+    " 启用global后，将不用ctags，因此echofunc.vim会失效
+    call neobundle#config('echofunc', {
+                \ 'disabled' : s:has_global,
+                \ })
     " }}}
     " 为函数插入Doxygen注释。在函数名所在行输入 :Dox 即可 {{{
     NeoBundleLazy 'DoxygenToolkit.vim', {
@@ -1398,11 +1409,14 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
     " Mark--Karkat: 可同时标记多个mark。\M显隐所有，\N清除所有Mark。\m标识当前word {{{
     NeoBundleLazy 'vernonrj/Mark--Karkat', {
                 \ 'commands' : ['Mark', 'MarkClear', 'Marks', 'MarkLoad', 'MarkSave', 'MarkPalette'],
-                \ 'mappings' : ['<Plug>(Mark', '<Leader>m', '<Leader>r', '<Leader>n', '<Leader>*', '<Leader>#', '<Leader>/', '<Leader>?', '*', '#'],
+                \ 'mappings' : [
+                \     '<Plug>MarkSet', '<Plug>MarkRegex', '<Plug>MarkClear', '<Plug>MarkToggle',
+                \     '<Plug>MarkAllClear',
+                \     '<Leader>n', '<Leader>*', '<Leader>#', '<Leader>/', '<Leader>?',
+                \ ],
+                \ 'disabled' : v:version < '701',
                 \ }
-    if !(v:version >= '701')
-        NeoBundleDisable 'Mark--Karkat'
-    else
+    if neobundle#tap('Mark--Karkat')
         nmap <unique> [mark]m <Plug>MarkSet
         xmap <unique> [mark]m <Plug>MarkSet
         nmap <unique> [mark]r <Plug>MarkRegex
@@ -1524,9 +1538,11 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
                 \ 'functoins' : [
                 \     'GtagsCandidate',
                 \ ]}
-    if !s:has_global
-        NeoBundleDisable 'gtags.vim'
+    call neobundle#config('gtags.vim', {
+                \ 'disabled' : !s:has_global,
+                \ })
 
+    if !neobundle#tap('gtags.vim')
         " 不使用gtags的话，如果有cscope就使用cscope
         if has("cscope") " {{{
             " use both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
@@ -1744,10 +1760,9 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
         " neocomplete: 代码补全插件 {{{
         NeoBundleLazy 'Shougo/neocomplete', {
                     \ 'insert' : 1,
+                    \ 'disabled' : !(v:version >= '703' && has('lua')),
                     \ }
-        if !(v:version >= '703' && has('lua'))
-            NeoBundleDisable 'neocomplete'
-        else
+        if neobundle#tap('neocomplete')
             "let g:neocomplcache_enable_debug = 1
             let g:neocomplete#enable_at_startup = 1
             " Disable auto completion, if set to 1, must use <C-x><C-u>
@@ -1820,10 +1835,9 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
         " neocomplcache: 代码补全插件 {{{
         NeoBundleLazy 'Shougo/neocomplcache', {
                     \ 'insert' : 1,
+                    \ 'disabled' : v:version >= '703' && has('lua'),
                     \ }
-        if v:version >= '703' && has('lua')
-            NeoBundleDisable 'neocomplete'
-        else
+        if neobundle#tap('neocomplcache')
             "let g:neocomplcache_enable_debug = 1
             let g:neocomplcache_enable_at_startup = 1
             " Disable auto completion, if set to 1, must use <C-x><C-u>
@@ -1974,10 +1988,9 @@ if count(s:settings.plugin_groups, 'scm') "{{{
     nnoremap [code]v :<C-U>VCSVimDiff<CR>
     " }}}
     " vim-fugitive: GIT前端 {{{
-    NeoBundle 'tpope/vim-fugitive'
-    if !executable('git')
-        NeoBundleDisable 'vim-fugitive'
-    endif
+    NeoBundle 'tpope/vim-fugitive', {
+                \ 'disabled' : !executable('git'),
+                \ }
     " }}}
 endif
 " }}}
@@ -2122,10 +2135,9 @@ if count(s:settings.plugin_groups, 'cpp') "{{{
     NeoBundleLazy 'rhysd/vim-clang-format', {
                 \ 'commands' : ['ClangFormat'],
                 \ 'mappings' : ['<Plug>(operator-clang-format'],
+                \ 'disabled' : !executable('clang-format'),
                 \ }
-    if !executable('clang-format')
-        NeoBundleDisable 'clang-format'
-    else
+    if neobundle#tap('vim-clang-format')
         let g:clang_format#code_style = 'google'
         let g:clang_format#style_options = {
                     \ "AccessModifierOffset" : -4,
@@ -2305,13 +2317,12 @@ if count(s:settings.plugin_groups, 'shell') "{{{
     " " slimux: 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列 {{{
     " NeoBundleLazy 'epeli/slimux', {
     "             \ 'commands' : [
-    "             \ 'SlimuxREPLSendLine', 'SlimuxREPLSendSelection', 'SlimuxREPLSendLine', 'SlimuxREPLSendBuffer', 'SlimuxREPLConfigure',
-    "             \ 'SlimuxShellRun', 'SlimuxShellPrompt', 'SlimuxShellLast', 'SlimuxShellConfigure',
-    "             \ 'SlimuxSendKeysPrompt', 'SlimuxSendKeysLast', 'SlimuxSendKeysConfigure' ],
+    "             \     'SlimuxREPLSendLine', 'SlimuxREPLSendSelection', 'SlimuxREPLSendLine', 'SlimuxREPLSendBuffer', 'SlimuxREPLConfigure',
+    "             \     'SlimuxShellRun', 'SlimuxShellPrompt', 'SlimuxShellLast', 'SlimuxShellConfigure',
+    "             \     'SlimuxSendKeysPrompt', 'SlimuxSendKeysLast', 'SlimuxSendKeysConfigure' ],
+    "             \ 'disabled' : !executable("tmux"),
     "             \ }
-    " if !executable("tmux")
-    "     NeoBundleDisable 'slimux'
-    " else
+    " if neobundle#tap('slimux')
     "     map  [repl]s :SlimuxREPLSendLine<CR>
     "     vmap [repl]s :SlimuxREPLSendSelection<CR>
     "     map  [repl]p :SlimuxShellPrompt<CR>
@@ -2403,11 +2414,7 @@ if count(s:settings.plugin_groups, 'syntax') "{{{
     NeoBundleLazy 'wps.vim', {
                 \ 'filetypes' : ['wps'],
                 \ }
-    if !(has("win32") || has("win64"))
-        NeoBundleDisable 'wps.vim'
-    else
-        au BufRead,BufNewFile *.wps,*.sbs,*.fms setf wps
-    endif
+    au BufRead,BufNewFile *.wps,*.sbs,*.fms setf wps
     " }}}
     NeoBundleLazy 'lbdbq', {
                 \ 'mappings' : ['<LocalLeader>lb'],
