@@ -810,7 +810,7 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     let g:unite_source_history_yank_enable = 1
 
     let g:unite_winheight = winheight("%") / 2
-    let g:unite_winwidth = winwidth("%") / 2
+    " let g:unite_winwidth = winwidth("%") / 2
 
     if s:ag_path != ""
         " Use ag in unite grep source.
@@ -887,6 +887,8 @@ if count(s:settings.plugin_groups, 'unite') "{{{
 
     autocmd! FileType unite call s:unite_my_settings()
     function! s:unite_my_settings() "{{{
+        unmap <buffer> <c-l>
+
         nmap <buffer> <ESC>      <Plug>(unite_exit)
         imap <buffer> jj      <Plug>(unite_insert_leave)
 
@@ -934,7 +936,7 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     NeoBundleLazy 'Shougo/unite-outline', {
                 \ 'unite_sources' : ['outline'],
                 \ }
-    nnoremap <silent> [unite]o  :<C-u>Unite fold outline -no-quit -vertical -toggle<CR>
+    nnoremap <silent> [unite]o  :<C-u>Unite fold outline -no-quit -no-start-insert -vertical -toggle -winwidth=40<CR>
     " }}}
     " unite-mark: 列出所有标记点 {{{
     NeoBundleLazy 'tacroe/unite-mark', {
@@ -2553,6 +2555,7 @@ if count(s:settings.plugin_groups, 'visual') "{{{
     " }}}
     " GoldenView.Vim: <F8>/<S-F8>当前窗口与主窗口交换 {{{
     NeoBundle 'zhaocai/GoldenView.Vim'
+
     let g:goldenview__enable_default_mapping = 0
     " nmap <silent> <C-N>  <Plug>GoldenViewNext
     " nmap <silent> <C-P>  <Plug>GoldenViewPrevious
