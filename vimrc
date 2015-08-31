@@ -1535,7 +1535,7 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
                 \     { 'name' : 'Gtagsa', 'complete' : 'custom,GtagsCandidate' },
                 \     "GtagsCursor","Gozilla","GtagsUpdate","GtagsCscope"
                 \ ],
-                \ 'functoins' : [
+                \ 'functions' : [
                 \     'GtagsCandidate',
                 \ ]}
     call neobundle#config('gtags.vim', {
