@@ -1702,6 +1702,12 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
                 \     'hujo/gf-user-vimfn',
                 \ ]}
     " }}}
+    " vim-ref: 按K查找各种资料 {{{
+    NeoBundleLazy 'thinca/vim-ref', {
+                \ 'unite_sources' : 'ref',
+                \ 'mappings' : ['nv', 'K'],
+                \ }
+    " }}}
 endif
 "}}}
 
@@ -1723,7 +1729,7 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
                     \ 'depends' : ['context_filetype.vim'],
                     \ 'commands' : ['NeoSnippetEdit'],
                     \ 'mappings' : ['<Plug>(neosnippet_'],
-                    \ 'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
+                    \ 'unite_sources' : ['neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
                     \ }
         let g:neosnippet#snippets_directory = fnamemodify(finddir("snippets", &runtimepath), ":p")
         let g:neosnippet#snippets_directory .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
@@ -1909,6 +1915,11 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
                         \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
         endif
         " }}}
+        " neoinclude.vim: 对include进行补全 {{{
+        NeoBundleLazy 'Shougo/neoinclude.vim', {
+                    \ 'insert' : 1,
+                    \ }
+        " }}}
         " echodoc: 代码补全插件 {{{
         NeoBundleLazy 'Shougo/echodoc', {
                     \ 'commands' : ['EchoDocEnable', 'EchoDocDisable'],
@@ -1923,6 +1934,7 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
         " neco-vim: 对vim文件进行补全 {{{
         NeoBundleLazy 'Shougo/neco-vim', {
                     \ 'filetypes' : ['vim',],
+                    \ 'insert' : 1,
                     \ }
         " }}}
     endif
@@ -2350,6 +2362,17 @@ if count(s:settings.plugin_groups, 'shell') "{{{
                 \     { 'name' : 'Start', 'complete' : 'customlist,dispatch#command_complete' },
                 \     'Copen',
                 \ ],
+                \ }
+    " }}}
+    " neossh.vim: 支持ssh://协议 {{{
+    NeoBundleLazy 'Shougo/neossh.vim', {
+                \ 'filetypes' : ['vimfiler', 'vimshell'],
+                \ 'unite_sources' : ['ssh'],
+                \ }
+    " }}}
+    " vimshell-ssh: 在vimshell中iexe ssh连接服务器 {{{
+    NeoBundleLazy 'ujihisa/vimshell-ssh', {
+                \ 'filetypes' : ['vimshell'],
                 \ }
     " }}}
 endif
