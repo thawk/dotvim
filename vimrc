@@ -106,26 +106,27 @@ else
     call add(s:settings.plugin_groups, 'autocomplete')
     call add(s:settings.plugin_groups, 'textobj')
     call add(s:settings.plugin_groups, 'scm')
-    call add(s:settings.plugin_groups, 'cpp')
-    call add(s:settings.plugin_groups, 'python')
-    call add(s:settings.plugin_groups, 'csharp')
-    call add(s:settings.plugin_groups, 'web')
-    call add(s:settings.plugin_groups, 'shell')
     call add(s:settings.plugin_groups, 'doc')
     call add(s:settings.plugin_groups, 'syntax')
     call add(s:settings.plugin_groups, 'visual')
     call add(s:settings.plugin_groups, 'misc')
 
+    call add(s:settings.plugin_groups, 'cpp')
+    call add(s:settings.plugin_groups, 'python')
+    call add(s:settings.plugin_groups, 'haskell')
+    call add(s:settings.plugin_groups, 'csharp')
+    call add(s:settings.plugin_groups, 'web')
+    call add(s:settings.plugin_groups, 'shell')
+
     " exclude all language-specific plugins by default
-    if !exists('g:dotvim_settings.plugin_groups_exclude')
-        let g:dotvim_settings.plugin_groups_exclude = ['python']
+    if exists('g:dotvim_settings.plugin_groups_exclude')
+        for group in g:dotvim_settings.plugin_groups_exclude
+            let i = index(s:settings.plugin_groups, group)
+            if i != -1
+                call remove(s:settings.plugin_groups, i)
+            endif
+        endfor
     endif
-    for group in g:dotvim_settings.plugin_groups_exclude
-        let i = index(s:settings.plugin_groups, group)
-        if i != -1
-            call remove(s:settings.plugin_groups, i)
-        endif
-    endfor
     if exists('g:dotvim_settings.plugin_groups_include')
         for group in g:dotvim_settings.plugin_groups_include
             call add(s:settings.plugin_groups, group)
@@ -2227,6 +2228,21 @@ if count(s:settings.plugin_groups, 'python') "{{{
     NeoBundleLazy 'hynek/vim-python-pep8-indent', {
                 \ 'filetypes' : ['python', 'python3'],
                 \ }
+endif
+" }}}
+
+if count(s:settings.plugin_groups, 'haskell') "{{{
+    " neco-ghc: 结合neocomplete补全haskell {{{
+    NeoBundleLazy 'eagletmt/neco-ghc', {
+                \ 'filetypes' : ['haskell'],
+                \ 'commands'  : ['NecoGhcDiagnostics'],
+                \ 'disabled'  : !executable("ghc-mod"),
+                \ }
+
+    if neobundle#tap('neco-ghc')
+        let g:necoghc_enable_detailed_browse = 0
+        let g:necoghc_debug = 0
+    endif
 endif
 " }}}
 

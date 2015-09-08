@@ -1,7 +1,11 @@
 let g:dotvim_settings = {}
 let g:dotvim_settings.disabled_plugins = []
+
+" 有效的插件组请参见vimrc中的plugin_groups
 let g:dotvim_settings.plugin_groups_exclude = []
+"let g:dotvim_settings.plugin_groups_exclude = ['cpp' , 'python' , 'haskell' , 'csharp' , 'web' , 'shell']
 let g:dotvim_settings.plugin_groups_include = []
+
 "let g:dotvim_settings.autocomplete_method = 'neocomplete'
 "let g:dotvim_settings.notes_directory = ['~/vim-notes']
 "let g:dotvim_settings.default_indent = 4
