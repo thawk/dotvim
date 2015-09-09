@@ -1,10 +1,15 @@
 #!/bin/sh
-if [ ! -f ~/.vimrc ]
+vim_path=$(dirname $(readlink -f "$0"))
+
+if [ ! -e ~/.vimrc ]
 then
-    echo 'runtime vimrc' > ~/.vimrc
+    echo "runtime vimrc" > ~/.vimrc
 fi
 
-vim_path=$(dirname $(readlink -f "$0"))
+if [ ! -e "${vim_path}/vimrc.local" ]
+then
+    cp "${vim_path}/vimrc.local.sample" "${vim_path}/vimrc.local"
+fi
 
 if [ -d "${vim_path}/bundle/vimproc" ]
 then
