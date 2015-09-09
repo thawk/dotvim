@@ -2189,7 +2189,7 @@ if count(s:settings.plugin_groups, 'cpp') "{{{
                 \    'WandboxOptionList',
                 \    'WandboxOptionListAsync',
                 \ ],
-                \ 'functions' : 'wandbox#',
+                \ 'function_prefix' : 'wandbox',
                 \ }
     let g:wandbox#echo_command = 'echomsg'
     noremap [make]w :<C-u>Wandbox<CR>
@@ -2334,30 +2334,31 @@ if count(s:settings.plugin_groups, 'shell') "{{{
     map  [repl]n :<C-U>VimShellPop<CR>
     " 以当前缓冲区目录打开vimshell窗口
     map  [repl]b :<C-U>VimShellPop <C-R>=expand("%:p:h")<CR><CR>
-    " 关闭最近一个vimshell窗口
-    map  [repl]c :<C-U>VimShellClose<CR>
-    " 执行当前行
-    map  [repl]s :<C-U>VimShellSendString<CR>
-    " 执行所选内容
-    vmap [repl]s :<C-U>'<,'>VimShellSendString<CR>
-    " 提示执行命令
-    map  [repl]p :<C-U>VimShellSendString<SPACE>
+    " " 关闭最近一个vimshell窗口
+    " map  [repl]c :<C-U>VimShellClose<CR>
+    " " 执行当前行
+    " map  [repl]s :<C-U>VimShellSendString<CR>
+    " " 执行所选内容
+    " vmap [repl]s :<C-U>'<,'>VimShellSendString<CR>
+    " " 提示执行命令
+    " map  [repl]p :<C-U>VimShellSendString<SPACE>
     " }}}
     " " slimux: 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列 {{{
-    " NeoBundleLazy 'epeli/slimux', {
-    "             \ 'commands' : [
-    "             \     'SlimuxREPLSendLine', 'SlimuxREPLSendSelection', 'SlimuxREPLSendLine', 'SlimuxREPLSendBuffer', 'SlimuxREPLConfigure',
-    "             \     'SlimuxShellRun', 'SlimuxShellPrompt', 'SlimuxShellLast', 'SlimuxShellConfigure',
-    "             \     'SlimuxSendKeysPrompt', 'SlimuxSendKeysLast', 'SlimuxSendKeysConfigure' ],
-    "             \ 'disabled' : !executable("tmux"),
-    "             \ }
-    " if neobundle#tap('slimux')
-    "     map  [repl]s :SlimuxREPLSendLine<CR>
-    "     vmap [repl]s :SlimuxREPLSendSelection<CR>
-    "     map  [repl]p :SlimuxShellPrompt<CR>
-    "     map  [repl]a :SlimuxShellLast<CR>
-    "     map  [repl]k :SlimuxSendKeysLast<CR>
-    " endif
+    NeoBundleLazy 'epeli/slimux', {
+                \ 'commands' : [
+                \     'SlimuxREPLSendLine', 'SlimuxREPLSendSelection', 'SlimuxREPLSendLine', 'SlimuxREPLSendBuffer', 'SlimuxREPLConfigure',
+                \     'SlimuxShellRun', 'SlimuxShellPrompt', 'SlimuxShellLast', 'SlimuxShellConfigure',
+                \     'SlimuxSendKeysPrompt', 'SlimuxSendKeysLast', 'SlimuxSendKeysConfigure' ],
+                \ 'functions': ['SlimuxConfigureCode', 'SlimuxSendCode', 'SlimuxSendCommand', 'SlimuxSendKeys',],
+                \ 'disabled' : !executable("tmux"),
+                \ }
+    if neobundle#tap('slimux')
+        map  [repl]s :SlimuxREPLSendLine<CR>
+        vmap [repl]s :SlimuxREPLSendSelection<CR>
+        map  [repl]p :SlimuxShellPrompt<CR>
+        map  [repl]r :SlimuxShellLast<CR>
+        map  [repl]k :SlimuxSendKeysLast<CR>
+    endif
     " " }}}
     " vim-tbone: 可以操作tmux缓冲区，执行tmux命令 {{{
     NeoBundleLazy 'tpope/vim-tbone', {
