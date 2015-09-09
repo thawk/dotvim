@@ -2243,6 +2243,7 @@ if count(s:settings.plugin_groups, 'haskell') "{{{
         let g:necoghc_enable_detailed_browse = 0
         let g:necoghc_debug = 0
     endif
+    " }}}
 endif
 " }}}
 
