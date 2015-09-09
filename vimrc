@@ -2343,7 +2343,7 @@ if count(s:settings.plugin_groups, 'shell') "{{{
     " " 提示执行命令
     " map  [repl]p :<C-U>VimShellSendString<SPACE>
     " }}}
-    " " slimux: 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列 {{{
+    " slimux: 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列 {{{
     NeoBundleLazy 'epeli/slimux', {
                 \ 'commands' : [
                 \     'SlimuxREPLSendLine', 'SlimuxREPLSendSelection', 'SlimuxREPLSendLine', 'SlimuxREPLSendBuffer', 'SlimuxREPLConfigure',
@@ -2353,11 +2353,11 @@ if count(s:settings.plugin_groups, 'shell') "{{{
                 \ 'disabled' : !executable("tmux"),
                 \ }
     if neobundle#tap('slimux')
-        map  [repl]s :SlimuxREPLSendLine<CR>
-        vmap [repl]s :SlimuxREPLSendSelection<CR>
-        map  [repl]p :SlimuxShellPrompt<CR>
-        map  [repl]r :SlimuxShellLast<CR>
-        map  [repl]k :SlimuxSendKeysLast<CR>
+        map  [repl]s :<C-U>SlimuxREPLSendLine<CR>
+        vmap [repl]s :<C-U>SlimuxREPLSendSelection<CR>
+        map  [repl]p :<C-U>SlimuxShellPrompt<CR>
+        map  [repl]r :<C-U>SlimuxShellLast<CR>
+        map  [repl]k :<C-U>SlimuxSendKeysLast<CR>
     endif
     " " }}}
     " vim-tbone: 可以操作tmux缓冲区，执行tmux命令 {{{
@@ -2369,6 +2369,10 @@ if count(s:settings.plugin_groups, 'shell') "{{{
                 \   { 'name' : 'Tyank', 'complete' : 'custom,tbone#complete_buffers' },
                 \   { 'name' : 'Twrite', 'complete' : 'custom,tbone#complete_panes' },
                 \ ]}
+    if neobundle#tap('vim-tbone')
+        map  [repl]c :<C-U>silent !tmux split-window -p 30 -d<CR>
+        map  [repl]b :<C-U>silent !tmux split-window -p 30 -d -c "<C-R>=expand("%:p:h")<CR>"<CR>
+    endif
     " }}}
     " vim-dispatch: 可以用:Make、:Dispatch等，通过tmux窗口、后台窗口等手段异步执行命令 {{{
     NeoBundleLazy 'tpope/vim-dispatch', {
