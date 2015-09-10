@@ -2244,6 +2244,32 @@ if count(s:settings.plugin_groups, 'haskell') "{{{
         let g:necoghc_debug = 0
     endif
     " }}}
+    " haskell-vim: Haskell的语法高亮和缩进 {{{
+    NeoBundleLazy 'neovimhaskell/haskell-vim', {
+                \ 'filetypes' : ['haskell', 'cabal'],
+                \ }
+
+    if neobundle#tap('haskell-vim')
+        " 控制部分功能的启用与否
+        " let g:haskell_enable_quantification = 1   " enable highlighting of forall
+        " let g:haskell_enable_recursivedo = 1      " enable highlighting of mdo and rec
+        " let g:haskell_enable_arrowsyntax = 1      " enable highlighting of proc
+        " let g:haskell_enable_pattern_synonyms = 1 " enable highlighting of pattern
+        " let g:haskell_enable_typeroles = 1        " enable highlighting of type roles
+        " let g:haskell_enable_static_pointers = 1  " enable highlighting of static
+
+        " 控制haskell缩进
+        " let g:haskell_indent_if = 3
+        " let g:haskell_indent_case = 2
+        " let g:haskell_indent_let = 4
+        " let g:haskell_indent_where = 6
+        " let g:haskell_indent_do = 3
+        " let g:haskell_indent_in = 1
+
+        " 控制cabal缩进
+        " let g:cabal_indent_section = 2
+    endif
+    " }}}
 endif
 " }}}
 
