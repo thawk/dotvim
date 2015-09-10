@@ -2339,36 +2339,6 @@ if count(s:settings.plugin_groups, 'shell') "{{{
     " ,t - backtrace
     let g:ConqueGdb_Leader = ','
     " }}}
-    " vimshell: Shell，:VimShell {{{
-    NeoBundleLazy 'Shougo/vimshell', {
-                \ 'commands' : [
-                \    { 'name' : 'VimShell', 'complete' : 'customlist,vimshell#complete'},
-                \    { 'name' : 'VimShellCreate', 'complete' : 'customlist,vimshell#complete'},
-                \    { 'name' : 'VimShellPop', 'complete' : 'customlist,vimshell#complete'},
-                \    { 'name' : 'VimShellTab', 'complete' : 'customlist,vimshell#complete'},
-                \    { 'name' : 'VimShellCurrentDir', 'complete' : 'customlist,vimshell#complete'},
-                \    { 'name' : 'VimShellBufferDir', 'complete' : 'customlist,vimshell#complete'},
-                \    { 'name' : 'VimShellExecute', 'complete' : 'customlist,vimshell#helpers#vimshell_execute_complete'},
-                \    { 'name' : 'VimShellInteractive', 'complete' : 'customlist,vimshell#helpers#vimshell_execute_complete'},
-                \    'VimShellSendString', 'VimShellSendBuffer', 'VimShellClose',
-                \ ],
-                \ 'mappings' : ['<Plug>(vimshell_'],
-                \ 'unite_sources' : ['bookmark', 'directory', 'directory_mru', 'directory_rec',],
-                \ }
-    let g:vimshell_data_directory=s:get_cache_dir('vimshell')
-    " 以当前目录开始vimshell窗口
-    map  [repl]n :<C-U>VimShellPop<CR>
-    " 以当前缓冲区目录打开vimshell窗口
-    map  [repl]b :<C-U>VimShellPop <C-R>=expand("%:p:h")<CR><CR>
-    " " 关闭最近一个vimshell窗口
-    " map  [repl]c :<C-U>VimShellClose<CR>
-    " " 执行当前行
-    " map  [repl]s :<C-U>VimShellSendString<CR>
-    " " 执行所选内容
-    " vmap [repl]s :<C-U>'<,'>VimShellSendString<CR>
-    " " 提示执行命令
-    " map  [repl]p :<C-U>VimShellSendString<SPACE>
-    " }}}
     " slimux: 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\ss发送当前行或选区，\sp提示输入命令，\sa重复上一命令，\sk重复上个key序列 {{{
     NeoBundleLazy 'epeli/slimux', {
                 \ 'commands' : [
@@ -2385,7 +2355,41 @@ if count(s:settings.plugin_groups, 'shell') "{{{
         map  [repl]r :<C-U>SlimuxShellLast<CR>
         map  [repl]k :<C-U>SlimuxSendKeysLast<CR>
     endif
-    " " }}}
+    " }}}
+    " vimshell: Shell，:VimShell {{{
+    NeoBundleLazy 'Shougo/vimshell', {
+                \ 'commands' : [
+                \    { 'name' : 'VimShell', 'complete' : 'customlist,vimshell#complete'},
+                \    { 'name' : 'VimShellCreate', 'complete' : 'customlist,vimshell#complete'},
+                \    { 'name' : 'VimShellPop', 'complete' : 'customlist,vimshell#complete'},
+                \    { 'name' : 'VimShellTab', 'complete' : 'customlist,vimshell#complete'},
+                \    { 'name' : 'VimShellCurrentDir', 'complete' : 'customlist,vimshell#complete'},
+                \    { 'name' : 'VimShellBufferDir', 'complete' : 'customlist,vimshell#complete'},
+                \    { 'name' : 'VimShellExecute', 'complete' : 'customlist,vimshell#helpers#vimshell_execute_complete'},
+                \    { 'name' : 'VimShellInteractive', 'complete' : 'customlist,vimshell#helpers#vimshell_execute_complete'},
+                \    'VimShellSendString', 'VimShellSendBuffer', 'VimShellClose',
+                \ ],
+                \ 'mappings' : ['<Plug>(vimshell_'],
+                \ 'unite_sources' : ['bookmark', 'directory', 'directory_mru', 'directory_rec',],
+                \ }
+    if neobundle#tap('vimshell')
+        let g:vimshell_data_directory=s:get_cache_dir('vimshell')
+        if !neobundle#tap('slimux') " 没有启用slimux则使用vimshell代替
+            " 以当前目录开始vimshell窗口
+            map  [repl]c :<C-U>VimShellPop<CR>
+            " 以当前缓冲区目录打开vimshell窗口
+            map  [repl]b :<C-U>VimShellPop <C-R>=expand("%:p:h")<CR><CR>
+            " 关闭最近一个vimshell窗口
+            map  [repl]x :<C-U>VimShellClose<CR>
+            " 执行当前行
+            map  [repl]s :<C-U>VimShellSendString<CR>
+            " 执行所选内容
+            vmap [repl]s :<C-U>'<,'>VimShellSendString<CR>
+            " 提示执行命令
+            map  [repl]p :<C-U>VimShellSendString<SPACE>
+        endif
+    endif
+    " }}}
     " vim-tbone: 可以操作tmux缓冲区，执行tmux命令 {{{
     NeoBundleLazy 'tpope/vim-tbone', {
                 \ 'commands' : [
