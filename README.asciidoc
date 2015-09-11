@@ -27,10 +27,7 @@ vim缺省会使用++\~/.vimrc++（Windows下使用++~/_vimrc++）配置文件。
 
 ** Linux下
 +
-[source,sh]
-----
-echo 'runtime vimrc' > ~/.vimrc
-----
+运行++bootstrap.sh++，将会建立++~/.vimrc++，并且会建立++vimrc.local++文件
 
 ** Windows下
 +
@@ -38,6 +35,16 @@ echo 'runtime vimrc' > ~/.vimrc
 +
 ----
 runtime vimrc
+----
++
+把++vimrc.local.sample++拷贝一份，改名为++vimrc.local++
+
+** 如果vim目录不放在++\~/.vimrc++或++\~/vimfiles++，需要设置++runtimepath++路径，如
++
+----
+set runtimepath^=d:/vimconfig
+set runtimepath+=d:/vimconfig/after
+source d:/vimconfig/vimrc
 ----
 
 . 运行vim程序，在vim中运行下面的命令以安装其余插件：
@@ -48,13 +55,13 @@ runtime vimrc
 +
 由于插件数量比较多，因此可能需要较长的时间。
 
-. 拷贝++vimproc++的动态库
-+
-本配置使用了++vimproc++插件，该插件需要安装相应的动态库才能正常使用。在Linux下，vim会自动执行编译步骤，而在Windows下则需要手工安装预先了的库文件到++~/vimfiles/bundle/vimproc/autoload/++下。
-+
-对于32位Windows系统，++\~/vimfiles/win32/vimproc_win32.dll++下已经有一份可用动态库，也可以到 https://github.com/Shougo/vimproc/downloads 下载更新的版本，并拷贝到++~/vimfiles/bundle/vimproc/autoload/++。
-
 . 至此，所有配置均已完成，可以开始体验vim了。
+
+== 插件选择
+
+本配置中的插件按用途进行了分组，并可以通过++vimrc.local++文件进行启用及禁用。
+
+缺省禁用了与开发相关的一些插件，可以按需要选择性启用。
 
 == 配置升级
 
