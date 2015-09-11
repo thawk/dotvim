@@ -62,7 +62,7 @@ if s:ag_path != ""
 endif
 " }}}
 
-" 缺省设置 {{{
+" 插件组命名及选择要使用的插件及插件组 {{{
 " Impacted by https://github.com/bling/dotvim
 if filereadable(s:vimrc_path . "/vimrc.local")
     exec "source " . s:vimrc_path . "/vimrc.local"
@@ -119,14 +119,15 @@ else
     call add(s:settings.plugin_groups, 'shell')
 
     " exclude all language-specific plugins by default
-    if exists('g:dotvim_settings.plugin_groups_exclude')
-        for group in g:dotvim_settings.plugin_groups_exclude
-            let i = index(s:settings.plugin_groups, group)
-            if i != -1
-                call remove(s:settings.plugin_groups, i)
-            endif
-        endfor
+    if !exists('g:dotvim_settings.plugin_groups_exclude')
+        let g:dotvim_settings.plugin_groups_exclude = ['cpp' , 'python' , 'haskell' , 'csharp' , 'web' , 'shell']
     endif
+    for group in g:dotvim_settings.plugin_groups_exclude
+        let i = index(s:settings.plugin_groups, group)
+        if i != -1
+            call remove(s:settings.plugin_groups, i)
+        endif
+    endfor
     if exists('g:dotvim_settings.plugin_groups_include')
         for group in g:dotvim_settings.plugin_groups_include
             call add(s:settings.plugin_groups, group)
