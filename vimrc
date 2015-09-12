@@ -2271,6 +2271,14 @@ if count(s:settings.plugin_groups, 'haskell') "{{{
         " let g:cabal_indent_section = 2
     endif
     " }}}
+    " ref-hoogle: 让vim-ref插件支持hoogle {{{
+    NeoBundleLazy 'ujihisa/ref-hoogle', {
+                \ 'filetypes' : ['haskell'],
+                \ }
+    call neobundle#config('ref-hoogle', {
+                \ 'disabled' : !executable('hoogle') || !neobundle#tap('vim-ref'),
+                \ })
+    " }}}
 endif
 " }}}
 
