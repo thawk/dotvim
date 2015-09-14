@@ -2612,6 +2612,10 @@ if count(s:settings.plugin_groups, 'visual') "{{{
     endfunction
 
     function! MyBranch()
+        if !exists('*airline#extensions#branch#get_head')
+            return ''
+        endif
+
         let result = airline#extensions#branch#get_head()
         if len(result)
             return result
