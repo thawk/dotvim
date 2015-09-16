@@ -2524,14 +2524,15 @@ if count(s:settings.plugin_groups, 'visual') "{{{
     " vim-airline: 增强的statusline {{{
     NeoBundle 'bling/vim-airline'
     let bundle = neobundle#get('vim-airline')
-    function! bundle.hooks.on_source(bundle)
+    function! bundle.hooks.on_post_source(bundle)
         " 把section a的第1个part从mode改为bufnr() + mode
-        call airline#parts#define_raw('bufnr_mode', '%{bufnr("%") . " " . airline#parts#mode()}')
-        let g:airline_section_a = airline#section#create_left(['bufnr_mode', 'paste', 'iminsert'])
         if executable("svn")
-            call airline#parts#define_function('mybranch', 'MyBranch')
+            call airline#parts#define_function('mybranch', 'AirLineMyBranch')
             let g:airline_section_b = airline#section#create(['hunks', 'mybranch'])
         endif
+
+        let g:airline_section_a = '%{bufnr("%")} ' . g:airline_section_a
+        let g:airline_section_y = g:airline_section_y . '%{&bomb ? "[BOM]" : ""}'
     endfunction
 
     " if neobundle#is_installed("vcscommand.vim")
@@ -2611,7 +2612,7 @@ if count(s:settings.plugin_groups, 'visual') "{{{
         return substitute(str,'%\(\x\x\)','\=nr2char("0x".submatch(1))','g')
     endfunction
 
-    function! MyBranch()
+    function! AirLineMyBranch()
         if !exists('*airline#extensions#branch#get_head')
             return ''
         endif
