@@ -65,10 +65,10 @@ endif
 " 插件组命名及选择要使用的插件及插件组 {{{
 " Impacted by https://github.com/bling/dotvim
 " 如果~下有vimrc.local则使用
-if filereadable("~/vimrc.local")
-    exec "source ~/vimrc.local"
-elseif filereadable("~/.vimrc.local")
-    exec "source ~/.vimrc.local"
+if filereadable($HOME . "/vimrc.local")
+    exec "source " . $HOME . "/vimrc.local"
+elseif filereadable($HOME . "/.vimrc.local")
+    exec "source " . $HOME . "/.vimrc.local"
 endif
 
 if !exists('g:dotvim_settings')
