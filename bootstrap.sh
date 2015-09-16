@@ -6,9 +6,9 @@ then
     echo "runtime vimrc" > ~/.vimrc
 fi
 
-if [ ! -e "${vim_path}/vimrc.local" ]
+if [ ! -e ~/.vimrc.local ]
 then
-    cp "${vim_path}/vimrc.local.sample" "${vim_path}/vimrc.local"
+    cp "${vim_path}/vimrc.local.sample" ~/.vimrc.local
 fi
 
 if [ -d "${vim_path}/bundle/vimproc" ]
