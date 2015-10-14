@@ -2,7 +2,7 @@ scriptencoding utf-8
 
 " 判断当前环境 {{{
 " 判断操作系统
-let s:is_windows = has("win32") || has("win64") || has("win32unix")
+let s:is_windows = has("win32") || has("win64")
 let s:is_cygwin = has('win32unix')
 let s:is_macvim = has('gui_macvim')
 
@@ -736,18 +736,23 @@ let g:neobundle#install_process_timeout = 1500
 
 if count(s:settings.plugin_groups, 'core') "{{{
     " vimproc: 用于异步执行命令的插件，被其它插件依赖 {{{
-    NeoBundle 'Shougo/vimproc', {
-                \ 'build' : {
-                \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
-                \     'cygwin' : 'make -f make_cygwin.mak && touch -t 200001010000.00 autoload/vimproc_cygwin.dll',
-                \     'mac' : 'make -f make_mac.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
-                \     'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
-                \ },
-                \ }
-    if has("win64") && filereadable(s:vimrc_path . "/win32/vimproc_win64.dll")
-        let g:vimproc_dll_path = s:vimrc_path . "/win32/vimproc_win64.dll"
-    elseif has("win32") && filereadable(s:vimrc_path . "/win32/vimproc_win32.dll")
-        let g:vimproc_dll_path = s:vimrc_path . "/win32/vimproc_win32.dll"
+    if (s:is_windows)
+        " Windows下需要固定为与dll对应的版本
+        NeoBundle 'Shougo/vimproc', { 'rev' : '725de1a' }
+        if has("win64") && filereadable(s:vimrc_path . "/win32/vimproc_win64.dll")
+            let g:vimproc_dll_path = s:vimrc_path . "/win32/vimproc_win64.dll"
+        elseif has("win32") && filereadable(s:vimrc_path . "/win32/vimproc_win32.dll")
+            let g:vimproc_dll_path = s:vimrc_path . "/win32/vimproc_win32.dll"
+        endif
+    else
+        NeoBundle 'Shougo/vimproc', {
+                    \ 'build' : {
+                    \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
+                    \     'cygwin' : 'make -f make_cygwin.mak && touch -t 200001010000.00 autoload/vimproc_cygwin.dll',
+                    \     'mac' : 'make -f make_mac.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
+                    \     'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
+                    \ },
+                    \ }
     endif
     " }}}
     " vim-misc: xolox的插件依赖的库 {{{
