@@ -1610,7 +1610,7 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
         nmap [tag]e :Gtags -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
         " 如果光标在定义上，就找引用，如果在引用上就找定义
         nmap [tag]<C-]> :GtagsCursor<CR>
-        nmap [tag]p :Gtags -P<SPACE>
+        nmap [tag]p :Gtags -P <C-R>=expand("<cfile>")<CR><CR>
         nmap [tag]f :Gtags -f %<CR>
 
         " <C-\>大写在当前窗口打开命令行
@@ -1618,6 +1618,7 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
         nmap [tag]G :Gtags<SPACE>
         nmap [tag]T :Gtags -g --literal<SPACE>
         nmap [tag]E :Gtags -g<SPACE>
+        nmap [tag]P :Gtags -P<SPACE>
     endif
     " }}}
     "" Intelligent_Tags: 自动为当前文件及其包含的文件生成tags {{{
@@ -1714,8 +1715,11 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
     " }}}
     " vim-ref: 按K查找各种资料 {{{
     NeoBundleLazy 'thinca/vim-ref', {
+                \ 'commands' : [
+                \   { 'name' : 'Ref', 'complete' : 'customlist,ref#complete' },
+                \ ],
                 \ 'unite_sources' : 'ref',
-                \ 'mappings' : ['nv', 'K'],
+                \ 'mappings' : ['nv', 'K', '<Plug>(ref-keyword)'],
                 \ }
     " }}}
 endif
