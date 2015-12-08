@@ -1610,7 +1610,7 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
         nmap [tag]e :Gtags -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
         " 如果光标在定义上，就找引用，如果在引用上就找定义
         nmap [tag]<C-]> :GtagsCursor<CR>
-        nmap [tag]p :Gtags -P <C-R>=expand("<cfile>")<CR><CR>
+        nmap [tag]p :Gtags -P <C-R>=expand("<cfile>:t")<CR><CR>
         nmap [tag]f :Gtags -f %<CR>
 
         " <C-\>大写在当前窗口打开命令行
