@@ -817,8 +817,6 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     let g:unite_source_session_path = s:get_cache_dir('session')
     let g:unite_source_grep_default_opts = "-iHn --color=never"
 
-    let g:unite_source_history_yank_enable = 1
-
     let g:unite_winheight = winheight("%") / 2
     " let g:unite_winwidth = winwidth("%") / 2
     let g:unite_winwidth = 40
@@ -890,6 +888,12 @@ if count(s:settings.plugin_groups, 'unite') "{{{
     NeoBundleLazy 'Shougo/unite-outline', {
                 \ 'unite_sources' : ['outline'],
                 \ }
+    " }}}
+    " neoyank.vim: unite的history/yank源，提供历史yank缓冲区。通过\fy访问 {{{
+    NeoBundle 'Shougo/neoyank.vim', {
+                \ 'unite_sources' : ['history/yank'],
+                \ }
+    let g:neoyank#file = s:path_join(s:get_cache_dir('neoyank'), 'history_yank')
     " }}}
     " unite-mark: 列出所有标记点 {{{
     NeoBundleLazy 'tacroe/unite-mark', {
@@ -1619,6 +1623,21 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
         nmap [tag]T :Gtags -g --literal<SPACE>
         nmap [tag]E :Gtags -g<SPACE>
         nmap [tag]P :Gtags -P<SPACE>
+
+        " <C-\>c小写在当前窗口打开光标下的符号，限定在当前目录下的文件
+        nmap [tag]cs :Gtags -l -sr <C-R>=expand("<cword>")<CR><CR>
+        nmap [tag]cg :Gtags -l --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
+        nmap [tag]ct :Gtags -l -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
+        nmap [tag]ce :Gtags -l -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
+        nmap [tag]cp :Gtags -l -P <C-R>=expand("<cfile>:t")<CR><CR>
+        nmap [tag]cf :Gtags -l -f %<CR>
+
+        " <C-\>大写在当前窗口打开命令行，限定在当前目录下的文件
+        nmap [tag]cS :Gtags -l  -sr<SPACE>
+        nmap [tag]cG :Gtags -l<SPACE>
+        nmap [tag]cT :Gtags -l  -g --literal<SPACE>
+        nmap [tag]cE :Gtags -l  -g<SPACE>
+        nmap [tag]cP :Gtags -l  -P<SPACE>
     endif
     " }}}
     "" Intelligent_Tags: 自动为当前文件及其包含的文件生成tags {{{
