@@ -444,7 +444,7 @@ set nolist " Don't display unprintable characters
 if &encoding != "utf-8"
     set listchars=tab:>-,trail:-,nbsp:%,extends:>,precedes:<
 else
-    let &listchars="tab:|-,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
+    let &listchars="tab:\u25b8 ,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 endif
 
 set foldenable " Turn on folding
