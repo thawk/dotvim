@@ -1970,6 +1970,13 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
                     \ 'insert' : 1,
                     \ }
         " }}}
+        " tmux-complete.vim: 可以补全其它tmux窗口中出现过的词 {{{
+        NeoBundleLazy 'wellle/tmux-complete.vim', {
+                    \ 'insert' : 1,
+                    \ 'disabled' : !executable("tmux"),
+                    \ }
+        let g:tmuxcomplete#trigger = ''
+        " }}}
     endif
     "}}}
 endif
