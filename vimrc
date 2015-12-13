@@ -2482,15 +2482,16 @@ endif
 " }}}
 
 if count(s:settings.plugin_groups, 'doc') "{{{
-    " " vim-orgmode: 对emacs的org文件的支持 {{{
-    " NeoBundleLazy 'jceb/vim-orgmode', {
-    "             \ 'depends' : [
-    "             \   'NrrwRgn',
-    "             \   'speeddating.vim',
-    "             \ ],
-    "             \ 'filetypes' : ['org'],
-    "             \ }
-    " " }}}
+    " vim-orgmode: 对emacs的org文件的支持 {{{
+    NeoBundleLazy 'jceb/vim-orgmode', {
+                \ 'depends' : [
+                \   'NrrwRgn',
+                \   'speeddating.vim',
+                \ ],
+                \ 'filetypes' : ['org'],
+                \ }
+    au BufRead,BufNewFile *.org setf org
+    " }}}
     " timl: VimL编写的Clojure语言 {{{
     NeoBundleLazy 'tpope/timl', {
                 \ 'filetypes' : ['timl'],
