@@ -517,50 +517,50 @@ let java_space_errors=1
 
 " Misc {{{
 if (s:is_windows)
-    au GUIEnter * simalt ~x " 启动时自动全屏
+    autocmd GUIEnter * simalt ~x " 启动时自动全屏
 endif
 
-au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif " restore position in file
+autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif " restore position in file
 
 " automatically open and close the popup menu / preview window
-au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 " }}}
 
 " Filetype detection " {{{
-au BufRead,BufNewFile {Gemfile,Rakefile,Capfile,*.rake,config.ru} setf ruby
-au BufRead,BufNewFile {*.md,*.mkd,*.markdown} setf markdown
-au BufRead,BufNewFile {COMMIT_EDITMSG}  setf gitcommit
-au BufRead,BufNewFile TDM*C,TDM*H       setf c
-au BufRead,BufNewFile *.dox             setf cpp    " Doxygen
-au BufRead,BufNewFile *.cshtml          setf cshtml
+autocmd BufRead,BufNewFile {Gemfile,Rakefile,Capfile,*.rake,config.ru} setf ruby
+autocmd BufRead,BufNewFile {*.md,*.mkd,*.markdown} setf markdown
+autocmd BufRead,BufNewFile {COMMIT_EDITMSG}  setf gitcommit
+autocmd BufRead,BufNewFile TDM*C,TDM*H       setf c
+autocmd BufRead,BufNewFile *.dox             setf cpp    " Doxygen
+autocmd BufRead,BufNewFile *.cshtml          setf cshtml
 
 "" Remove trailing spaces for C/C++ and Vim files
-au BufWritePre *                  call s:RemoveTrailingSpace()
+autocmd BufWritePre *                  call s:RemoveTrailingSpace()
 
-au BufRead,BufNewFile todo.txt,done.txt           setf todo
-au BufRead,BufNewFile *.mm                        setf xml
-au BufRead,BufNewFile *.proto                     setf proto
-au BufRead,BufNewFile Jamfile*,Jamroot*,*.jam     setf jam
-au BufRead,BufNewFile pending.data,completed.data setf task
-au BufRead,BufNewFile *.ipp                       setf cpp
+autocmd BufRead,BufNewFile todo.txt,done.txt           setf todo
+autocmd BufRead,BufNewFile *.mm                        setf xml
+autocmd BufRead,BufNewFile *.proto                     setf proto
+autocmd BufRead,BufNewFile Jamfile*,Jamroot*,*.jam     setf jam
+autocmd BufRead,BufNewFile pending.data,completed.data setf task
+autocmd BufRead,BufNewFile *.ipp                       setf cpp
 " }}}
 
 " Filetype related autosettings " {{{
-au FileType diff  setlocal shiftwidth=4 tabstop=4
-" au FileType html  setlocal autoindent indentexpr= shiftwidth=2 tabstop=2
-au FileType changelog setlocal textwidth=76
+autocmd FileType diff  setlocal shiftwidth=4 tabstop=4
+" autocmd FileType html  setlocal autoindent indentexpr= shiftwidth=2 tabstop=2
+autocmd FileType changelog setlocal textwidth=76
 " 把-等符号也作为xml文件的有效关键字，可以用Ctrl-N补全带-等字符的属性名
-au FileType {xml,xslt} setlocal iskeyword=@,-,\:,48-57,_,128-167,224-235
+autocmd FileType {xml,xslt} setlocal iskeyword=@,-,\:,48-57,_,128-167,224-235
 if executable("tidy")
-    au FileType xml        exe 'setlocal equalprg=tidy\ -quiet\ -indent\ -xml\ -raw\ --show-errors\ 0\ --wrap\ 0\ --vertical-space\ 1\ --indent-spaces\ 4'
+    autocmd FileType xml        exe 'setlocal equalprg=tidy\ -quiet\ -indent\ -xml\ -raw\ --show-errors\ 0\ --wrap\ 0\ --vertical-space\ 1\ --indent-spaces\ 4'
 elseif executable("xmllint")
-    au FileType xml        exe 'setlocal equalprg=xmllint\ --format\ --recover\ --encode\ UTF-8\ -'
+    autocmd FileType xml        exe 'setlocal equalprg=xmllint\ --format\ --recover\ --encode\ UTF-8\ -'
 endif
 
-au FileType qf setlocal wrap linebreak
-au FileType vim nnoremap <silent> <buffer> K :<C-U>help <C-R><C-W><CR>
-au FileType man setlocal foldmethod=indent foldnestmax=2 foldenable nomodifiable nonumber shiftwidth=3 foldlevel=2
-au FileType cs setlocal wrap
+autocmd FileType qf setlocal wrap linebreak
+autocmd FileType vim nnoremap <silent> <buffer> K :<C-U>help <C-R><C-W><CR>
+autocmd FileType man setlocal foldmethod=indent foldnestmax=2 foldenable nomodifiable nonumber shiftwidth=3 foldlevel=2
+autocmd FileType cs setlocal wrap
 
 " 如果系统中能找到jing（RELAX NG验证工具）
 if executable("jing")
@@ -578,12 +578,12 @@ if executable("jing")
         endif
     endfunction
     augroup jing
-        au FileType xml call s:jing_settings("xml")
-        au FileType rnc call s:jing_settings("rnc")
+        autocmd FileType xml call s:jing_settings("xml")
+        autocmd FileType rnc call s:jing_settings("rnc")
     augroup END
 endif
 
-"au BufRead,BufNewFile *.adoc,*.asciidoc  set filetype=asciidoc
+"autocmd BufRead,BufNewFile *.adoc,*.asciidoc  set filetype=asciidoc
 function! MyAsciidocFoldLevel(lnum)
     let lt = getline(a:lnum)
     let fh = matchend(lt, '\V\^\(=\+\)\ze\s\+\S')
@@ -593,7 +593,7 @@ function! MyAsciidocFoldLevel(lnum)
     return '='
 endfunction
 
-au FileType asciidoc setlocal shiftwidth=2
+autocmd FileType asciidoc setlocal shiftwidth=2
             \ tabstop=2
             \ textwidth=0 wrap formatoptions=cqnmB
             \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
@@ -607,15 +607,15 @@ au FileType asciidoc setlocal shiftwidth=2
 " }}}
 
 " 根据不同的文件类型设定g<F3>时应该查找的文件 {{{
-au FileType *             let b:vimgrep_files=expand("%:e") == "" ? "**/*" : "**/*." . expand("%:e")
-au FileType c,cpp         let b:vimgrep_files="**/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.ipp"
-au FileType php           let b:vimgrep_files="**/*.php **/*.htm **/*.html"
-au FileType cs            let b:vimgrep_files="**/*.cs"
-au FileType vim           let b:vimgrep_files="**/*.vim"
-au FileType javascript    let b:vimgrep_files="**/*.js **/*.htm **/*.html"
-au FileType python        let b:vimgrep_files="**/*.py"
-au FileType xml           let b:vimgrep_files="**/*.xml"
-au FileType jam           let b:vimgrep_files="**/*.jam **/Jam*"
+autocmd FileType *             let b:vimgrep_files=expand("%:e") == "" ? "**/*" : "**/*." . expand("%:e")
+autocmd FileType c,cpp         let b:vimgrep_files="**/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.ipp"
+autocmd FileType php           let b:vimgrep_files="**/*.php **/*.htm **/*.html"
+autocmd FileType cs            let b:vimgrep_files="**/*.cs"
+autocmd FileType vim           let b:vimgrep_files="**/*.vim"
+autocmd FileType javascript    let b:vimgrep_files="**/*.js **/*.htm **/*.html"
+autocmd FileType python        let b:vimgrep_files="**/*.py"
+autocmd FileType xml           let b:vimgrep_files="**/*.xml"
+autocmd FileType jam           let b:vimgrep_files="**/*.jam **/Jam*"
 " }}}
 
 " 自动打开quickfix窗口 {{{
@@ -634,30 +634,30 @@ autocmd QuickFixCmdPost    l* nested botright lwindow
 " python autocommands {{{
 " 设定python的makeprg
 if executable("python2")
-    au FileType python setlocal makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+    autocmd FileType python setlocal makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 else
-    au FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+    autocmd FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 endif
 
-"au FileType python set errorformat=%C\ %.%#,%A\ \ File\ \"%f\"\\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-au FileType python setlocal errorformat=%[%^(]%\\+('%m'\\,\ ('%f'\\,\ %l\\,\ %v\\,%.%#
-au FileType python setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+"autocmd FileType python set errorformat=%C\ %.%#,%A\ \ File\ \"%f\"\\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+autocmd FileType python setlocal errorformat=%[%^(]%\\+('%m'\\,\ ('%f'\\,\ %l\\,\ %v\\,%.%#
+autocmd FileType python setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 " }}}
 
 " Text file encoding autodetection {{{
-au BufReadPre  *.gb               call SetFileEncodings('gbk')
-au BufReadPre  *.big5             call SetFileEncodings('big5')
-au BufReadPre  *.nfo              call SetFileEncodings('cp437')
-au BufReadPre  *.php              call SetFileEncodings('utf-8')
-au BufReadPre  *.lua              call SetFileEncodings('utf-8')
-au BufReadPost *.gb,*.big5,*.nfo,*.php,*.lua  call RestoreFileEncodings()
+autocmd BufReadPre  *.gb               call SetFileEncodings('gbk')
+autocmd BufReadPre  *.big5             call SetFileEncodings('big5')
+autocmd BufReadPre  *.nfo              call SetFileEncodings('cp437')
+autocmd BufReadPre  *.php              call SetFileEncodings('utf-8')
+autocmd BufReadPre  *.lua              call SetFileEncodings('utf-8')
+autocmd BufReadPost *.gb,*.big5,*.nfo,*.php,*.lua  call RestoreFileEncodings()
 
-au BufWinEnter *.txt              call CheckFileEncoding()
+autocmd BufWinEnter *.txt              call CheckFileEncoding()
 
 " 强制用UTF-8打开vim文件
-au BufReadPost  .vimrc,*.vim nested     call ForceFileEncoding('utf-8')
+autocmd BufReadPost  .vimrc,*.vim nested     call ForceFileEncoding('utf-8')
 
-au FileType task call ForceFileEncoding('utf-8')
+autocmd FileType task call ForceFileEncoding('utf-8')
 " }}}
 
 " }}}
@@ -1441,7 +1441,7 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
 
         " 在插件载入后再执行修改颜色的操作
         augroup Mark
-            au VimEnter *
+            autocmd VimEnter *
                         \ highlight MarkWord1 ctermbg=DarkCyan    ctermfg=Black guibg=#8CCBEA guifg=Black |
                         \ highlight MarkWord2 ctermbg=DarkMagenta ctermfg=Black guibg=#FF7272 guifg=Black |
                         \ highlight MarkWord3 ctermbg=DarkYellow  ctermfg=Black guibg=#FFDB72 guifg=Black |
@@ -2490,7 +2490,7 @@ if count(s:settings.plugin_groups, 'doc') "{{{
                 \ ],
                 \ 'filetypes' : ['org'],
                 \ }
-    au BufRead,BufNewFile *.org setf org
+    autocmd BufRead,BufNewFile *.org setf org
     " }}}
     " timl: VimL编写的Clojure语言 {{{
     NeoBundleLazy 'tpope/timl', {
@@ -2541,7 +2541,7 @@ if count(s:settings.plugin_groups, 'syntax') "{{{
     NeoBundleLazy 'wps.vim', {
                 \ 'filetypes' : ['wps'],
                 \ }
-    au BufRead,BufNewFile *.wps,*.sbs,*.fms setf wps
+    autocmd BufRead,BufNewFile *.wps,*.sbs,*.fms setf wps
     " }}}
     NeoBundleLazy 'lbdbq', {
                 \ 'mappings' : ['<LocalLeader>lb'],
