@@ -291,6 +291,22 @@ function! FindVcsRoot(path) " {{{
 
     return path
 endfunction " }}}
+
+
+" s:VisualSelection() {{{
+" Thanks to xolox!
+" http://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
+func! s:VisualSelection() abort
+    " Why is this not a built-in Vim script function?!
+    let [lnum1, col1] = getpos("'<")[1:2]
+    let [lnum2, col2] = getpos("'>")[1:2]
+    let lines = getline(lnum1, lnum2)
+    let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
+    let lines[0] = lines[0][col1 - 1:]
+    return join(lines, "\n")
+endf
+" }}}
+
 " }}}
 
 " General {{{
@@ -1607,22 +1623,16 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
         let g:Gtags_No_Auto_Jump = 0
         let g:GtagsCscope_Auto_Load = 1
 
+        " 如果光标在定义上，就找引用，如果在引用上就找定义
+        nmap [tag]<C-]> :GtagsCursor<CR>
+        nmap [tag]f :Gtags -f %<CR>
+
         " <C-\>小写在当前窗口打开光标下的符号
         nmap [tag]s :Gtags -sr <C-R>=expand("<cword>")<CR><CR>
         nmap [tag]g :Gtags --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
         nmap [tag]t :Gtags -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
         nmap [tag]e :Gtags -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
-        " 如果光标在定义上，就找引用，如果在引用上就找定义
-        nmap [tag]<C-]> :GtagsCursor<CR>
         nmap [tag]p :Gtags -P <C-R>=expand("<cfile>:t")<CR><CR>
-        nmap [tag]f :Gtags -f %<CR>
-
-        " <C-\>大写在当前窗口打开命令行
-        nmap [tag]S :Gtags -sr<SPACE>
-        nmap [tag]G :Gtags<SPACE>
-        nmap [tag]T :Gtags -g --literal<SPACE>
-        nmap [tag]E :Gtags -g<SPACE>
-        nmap [tag]P :Gtags -P<SPACE>
 
         " <C-\>c小写在当前窗口打开光标下的符号，限定在当前目录下的文件
         nmap [tag]cs :Gtags -l -sr <C-R>=expand("<cword>")<CR><CR>
@@ -1630,7 +1640,28 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
         nmap [tag]ct :Gtags -l -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
         nmap [tag]ce :Gtags -l -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
         nmap [tag]cp :Gtags -l -P <C-R>=expand("<cfile>:t")<CR><CR>
-        nmap [tag]cf :Gtags -l -f %<CR>
+
+        " <C-\>小写在当前窗口打开选中的符号
+        vmap [tag]s :Gtags -sr <C-R>=s:VisualSelection()<CR><CR>
+        vmap [tag]g :Gtags --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=s:VisualSelection()<CR><CR>
+        vmap [tag]t :Gtags -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=s:VisualSelection()<CR><CR>
+        vmap [tag]e :Gtags -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=s:VisualSelection()<CR><CR>
+        vmap [tag]p :Gtags -P <C-R>=s:VisualSelection()<CR><CR>
+
+        " <C-\>c小写在当前窗口打开选中的符号，限定在当前目录下的文件
+        vmap [tag]cs :Gtags -l -sr <C-R>=s:VisualSelection()<CR><CR>
+        vmap [tag]cg :Gtags -l --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=s:VisualSelection()<CR><CR>
+        vmap [tag]ct :Gtags -l -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=s:VisualSelection()<CR><CR>
+        vmap [tag]ce :Gtags -l -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=s:VisualSelection()<CR><CR>
+        vmap [tag]cp :Gtags -l -P <C-R>=s:VisualSelection()<CR><CR>
+
+
+        " <C-\>大写在当前窗口打开命令行
+        nmap [tag]S :Gtags -sr<SPACE>
+        nmap [tag]G :Gtags<SPACE>
+        nmap [tag]T :Gtags -g --literal<SPACE>
+        nmap [tag]E :Gtags -g<SPACE>
+        nmap [tag]P :Gtags -P<SPACE>
 
         " <C-\>大写在当前窗口打开命令行，限定在当前目录下的文件
         nmap [tag]cS :Gtags -l  -sr<SPACE>
@@ -2031,7 +2062,7 @@ if count(s:settings.plugin_groups, 'scm') "{{{
     nnoremap [code]L :<C-U>VCSLock<CR>
     nnoremap [code]l :<C-U>VCSLog<CR>
     nnoremap [code]N :<C-U>VCSAnnotate! -g<CR>
-    nnoremap [code]n :<C-U>VCSAnnotate -g<CR>
+    nnoremap [code]n :<C-U>let tmp_lnum=line('.')<CR>:VCSAnnotate -g<CR>:keepjumps execute <C-R>=tmp_lnum<CR><CR>:unlet tmp_lnum<CR>
     nnoremap [code]q :<C-U>VCSRevert<CR>
     nnoremap [code]r :<C-U>VCSReview<CR>
     nnoremap [code]s :<C-U>VCSStatus<CR>
@@ -2931,16 +2962,8 @@ nmap g<F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j " . b:vim
 nmap <F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
 
 " V模式下，搜索选中的内容而不是当前word
-vnoremap g<F3> :<C-U>
-            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-            \gvy
-            \:execute "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
-            \gV:call setreg('"', old_reg, old_regtype)<CR>
-vnoremap <F3> :<C-U>
-            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-            \gvy
-            \:execute "vimgrep /" . substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
-            \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap g<F3> :<C-U>:exec "vimgrep /" . substitute(escape(s:VisualSelection(), '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
+vnoremap <F3> :<C-U>:exec "vimgrep /" . substitute(escape(s:VisualSelection(), '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
 " }}}
 
 " 在VISUAL模式下，缩进后保持原来的选择，以便再次进行缩进 {{{
