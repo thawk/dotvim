@@ -1492,10 +1492,10 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
     let g:indent_guides_default_mapping = 0
     let g:indent_guides_auto_colors = 0
     let g:indent_guides_start_level = 2
-    "let g:indent_guides_guide_size = 1
+    let g:indent_guides_guide_size = 1
     augroup IndentGuides_hack
-        autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=darkgray ctermbg=8
-        autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=black    ctermbg=0
+        autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#073642 ctermbg=0
+        autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#03303c ctermbg=0
         autocmd filetype python :IndentGuidesEnable
     augroup END
     " }}}
