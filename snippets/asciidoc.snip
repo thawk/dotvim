@@ -1,5 +1,5 @@
 snippet skel
   // vim: set filetype=asciidoc fileencoding=utf-8:
-  = ${1:title}
-  :Author: ${2:author}
-  $0
+  = ${1:`expand("%:t:r")`}
+
+  ${0}
