@@ -617,6 +617,10 @@ autocmd FileType asciidoc setlocal shiftwidth=2
             \ foldexpr=MyAsciidocFoldLevel(v:lnum)
             \ foldmethod=expr
             \ nospell
+            \ isfname-=#
+            \ isfname-=[
+            \ isfname-=]
+            \ isfname-=:
             \ suffixesadd=.asciidoc,.adoc
             \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
             \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
@@ -676,54 +680,6 @@ autocmd BufReadPost  .vimrc,*.vim nested     call ForceFileEncoding('utf-8')
 autocmd FileType task call ForceFileEncoding('utf-8')
 " }}}
 
-" }}}
-
-" 用于各插件的热键前缀 {{{
-nnoremap [unite] <Nop>
-xnoremap [unite] <Nop>
-nmap <Leader>f [unite]
-xmap <Leader>f [unite]
-
-nnoremap [unite2] <Nop>
-xnoremap [unite2] <Nop>
-nmap <Leader>F [unite2]
-xmap <Leader>F [unite2]
-
-nnoremap [repl] <Nop>
-xnoremap [repl] <Nop>
-nmap <Leader>r [repl]
-xmap <Leader>r [repl]
-
-nnoremap [tag] <Nop>
-nmap <C-\> [tag]
-nnoremap [tag] <C-\>
-
-nnoremap [unite-tag] <Nop>
-nmap <C-\><C-\> [unite-tag]
-
-nnoremap [ctrlsf] <Nop>
-vnoremap [ctrlsf] <Nop>
-nmap \s [ctrlsf]
-vmap \s [ctrlsf]
-
-nnoremap [grep] <Nop>
-vnoremap [grep] <Nop>
-nmap \S [grep]
-vmap \S [grep]
-
-nnoremap [code] <Nop>
-nmap <Leader>c [code]
-
-nnoremap [fswitch] <Nop>
-nmap <Leader>o [fswitch]
-
-nnoremap [make] <Nop>
-nmap <Leader>t [make]
-
-nnoremap [mark] <Nop>
-vnoremap [mark] <Nop>
-nmap <Leader>m [mark]
-vmap <Leader>m [mark]
 " }}}
 
 " Plugins {{{
