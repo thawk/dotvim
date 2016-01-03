@@ -609,6 +609,7 @@ function! MyAsciidocFoldLevel(lnum)
     return '='
 endfunction
 
+autocmd BufNewFile *.adoc,*.asciidoc setlocal fileencoding=utf-8
 autocmd FileType asciidoc setlocal shiftwidth=2
             \ tabstop=2
             \ textwidth=0 wrap formatoptions=cqnmB
@@ -667,7 +668,7 @@ autocmd FileType python setlocal smartindent cinwords=if,elif,else,for,while,try
 " Text file encoding autodetection {{{
 autocmd BufReadPre  *.gb               call SetFileEncodings('gbk')
 autocmd BufReadPre  *.big5             call SetFileEncodings('big5')
-autocmd BufReadPre  *.nfo              call SetFileEncodings('cp437')
+autocmd BufReadPre  *.nfo              call SetFileEncodings('cp437') | set ambiwidth=single
 autocmd BufReadPre  *.php              call SetFileEncodings('utf-8')
 autocmd BufReadPre  *.lua              call SetFileEncodings('utf-8')
 autocmd BufReadPost *.gb,*.big5,*.nfo,*.php,*.lua  call RestoreFileEncodings()
