@@ -80,6 +80,7 @@ let s:cache_dir = get(g:dotvim_settings, 'cache_dir', '~/.vim_cache')
 let s:settings = {}
 let s:settings.default_indent = 4
 let s:settings.autocomplete_method = 'neocomplcache'
+let s:settings.snippet_engine = 'ultisnips'
 
 " marching有三种backend，不指定则自动选一种
 let s:settings.cpp_complete_method = 'marching'
@@ -98,6 +99,13 @@ if v:version >= '703' && has('lua')
 elseif filereadable(expand(s:vimrc_path . "/bundle/YouCompleteMe/python/ycm_core.*"))
     let s:settings.autocomplete_method = 'ycm'
 endif
+
+if v:version >= '704' && has('python')
+    let s:settings.snippet_engine = 'ultisnips'
+else
+    let s:settings.snippet_engine = 'neosnippet'
+endif
+
 if exists('g:dotvim_settings.plugin_groups')
     let s:settings.plugin_groups = g:dotvim_settings.plugin_groups
 else
@@ -106,6 +114,7 @@ else
     call add(s:settings.plugin_groups, 'unite')
     call add(s:settings.plugin_groups, 'editing')
     call add(s:settings.plugin_groups, 'navigation')
+    call add(s:settings.plugin_groups, 'snippet')
     call add(s:settings.plugin_groups, 'autocomplete')
     call add(s:settings.plugin_groups, 'textobj')
     call add(s:settings.plugin_groups, 'scm')
@@ -1780,17 +1789,8 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
 endif
 "}}}
 
-if count(s:settings.plugin_groups, 'autocomplete') "{{{
-    if s:settings.autocomplete_method == 'ycm' "{{{
-        " " " YouCompleteMe: 代码补全 {{{
-        " NeoBundleLazy 'Valloric/YouCompleteMe', {
-        "             \ 'build' : {
-        "             \     'unix' : './install.sh --clang-completer',
-        "             \    }
-        "             \ }
-        " " " }}}
-        " }}}
-    else " neocomplete {{{
+if count(s:settings.plugin_groups, 'snippet') "{{{
+    if s:settings.snippet_engine == 'neosnippet' "{{{
         " neosnippet: 代码模板引擎 {{{
         NeoBundleLazy 'Shougo/neosnippet', {
                     \ 'insert' : 1,
@@ -1830,8 +1830,48 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
         endif
         " }}}
         " neosnippet-snippets: 代码模板 {{{
-        NeoBundle 'Shougo/neosnippet-snippets'
+        NeoBundleLazy 'Shougo/neosnippet-snippets', {
+                    \ 'on_source': ['neosnippet'],
+                    \ }
         " }}}
+        " }}}
+    elseif s:settings.snippet_engine == 'ultisnips' "{{{
+        " ultisnips: 代码模板引擎 {{{
+        NeoBundleLazy 'SirVer/ultisnips', {
+                    \ 'insert' : 1,
+                    \ 'unite_sources' : ['ultisnips'],
+                    \ 'function_prefix' : 'UltiSnips',
+                    \ }
+        if neobundle#tap('ultisnips')
+            let g:UltiSnipsSnippetsDir = s:vimrc_path . '/mysnippets'
+            let g:UltiSnipsSnippetDirectories=['UltiSnips', 'mysnippets']
+
+            function! neobundle#hooks.on_source(bundle)
+                silent! call UltiSnips#FileTypeChanged()
+            endfunction
+            call neobundle#untap()
+        endif
+        " }}}
+        " vim-snippets: 代码模板 {{{
+        NeoBundleLazy 'honza/vim-snippets', {
+                    \  'on_source': ['ultisnips'],
+                    \ }
+        " }}}
+    endif "}}}
+endif
+"}}}
+
+if count(s:settings.plugin_groups, 'autocomplete') "{{{
+    if s:settings.autocomplete_method == 'ycm' "{{{
+        " " " YouCompleteMe: 代码补全 {{{
+        " NeoBundleLazy 'Valloric/YouCompleteMe', {
+        "             \ 'build' : {
+        "             \     'unix' : './install.sh --clang-completer',
+        "             \    }
+        "             \ }
+        " " " }}}
+        " }}}
+    else " neocomplete {{{
         " neocomplete: 代码补全插件 {{{
         NeoBundleLazy 'Shougo/neocomplete', {
                     \ 'insert' : 1,

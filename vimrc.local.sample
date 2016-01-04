@@ -7,6 +7,7 @@ let g:dotvim_settings.plugin_groups_exclude = ['cpp' , 'python' , 'haskell' , 'c
 let g:dotvim_settings.plugin_groups_include = []
 
 "let g:dotvim_settings.autocomplete_method = 'neocomplete'
+"let g:dotvim_settings.snippet_engine = 'neosnippet'
 "let g:dotvim_settings.notes_directory = ['~/vim-notes']
 "let g:dotvim_settings.default_indent = 4
 "let g:dotvim_settings.background = 'light'
