@@ -1,21 +1,21 @@
-let g:dotvim_settings = {}
-let g:dotvim_settings.disabled_plugins = []
+let g:dotvim_user_settings = {}
+let g:dotvim_user_settings.disabled_plugins = []
 
 " 有效的插件组请参见vimrc中的plugin_groups
-"let g:dotvim_settings.plugin_groups_exclude = []
-let g:dotvim_settings.plugin_groups_exclude = ['cpp' , 'python' , 'haskell' , 'csharp' , 'web' , 'shell']
-let g:dotvim_settings.plugin_groups_include = []
+"let g:dotvim_user_settings.plugin_groups_exclude = []
+let g:dotvim_user_settings.plugin_groups_exclude = ['cpp' , 'python' , 'haskell' , 'csharp' , 'web' , 'shell']
+let g:dotvim_user_settings.plugin_groups_include = []
 
-"let g:dotvim_settings.autocomplete_method = 'neocomplete'
-"let g:dotvim_settings.snippet_engine = 'neosnippet'
-"let g:dotvim_settings.notes_directory = ['~/vim-notes']
-"let g:dotvim_settings.default_indent = 4
-"let g:dotvim_settings.background = 'light'
-"let g:dotvim_settings.colorscheme = 'base16-solarized'
+"let g:dotvim_user_settings.autocomplete_method = 'neocomplete'
+"let g:dotvim_user_settings.snippet_engine = 'neosnippet'
+"let g:dotvim_user_settings.notes_directory = ['~/vim-notes']
+"let g:dotvim_user_settings.default_indent = 4
+"let g:dotvim_user_settings.background = 'light'
+"let g:dotvim_user_settings.colorscheme = 'base16-solarized'
 " marching有三种backend，不指定则自动选一种
-" let g:dotvim_settings.cpp_complete_method = 'marching'
-" let g:dotvim_settings.cpp_complete_method = 'marching.snowdrop'
-" let g:dotvim_settings.cpp_complete_method = 'marching.sync'
-" let g:dotvim_settings.cpp_complete_method = 'marching.async'
-" let g:dotvim_settings.cpp_complete_method = 'clang_complete'
-" let g:dotvim_settings.cpp_complete_method = 'vim-clang'
+" let g:dotvim_user_settings.cpp_complete_method = 'marching'
+" let g:dotvim_user_settings.cpp_complete_method = 'marching.snowdrop'
+" let g:dotvim_user_settings.cpp_complete_method = 'marching.sync'
+" let g:dotvim_user_settings.cpp_complete_method = 'marching.async'
+" let g:dotvim_user_settings.cpp_complete_method = 'clang_complete'
+" let g:dotvim_user_settings.cpp_complete_method = 'vim-clang'
