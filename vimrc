@@ -1789,78 +1789,6 @@ if count(s:settings.plugin_groups, 'navigation') "{{{
 endif
 "}}}
 
-if count(s:settings.plugin_groups, 'snippet') "{{{
-    if s:settings.snippet_engine == 'neosnippet' "{{{
-        " neosnippet: 代码模板引擎 {{{
-        NeoBundleLazy 'Shougo/neosnippet', {
-                    \ 'insert' : 1,
-                    \ 'filetypes' : 'neosnippet',
-                    \ 'depends' : ['context_filetype.vim'],
-                    \ 'commands' : ['NeoSnippetEdit'],
-                    \ 'mappings' : ['<Plug>(neosnippet_'],
-                    \ 'unite_sources' : ['neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
-                    \ }
-        let g:neosnippet#snippets_directory = fnamemodify(finddir("snippets", &runtimepath), ":p")
-        let g:neosnippet#snippets_directory .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
-
-        let g:neosnippet#data_directory = s:get_cache_dir('neosnippet')
-
-        if !exists('g:neosnippet#scope_aliases')
-            let g:neosnippet#scope_aliases = {}
-        endif
-
-        " mako模板也可以使用html
-        let g:neosnippet#scope_aliases['mako'] = 'html'
-
-        imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-        smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-        xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-        " " SuperTab like snippets behavior.
-        " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        "             \ "\<Plug>(neosnippet_expand_or_jump)"
-        "             \: pumvisible() ? "\<C-n>" : "\<TAB>"
-        " smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        "             \ "\<Plug>(neosnippet_expand_or_jump)"
-        "             \: "\<TAB>"
-
-        " For snippet_complete marker.
-        if has('conceal')
-            set conceallevel=2 concealcursor=i
-        endif
-        " }}}
-        " neosnippet-snippets: 代码模板 {{{
-        NeoBundleLazy 'Shougo/neosnippet-snippets', {
-                    \ 'on_source': ['neosnippet'],
-                    \ }
-        " }}}
-        " }}}
-    elseif s:settings.snippet_engine == 'ultisnips' "{{{
-        " ultisnips: 代码模板引擎 {{{
-        NeoBundleLazy 'SirVer/ultisnips', {
-                    \ 'insert' : 1,
-                    \ 'unite_sources' : ['ultisnips'],
-                    \ 'function_prefix' : 'UltiSnips',
-                    \ }
-        if neobundle#tap('ultisnips')
-            let g:UltiSnipsSnippetsDir = s:vimrc_path . '/mysnippets'
-            let g:UltiSnipsSnippetDirectories=['UltiSnips', 'mysnippets']
-
-            function! neobundle#hooks.on_source(bundle)
-                silent! call UltiSnips#FileTypeChanged()
-            endfunction
-            call neobundle#untap()
-        endif
-        " }}}
-        " vim-snippets: 代码模板 {{{
-        NeoBundleLazy 'honza/vim-snippets', {
-                    \  'on_source': ['ultisnips'],
-                    \ }
-        " }}}
-    endif "}}}
-endif
-"}}}
-
 if count(s:settings.plugin_groups, 'autocomplete') "{{{
     if s:settings.autocomplete_method == 'ycm' "{{{
         " " " YouCompleteMe: 代码补全 {{{
@@ -2055,6 +1983,78 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
         " }}}
     endif
     "}}}
+endif
+"}}}
+
+if count(s:settings.plugin_groups, 'snippet') "{{{
+    if s:settings.snippet_engine == 'neosnippet' "{{{
+        " neosnippet: 代码模板引擎 {{{
+        NeoBundleLazy 'Shougo/neosnippet', {
+                    \ 'insert' : 1,
+                    \ 'filetypes' : 'neosnippet',
+                    \ 'depends' : ['context_filetype.vim'],
+                    \ 'commands' : ['NeoSnippetEdit'],
+                    \ 'mappings' : ['<Plug>(neosnippet_'],
+                    \ 'unite_sources' : ['neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
+                    \ }
+        let g:neosnippet#snippets_directory = fnamemodify(finddir("snippets", &runtimepath), ":p")
+        let g:neosnippet#snippets_directory .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
+
+        let g:neosnippet#data_directory = s:get_cache_dir('neosnippet')
+
+        if !exists('g:neosnippet#scope_aliases')
+            let g:neosnippet#scope_aliases = {}
+        endif
+
+        " mako模板也可以使用html
+        let g:neosnippet#scope_aliases['mako'] = 'html'
+
+        imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+        smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+        xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+        " " SuperTab like snippets behavior.
+        " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+        "             \ "\<Plug>(neosnippet_expand_or_jump)"
+        "             \: pumvisible() ? "\<C-n>" : "\<TAB>"
+        " smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+        "             \ "\<Plug>(neosnippet_expand_or_jump)"
+        "             \: "\<TAB>"
+
+        " For snippet_complete marker.
+        if has('conceal')
+            set conceallevel=2 concealcursor=i
+        endif
+        " }}}
+        " neosnippet-snippets: 代码模板 {{{
+        NeoBundleLazy 'Shougo/neosnippet-snippets', {
+                    \ 'on_source': ['neosnippet'],
+                    \ }
+        " }}}
+        " }}}
+    elseif s:settings.snippet_engine == 'ultisnips' "{{{
+        " ultisnips: 代码模板引擎 {{{
+        NeoBundleLazy 'SirVer/ultisnips', {
+                    \ 'insert' : 1,
+                    \ 'unite_sources' : ['ultisnips'],
+                    \ 'function_prefix' : 'UltiSnips',
+                    \ }
+        if neobundle#tap('ultisnips')
+            let g:UltiSnipsSnippetsDir = s:vimrc_path . '/mysnippets'
+            let g:UltiSnipsSnippetDirectories=['UltiSnips', 'mysnippets']
+
+            function! neobundle#hooks.on_source(bundle)
+                silent! call UltiSnips#FileTypeChanged()
+            endfunction
+            call neobundle#untap()
+        endif
+        " }}}
+        " vim-snippets: 代码模板 {{{
+        NeoBundleLazy 'honza/vim-snippets', {
+                    \  'on_source': ['ultisnips'],
+                    \ }
+        " }}}
+    endif "}}}
 endif
 "}}}
 
