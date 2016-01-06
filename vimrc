@@ -1799,8 +1799,7 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
         "             \ }
         " " " }}}
         " }}}
-    else " neocomplete {{{
-        " neocomplete: 代码补全插件 {{{
+    elseif s:settings.autocomplete_method == 'neocomplete' " {{{
         NeoBundleLazy 'Shougo/neocomplete', {
                     \ 'insert' : 1,
                     \ 'disabled' : !(v:version >= '703' && has('lua')),
@@ -1816,7 +1815,7 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
             let g:neocomplete#sources#syntax#min_syntax_length = 3
             let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
             let g:neocomplete#enable_auto_select = 0
-            let g:neocomplete#auto_completion_start_length = 3
+            let g:neocomplete#auto_completion_start_length = 2
             let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
 
             if v:version == '704' && !has("patch-7.4.633")
@@ -1875,7 +1874,7 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
                         \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
         endif
         " }}}
-        " neocomplcache: 代码补全插件 {{{
+    elseif s:settings.autocomplete_method == 'neocomplcache' " {{{
         NeoBundleLazy 'Shougo/neocomplcache', {
                     \ 'insert' : 1,
                     \ 'disabled' : v:version >= '703' && has('lua'),
@@ -1952,6 +1951,9 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
                         \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
         endif
         " }}}
+    endif
+
+    if neobundle#tap('neocomplete') || neobundle#tap('neocomplcache')
         " neoinclude.vim: 对include进行补全 {{{
         NeoBundleLazy 'Shougo/neoinclude.vim', {
                     \ 'insert' : 1,
@@ -1982,7 +1984,6 @@ if count(s:settings.plugin_groups, 'autocomplete') "{{{
         let g:tmuxcomplete#trigger = ''
         " }}}
     endif
-    "}}}
 endif
 "}}}
 
@@ -2034,7 +2035,7 @@ if count(s:settings.plugin_groups, 'snippet') "{{{
         " }}}
     elseif s:settings.snippet_engine == 'ultisnips' "{{{
         " ultisnips: 代码模板引擎 {{{
-        NeoBundleLazy 'SirVer/ultisnips', {
+        NeoBundle 'SirVer/ultisnips', {
                     \ 'insert' : 1,
                     \ 'unite_sources' : ['ultisnips'],
                     \ 'function_prefix' : 'UltiSnips',
@@ -2042,10 +2043,6 @@ if count(s:settings.plugin_groups, 'snippet') "{{{
         if neobundle#tap('ultisnips')
             let g:UltiSnipsSnippetsDir = s:vimrc_path . '/mysnippets'
             let g:UltiSnipsSnippetDirectories=['UltiSnips', 'mysnippets']
-
-            function! neobundle#hooks.on_source(bundle)
-                silent! call UltiSnips#FileTypeChanged()
-            endfunction
             call neobundle#untap()
         endif
         " }}}
