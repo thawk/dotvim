@@ -2009,6 +2009,8 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
             let g:neosnippet#scope_aliases = {}
         endif
 
+        let g:neosnippet#enable_snipmate_compatibility = 1
+
         " mako模板也可以使用html
         let g:neosnippet#scope_aliases['mako'] = 'html'
 
@@ -2056,12 +2058,14 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
             let g:UltiSnipsJumpForwardTrigger  = '<TAB>'
             let g:UltiSnipsJumpBackwardTrigger = '<S-TAB>'
 
-            inoremap <silent><expr> <TAB>
-                \ pumvisible() ? "\<C-n>" :
-                \ "<C-R>=UltiSnips#ExpandSnippetOrJump()<CR>"
-            inoremap <silent><expr> <S-TAB>
-                \ pumvisible() ? "\<C-p>" :
-                \ "<C-R>=UltiSnips#JumpBackwards()<CR>"
+            let g:UltiSnipsEnableSnipMate = 0
+
+            " inoremap <silent><expr> <TAB>
+            "     \ pumvisible() ? "\<C-n>" :
+            "     \ "<C-R>=UltiSnips#ExpandSnippetOrJump()<CR>"
+            " inoremap <silent><expr> <S-TAB>
+            "     \ pumvisible() ? "\<C-p>" :
+            "     \ "<C-R>=UltiSnips#JumpBackwards()<CR>"
 
             call neobundle#untap()
 
