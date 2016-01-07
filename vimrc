@@ -1954,7 +1954,6 @@ if count(g:dotvim_settings.plugin_groups, 'autocomplete') "{{{
     else
         let g:dotvim_settings.autocomplete_method = ''  " 不支持的补全方式，清空
     endif
-    " }}}
 
     if neobundle#tap('neocomplete') || neobundle#tap('neocomplcache')
         " neoinclude.vim: 对include进行补全 {{{
@@ -2035,7 +2034,7 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
         " }}}
     " }}}
     elseif g:dotvim_settings.snippet_engine == 'ultisnips' "{{{
-        " ultisnips: 代码模板引擎 {{{
+        " ultisnips: 以python实现的更强大的代码模板引擎 {{{
         NeoBundle 'SirVer/ultisnips'
         if neobundle#tap('ultisnips')
             let g:UltiSnipsSnippetsDir = s:vimrc_path . '/mysnippets'
@@ -2043,13 +2042,13 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
 
             let g:UltiSnipsExpandTrigger       = '<NOP>'
             let g:UltiSnipsListSnippets        = '<C-tab>'
-            let g:UltiSnipsJumpForwardTrigger  = '<C-j>'
-            let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+            let g:UltiSnipsJumpForwardTrigger  = '<TAB>'
+            let g:UltiSnipsJumpBackwardTrigger = '<S-TAB>'
 
-            inoremap <expr> <TAB>
+            inoremap <silent><expr> <TAB>
                 \ pumvisible() ? "\<C-n>" :
                 \ "<C-R>=UltiSnips#ExpandSnippetOrJump()<CR>"
-            inoremap <expr> <S-TAB>
+            inoremap <silent><expr> <S-TAB>
                 \ pumvisible() ? "\<C-p>" :
                 \ "<C-R>=UltiSnips#JumpBackwards()<CR>"
 
@@ -2058,8 +2057,9 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
             if neobundle#tap('neocomplete')
                 inoremap <silent><expr><CR> pumvisible() ?
                             \ (len(keys(UltiSnips#SnippetsInCurrentScope())) > 0 ?
-                            \ neocomplete#close_popup()."\<C-c>l:call UltiSnips#ExpandSnippet()\<CR>" :
+                            \ neocomplete#close_popup()."<C-R>=UltiSnips#ExpandSnippet()<CR>" :
                             \ neocomplete#close_popup()) : "\<CR>"
+                call neobundle#untap()
             endif
         endif
         " }}}
