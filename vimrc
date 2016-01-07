@@ -1814,7 +1814,7 @@ if count(g:dotvim_settings.plugin_groups, 'autocomplete') "{{{
             let g:neocomplete#sources#syntax#min_syntax_length = 3
             let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
             let g:neocomplete#enable_auto_select = 0
-            let g:neocomplete#auto_completion_start_length = 2
+            let g:neocomplete#auto_completion_start_length = 3
             let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
 
             if v:version == '704' && !has("patch-7.4.633")
@@ -1837,7 +1837,9 @@ if count(g:dotvim_settings.plugin_groups, 'autocomplete') "{{{
             " <CR>: close popup and save indent.
             inoremap <expr><CR>  neocomplete#smart_close_popup() . "\<CR>"
             " <TAB>: completion.
-            "inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+            inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+            " <S-TAB>: completion.
+            inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
             " <C-h>, <BS>: close popup and delete backword char.
             inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
             inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
@@ -1948,7 +1950,9 @@ if count(g:dotvim_settings.plugin_groups, 'autocomplete') "{{{
                         \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
             let g:neocomplcache_force_omni_patterns.python =
                         \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-        endif
+        endif " }}}
+    else
+        let g:dotvim_settings.autocomplete_method = ''  " 不支持的补全方式，清空
     endif
     " }}}
 
@@ -2013,18 +2017,18 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
         smap <C-k>     <Plug>(neosnippet_expand_or_jump)
         xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-        " " SuperTab like snippets behavior.
-        " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        "             \ "\<Plug>(neosnippet_expand_or_jump)"
-        "             \: pumvisible() ? "\<C-n>" : "\<TAB>"
-        " smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        "             \ "\<Plug>(neosnippet_expand_or_jump)"
-        "             \: "\<TAB>"
+        " SuperTab like snippets behavior.
+        imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+                    \ "\<Plug>(neosnippet_expand_or_jump)"
+                    \: pumvisible() ? "\<C-n>" : "\<TAB>"
+        smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+                    \ "\<Plug>(neosnippet_expand_or_jump)"
+                    \: "\<TAB>"
 
         " For snippet_complete marker.
-        if has('conceal')
-            set conceallevel=2 concealcursor=i
-        endif
+        " if has('conceal')
+        "     set conceallevel=2 concealcursor=i
+        " endif
         " }}}
         " neosnippet-snippets: 代码模板 {{{
         NeoBundle 'Shougo/neosnippet-snippets'
@@ -2036,7 +2040,27 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
         if neobundle#tap('ultisnips')
             let g:UltiSnipsSnippetsDir = s:vimrc_path . '/mysnippets'
             let g:UltiSnipsSnippetDirectories=['UltiSnips', 'mysnippets']
+
+            let g:UltiSnipsExpandTrigger       = '<NOP>'
+            let g:UltiSnipsListSnippets        = '<C-tab>'
+            let g:UltiSnipsJumpForwardTrigger  = '<C-j>'
+            let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+
+            inoremap <expr> <TAB>
+                \ pumvisible() ? "\<C-n>" :
+                \ "<C-R>=UltiSnips#ExpandSnippetOrJump()<CR>"
+            inoremap <expr> <S-TAB>
+                \ pumvisible() ? "\<C-p>" :
+                \ "<C-R>=UltiSnips#JumpBackwards()<CR>"
+
             call neobundle#untap()
+
+            if neobundle#tap('neocomplete')
+                inoremap <silent><expr><CR> pumvisible() ?
+                            \ (len(keys(UltiSnips#SnippetsInCurrentScope())) > 0 ?
+                            \ neocomplete#close_popup()."\<C-c>l:call UltiSnips#ExpandSnippet()\<CR>" :
+                            \ neocomplete#close_popup()) : "\<CR>"
+            endif
         endif
         " }}}
         " vim-snippets: 代码模板 {{{
