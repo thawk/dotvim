@@ -2028,6 +2028,17 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
         " if has('conceal')
         "     set conceallevel=2 concealcursor=i
         " endif
+
+        if neobundle#tap('neocomplete')
+            " 回车直接展开当前选中的snippet
+            " 不知为何，用inoremap时，是<Plug>(neosnippet_expand_or_jump)的文
+            " 字，而不是执行这个map。所以使用imap代替
+            imap <silent><expr> <CR> pumvisible() ?
+                        \ (neosnippet#expandable_or_jumpable() ?
+                        \ neocomplete#close_popup()."\<Plug>(neosnippet_expand_or_jump)" :
+                        \ neocomplete#close_popup()) : "\<CR>"
+            call neobundle#untap()
+        endif
         " }}}
         " neosnippet-snippets: 代码模板 {{{
         NeoBundle 'Shougo/neosnippet-snippets'
@@ -2055,6 +2066,7 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
             call neobundle#untap()
 
             if neobundle#tap('neocomplete')
+                " 回车直接展开当前选中的snippet
                 inoremap <silent><expr><CR> pumvisible() ?
                             \ (len(keys(UltiSnips#SnippetsInCurrentScope())) > 0 ?
                             \ neocomplete#close_popup()."<C-R>=UltiSnips#ExpandSnippet()<CR>" :
