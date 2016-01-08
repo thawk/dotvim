@@ -2062,10 +2062,13 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
 
             " inoremap <silent><expr> <TAB>
             "     \ pumvisible() ? "\<C-n>" :
-            "     \ "<C-R>=UltiSnips#ExpandSnippetOrJump()<CR>"
-            " inoremap <silent><expr> <S-TAB>
-            "     \ pumvisible() ? "\<C-p>" :
-            "     \ "<C-R>=UltiSnips#JumpBackwards()<CR>"
+            "     \ (len(keys(UltiSnips#SnippetsInCurrentScope())) > 0 ?
+            "     \ "<C-R>=UltiSnips#ExpandSnippet()<CR>" : "\<TAB>")
+
+            inoremap <silent><expr> <TAB>
+                \ pumvisible() ? "\<C-n>" :
+                \ (len(keys(UltiSnips#SnippetsInCurrentScope())) > 0 ?
+                \ "<C-R>=UltiSnips#ExpandSnippet()<CR>" : "\<TAB>")
 
             call neobundle#untap()
 
