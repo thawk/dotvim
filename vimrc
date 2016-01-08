@@ -2058,7 +2058,7 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
             let g:UltiSnipsJumpForwardTrigger  = '<TAB>'
             let g:UltiSnipsJumpBackwardTrigger = '<S-TAB>'
 
-            let g:UltiSnipsEnableSnipMate = 0
+            let g:UltiSnipsEnableSnipMate = 1
 
             " inoremap <silent><expr> <TAB>
             "     \ pumvisible() ? "\<C-n>" :
