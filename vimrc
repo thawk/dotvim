@@ -2055,8 +2055,6 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
 
             let g:UltiSnipsExpandTrigger       = '<NOP>'
             let g:UltiSnipsListSnippets        = '<C-tab>'
-            let g:UltiSnipsJumpForwardTrigger  = '<TAB>'
-            let g:UltiSnipsJumpBackwardTrigger = '<S-TAB>'
 
             let g:UltiSnipsEnableSnipMate = 1
 
@@ -2065,20 +2063,46 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
             "     \ (len(keys(UltiSnips#SnippetsInCurrentScope())) > 0 ?
             "     \ "<C-R>=UltiSnips#ExpandSnippet()<CR>" : "\<TAB>")
 
+            let g:UltiSnipsJumpForwardTrigger="<NOP>"
+            let g:ulti_expand_or_jump_res = 0
+            function! ExpandSnippetOrJumpForwardOrReturn(next)
+                " 如果可以展开就展开，可以跳转就跳转，否则返回参数指定的值
+                let snippet = UltiSnips#ExpandSnippetOrJump()
+                if g:ulti_expand_or_jump_res > 0
+                    return snippet
+                else
+                    return a:next
+                endif
+            endfunction
             inoremap <silent><expr> <TAB>
-                \ pumvisible() ? "\<C-n>" :
-                \ (len(keys(UltiSnips#SnippetsInCurrentScope())) > 0 ?
-                \ "<C-R>=UltiSnips#ExpandSnippet()<CR>" : "\<TAB>")
+                        \ pumvisible() ? "\<C-n>" :
+                        \ "<C-R>=ExpandSnippetOrJumpForwardOrReturn('\<TAB>')<CR>"
+
+            " previous menu item, jump to previous placeholder or do nothing
+            let g:UltiSnipsJumpBackwordTrigger = ""
+            inoremap <expr> <S-TAB>
+                        \ pumvisible() ? "\<C-p>" :
+                        \ "<C-R>=UltiSnips#JumpBackwards()<CR>"
+
+            " jump to previous placeholder otherwise do nothing
+            snoremap <buffer> <silent> <S-TAB>
+                        \ <ESC>:call UltiSnips#JumpBackwards()<CR>
 
             call neobundle#untap()
 
-            if neobundle#tap('neocomplete')
-                " 回车直接展开当前选中的snippet
-                inoremap <silent><expr><CR> pumvisible() ?
-                            \ (len(keys(UltiSnips#SnippetsInCurrentScope())) > 0 ?
-                            \ neocomplete#close_popup()."<C-R>=UltiSnips#ExpandSnippet()<CR>" :
-                            \ neocomplete#close_popup()) : "\<CR>"
-                call neobundle#untap()
+            " 回车直接展开当前选中的snippet
+            if exists('*neocomplete#close_popup')
+                " 如果存在neocomplete，就用neocomplete#close_popup来关闭popup
+                " menu
+                inoremap <silent><expr> <CR>
+                            \ pumvisible() ?
+                            \ neocomplete#close_popup()."<C-R>=ExpandSnippetOrJumpForwardOrReturn('')<CR>" :
+                            \ "\<CR>"
+            else
+                inoremap <silent><expr> <CR>
+                            \ pumvisible() ?
+                            \ "<C-R>=ExpandSnippetOrJumpForwardOrReturn('\<C-y>')<CR>" :
+                            \ "\<CR>"
             endif
         endif
         " }}}
