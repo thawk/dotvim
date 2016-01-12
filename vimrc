@@ -2151,24 +2151,24 @@ if count(g:dotvim_settings.plugin_groups, 'scm') "{{{
                 \ }
     let g:VCSCommandDisableMappings = 1
 
-    nnoremap [code]p :<C-U>VCSVimDiff PREV<CR>
-    nnoremap [code]a :<C-U>VCSAdd<CR>
-    nnoremap [code]c :<C-U>VCSCommit<CR>
-    nnoremap [code]D :<C-U>VCSDelete<CR>
-    nnoremap [code]d :<C-U>VCSDiff<CR>
-    nnoremap [code]G :<C-U>VCSGotoOriginal!<CR>
-    nnoremap [code]g :<C-U>VCSGotoOriginal<CR>
-    nnoremap [code]i :<C-U>VCSInfo<CR>
-    nnoremap [code]L :<C-U>VCSLock<CR>
-    nnoremap [code]l :<C-U>VCSLog<CR>
-    nnoremap [code]N :<C-U>VCSAnnotate! -g<CR>
-    nnoremap [code]n :<C-U>let tmp_lnum=line('.')<CR>:VCSAnnotate -g<CR>:keepjumps execute <C-R>=tmp_lnum<CR><CR>:unlet tmp_lnum<CR>
-    nnoremap [code]q :<C-U>VCSRevert<CR>
-    nnoremap [code]r :<C-U>VCSReview<CR>
-    nnoremap [code]s :<C-U>VCSStatus<CR>
-    nnoremap [code]U :<C-U>VCSUnlock<CR>
-    nnoremap [code]u :<C-U>VCSUpdate<CR>
-    nnoremap [code]v :<C-U>VCSVimDiff<CR>
+    nnoremap <silent> [code]p :<C-U>VCSVimDiff PREV<CR>
+    nnoremap <silent> [code]a :<C-U>VCSAdd<CR>
+    nnoremap <silent> [code]c :<C-U>VCSCommit<CR>
+    nnoremap <silent> [code]D :<C-U>VCSDelete<CR>
+    nnoremap <silent> [code]d :<C-U>VCSDiff<CR>
+    nnoremap <silent> [code]G :<C-U>VCSGotoOriginal!<CR>
+    nnoremap <silent> [code]g :<C-U>VCSGotoOriginal<CR>
+    nnoremap <silent> [code]i :<C-U>VCSInfo<CR>
+    nnoremap <silent> [code]L :<C-U>VCSLock<CR>
+    nnoremap <silent> [code]l :<C-U>VCSLog<CR>
+    nnoremap <silent> [code]N :<C-U>VCSAnnotate! -g<CR>
+    nnoremap <silent> [code]n :<C-U>let tmp_lnum=line('.')<CR>:VCSAnnotate -g<CR>:keepjumps execute <C-R>=tmp_lnum<CR><CR>:unlet tmp_lnum<CR>
+    nnoremap <silent> [code]q :<C-U>VCSRevert<CR>
+    nnoremap <silent> [code]r :<C-U>VCSReview<CR>
+    nnoremap <silent> [code]s :<C-U>VCSStatus<CR>
+    nnoremap <silent> [code]U :<C-U>VCSUnlock<CR>
+    nnoremap <silent> [code]u :<C-U>VCSUpdate<CR>
+    nnoremap <silent> [code]v :<C-U>VCSVimDiff<CR>
     " }}}
     " vim-fugitive: GIT前端 {{{
     NeoBundle 'tpope/vim-fugitive', {
