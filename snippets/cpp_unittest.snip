@@ -2,12 +2,12 @@
 snippet ut
 options head
 	#include <boost/test/unit_test.hpp>
-    #include <boost/system/error_code.hpp>
-    #include <turtle/mock.hpp>
-    #include <`substitute(findfile(substitute(expand("%:t:r"), "^test_\\?", "", "") . ".h", substitute(expand("%:p"), "\\<unittest/.*", "include/**", ""), 1), ".*\\<include/", "", "")`>
-    
-    using namespace `substitute(substitute(fnamemodify(substitute(findfile(substitute(expand("%:t:r"), "^test_\\?", "", "") . ".h", substitute(expand("%:p"), "\\<unittest/.*", "include/**", ""), 1), ".*\\<include/", "", ""), ":p:h"), "[.-]", "_", "g"), "/", "::", "g")`;
-    using boost::system::error_code;
+	#include <boost/system/error_code.hpp>
+	#include <turtle/mock.hpp>
+	#include <`substitute(findfile(substitute(expand("%:t:r"), "^test_\\?", "", "") . ".h", substitute(expand("%:p"), "\\<unittest/.*", "include/**", ""), 1), ".*\\<include/", "", "")`>
+	
+	using namespace `substitute(substitute(fnamemodify(substitute(findfile(substitute(expand("%:t:r"), "^test_\\?", "", "") . ".h", substitute(expand("%:p"), "\\<unittest/.*", "include/**", ""), 1), ".*\\<include/", "", ""), ":p:h"), "[.-]", "_", "g"), "/", "::", "g")`;
+	using boost::system::error_code;
 
 	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`);
 
@@ -15,13 +15,13 @@ options head
 	{
 	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${1:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
 
-        Fixture()
-        : $1(${2})
-        {
-        }
+	    Fixture()
+	    : $1(${2})
+	    {
+	    }
 	};
 
-    ${0}
+	${0}
 
 	BOOST_AUTO_TEST_SUITE_END()
 
@@ -30,26 +30,26 @@ snippet sut1
 abbr sscc::util
 options head
 	#include <boost/test/unit_test.hpp>
-    #include <boost/system/error_code.hpp>
-    #include <turtle/mock.hpp>
-    #include "../src/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
+	#include <boost/system/error_code.hpp>
+	#include <turtle/mock.hpp>
+	#include "../src/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
 
-    using namespace sscc`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*\\(\\(/[^/]\\+\\)\\{1}\\)$", "\\1", ""), "/", "::", "g")`;
-    using boost::system::error_code;
+	using namespace sscc`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*\\(\\(/[^/]\\+\\)\\{1}\\)$", "\\1", ""), "/", "::", "g")`;
+	using boost::system::error_code;
 
 	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`);
 
-    struct Fixture
-    {
+	struct Fixture
+	{
 	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${1:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
 
-        Fixture()
-        : $1(${2})
-        {
-        }
-    };
+	    Fixture()
+	    : $1(${2})
+	    {
+	    }
+	};
 
-    ${0}
+	${0}
 
 	BOOST_AUTO_TEST_SUITE_END()
 
@@ -58,26 +58,26 @@ snippet sut2
 abbr sscc::trade::share
 options head
 	#include <boost/test/unit_test.hpp>
-    #include <boost/system/error_code.hpp>
-    #include <turtle/mock.hpp>
-    #include "../src/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
+	#include <boost/system/error_code.hpp>
+	#include <turtle/mock.hpp>
+	#include "../src/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
 
-    using namespace sscc`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*\\(\\(/[^/]\\+\\)\\{2}\\)$", "\\1", ""), "/", "::", "g")`;
-    using boost::system::error_code;
+	using namespace sscc`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*\\(\\(/[^/]\\+\\)\\{2}\\)$", "\\1", ""), "/", "::", "g")`;
+	using boost::system::error_code;
 
 	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`);
 
-    struct Fixture
-    {
+	struct Fixture
+	{
 	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${1:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
 
-        Fixture()
-        : $1(${2})
-        {
-        }
-    };
+	    Fixture()
+	    : $1(${2})
+	    {
+	    }
+	};
 
-    ${0}
+	${0}
 
 	BOOST_AUTO_TEST_SUITE_END()
 
@@ -86,26 +86,26 @@ snippet sut3
 abbr sscc::trade::tcs::core
 options head
 	#include <boost/test/unit_test.hpp>
-    #include <boost/system/error_code.hpp>
-    #include <turtle/mock.hpp>
-    #include "../src/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
+	#include <boost/system/error_code.hpp>
+	#include <turtle/mock.hpp>
+	#include "../src/`substitute(expand("%:t:r"), "^test_\\?", "", "")`.h"
 
-    using namespace sscc`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*\\(\\(/[^/]\\+\\)\\{3}\\)$", "\\1", ""), "/", "::", "g")`;
-    using boost::system::error_code;
+	using namespace sscc`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*\\(\\(/[^/]\\+\\)\\{3}\\)$", "\\1", ""), "/", "::", "g")`;
+	using boost::system::error_code;
 
 	BOOST_AUTO_TEST_SUITE(test_`substitute(expand("%:t:r"), "^test_\\?", "", "")`);
 
-    struct Fixture
-    {
+	struct Fixture
+	{
 	    `substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")` ${1:`substitute(expand("%:t:r"), "^test_\\?", "", "")`};
 
-        Fixture()
-        : $1(${2})
-        {
-        }
-    };
+	    Fixture()
+	    : $1(${2})
+	    {
+	    }
+	};
 
-    ${0}
+	${0}
 
 	BOOST_AUTO_TEST_SUITE_END()
 
@@ -113,60 +113,60 @@ options head
 snippet tc
 abbr unittest for any class
 options head
-    /**
-     * @class `substitute(substitute(fnamemodify(substitute(findfile(substitute(expand("%:t:r"), "^test_\\?", "", "") . ".h", substitute(expand("%:p"), "\\<unittest/.*", "include/**", ""), 1), ".*\\<include/", "", ""), ":p:h"), "[.-]", "_", "g"), "/", "::", "g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
-     * @test ${1}\n
-     * <b>输入数据：</b> ${2}\n
-     * <b>预期输出：</b> ${3}
-     */
-     BOOST_FIXTURE_TEST_CASE(Test${4}, Fixture)
-     {
-         ${0}
-     }
+	/**
+	 * @class `substitute(substitute(fnamemodify(substitute(findfile(substitute(expand("%:t:r"), "^test_\\?", "", "") . ".h", substitute(expand("%:p"), "\\<unittest/.*", "include/**", ""), 1), ".*\\<include/", "", ""), ":p:h"), "[.-]", "_", "g"), "/", "::", "g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
+	 * @test ${1}\n
+	 * <b>输入数据：</b> ${2}\n
+	 * <b>预期输出：</b> ${3}
+	 */
+	 BOOST_FIXTURE_TEST_CASE(Test${4}, Fixture)
+	 {
+	     ${0}
+	 }
 
 # Comment for Sscc Test Case
 snippet stc1
 abbr unittest for sscc::util
 options head
-    /**
-     * @class sscc::`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*/\\([^/]\\+\\)$", "\\1", ""), "/", "::", "g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
-     * @test ${1}\n
-     * <b>输入数据：</b> ${2}\n
-     * <b>预期输出：</b> ${3}
-     */
-     BOOST_FIXTURE_TEST_CASE(Test${4}, Fixture)
-     {
-         ${0}
-     }
+	/**
+	 * @class sscc::`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*/\\([^/]\\+\\)$", "\\1", ""), "/", "::", "g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
+	 * @test ${1}\n
+	 * <b>输入数据：</b> ${2}\n
+	 * <b>预期输出：</b> ${3}
+	 */
+	 BOOST_FIXTURE_TEST_CASE(Test${4}, Fixture)
+	 {
+	     ${0}
+	 }
 
 
 # Comment for Sscc Test Case
 snippet stc2
 abbr unittest for sscc::trade::share
 options head
-    /**
-     * @class sscc::`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*/\\([^/]\\+/[^/]\\+\\)$", "\\1", ""), "/", "::", "g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
-     * @test ${1}\n
-     * <b>输入数据：</b> ${2}\n
-     * <b>预期输出：</b> ${3}
-     */
-     BOOST_FIXTURE_TEST_CASE(Test${4}, Fixture)
-     {
-         ${0}
-     }
+	/**
+	 * @class sscc::`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*/\\([^/]\\+/[^/]\\+\\)$", "\\1", ""), "/", "::", "g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
+	 * @test ${1}\n
+	 * <b>输入数据：</b> ${2}\n
+	 * <b>预期输出：</b> ${3}
+	 */
+	 BOOST_FIXTURE_TEST_CASE(Test${4}, Fixture)
+	 {
+	     ${0}
+	 }
 
 # Comment for Sscc Test Case
 snippet stc3
 abbr unittest for sscc::trade::tcs::core
 options head
-    /**
-     * @class sscc::`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*/\\([^/]\\+/[^/]\\+/[^/]\\+\\)$", "\\1", ""), "/", "::", "g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
-     * @test ${1}\n
-     * <b>输入数据：</b> ${2}\n
-     * <b>预期输出：</b> ${3}
-     */
-     BOOST_FIXTURE_TEST_CASE(Test${4}, Fixture)
-     {
-         ${0}
-     }
+	/**
+	 * @class sscc::`substitute(substitute(substitute(substitute(expand("%:p:h"), "/unittest\\>", "", ""), "[.-]", "_", "g"), "^.*/\\([^/]\\+/[^/]\\+/[^/]\\+\\)$", "\\1", ""), "/", "::", "g")`::`substitute(substitute(expand("%:t:r"), "^test_\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`
+	 * @test ${1}\n
+	 * <b>输入数据：</b> ${2}\n
+	 * <b>预期输出：</b> ${3}
+	 */
+	 BOOST_FIXTURE_TEST_CASE(Test${4}, Fixture)
+	 {
+	     ${0}
+	 }
 

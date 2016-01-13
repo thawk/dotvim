@@ -1,72 +1,58 @@
-snippet     class
-abbr        class {}
-    class ${1:#:name}
-    {
-        ${2}
-    };
+snippet try
+	try
+	{
+	    ${1}
+	}
+	catch (${2:...})
+	{
+	    ${3}
+	}
 
-snippet     try
-abbr        try catch
-    try
-    {
-        ${1:TARGET}
-    }
-    catch (${2:exception})
-    {
-        ${3}
-    }
-
-snippet     fori
-abbr        for (T i::) {}
-    for (${1:size_t} ${2:i}=${3:0}; $2 < ${4}; ++$2)
-    {
-        ${0}
-    }
+snippet fori
+	for (${1:size_t} ${2:i}=${3:0}; $2 < ${4}; ++$2)
+	{
+	    ${0}
+	}
 
 # range based for ( C++11 feature )
-snippet     for_CPP11
-abbr        for (:) {}
-    for (${1:#:var} : ${2:#:container})
-    {
-        ${0:TARGET}
-    }
+snippet     fore
+	for (${1:auto} ${2:i} : ${3:container})
+	{
+	    ${4}
+	}
 
-delete      namespace
 snippet     namespace
-abbr        namespace {}
-options     head
-    namespace ${1:#:name}
-    {
+	namespace ${1:#:name}
+	{
 
-    ${0:TARGET}
+	${0}
 
-    } // namespace $1
+	}   // namespace $1
 
 snippet mfun
-    
-    ${4:void} ${1:`substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`}::${2:MemberFunction}(${3})
-    {
-        ${0}
-    }
+	
+	${4:void} ${1:`substitute(substitute(expand("%:t:r"), "^\\(.\\)", "\\u\\1", ""),"_\\(.\\)","\\u\\1","g")`}::${2:MemberFunction}(${3})
+	{
+	    ${0}
+	}
 
 snippet     helloworld
-abbr        #include<iostream> int main...
-    #include <iostream>
-    using namespace std;
+	#include <iostream>
+	using namespace std;
 
-    int main(int argc, char const* argv[])
-    {
-        ${0:cout << "hello, world!" << endl;}
+	int main(int argc, char const* argv[])
+	{
+	    ${0:cout << "hello, world!" << endl;}
 
-        return 0;
-    }
+	    return 0;
+	}
 
 snippet log
-    LOG_${1:INFO}(
-        ${2:kInfo},
-        format(translate(${3}))
-        % ${4},
-        ${5:""});
+	LOG_${1:INFO}(
+	    ${2:kInfo},
+	    format(translate(${3}))
+	    % ${4},
+	    ${5:""});
 
-    ${0}
+	${0}
 
