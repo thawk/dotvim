@@ -1836,10 +1836,10 @@ if count(g:dotvim_settings.plugin_groups, 'autocomplete') "{{{
             " Recommended key-mappings.
             " <CR>: close popup and save indent.
             inoremap <expr><CR>  neocomplete#smart_close_popup() . "\<CR>"
-            " <TAB>: completion.
-            inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-            " <S-TAB>: completion.
-            inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
+            " " <TAB>: next.
+            " inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+            " " <S-TAB>: prev.
+            " inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
             " <C-h>, <BS>: close popup and delete backword char.
             inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
             inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
@@ -2053,17 +2053,16 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
             let g:UltiSnipsSnippetsDir = s:vimrc_path . '/mysnippets'
             let g:UltiSnipsSnippetDirectories=['UltiSnips', 'mysnippets']
 
-            let g:UltiSnipsExpandTrigger       = '<NOP>'
-            let g:UltiSnipsListSnippets        = '<C-tab>'
-
             let g:UltiSnipsEnableSnipMate = 1
 
+            " let g:UltiSnipsExpandTrigger       = '<TAB>'
+            " let g:UltiSnipsListSnippets        = '<C-TAB>'
+            "
             " inoremap <silent><expr> <TAB>
             "     \ pumvisible() ? "\<C-n>" :
             "     \ (len(keys(UltiSnips#SnippetsInCurrentScope())) > 0 ?
             "     \ "<C-R>=UltiSnips#ExpandSnippet()<CR>" : "\<TAB>")
 
-            let g:UltiSnipsJumpForwardTrigger="<NOP>"
             let g:ulti_expand_or_jump_res = 0
             function! ExpandSnippetOrJumpForwardOrReturn(next)
                 " 如果可以展开就展开，可以跳转就跳转，否则返回参数指定的值
@@ -2074,19 +2073,23 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
                     return a:next
                 endif
             endfunction
-            inoremap <silent><expr> <TAB>
-                        \ pumvisible() ? "\<C-n>" :
-                        \ "<C-R>=ExpandSnippetOrJumpForwardOrReturn('\<TAB>')<CR>"
 
-            " previous menu item, jump to previous placeholder or do nothing
-            let g:UltiSnipsJumpBackwordTrigger = ""
-            inoremap <expr> <S-TAB>
-                        \ pumvisible() ? "\<C-p>" :
-                        \ "<C-R>=UltiSnips#JumpBackwards()<CR>"
+            " let g:UltiSnipsJumpForwardTrigger="<TAB>"
+            " let g:UltiSnipsJumpForwardTrigger="<NOP>"
+            " inoremap <silent><expr> <TAB>
+            "             \ pumvisible() ? "\<C-n>" :
+            "             \ "<C-R>=ExpandSnippetOrJumpForwardOrReturn('\<TAB>')<CR>"
 
-            " jump to previous placeholder otherwise do nothing
-            snoremap <buffer> <silent> <S-TAB>
-                        \ <ESC>:call UltiSnips#JumpBackwards()<CR>
+            " let g:UltiSnipsJumpBackwordTrigger = "<S-TAB>"
+            " " previous menu item, jump to previous placeholder or do nothing
+            " let g:UltiSnipsJumpBackwordTrigger = "<NOP>"
+            " inoremap <expr> <S-TAB>
+            "             \ pumvisible() ? "\<C-p>" :
+            "             \ "<C-R>=UltiSnips#JumpBackwards()<CR>"
+            "
+            " " jump to previous placeholder otherwise do nothing
+            " snoremap <buffer> <silent> <S-TAB>
+            "             \ <ESC>:call UltiSnips#JumpBackwards()<CR>
 
             call neobundle#untap()
 
