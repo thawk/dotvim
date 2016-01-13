@@ -868,7 +868,7 @@ if count(g:dotvim_settings.plugin_groups, 'unite') "{{{
 
     autocmd! FileType unite call s:unite_my_settings()
     function! s:unite_my_settings() "{{{
-        unmap <buffer> <c-l>
+        silent! unmap <buffer> <c-l>
 
         nmap <buffer> <ESC>      <Plug>(unite_exit)
         imap <buffer> jj      <Plug>(unite_insert_leave)
