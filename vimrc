@@ -767,7 +767,7 @@ if count(g:dotvim_settings.plugin_groups, 'core') "{{{
     " vimproc: 用于异步执行命令的插件，被其它插件依赖 {{{
     if (s:is_windows)
         " Windows下需要固定为与dll对应的版本
-        NeoBundle 'Shougo/vimproc', { 'rev' : '725de1a' }
+        NeoBundle 'Shougo/vimproc', { 'rev' : 'f96e476' }
         if has("win64") && filereadable(s:vimrc_path . "/win32/vimproc_win64.dll")
             let g:vimproc_dll_path = s:vimrc_path . "/win32/vimproc_win64.dll"
         elseif has("win32") && filereadable(s:vimrc_path . "/win32/vimproc_win32.dll")
