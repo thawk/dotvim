@@ -1,0 +1,70 @@
+snippet src "source list" b
+[source,${1}]
+----
+${VISUAL}${2}
+----
+endsnippet
+
+snippet -- "open block" b
+--
+${VISUAL}$1
+--
+${0}
+endsnippet
+
+snippet ---- "listing block" b
+----
+${VISUAL}$1
+----
+${0}
+endsnippet
+
+snippet ==== "example block" b
+====
+${VISUAL}$1
+====
+${0}
+endsnippet
+
+snippet .... "literal block" b
+....
+${VISUAL}$1
+....
+${0}
+endsnippet
+
+snippet ++++ "pass block" b
+++++
+${VISUAL}$1
+++++
+${0}
+endsnippet
+
+snippet ____ "quote block" b
+____
+${VISUAL}$1
+____
+${0}
+endsnippet
+
+snippet **** "sidebar block" b
+****
+${VISUAL}$1
+****
+${0}
+endsnippet
+
+snippet **** "sidebar block" b
+****
+${VISUAL}$1
+****
+${0}
+endsnippet
+
+snippet table "table" b
+[cols="${1:2}*", options="${2:header}"]
+|===
+|${VISUAL/\n\s*/\n|/g}${3}
+|===
+${0}
+endsnippet
