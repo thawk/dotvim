@@ -625,6 +625,7 @@ autocmd FileType asciidoc setlocal shiftwidth=2
             \ errorformat=ERROR:\ %f:\ line\ %l:\ %m
             \ foldexpr=MyAsciidocFoldLevel(v:lnum)
             \ foldmethod=expr
+            \ foldlevel=1
             \ nospell
             \ isfname-=#
             \ isfname-=[
