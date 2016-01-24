@@ -302,7 +302,7 @@ function! FindVcsRoot(path) " {{{
 endfunction " }}}
 
 
-" s:VisualSelection() {{{
+" s:VisualSelection(): 返回当前被选中的文字 {{{
 " Thanks to xolox!
 " http://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
 func! s:VisualSelection() abort
@@ -785,14 +785,6 @@ if count(g:dotvim_settings.plugin_groups, 'core') "{{{
                     \ }
     endif
     " }}}
-    " vim-misc: xolox的插件依赖的库 {{{
-    NeoBundleLazy 'xolox/vim-misc', {
-                \ 'function_prefix' : 'xolox',
-                \ }
-    " }}}
-    " ingo-library: Ingo Karkat的插件依赖的库 {{{
-    NeoBundleLazy 'ingo-library'
-    " }}}
 endif
 " }}}
 
@@ -1133,14 +1125,9 @@ if count(g:dotvim_settings.plugin_groups, 'editing') "{{{
     "    \ 'on_cmd' : ['B'],
     "    \ }
     "" }}}
-    " vim-operator-user: 被多个vim-operator插件依赖的插件 {{{
-    NeoBundleLazy 'kana/vim-operator-user', {
-                \ 'on_func' : 'operator#user#define',
-                \ }
-    " }}}
     " vim-operator-replace: 双引号x_{motion} : 把{motion}涉及的内容替换为register x的内容 {{{
     NeoBundleLazy 'kana/vim-operator-replace', {
-                \ 'depends' : 'vim-operator-user',
+                \ 'depends' : 'kana/vim-operator-user',
                 \ 'on_map' : [
                 \     ['nx', '<Plug>(operator-replace)']
                 \ ]}
@@ -1149,7 +1136,7 @@ if count(g:dotvim_settings.plugin_groups, 'editing') "{{{
     " }}}
     " vim-operator-surround: sa{motion}/sd{motion}/sr{motion}：增/删/改括号、引号等 {{{
     NeoBundleLazy 'rhysd/vim-operator-surround', {
-                \ 'depends' : 'vim-operator-user',
+                \ 'depends' : 'kana/vim-operator-user',
                 \ 'on_map' : [
                 \     ['nxo', '<Plug>(operator-surround'],
                 \ ]}
@@ -1182,7 +1169,7 @@ if count(g:dotvim_settings.plugin_groups, 'editing') "{{{
     "             \ ],
     "             \ 'on_ft' : ['notes'],
     "             \ 'depends' : [
-    "             \     'vim-misc',
+    "             \     'xolox/vim-misc',
     "             \ ],
     "             \ }
     " " let g:notes_suffix = '.markdown'
@@ -1337,6 +1324,16 @@ if count(g:dotvim_settings.plugin_groups, 'editing') "{{{
                 \     {'name': 'ViewSys', 'complete': 'command'},
                 \     'Collect', 'Silently',
                 \ ]}
+    " }}}
+    " FastFold: 编辑时不自动更新折叠，在保存或手工进行折叠操作时才更新 {{{
+    NeoBundleLazy 'Konfekt/FastFold', {
+                \ 'on_path' : ['.*'],
+                \ }
+    " }}}
+    " vim-fakeclip: 为vim在终端等场合提供+/"寄存器，支持tmux/screen缓冲区 {{{
+    NeoBundleLazy 'kana/vim-fakeclip', {
+                \ 'on_cmd' : ['FakeclipDefaultKeyMappings'],
+                \ }
     " }}}
 endif
 " }}}
@@ -1786,6 +1783,15 @@ if count(g:dotvim_settings.plugin_groups, 'navigation') "{{{
                 \ 'on_map' : ['nv', 'K', '<Plug>(ref-keyword)'],
                 \ }
     " }}}
+    " vim-expand-region: 选择模式下，按+/_扩展和收缩选区 {{{
+    NeoBundleLazy 'terryma/vim-expand-region', {
+                \ 'on_map' : [['nv', '<Plug>']],
+                \ }
+    nmap + <Plug>(expand_region_expand)
+    vmap + <Plug>(expand_region_expand)
+    vmap _ <Plug>(expand_region_shrink)
+    nmap _ <Plug>(expand_region_shrink)
+    " }}}
 endif
 "}}}
 
@@ -2118,23 +2124,28 @@ endif
 "}}}
 
 if count(g:dotvim_settings.plugin_groups, 'textobj') "{{{
-    " vim-textobj-user: 可自定义motion {{{
-    NeoBundle 'kana/vim-textobj-user'
-    " }}}
     " vim-textobj-indent: 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进） {{{
-    NeoBundle 'kana/vim-textobj-indent'
+    NeoBundle 'kana/vim-textobj-indent', {
+               \ 'depends' : 'kana/vim-textobj-user',
+               \ }
     " }}}
     " vim-textobj-line: 增加motion: al il {{{
-    NeoBundle 'kana/vim-textobj-line'
+    NeoBundle 'kana/vim-textobj-line', {
+               \ 'depends' : 'kana/vim-textobj-user',
+               \ }
     " }}}
     " vim-textobj-function: 增加motion: if/af/iF/aF 选择一个函数 {{{
-    NeoBundle 'kana/vim-textobj-function'
+    NeoBundle 'kana/vim-textobj-function', {
+               \ 'depends' : 'kana/vim-textobj-user',
+               \ }
     " }}}
     " CamelCaseMotion: 增加,w ,b ,e 可以处理大小写混合或下划线分隔两种方式的单词 {{{
     NeoBundle 'bkad/CamelCaseMotion'
     " }}}
     " vim-textobj-comment: 增加motion: ac ic {{{
-    NeoBundle 'thinca/vim-textobj-comment'
+    NeoBundle 'thinca/vim-textobj-comment', {
+               \ 'depends' : 'kana/vim-textobj-user',
+               \ }
     " }}}
     " vim-pairs: ci/, di;, yi*, vi@, ca/, da;, ya*, va@ ... {{{
     NeoBundle 'kurkale6ka/vim-pairs'
@@ -2322,6 +2333,7 @@ if count(g:dotvim_settings.plugin_groups, 'cpp') "{{{
     NeoBundleLazy 'rhysd/vim-clang-format', {
                 \ 'on_cmd' : ['ClangFormat'],
                 \ 'on_map' : ['<Plug>(operator-clang-format'],
+                \ 'depends' : 'kana/vim-operator-user',
                 \ 'external_commands' : 'clang-format',
                 \ }
     if neobundle#tap('vim-clang-format')
@@ -2644,11 +2656,6 @@ if count(g:dotvim_settings.plugin_groups, 'doc') "{{{
         let $APPCACHE=s:get_cache_dir('timl')
     endif
     " }}}
-    " vim-markdown-concealed: markdown支持，并且利用conceal功能隐藏不需要的字符 {{{
-    NeoBundleLazy 'prurigro/vim-markdown-concealed', {
-                \ 'on_ft' : ['markdown'],
-                \ }
-    " }}}
     " vim-asciidoc: AsciiDoc的语法高亮 {{{
     NeoBundleLazy 'asciidoc/vim-asciidoc', {
                 \ 'on_ft' : ['asciidoc'],
@@ -2679,16 +2686,22 @@ if count(g:dotvim_settings.plugin_groups, 'syntax') "{{{
                 \ }
     autocmd BufRead,BufNewFile *.wps,*.sbs,*.fms setf wps
     " }}}
+    " lbdbq: 支持lbdb {{{
     NeoBundleLazy 'lbdbq', {
                 \ 'on_map' : ['<LocalLeader>lb'],
-                \ }                                             " 支持lbdb
+                \ }
+    " }}}
+    " gprof.vim: 对gprof文件提供语法高亮 {{{
     NeoBundleLazy 'gprof.vim', {
                 \ 'on_ft' : ['gprof'],
-                \ }                                             " 对gprof文件提供语法高亮
+                \ }
+    " }}}
+    " po.vim: 用于编辑PO语言包文件。 {{{
     NeoBundleLazy 'po.vim', {
                 \ 'on_ft' : ['po'],
                 \ 'on_path' : ['.*\.pot\?'],
-                \ }                                             " 用于编辑PO语言包文件。
+                \ }
+    " }}}
 endif
 " }}}
 
@@ -2931,6 +2944,11 @@ if count(g:dotvim_settings.plugin_groups, 'misc') "{{{
     " }}}
     " context_filetype.vim: 在文件中根据上下文确定当前的filetype，如识别出html中内嵌js、css {{{
     NeoBundleLazy 'Shougo/context_filetype.vim', {
+                \ }
+    " }}}
+    " vim-markdown-concealed: markdown支持，并且利用conceal功能隐藏不需要的字符 {{{
+    NeoBundleLazy 'prurigro/vim-markdown-concealed', {
+                \ 'on_ft' : ['markdown'],
                 \ }
     " }}}
     " NeoBundle 'tyru/current-func-info.vim'
