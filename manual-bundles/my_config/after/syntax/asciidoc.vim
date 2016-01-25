@@ -13,3 +13,6 @@ function! s:AsciidocEnableSyntaxRanges()
 endfunction
 
 call s:AsciidocEnableSyntaxRanges()
+
+" 禁用对于双行标题的高亮，以免把windbg之类的输出当成双行标题
+syn match asciidocTwoLineTitle /^!!!Non Matchable!!!$/
