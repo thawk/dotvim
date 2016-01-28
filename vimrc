@@ -1329,6 +1329,7 @@ if count(g:dotvim_settings.plugin_groups, 'editing') "{{{
     NeoBundleLazy 'Konfekt/FastFold', {
                 \ 'on_path' : ['.*'],
                 \ }
+    let g:fastfold_savehook = 0
     " }}}
     " vim-fakeclip: 为vim在终端等场合提供+/"寄存器，支持tmux/screen缓冲区 {{{
     NeoBundleLazy 'kana/vim-fakeclip', {
