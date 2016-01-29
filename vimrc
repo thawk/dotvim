@@ -2707,15 +2707,10 @@ endif
 " }}}
 
 if count(g:dotvim_settings.plugin_groups, 'visual') "{{{
-    " taboo.vim: 为TAB起名 {{{
-    NeoBundle 'gcmt/taboo.vim', {
-                \ 'on_cmd': [
-                \     'TabooRename', 'TabooOpen', 'TabooReset',
-                \ ]}
-    let g:taboo_tabline = 0 " 使用vim-airline进行显示
-    " }}}
     " vim-airline: 增强的statusline {{{
-    NeoBundle 'bling/vim-airline'
+    NeoBundle 'vim-airline/vim-airline', {
+                \ 'depends': ['vim-airline/vim-airline-themes'],
+                \ }
     let bundle = neobundle#get('vim-airline')
     function! bundle.hooks.on_post_source(bundle)
         " 把section a的第1个part从mode改为bufnr() + mode
@@ -2841,6 +2836,16 @@ if count(g:dotvim_settings.plugin_groups, 'visual') "{{{
         let s:path_branch[path] = branch
         return branch
     endfunction
+    " }}}
+    " taboo.vim: 为TAB起名 {{{
+    NeoBundle 'gcmt/taboo.vim', {
+                \ 'on_cmd': [
+                \     'TabooRename', 'TabooOpen', 'TabooReset',
+                \ ]}
+    if neobundle#tap('vim-airline')
+        let g:taboo_tabline = 0 " 使用vim-airline进行显示
+        call neobundle#untap()
+    endif
     " }}}
     " GoldenView.Vim: <F8>/<S-F8>当前窗口与主窗口交换 {{{
     NeoBundle 'zhaocai/GoldenView.Vim'
