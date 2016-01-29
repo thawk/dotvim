@@ -14,17 +14,17 @@ ${0}
 endsnippet
 
 snippet table "table" b
-[cols="${1:2}*", options="${2:header}"]
+[cols="${1:${2:2}*}", options="${3:header}"]
 |===
-|${VISUAL/\n\s*/\n|/g}${3}
+|${VISUAL/\n\s*/\n|/g}${4}
 |===
 ${0}
 endsnippet
 
 snippet quote "Quote Block" b
-[quote,${1:author},${2:source}]
+[quote${1:,${2:author}${3:,${4:source}}}]
 ____
-${VISUAL}$3
+${VISUAL}$5
 ____
 ${0}
 endsnippet
@@ -69,13 +69,6 @@ snippet sidebar "Sidebar Block" b
 ****
 ${VISUAL}$1
 ****
-${0}
-endsnippet
-
-snippet quote "Quote Block" b
-____
-${VISUAL}$1
-____
 ${0}
 endsnippet
 
