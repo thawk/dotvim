@@ -2747,15 +2747,22 @@ if count(g:dotvim_settings.plugin_groups, 'visual') "{{{
             let g:airline_symbols.paste = "\u2225"
         endif
     else
-        let g:airline_left_sep = " "
-        let g:airline_left_alt_sep = "|"
-        let g:airline_right_sep = " "
-        let g:airline_right_alt_sep = "|"
-        let g:airline_symbols.branch = ""
-        let g:airline_symbols.readonly = "RO"
-        let g:airline_symbols.linenr = "LN"
-        let g:airline_symbols.paste = "PASTE"
-        let g:airline_symbols.whitespace = " "
+        " let g:airline_left_sep = " "
+        " let g:airline_left_alt_sep = "|"
+        " let g:airline_right_sep = " "
+        " let g:airline_right_alt_sep = "|"
+        " let g:airline_symbols.branch = ""
+        " let g:airline_symbols.readonly = "RO"
+        " let g:airline_symbols.linenr = "LN"
+
+        let g:airline_left_sep = iconv(nr2char(0xe0b0, 1), "utf-8", &encoding)
+        let g:airline_left_alt_sep = iconv(nr2char(0xe0b1, 1), "utf-8", &encoding)
+        let g:airline_right_sep = iconv(nr2char(0xe0b2, 1), "utf-8", &encoding)
+        let g:airline_right_alt_sep = iconv(nr2char(0xe0b3, 1), "utf-8", &encoding)
+
+        let g:airline_symbols.branch = iconv(nr2char(0xe0a0, 1), "utf-8", &encoding)
+        let g:airline_symbols.readonly = iconv(nr2char(0xe0a2, 1), "utf-8", &encoding)
+        let g:airline_symbols.linenr = iconv(nr2char(0xe0a1, 1), "utf-8", &encoding)
 
         " let g:airline_left_sep = "\ue0b0"
         " let g:airline_left_alt_sep = "\ue0b1"
@@ -2765,7 +2772,12 @@ if count(g:dotvim_settings.plugin_groups, 'visual') "{{{
         " let g:airline_symbols.branch = "\ue0a0"
         " let g:airline_symbols.readonly = "\ue0a2"
         " let g:airline_symbols.linenr = "\ue0a1"
+
         " let g:airline_symbols.paste = "\u22256"
+        " let g:airline_symbols.paste = "PASTE"
+        let g:airline_symbols.paste = 'ρ'
+        " let g:airline_symbols.whitespace = " "
+        let g:airline_symbols.whitespace = 'Ξ'
     endif
 
     set noshowmode
