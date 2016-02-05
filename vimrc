@@ -973,7 +973,8 @@ if s:is_plugin_group_enabled('unite') "{{{
                 \ })
 
     if neobundle#tap('unite-gtags')
-        nnoremap [unite-tag]s :<C-u>Unite gtags/context<CR>
+        nnoremap [unite-tag]] :<C-u>Unite gtags/context<CR>
+        nnoremap [unite-tag]s :<C-u>Unite gtags/ref<CR>
         nnoremap [unite-tag]S :<C-u>Unite gtags/ref:
         nnoremap [unite-tag]g :<C-u>Unite gtags/def<CR>
         nnoremap [unite-tag]G :<C-u>Unite gtags/def:
