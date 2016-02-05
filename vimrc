@@ -12,58 +12,15 @@ let s:is_gui = has("gui_running")
 " 当前脚本路径
 let s:vimrc_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
-" 确定libclang的位置
-let s:libclang_path = ""
-
 if s:is_windows " windows下把vimrc目录下的win32加入到路径中，以便使用该目录下的工具
     let $PATH = $PATH . ";" . s:vimrc_path . '\win32'
-endif
-
-" 确定ag可执行程序
-let s:ag_path = ""
-if executable("ag")
-    let s:ag_path = "ag"
-endif
-
-let s:ctags_path = ""
-if executable("ctags")
-    let s:ctags_path = "ctags"
-endif
-
-let s:global_command = $GTAGSGLOBAL
-if s:global_command == ''
-    let s:global_command = "global"
-endif
-if executable(s:global_command)
-    let s:has_global = 1
-else
-    let s:has_global = 0
-endif
-
-if s:is_windows
-    if filereadable(s:vimrc_path . "/win32/libclang.dll")
-        let s:libclang_path = s:vimrc_path . "/win32"
-    endif
-else
-    if filereadable(expand("~/libexec/libclang.so"))
-        let s:libclang_path = expand("~/libexec")
-    elseif filereadable(expand("/usr/lib/libclang.so"))
-        let s:libclang_path = expand("/usr/lib")
-    elseif filereadable(expand("/usr/lib64/libclang.so"))
-        let s:libclang_path = expand("/usr/lib64")
-    endif
-endif
-
-let s:clang_include_path = fnamemodify(finddir("include",  s:libclang_path . "/clang/**"), ":p")
-
-if s:ag_path != ""
-    exec 'set grepprg=' . s:ag_path . '\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow'
-    set grepformat=%f:%l:%c:%m
 endif
 " }}}
 
 " 插件组命名及选择要使用的插件及插件组 {{{
 " Impacted by https://github.com/bling/dotvim
+
+" 读入用户本地设置 {{{
 " 如果~下有vimrc.local则使用
 if filereadable($HOME . "/vimrc.local")
     exec "source " . $HOME . "/vimrc.local"
@@ -74,9 +31,9 @@ endif
 if !exists('g:dotvim_user_settings')
     let g:dotvim_user_settings = {}
 endif
+" }}}
 
-let s:cache_dir = get(g:dotvim_user_settings, 'cache_dir', '~/.vim_cache')
-
+" 设置缺省值 {{{
 let g:dotvim_settings = {}
 let g:dotvim_settings.default_indent = 4
 if v:version >= '703' && has('lua')
@@ -99,64 +56,71 @@ let g:dotvim_settings.enable_cursorcolumn = 0
 let g:dotvim_settings.background = 'dark'
 let g:dotvim_settings.colorscheme = 'solarized'
 let g:dotvim_settings.notes_directory = ['~/vim-notes']
+let g:dotvim_settings.cache_dir = '~/.vim_cache'
+
+" 一些工具的路径
+let g:dotvim_settings.ag_path = ''
+if executable("ag")
+    let g:dotvim_settings.ag_path = 'ag'
+endif
+
+let g:dotvim_settings.ctags_path = ''
+if executable("ctags")
+    let g:dotvim_settings.ctags_path = 'ctags'
+endif
+
+let g:dotvim_settings.global_command = $GTAGSGLOBAL
+if g:dotvim_settings.global_command == ''
+    let g:dotvim_settings.global_command = "global"
+endif
+if !executable(g:dotvim_settings.global_command)
+    let g:dotvim_settings.global_command = ""
+endif
+
+" 确定libclang的位置 {{{
+let g:dotvim_settings.libclang_path = ""
+
+if s:is_windows
+    if filereadable(s:vimrc_path . "/win32/libclang.dll")
+        let g:dotvim_settings.libclang_path = s:vimrc_path . "/win32"
+    endif
+else
+    if filereadable(expand("~/libexec/libclang.so"))
+        let g:dotvim_settings.libclang_path = expand("~/libexec")
+    elseif filereadable(expand("/usr/lib/libclang.so"))
+        let g:dotvim_settings.libclang_path = expand("/usr/lib")
+    elseif filereadable(expand("/usr/lib64/libclang.so"))
+        let g:dotvim_settings.libclang_path = expand("/usr/lib64")
+    endif
+endif
+
+let g:dotvim_settings.clang_include_path = fnamemodify(finddir("include",  g:dotvim_settings.libclang_path . "/clang/**"), ":p")
+" }}}
 
 if v:version >= '704' && has('python')
     let g:dotvim_settings.snippet_engine = 'ultisnips'
 else
     let g:dotvim_settings.snippet_engine = 'neosnippet'
 endif
+" }}}
 
-if exists('g:dotvim_user_settings.plugin_groups')
-    let g:dotvim_settings.plugin_groups = g:dotvim_user_settings.plugin_groups
-else
-    let g:dotvim_settings.plugin_groups = []
-    call add(g:dotvim_settings.plugin_groups, 'core')
-    call add(g:dotvim_settings.plugin_groups, 'unite')
-    call add(g:dotvim_settings.plugin_groups, 'editing')
-    call add(g:dotvim_settings.plugin_groups, 'navigation')
-    call add(g:dotvim_settings.plugin_groups, 'snippet')
-    call add(g:dotvim_settings.plugin_groups, 'autocomplete')
-    call add(g:dotvim_settings.plugin_groups, 'textobj')
-    call add(g:dotvim_settings.plugin_groups, 'scm')
-    call add(g:dotvim_settings.plugin_groups, 'doc')
-    call add(g:dotvim_settings.plugin_groups, 'syntax')
-    call add(g:dotvim_settings.plugin_groups, 'visual')
-    call add(g:dotvim_settings.plugin_groups, 'misc')
-
-    call add(g:dotvim_settings.plugin_groups, 'cpp')
-    call add(g:dotvim_settings.plugin_groups, 'python')
-    call add(g:dotvim_settings.plugin_groups, 'haskell')
-    call add(g:dotvim_settings.plugin_groups, 'csharp')
-    call add(g:dotvim_settings.plugin_groups, 'web')
-    call add(g:dotvim_settings.plugin_groups, 'shell')
-
-    " exclude all language-specific plugins by default
-    if !exists('g:dotvim_user_settings.plugin_groups_exclude')
-        let g:dotvim_user_settings.plugin_groups_exclude = ['cpp' , 'python' , 'haskell' , 'csharp' , 'web' , 'shell']
-    endif
-    for group in g:dotvim_user_settings.plugin_groups_exclude
-        let i = index(g:dotvim_settings.plugin_groups, group)
-        if i != -1
-            call remove(g:dotvim_settings.plugin_groups, i)
-        endif
-    endfor
-    if exists('g:dotvim_user_settings.plugin_groups_include')
-        for group in g:dotvim_user_settings.plugin_groups_include
-            call add(g:dotvim_settings.plugin_groups, group)
-        endfor
-    endif
-endif
-if exists('g:dotvim_user_settings.disabled_plugins')
-    let g:dotvim_settings.disabled_plugins = g:dotvim_user_settings.disabled_plugins
-else
-    let g:dotvim_settings.disabled_plugins = []
-endif
+" {{{ 使用用户本地设置覆盖缺省设置
 " override defaults with the ones specified in g:dotvim_user_settings
 for key in keys(g:dotvim_settings)
     if has_key(g:dotvim_user_settings, key)
         let g:dotvim_settings[key] = g:dotvim_user_settings[key]
     endif
 endfor
+
+" plugin_groups_include/plugin_groups_exclude列表中存放的是正则表达式
+" exclude all language-specific plugins by default
+let g:dotvim_settings.plugin_groups_exclude = get(
+            \ g:dotvim_user_settings,
+            \ 'plugin_groups_exclude',
+            \ ['cpp' , 'python' , 'haskell' , 'csharp' , 'web' , 'shell'])
+let g:dotvim_settings.plugin_groups_include = get(g:dotvim_user_settings, 'plugin_groups_include', [])
+let g:dotvim_settings.disabled_plugins = get(g:dotvim_user_settings, 'disabled_plugins', [])
+" }}}
 " }}}
 
 " Helper Functions {{{
@@ -250,7 +214,7 @@ endfunction "}}}
 
 function! s:get_cache_dir(...) "{{{
     let i = 0
-    let path = resolve(expand(s:cache_dir))
+    let path = resolve(expand(g:dotvim_settings.cache_dir))
     if !isdirectory(path)
         call mkdir(path)
     endif
@@ -266,6 +230,44 @@ function! s:get_cache_dir(...) "{{{
 
     return path
 endfunction "}}}
+
+function! s:is_plugin_group_enabled(group_name)
+    for name in ["_plugin_groups", "_enabled_plugin_groups", "_disabled_plugin_groups"]
+        if !has_key(g:dotvim_settings, name)
+            let g:dotvim_settings[name] = []
+        endif
+    endfor
+
+    " 之前已经处理过了
+    if index(g:dotvim_settings._enabled_plugin_groups, a:group_name) >= 0
+        return 1
+    endif
+
+    " 形成一份包含目前支持的所有组的列表
+    if index(g:dotvim_settings._plugin_groups, a:group_name) < 0
+        call add(g:dotvim_settings._plugin_groups, a:group_name)
+    endif
+
+    " 在include中的优先级最高。include列表中，可以使用正则表达式
+    for pattern in g:dotvim_settings.plugin_groups_include
+        if a:group_name =~ pattern
+            call add(g:dotvim_settings._enabled_plugin_groups, a:group_name)
+            return 1
+        endif
+    endfor
+
+    " 在exclude中的组被禁用
+    for pattern in g:dotvim_settings.plugin_groups_exclude
+        if a:group_name =~ pattern
+            call add(g:dotvim_settings._disabled_plugin_groups, a:group_name)
+            return 0
+        endif
+    endfor
+
+    " 没在两个列表中的被启用
+    call add(g:dotvim_settings._enabled_plugin_groups, a:group_name)
+    return 1
+endfunction
 
 function! FindVcsRoot(path) " {{{
     let vcs_folder = ['.git', '.hg', '.svn', '.bzr', '_darcs']
@@ -300,7 +302,6 @@ function! FindVcsRoot(path) " {{{
 
     return path
 endfunction " }}}
-
 
 " s:VisualSelection(): 返回当前被选中的文字 {{{
 " Thanks to xolox!
@@ -535,6 +536,11 @@ endif
 " Highlight space errors in C/C++ source files (Vim tip #935)
 let c_space_errors=1
 let java_space_errors=1
+
+if g:dotvim_settings.ag_path != ""
+    exec 'set grepprg=' . g:dotvim_settings.ag_path . '\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow'
+    set grepformat=%f:%l:%c:%m
+endif
 " }}}
 
 " Auto commands " {{{
@@ -764,7 +770,7 @@ let g:neobundle#install_process_timeout = 1500
 " NeoBundle 'Shougo/neobundle.vim'    " 插件管理软件
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'core') "{{{
+if s:is_plugin_group_enabled('core') "{{{
     " vimproc: 用于异步执行命令的插件，被其它插件依赖 {{{
     if (s:is_windows)
         " Windows下需要固定为与dll对应的版本
@@ -788,7 +794,7 @@ if count(g:dotvim_settings.plugin_groups, 'core') "{{{
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'unite') "{{{
+if s:is_plugin_group_enabled('unite') "{{{
     " unite.vim: Unite主插件，提供\f开头的功能 {{{
     NeoBundleLazy 'Shougo/unite.vim', {
                 \ 'on_cmd' : [
@@ -843,9 +849,9 @@ if count(g:dotvim_settings.plugin_groups, 'unite') "{{{
     " let g:unite_winwidth = winwidth("%") / 2
     let g:unite_winwidth = 40
 
-    if s:ag_path != ""
+    if g:dotvim_settings.ag_path != ""
         " Use ag in unite grep source.
-        let g:unite_source_grep_command = s:ag_path
+        let g:unite_source_grep_command = g:dotvim_settings.ag_path
         let g:unite_source_grep_default_opts =
                     \ '--line-numbers --nocolor --nogroup --hidden --ignore ''.hg''' .
                     \ ' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr''' .
@@ -963,7 +969,7 @@ if count(g:dotvim_settings.plugin_groups, 'unite') "{{{
                 \ "on_unite" : ["gtags/ref","gtags/def","gtags/context","gtags/completion","gtags/grep","gtags/file"],
                 \ }
     call neobundle#config('unite-gtags', {
-                \ 'disabled' : !s:has_global,
+                \ 'disabled' : g:dotvim_settings.global_command=='',
                 \ })
 
     if neobundle#tap('unite-gtags')
@@ -1063,7 +1069,7 @@ if count(g:dotvim_settings.plugin_groups, 'unite') "{{{
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'editing') "{{{
+if s:is_plugin_group_enabled('editing') "{{{
     " vim-alignta: 代码对齐插件。通过\fa访问 {{{
     NeoBundleLazy 'h1mesuke/vim-alignta', {
                 \ 'on_cmd' : ['Alignta'],
@@ -1207,7 +1213,7 @@ if count(g:dotvim_settings.plugin_groups, 'editing') "{{{
                 \ }
     " 启用global后，将不用ctags，因此echofunc.vim会失效
     call neobundle#config('echofunc', {
-                \ 'disabled' : s:has_global,
+                \ 'disabled' : g:dotvim_settings.global_command!='',
                 \ })
     " }}}
     " 为函数插入Doxygen注释。在函数名所在行输入 :Dox 即可 {{{
@@ -1331,15 +1337,13 @@ if count(g:dotvim_settings.plugin_groups, 'editing') "{{{
                 \ }
     let g:fastfold_savehook = 0
     " }}}
-    " vim-fakeclip: 为vim在终端等场合提供+/"寄存器，支持tmux/screen缓冲区 {{{
-    NeoBundleLazy 'kana/vim-fakeclip', {
-                \ 'on_cmd' : ['FakeclipDefaultKeyMappings'],
-                \ }
+    " vim-fakeclip: 为vim在终端等场合提供&/+/"寄存器，其中&支持tmux/screen缓冲区 {{{
+    NeoBundle 'kana/vim-fakeclip'
     " }}}
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'navigation') "{{{
+if s:is_plugin_group_enabled('navigation') "{{{
     " vim-easymotion: \\w启动word motion，\\f<字符>启动查找模式 {{{
     if v:version >= '703'
         NeoBundleLazy 'Lokaltog/vim-easymotion', {
@@ -1394,8 +1398,8 @@ if count(g:dotvim_settings.plugin_groups, 'navigation') "{{{
                 \     {'name': 'LAckHelp', 'complete': 'help'},
                 \     'AckWindow', 'LAckWindow',
                 \ ]}
-    if s:ag_path != ""
-        let g:ackprg = s:ag_path . " --nogroup --column --smart-case --follow"
+    if g:dotvim_settings.ag_path != ""
+        let g:ackprg = g:dotvim_settings.ag_path . " --nogroup --column --smart-case --follow"
     endif
 
     " let g:ackhighlight = 1
@@ -1424,8 +1428,8 @@ if count(g:dotvim_settings.plugin_groups, 'navigation') "{{{
                 \     {'name': 'CtrlSF', 'complete': 'customlist,ctrlsf#comp#Completion'},
                 \     'CtrlSFOpen', 'CtrlSFUpdate', 'CtrlSFClose', 'CtrlSFClearHL', 'CtrlSFToggle',
                 \ ]}
-    if s:ag_path != ""
-        let g:ctrlsf_ackprg = s:ag_path
+    if g:dotvim_settings.ag_path != ""
+        let g:ctrlsf_ackprg = g:dotvim_settings.ag_path
     endif
 
     let g:ctrlsf_default_root = 'project'
@@ -1529,7 +1533,7 @@ if count(g:dotvim_settings.plugin_groups, 'navigation') "{{{
     nnoremap <silent> g<F9> :<C-U>TagbarCurrentTag fs<CR>
     nnoremap <silent> <F9> :<C-U>TagbarToggle<CR>
 
-    let g:tagbar_ctags_bin = s:ctags_path
+    let g:tagbar_ctags_bin = g:dotvim_settings.ctags_path
 
     let g:tagbar_type_jam = {
                 \ 'ctagstype' : 'jam',
@@ -1581,7 +1585,7 @@ if count(g:dotvim_settings.plugin_groups, 'navigation') "{{{
                 \     'GtagsCandidate',
                 \ ]}
     call neobundle#config('gtags.vim', {
-                \ 'disabled' : !s:has_global,
+                \ 'disabled' : g:dotvim_settings.global_command=='',
                 \ })
 
     if !neobundle#tap('gtags.vim')
@@ -1796,7 +1800,7 @@ if count(g:dotvim_settings.plugin_groups, 'navigation') "{{{
 endif
 "}}}
 
-if count(g:dotvim_settings.plugin_groups, 'autocomplete') "{{{
+if s:is_plugin_group_enabled('autocomplete') "{{{
     if g:dotvim_settings.autocomplete_method == 'ycm' "{{{
         " " " YouCompleteMe: 代码补全 {{{
         " NeoBundleLazy 'Valloric/YouCompleteMe', {
@@ -1833,8 +1837,8 @@ if count(g:dotvim_settings.plugin_groups, 'autocomplete') "{{{
             " Define dictionary.
             let g:neocomplete#sources#dictionary#dictionaries = {
                         \ 'default' : '',
-                        \ 'vimshell' : expand(s:cache_dir.'/.vimshell_hist'),
-                        \ 'scheme' : expand(s:cache_dir.'/.gosh_completions')
+                        \ 'vimshell' : expand(g:dotvim_settings.cache_dir.'/.vimshell_hist'),
+                        \ 'scheme' : expand(g:dotvim_settings.cache_dir.'/.gosh_completions')
                         \ }
 
             " Plugin key-mappings.
@@ -1909,8 +1913,8 @@ if count(g:dotvim_settings.plugin_groups, 'autocomplete') "{{{
             " Define dictionary.
             let g:neocomplcache_dictionary_filetype_lists = {
                         \ 'default' : '',
-                        \ 'vimshell' : expand(s:cache_dir.'/.vimshell_hist'),
-                        \ 'scheme' : expand(s:cache_dir.'/.gosh_completions')
+                        \ 'vimshell' : expand(g:dotvim_settings.cache_dir.'/.vimshell_hist'),
+                        \ 'scheme' : expand(g:dotvim_settings.cache_dir.'/.gosh_completions')
                         \ }
 
             inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
@@ -1997,7 +2001,7 @@ if count(g:dotvim_settings.plugin_groups, 'autocomplete') "{{{
 endif
 "}}}
 
-if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
+if s:is_plugin_group_enabled('snippet') "{{{
     if g:dotvim_settings.snippet_engine == 'neosnippet' "{{{
         " neosnippet: 代码模板引擎 {{{
         NeoBundleLazy 'Shougo/neosnippet', {
@@ -2124,7 +2128,7 @@ if count(g:dotvim_settings.plugin_groups, 'snippet') "{{{
 endif
 "}}}
 
-if count(g:dotvim_settings.plugin_groups, 'textobj') "{{{
+if s:is_plugin_group_enabled('textobj') "{{{
     " vim-textobj-indent: 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进） {{{
     NeoBundle 'kana/vim-textobj-indent', {
                \ 'depends' : 'kana/vim-textobj-user',
@@ -2154,7 +2158,7 @@ if count(g:dotvim_settings.plugin_groups, 'textobj') "{{{
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'scm') "{{{
+if s:is_plugin_group_enabled('scm') "{{{
     " vcscommand.vim: SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件 {{{
     NeoBundleLazy 'vcscommand.vim', {
                 \ 'on_map' : [
@@ -2194,14 +2198,14 @@ if count(g:dotvim_settings.plugin_groups, 'scm') "{{{
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'cpp') "{{{
+if s:is_plugin_group_enabled('cpp') "{{{
     " clang_complete: 使用clang编译器进行上下文补全 {{{
     NeoBundleLazy 'Rip-Rip/clang_complete', {
                 \ 'on_ft' : ['c', 'cpp'],
                 \ }
     call neobundle#config('clang_complete', {
                 \ 'disabled' : (g:dotvim_settings.cpp_complete_method != 'clang_complete'
-                \           || (s:libclang_path == "" && !executable('clang'))),
+                \           || (g:dotvim_settings.libclang_path == "" && !executable('clang'))),
                 \ })
     if neobundle#tap('clang_complete')
         " clang编译方法：
@@ -2226,9 +2230,9 @@ if count(g:dotvim_settings.plugin_groups, 'cpp') "{{{
         let g:clang_user_options = '-std=c++11 -stdlib=libc++'
         let g:clang_complete_macros = 1
 
-        if s:libclang_path != ""
+        if g:dotvim_settings.libclang_path != ""
             let g:clang_use_library = 1
-            let g:clang_library_path = s:libclang_path
+            let g:clang_library_path = g:dotvim_settings.libclang_path
         endif
     endif
     " }}}
@@ -2255,8 +2259,8 @@ if count(g:dotvim_settings.plugin_groups, 'cpp') "{{{
         endif
         let g:clang_cpp_options .= ' -std=c++11 -stdlib=libc++'
 
-        if s:clang_include_path != ""
-            let g:clang_cpp_options .= " -I " . s:clang_include_path
+        if g:dotvim_settings.clang_include_path != ""
+            let g:clang_cpp_options .= " -I " . g:dotvim_settings.clang_include_path
         endif
     endif
     " }}}
@@ -2270,14 +2274,14 @@ if count(g:dotvim_settings.plugin_groups, 'cpp') "{{{
                 \ }
     call neobundle#config('vim-marching', {
                 \ 'disabled' : g:dotvim_settings.cpp_complete_method !~ 'marching.*'
-                \           || (s:libclang_path == "" && !executable('clang')),
+                \           || (g:dotvim_settings.libclang_path == "" && !executable('clang')),
                 \ })
     if neobundle#tap('vim-marching')
         let g:marching_enable_neocomplete = 1
         let g:marching_clang_command_option = ' -std=c++11 -stdlib=libc++'
 
         if g:dotvim_settings.cpp_complete_method == 'marching' " 自动选择方式
-            if s:libclang_path != ""
+            if g:dotvim_settings.libclang_path != ""
                 let g:dotvim_settings.cpp_complete_method = 'marching.snowdrop'
             else
                 let g:dotvim_settings.cpp_complete_method = 'marching.async'
@@ -2313,11 +2317,11 @@ if count(g:dotvim_settings.plugin_groups, 'cpp') "{{{
                 \ 'on_unite' : ['snowdrop/includes', 'snowdrop/outline'],
                 \ }
     call neobundle#config('vim-snowdrop', {
-                \ 'disabled' : s:libclang_path == "",
+                \ 'disabled' : g:dotvim_settings.libclang_path == "",
                 \ })
     if neobundle#tap('vim-snowdrop')
-        let g:snowdrop#libclang_directory = fnamemodify(s:libclang_path, ':p:h')
-        let g:snowdrop#libclang_file      = fnamemodify(s:libclang_path, ':p:t')
+        let g:snowdrop#libclang_directory = fnamemodify(g:dotvim_settings.libclang_path, ':p:h')
+        let g:snowdrop#libclang_file      = fnamemodify(g:dotvim_settings.libclang_path, ':p:t')
 
         " Enable code completion in neocomplete.vim.
         let g:neocomplete#sources#snowdrop#enable = 1
@@ -2404,7 +2408,7 @@ if count(g:dotvim_settings.plugin_groups, 'cpp') "{{{
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'python') "{{{
+if s:is_plugin_group_enabled('python') "{{{
     " jedi-vim: 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置 {{{
     NeoBundleLazy 'davidhalter/jedi-vim', {
                 \ 'on_ft' : ['python', 'python3'],
@@ -2418,7 +2422,7 @@ if count(g:dotvim_settings.plugin_groups, 'python') "{{{
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'haskell') "{{{
+if s:is_plugin_group_enabled('haskell') "{{{
     " neco-ghc: 结合neocomplete补全haskell {{{
     NeoBundleLazy 'eagletmt/neco-ghc', {
                 \ 'on_ft' : ['haskell'],
@@ -2469,7 +2473,7 @@ if count(g:dotvim_settings.plugin_groups, 'haskell') "{{{
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'csharp') "{{{
+if s:is_plugin_group_enabled('csharp') "{{{
     " vim-csharp: C#文件的支持 {{{
     NeoBundleLazy 'OrangeT/vim-csharp', {
                 \ 'on_ft' : ['csharp'],
@@ -2478,7 +2482,7 @@ if count(g:dotvim_settings.plugin_groups, 'csharp') "{{{
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'web') "{{{
+if s:is_plugin_group_enabled('web') "{{{
     " Emmet.vim: 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>, {{{
     NeoBundleLazy 'mattn/emmet-vim', {
                 \ 'on_ft' : ['xml','html','css','sass','scss','less'],
@@ -2507,7 +2511,7 @@ if count(g:dotvim_settings.plugin_groups, 'web') "{{{
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'shell') "{{{
+if s:is_plugin_group_enabled('shell') "{{{
     " Conque-GDB: 在vim中进行gdb调试 {{{
     NeoBundleLazy 'Conque-GDB', {
                 \ 'disabled' : !executable("gdb"),
@@ -2630,7 +2634,7 @@ if count(g:dotvim_settings.plugin_groups, 'shell') "{{{
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'doc') "{{{
+if s:is_plugin_group_enabled('doc') "{{{
     " vim-orgmode: 对emacs的org文件的支持 {{{
     NeoBundleLazy 'jceb/vim-orgmode', {
                 \ 'depends' : [
@@ -2665,7 +2669,7 @@ if count(g:dotvim_settings.plugin_groups, 'doc') "{{{
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'syntax') "{{{
+if s:is_plugin_group_enabled('syntax') "{{{
     " SyntaxRange: 在一段文字中使用特别的语法高亮 {{{
     NeoBundleLazy 'SyntaxRange', {
                 \ 'depends': ['ingo-library'],
@@ -2706,7 +2710,7 @@ if count(g:dotvim_settings.plugin_groups, 'syntax') "{{{
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'visual') "{{{
+if s:is_plugin_group_enabled('visual') "{{{
     " vim-airline: 增强的statusline {{{
     NeoBundle 'vim-airline/vim-airline', {
                 \ 'depends': ['vim-airline/vim-airline-themes'],
@@ -2869,7 +2873,7 @@ if count(g:dotvim_settings.plugin_groups, 'visual') "{{{
 endif
 " }}}
 
-if count(g:dotvim_settings.plugin_groups, 'misc') "{{{
+if s:is_plugin_group_enabled('misc') "{{{
     " LargeFile: 在打开大文件时，禁用语法高亮以提供打开速度 {{{
     NeoBundle 'LargeFile'
     " }}}
