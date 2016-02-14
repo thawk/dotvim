@@ -97,18 +97,18 @@ footnote:[${1:${VISUAL:text}}]${0}
 endsnippet
 
 snippet anchor "Hypertext link target"
-anchor:${1:id}[${2:${VISUAL:label}}]${0}
+anchor:${1:${VISUAL:id}}[${2:label}]${0}
 endsnippet
 
 snippet xref "Link to hypertext anchor"
-xref:${1:id}[${2:${VISUAL:caption}}]${0}
+xref:${1:${VISUAL:id}}[${2:caption}]${0}
 endsnippet
 
 snippet image "Image"
-image:${1:target}[${2:alt="${VISUAL}$3"}]${0}
+image:${1:${VISUAL:target}}[${2:alt="$3"}]${0}
 endsnippet
 
 snippet link "Link to URL"
-link:${1:url}[${2:${VISUAL:caption}}]${0}
+link:${1:${VISUAL:url}}[${2:title}]${0}
 endsnippet
 
