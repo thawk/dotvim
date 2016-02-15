@@ -2714,7 +2714,7 @@ endif
 if s:is_plugin_group_enabled('visual') "{{{
     " vim-airline: 增强的statusline {{{
     NeoBundle 'vim-airline/vim-airline', {
-                \ 'depends': ['vim-airline/vim-airline-themes'],
+                \ 'depends': ['vim-airline/vim-airline-themes', 'unicode.vim'],
                 \ }
     let bundle = neobundle#get('vim-airline')
     function! bundle.hooks.on_post_source(bundle)
@@ -2927,6 +2927,7 @@ if s:is_plugin_group_enabled('misc') "{{{
                 \   ['n','<leader>un'],
                 \ ],
                 \ 'on_cmd' : ['UnicodeName', 'Digraphs', 'SearchUnicode', 'UnicodeTable', 'DownloadUnicode'],
+                \ 'on_func' : ['unicode#FindDigraphBy', 'unicode#FindUnicodeBy', 'unicode#Digraph', 'unicode#Download', 'unicode#UnicodeName'],
                 \ }
     nmap ga <Plug>(UnicodeGA)
     " }}}
