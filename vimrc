@@ -2912,11 +2912,23 @@ if s:is_plugin_group_enabled('misc') "{{{
     nnoremap <silent> [unite]ec :<C-u>VimFiler<CR>
     nnoremap <silent> [unite]eb :<C-u>VimFiler <C-R>=expand("%:p:h")<CR><CR>
     " }}}
-    " tpope/vim-characterize: ga会显示当前字符的更多信息 {{{
-    NeoBundleLazy 'tpope/vim-characterize', {
-                \     'on_map' : ['<Plug>'],
+    " " tpope/vim-characterize: ga会显示当前字符的更多信息 {{{
+    " NeoBundleLazy 'tpope/vim-characterize', {
+    "             \     'on_map' : ['<Plug>'],
+    "             \ }
+    " nmap ga <Plug>(characterize)
+    " " }}}
+    " unicode.vim: ga会显示当前字符的更多信息，<C-X><C-G>/<C-X><C-Z>进行补全 {{{
+    NeoBundleLazy 'chrisbra/unicode.vim', {
+                \ 'on_map' : [
+                \   ['nxo','<Plug>'],
+                \   ['nx','<F4>'],
+                \   ['i', '<C-X><C-G>', '<C-X><C-Z>'],
+                \   ['n','<leader>un'],
+                \ ],
+                \ 'on_cmd' : ['UnicodeName', 'Digraphs', 'SearchUnicode', 'UnicodeTable', 'DownloadUnicode'],
                 \ }
-    nmap ga <Plug>(characterize)
+    nmap ga <Plug>(UnicodeGA)
     " }}}
     " vim-eunuch: Remove/Unlink/Move/SudoEdit/SudoWrite等UNIX命令 {{{
     NeoBundleLazy 'tpope/vim-eunuch', {
