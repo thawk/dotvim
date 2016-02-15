@@ -2682,7 +2682,7 @@ if s:is_plugin_group_enabled('syntax') "{{{
                 \ ]}
     " }}}
     " csv.vim: 增加对CSV文件（逗号分隔文件）的支持 {{{
-    NeoBundleLazy 'csv.vim', {
+    NeoBundleLazy 'chrisbra/csv.vim', {
                 \ 'on_ft' : ['csv'],
                 \ 'on_path' : '.*\.csv',
                 \ }
