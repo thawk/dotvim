@@ -920,6 +920,7 @@ if s:is_plugin_group_enabled('unite') "{{{
     " neoyank.vim: unite的history/yank源，提供历史yank缓冲区。通过\fy访问 {{{
     NeoBundle 'Shougo/neoyank.vim', {
                 \ 'on_unite' : ['history/yank'],
+                \ 'on_path' : '.*',
                 \ }
     let g:neoyank#file = s:path_join(s:get_cache_dir('neoyank'), 'history_yank')
     " }}}
