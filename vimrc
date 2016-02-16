@@ -1789,6 +1789,7 @@ if s:is_plugin_group_enabled('navigation') "{{{
                 \ 'on_unite' : 'ref',
                 \ 'on_map' : ['nv', 'K', '<Plug>(ref-keyword)'],
                 \ }
+    let g:ref_man_cmd = executable('man') ? 'man' : ''
     " }}}
     " vim-expand-region: 选择模式下，按+/_扩展和收缩选区 {{{
     NeoBundleLazy 'terryma/vim-expand-region', {
