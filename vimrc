@@ -2416,7 +2416,26 @@ if s:is_plugin_group_enabled('python') "{{{
     NeoBundleLazy 'davidhalter/jedi-vim', {
                 \ 'on_ft' : ['python', 'python3'],
                 \ }
-    let g:jedi#popup_select_first = 0   " 不要自动选择第一个候选项
+    if neobundle#tap('jedi-vim')
+        let g:jedi#popup_select_first = 0   " 不要自动选择第一个候选项
+        let g:jedi#show_call_signatures = 2 " 在cmdline显示函数签名
+        let g:jedi#popup_on_dot = 1
+
+        let g:jedi#goto_command = "<leader>d"
+        let g:jedi#goto_assignments_command = ""
+        let g:jedi#completions_command = ""
+        let g:jedi#call_signatures_command = "<leader>n"
+        let g:jedi#usages_command = "<leader>n"
+        let g:jedi#rename_command = "<leader>r"
+        let g:jedi#documentation_command = "K"
+
+        autocmd FileType python
+                    \ nmap <buffer> [tag]] <leader>d
+                    \ | nmap <buffer> [tag]g <leader>d
+                    \ | nmap <buffer> [tag]s <leader>n
+
+        call neobundle#untap()
+    endif
     " }}}
     "NeoBundle 'tmhedberg/SimpylFold'
     NeoBundleLazy 'hynek/vim-python-pep8-indent', {
