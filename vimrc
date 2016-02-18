@@ -513,7 +513,31 @@ if has('multi_byte_ime')
     highlight Cursor guifg=NONE guibg=Green
     highlight CursorIM guifg=NONE guibg=Purple
 endif
+" }}}
 
+" Syntax Highlight {{{
+let g:vimsyn_folding = ''
+let g:vimsyn_folding .= 'a' " augroups
+let g:vimsyn_folding .= 'f' " fold functions
+let g:vimsyn_folding .= 'm' " fold mzscheme script
+let g:vimsyn_folding .= 'p' " fold perl     script
+let g:vimsyn_folding .= 'P' " fold python   script
+let g:vimsyn_folding .= 'r' " fold ruby     script
+let g:vimsyn_folding .= 't' " fold tcl      script
+
+let g:load_doxygen_syntax = 1 " 启用源代码中的doxygen注释高亮
+let g:doxygen_enhanced_color = 1    " 对Doxygen注释使用非标准高亮
+
+let g:is_bash	   = 1  " 如果没有#!行，缺省认为shell脚本用的是bash
+
+let g:sh_fold_enabled = 0      " default, no syntax folding
+let g:sh_fold_enabled += 1     " enable function folding
+let g:sh_fold_enabled += 2     " enable heredoc folding
+let g:sh_fold_enabled += 4     " enable if/do/for folding
+
+" 启用XML文件语法折叠，在打开大XML时可能会慢一些。参见:help xml-folding
+let g:xml_syntax_folding = 1
+autocmd FileType xml setlocal foldmethod=syntax
 " }}}
 
 " Coding {{{
