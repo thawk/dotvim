@@ -3196,6 +3196,11 @@ else
 endif
 " }}}
 
+" 用jk/kj退出编辑模式 {{{
+inoremap jk <Esc>
+inoremap kj <Esc>
+" }}}
+
 " 其它 {{{
 " Split line(opposite to S-J joining line)
 " nnoremap <silent> <C-J> gEa<CR><ESC>ew
