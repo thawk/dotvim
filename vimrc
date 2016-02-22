@@ -1146,12 +1146,23 @@ if s:is_plugin_group_enabled('editing') "{{{
     nnoremap <silent> [unite]a :<C-u>Unite alignta:options -no-start-insert<CR>
     xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments -no-start-insert<CR>
     " }}}
-    " YankRing.vim: 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容 {{{
+    "" YankRing.vim: 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容 {{{
     "NeoBundle 'YankRing.vim'
     "    let g:yankring_persist = 0              "不把yankring持久化
     "    let g:yankring_share_between_instances = 0
     "    let g:yankring_manual_clipboard_check = 1
     " }}}
+
+    " ExtractMatches: 可以拷贝匹配pattern的内容 {{{
+    NeoBundleLazy 'ExtractMatches', {
+                \ 'on_cmd' : [
+                \     'GrepToReg', 'YankMatches', 'YankUniqueMatches',
+                \     'PrintMatches', 'PrintUniqueMatches', 'SubstituteAndYank ',
+                \     'SubstituteAndYankUnique', 'PutMatches', 'PutUniqueMatches',
+                \ ],
+                \ }
+    " }}}
+
     "" vis: 在块选后（<C-V>进行选择），:B cmd在选中内容中执行cmd {{{
     "NeoBundleLazy 'vis', {
     "    \ 'on_cmd' : ['B'],
@@ -1347,14 +1358,16 @@ if s:is_plugin_group_enabled('editing') "{{{
                 \     ],
                 \ ],
                 \ 'on_cmd': [
-                \     'G', 'StringScanner', 'Mkvimrc', 'BufTypeDo', 'BufMatchDo',
-                \     'QFargs', 'QFargslocal', 'LLargs', 'LLargslocal',
-                \     'QFbufs', 'LLbufs', 'QFdo', 'LLdo', 'Filter',
+                \     'G', 'StringScanner', 'Mkvimrc', 'BufTypeDo',
+                \     'BufMatchDo', 'QFargs', 'QFargslocal', 'LLargs',
+                \     'LLargslocal', 'QFbufs', 'LLbufs', 'QFdo',
+                \     'LLdo', 'Filter',
                 \     {'name': 'ReadIntoBuffer', 'complete': 'file'},
                 \     {'name': 'View', 'complete': 'command'},
+                \     {'name': 'ViewFT', 'complete': 'command'},
                 \     {'name': 'ViewExpr', 'complete': 'command'},
                 \     {'name': 'ViewSys', 'complete': 'command'},
-                \     'Collect', 'Silently',
+                \     'Collect', 'GCollect', 'Silently',
                 \ ]}
     " }}}
     " FastFold: 编辑时不自动更新折叠，在保存或手工进行折叠操作时才更新 {{{
