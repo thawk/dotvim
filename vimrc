@@ -1370,12 +1370,6 @@ if s:is_plugin_group_enabled('editing') "{{{
                 \     'Collect', 'GCollect', 'Silently',
                 \ ]}
     " }}}
-    " FastFold: 编辑时不自动更新折叠，在保存或手工进行折叠操作时才更新 {{{
-    NeoBundleLazy 'Konfekt/FastFold', {
-                \ 'on_path' : ['.*'],
-                \ }
-    let g:fastfold_savehook = 0
-    " }}}
     " vim-fakeclip: 为vim在终端等场合提供&/+/"寄存器，其中&支持tmux/screen缓冲区 {{{
     NeoBundle 'kana/vim-fakeclip'
     " }}}
