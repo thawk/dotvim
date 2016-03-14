@@ -359,7 +359,7 @@ endif
 " }}}
 
 if (s:is_windows)
-    set shellpipe=\|\ tee
+    set shellpipe=2>&1\ \|\ tee
     set shellslash
 endif
 
@@ -2439,6 +2439,16 @@ if s:is_plugin_group_enabled('cpp') "{{{
                 \   'clang-head' : '-O3 -Werror',
                 \ })
     " }}}
+endif
+" }}}
+
+if s:is_plugin_group_enabled('arduino') "{{{
+    " arduvim: 提供了更多的Arduino关键字，并且可以根据需要生成自己的库的关键字 {{{
+    NeoBundleLazy 'z3t0/arduvim', {
+                \ 'on_ft' : ['arduino'],
+                \ }
+    " vim-compiler-arduino: 利用Arduino IDE的命令行作为Arduino的compiler {{{
+    NeoBundle 'thawk/vim-compiler-arduino'
 endif
 " }}}
 
