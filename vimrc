@@ -2760,6 +2760,11 @@ if s:is_plugin_group_enabled('syntax') "{{{
                 \ 'on_path' : ['.*\.pot\?'],
                 \ }
     " }}}
+    " vim-drake-syntax: Drake的语法高亮（命令行workflow工具） {{{
+    NeoBundleLazy 'bitbucket:larsyencken/vim-drake-syntax.git', {
+                \ 'on_ft' : ['po'],
+                \ }
+    " }}}
 endif
 " }}}
 
