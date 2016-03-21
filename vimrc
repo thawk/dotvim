@@ -1024,7 +1024,7 @@ if s:is_plugin_group_enabled('unite') "{{{
     " unite的key binding {{{
     nnoremap [unite]S :<C-U>Unite source<CR>
 
-    nnoremap <silent> [unite]y :<C-U>Unite -buffer-name=yanks history/yank register<CR>
+    nnoremap <silent> [unite]y :<C-U>Unite -buffer-name=yanks history/yank -default-action=append register<CR>
     nnoremap <silent> [unite]w :<C-u>UniteWithCursorWord -buffer-name=register buffer file_mru bookmark file<CR>
     " nnoremap <silent> [unite]c :<C-u>Unite change jump<CR>
     " nnoremap <silent> [unite]R :<C-u>Unite -buffer-name=resume resume<CR>
