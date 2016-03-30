@@ -2303,7 +2303,6 @@ if s:is_plugin_group_enabled('cpp') "{{{
                     \ 'on_cmd' : [
                     \     'MarchingBufferClearCache', 'MarchingDebugLog'],
                     \ 'on_map' : [['i', '<Plug>(marching_']],
-                    \ }
                     \ })
 
         let g:marching_enable_neocomplete = 1
@@ -2369,7 +2368,7 @@ if s:is_plugin_group_enabled('cpp') "{{{
                     \ 'depends' : 'kana/vim-operator-user',
                     \ }
     if executable('clang-format')
-        call neobundle#config('clang-format', {
+        call neobundle#config('vim-clang-format', {
                     \ 'on_cmd' : ['ClangFormat'],
                     \ 'on_map' : ['<Plug>(operator-clang-format'],
                     \ })
