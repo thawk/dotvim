@@ -2293,7 +2293,9 @@ if s:is_plugin_group_enabled('cpp') "{{{
     endif
     " }}}
     " vim-marching: 使用clang进行补全 {{{
-    NeoBundleLazy 'osyo-manga/vim-marching'
+    NeoBundleLazy 'osyo-manga/vim-marching', {
+                    \ 'depends' : ['osyo-manga/vim-reunions', ],
+                    \ }
     if g:dotvim_settings.cpp_complete_method =~ 'marching.*'
                 \ && !(g:dotvim_settings.libclang_path == "" && !executable('clang'))
         call neobundle#config('vim-marching', {
@@ -2301,7 +2303,6 @@ if s:is_plugin_group_enabled('cpp') "{{{
                     \ 'on_cmd' : [
                     \     'MarchingBufferClearCache', 'MarchingDebugLog'],
                     \ 'on_map' : [['i', '<Plug>(marching_']],
-                    \ 'depends' : ['osyo-manga/vim-reunions', ],
                     \ }
                     \ })
 
@@ -2345,7 +2346,7 @@ if s:is_plugin_group_enabled('cpp') "{{{
                     \     'SnowdropEchoResultTypeof', 'SnowdropFixit',
                     \ ],
                     \ 'on_unite' : ['snowdrop/includes', 'snowdrop/outline'],
-                    \ }
+                    \ })
     endif
 
     if neobundle#tap('vim-snowdrop')
@@ -2364,12 +2365,13 @@ if s:is_plugin_group_enabled('cpp') "{{{
     endif
     " }}}
     " vim-clang-format: 使用clang编译器进行上下文补全 {{{
-    NeoBundleLazy 'rhysd/vim-clang-format'
+    NeoBundleLazy 'rhysd/vim-clang-format', {
+                    \ 'depends' : 'kana/vim-operator-user',
+                    \ }
     if executable('clang-format')
         call neobundle#config('clang-format', {
                     \ 'on_cmd' : ['ClangFormat'],
                     \ 'on_map' : ['<Plug>(operator-clang-format'],
-                    \ 'depends' : 'kana/vim-operator-user',
                     \ })
 
         let g:clang_format#code_style = 'google'
