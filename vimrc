@@ -1092,6 +1092,18 @@ endif
 " }}}
 
 if s:is_plugin_group_enabled('editing') "{{{
+    " vim-easy-align: 代码对齐插件。n/x模式下通过ga启动 {{{
+    NeoBundleLazy 'junegunn/vim-easy-align', {
+                \ 'on_map' : ['<Plug>(EasyAlign)', '<Plug>(LiveEasyAlign)', '<Plug>(EasyAlignRepeat)'],
+                \ 'on_cmd' : ['EasyAlign', 'LiveEasyAlign'],
+                \ }
+    " Start interactive EasyAlign in visual mode (e.g. vipga)
+    xmap ga <Plug>(EasyAlign)
+
+    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+    nmap ga <Plug>(EasyAlign)
+    " }}}
+
     " vim-alignta: 代码对齐插件。通过\fa访问 {{{
     NeoBundleLazy 'h1mesuke/vim-alignta', {
                 \ 'on_cmd' : ['Alignta'],
@@ -3006,7 +3018,7 @@ if s:is_plugin_group_enabled('misc') "{{{
                 \ 'on_cmd' : ['UnicodeName', 'Digraphs', 'SearchUnicode', 'UnicodeTable', 'DownloadUnicode'],
                 \ 'on_func' : ['unicode#FindDigraphBy', 'unicode#FindUnicodeBy', 'unicode#Digraph', 'unicode#Download', 'unicode#UnicodeName'],
                 \ }
-    nmap ga <Plug>(UnicodeGA)
+    " nmap ga <Plug>(UnicodeGA)
     " }}}
     " vim-eunuch: Remove/Unlink/Move/SudoEdit/SudoWrite等UNIX命令 {{{
     NeoBundleLazy 'tpope/vim-eunuch', {
@@ -3054,11 +3066,11 @@ if s:is_plugin_group_enabled('misc') "{{{
     NeoBundleLazy 'Shougo/context_filetype.vim', {
                 \ }
     " }}}
-    " vim-markdown-concealed: markdown支持，并且利用conceal功能隐藏不需要的字符 {{{
-    NeoBundleLazy 'prurigro/vim-markdown-concealed', {
-                \ 'on_ft' : ['markdown'],
-                \ }
-    " }}}
+    " " vim-markdown-concealed: markdown支持，并且利用conceal功能隐藏不需要的字符 {{{
+    " NeoBundleLazy 'prurigro/vim-markdown-concealed', {
+    "             \ 'on_ft' : ['markdown'],
+    "             \ }
+    " " }}}
     " NeoBundle 'tyru/current-func-info.vim'
 endif
 " }}}
