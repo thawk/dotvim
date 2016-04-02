@@ -1092,68 +1092,98 @@ endif
 " }}}
 
 if s:is_plugin_group_enabled('editing') "{{{
-    " vim-easy-align: 代码对齐插件。n/x模式下通过ga启动 {{{
+    " vim-easy-align: 代码对齐插件。普通模式下通过ga启动，visual模式通过回车启
+    " 用{{{
     NeoBundleLazy 'junegunn/vim-easy-align', {
                 \ 'on_map' : ['<Plug>(EasyAlign)', '<Plug>(LiveEasyAlign)', '<Plug>(EasyAlignRepeat)'],
                 \ 'on_cmd' : ['EasyAlign', 'LiveEasyAlign'],
                 \ }
-    " Start interactive EasyAlign in visual mode (e.g. vipga)
-    xmap ga <Plug>(EasyAlign)
+    if neobundle#tap('vim-easy-align')
+        " Start interactive EasyAlign in visual mode (e.g. vipga)
+        vmap <Enter> <Plug>(EasyAlign)
 
-    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-    nmap ga <Plug>(EasyAlign)
+        " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+        nmap ga <Plug>(EasyAlign)
+
+        " 对齐过程中禁用foldmethod，以免拖慢速度
+        let g:easy_align_bypass_fold = 1
+
+        if !exists('g:easy_align_delimiters')
+            let g:easy_align_delimiters = {}
+        endif
+
+        " 对齐C/C++注释
+        let g:easy_align_delimiters['/'] = {
+                    \  'pattern': '\/\/\|\/\*',
+                    \ 'delimiter_align': 'l', 'ignore_groups': ['!Comment']
+                    \ }
+
+        " 用于定义C++变量声明、函数声明的对齐规则。变量前、注释前的空白字符都
+        " 要进行对齐
+        " 为易于维护，先定义一个数组，每种形式定义一行，再join起来
+        let kw = []
+        call add(kw, '\w\+\s*[,;=]')                                   " ,;=前的单词
+        call add(kw, '\w\+\s*)\(\s*const\)\?\(\s*=\s*0\)\?\s*;\?\s*$') " 函数声明的最后一个参数，行末有可选的const和=0（纯虚函数）
+        call add(kw, '\/\/.*\|\/\*.*')                                 " 注释
+
+        " 对齐C++变更声明。*d会把后面的注释也一起对齐
+        let g:easy_align_delimiters['d'] = {
+                    \ 'pattern': ' \ze\(' . join(kw, '\|') . '\)',
+                    \ 'left_margin': 0, 'right_margin': 0
+                    \ }
+    endif
     " }}}
 
-    " vim-alignta: 代码对齐插件。通过\fa访问 {{{
-    NeoBundleLazy 'h1mesuke/vim-alignta', {
-                \ 'on_cmd' : ['Alignta'],
-                \ 'on_unite' : 'alignta',
-                \ }
-    " 对齐
-    " :[range]Alignta [arguments] 或 [range]Align [arguments]
-    " 参数：
-    " g/regex 或 v/regex 过滤行
+    " " vim-alignta: 代码对齐插件。通过\fa访问 {{{
+    " NeoBundleLazy 'h1mesuke/vim-alignta', {
+    "             \ 'on_cmd' : ['Alignta'],
+    "             \ 'on_unite' : 'alignta',
+    "             \ }
+    " " 对齐
+    " " :[range]Alignta [arguments] 或 [range]Align [arguments]
+    " " 参数：
+    " " g/regex 或 v/regex 过滤行
+    " "
+    " " :Alignta = 对齐等号
+    " " :Alignta = 对齐等号，
+    " " :Alignta <- b 对齐b字符
     "
-    " :Alignta = 对齐等号
-    " :Alignta = 对齐等号，
-    " :Alignta <- b 对齐b字符
-
-    let s:comment_leadings = '^\s*\("\|#\|/\*\|//\|<!--\)'
-
-    let g:unite_source_alignta_preset_arguments = [
-                \ ["Align at ' '", '\S\+'],
-                \ ["Declaration", 'v/^\w\+:\|' . s:comment_leadings . ' <<1:2 \(\S\+;\|\w\+()\(\s*const\)\?\s*;\|\w\+,\|\w\+);\?\) \(\/\/.*\|\/\*.*\)\?'],
-                \ ["Align at '='", '=>\='],
-                \ ["Align at ':'", '01 :'],
-                \ ["Align at ','", '10 \(,\s*\)\@<=\S'],
-                \ ["Align at '|'", '|'   ],
-                \ ["Align at ')'", '0 )' ],
-                \ ["Align at ']'", '0 ]' ],
-                \ ["Align at '}'", '}'   ],
-                \]
-
-    let g:unite_source_alignta_preset_options = [
-                \ ["Not in comment ".s:comment_leadings, 'v/' . s:comment_leadings],
-                \ ["Justify Left",      '<<' ],
-                \ ["Justify Center",    '||' ],
-                \ ["Justify Right",     '>>' ],
-                \ ["Justify None",      '==' ],
-                \ ["Shift Left",        '<-' ],
-                \ ["Shift Right",       '->' ],
-                \ ["Shift Left  [Tab]", '<--'],
-                \ ["Shift Right [Tab]", '-->'],
-                \ ["Margin 0:0",        '0'  ],
-                \ ["Margin 0:1",        '01' ],
-                \ ["Margin 1:0",        '10' ],
-                \ ["Margin 1:1",        '1'  ],
-                \ ["In comment ".s:comment_leadings, 'g/' . s:comment_leadings],
-                \]
-    unlet s:comment_leadings
-
-    " 在没选中文本时，按[unite]a选择需要用的选项，再选中要操作的文本，[unite]a进行操作
-    nnoremap <silent> [unite]a :<C-u>Unite alignta:options -no-start-insert<CR>
-    xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments -no-start-insert<CR>
-    " }}}
+    " let s:comment_leadings = '^\s*\("\|#\|/\*\|//\|<!--\)'
+    "
+    " let g:unite_source_alignta_preset_arguments = [
+    "             \ ["Align at ' '", '\S\+'],
+    "             \ ["Declaration", 'v/^\w\+:\|' . s:comment_leadings . ' <<1:2 \(\S\+;\|\w\+()\(\s*const\)\?\s*;\|\w\+,\|\w\+);\?\) \(\/\/.*\|\/\*.*\)\?'],
+    "             \ ["Align at '='", '=>\='],
+    "             \ ["Align at ':'", '01 :'],
+    "             \ ["Align at ','", '10 \(,\s*\)\@<=\S'],
+    "             \ ["Align at '|'", '|'   ],
+    "             \ ["Align at ')'", '0 )' ],
+    "             \ ["Align at ']'", '0 ]' ],
+    "             \ ["Align at '}'", '}'   ],
+    "             \]
+    "
+    " let g:unite_source_alignta_preset_options = [
+    "             \ ["Not in comment ".s:comment_leadings, 'v/' . s:comment_leadings],
+    "             \ ["Justify Left",      '<<' ],
+    "             \ ["Justify Center",    '||' ],
+    "             \ ["Justify Right",     '>>' ],
+    "             \ ["Justify None",      '==' ],
+    "             \ ["Shift Left",        '<-' ],
+    "             \ ["Shift Right",       '->' ],
+    "             \ ["Shift Left  [Tab]", '<--'],
+    "             \ ["Shift Right [Tab]", '-->'],
+    "             \ ["Margin 0:0",        '0'  ],
+    "             \ ["Margin 0:1",        '01' ],
+    "             \ ["Margin 1:0",        '10' ],
+    "             \ ["Margin 1:1",        '1'  ],
+    "             \ ["In comment ".s:comment_leadings, 'g/' . s:comment_leadings],
+    "             \]
+    " unlet s:comment_leadings
+    "
+    " " 在没选中文本时，按[unite]a选择需要用的选项，再选中要操作的文本，[unite]a进行操作
+    " nnoremap <silent> [unite]a :<C-u>Unite alignta:options -no-start-insert<CR>
+    " xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments -no-start-insert<CR>
+    " " }}}
     "" YankRing.vim: 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容 {{{
     "NeoBundle 'YankRing.vim'
     "    let g:yankring_persist = 0              "不把yankring持久化
@@ -2763,6 +2793,12 @@ if s:is_plugin_group_enabled('syntax') "{{{
                 \     'SyntaxIgnore',
                 \     {'name': 'SyntaxInclude', 'complete': 'syntax'},
                 \ ]}
+    let g:my_sub_syntaxes = []
+    for lang in ['bat', 'c', 'cpp', 'cucumber', 'java', 'javascript', 'json', 'python', 'ruby', 'sh', 'typescript', 'vim', 'xml', 'yaml']
+        if !empty(findfile("syntax/" . lang . ".vim", &runtimepath))
+            call add(g:my_sub_syntaxes, lang)
+        endif
+    endfor
     " }}}
     " csv.vim: 增加对CSV文件（逗号分隔文件）的支持 {{{
     NeoBundleLazy 'chrisbra/csv.vim', {

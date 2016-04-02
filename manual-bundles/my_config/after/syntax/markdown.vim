@@ -1,13 +1,11 @@
 function! s:MarkdownEnableSyntaxRanges()
     " source block syntax highlighting
     if exists('g:loaded_SyntaxRange')
-        for lang in ['c', 'python', 'vim', 'javascript', 'cucumber', 'xml', 'typescript', 'sh', 'java', 'cpp']
-            if !empty(findfile("syntax/" . lang . ".vim", &runtimepath))
-                call SyntaxRange#Include(
-                            \ '^```' . lang . '$'
-                            \, '^```$'
-                            \, lang, 'NonText')
-            endif
+        for lang in g:my_sub_syntaxes
+            call SyntaxRange#Include(
+                        \ '^```' . lang . '$'
+                        \, '^```$'
+                        \, lang, 'NonText')
         endfor
     endif
 endfunction
