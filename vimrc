@@ -1386,28 +1386,11 @@ if s:is_plugin_group_enabled('editing') "{{{
                 \ 'on_cmd' : ['Vinarise', 'VinariseDump', 'VinariseScript2Hex'],
                 \ }
     " }}}
-    " vimple: :View查看ex命令输出等辅助功能 {{{
-    NeoBundleLazy 'dahu/vimple', {
-                \ 'on_map': [
-                \     ['n',
-                \       '<plug>vimple_ident_search', '<plug>vimple_ident_search_forward',
-                \       '[I', ']I',
-                \       '<plug>vimple_spell_suggest', 'z=',
-                \       '<plug>vimple_filter',
-                \     ],
-                \ ],
-                \ 'on_cmd': [
-                \     'G', 'StringScanner', 'Mkvimrc', 'BufTypeDo',
-                \     'BufMatchDo', 'QFargs', 'QFargslocal', 'LLargs',
-                \     'LLargslocal', 'QFbufs', 'LLbufs', 'QFdo',
-                \     'LLdo', 'Filter',
-                \     {'name': 'ReadIntoBuffer', 'complete': 'file'},
-                \     {'name': 'View', 'complete': 'command'},
-                \     {'name': 'ViewFT', 'complete': 'command'},
-                \     {'name': 'ViewExpr', 'complete': 'command'},
-                \     {'name': 'ViewSys', 'complete': 'command'},
-                \     'Collect', 'GCollect', 'Silently',
-                \ ]}
+    " undotree: 列出修改历史，方便undo到一个特定的位置 {{{
+    NeoBundleLazy 'mbbill/undotree', {
+                \ 'on_cmd' : ['UndotreeToggle', 'UndotreeHide', 'UndotreeShow', 'UndotreeFocus'],
+                \ }
+    nnoremap <silent> <F5> :UndotreeToggle<CR>
     " }}}
     " FastFold: 编辑时不自动更新折叠，在保存或手工进行折叠操作时才更新。zuz刷
     " 新{{{
@@ -1423,35 +1406,15 @@ if s:is_plugin_group_enabled('editing') "{{{
 endif
 " }}}
 
-if s:is_plugin_group_enabled('navigation') "{{{
-    " vim-easymotion: \\w启动word motion，\\f<字符>启动查找模式 {{{
-    if v:version >= '703'
-        NeoBundleLazy 'Lokaltog/vim-easymotion', {
-                    \ 'on_map' : [['n'] + map(
-                    \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
-                    \     '"<Leader><Leader>" . v:val')],
-                    \ }
-    else
-        " NeoBundleLazy 'Lokaltog/vim-easymotion', {
-        "             \ 'rev' : 'e41082',
-        "             \ 'on_map' : [['n'] + map(
-        "             \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
-        "             \     '"<Leader><Leader>" . v:val')],
-        "             \ }                                 " \\w启动word motion，\\f<字符>启动查找模式
-    endif
-    let g:EasyMotion_startofline = 0
-    let g:EasyMotion_smartcase = 1
-    let g:EasyMotion_do_shade = 1
-
-    if v:version >= '703'
-        let g:EasyMotion_use_upper = 1
-        let g:EasyMotion_keys = 'ASDGHKLQWERTYUIOPZXCVBNMFJ;'
-    endif
-
-    hi link EasyMotionTarget Search
-    hi link EasyMotionTarget2First IncSearch
-    hi link EasyMotionTarget2Second IncSearch
-    hi link EasyMotionShade Comment
+if s:is_plugin_group_enabled('searching') "{{{
+    " vim-abolish: :%S/box{,es}/bag{,s}/g进行单复数、大小写对应的查找 {{{
+    NeoBundleLazy 'tpope/vim-abolish', {
+                \ 'on_map' : [
+                \   ['n', '<Plug>Coerce'],
+                \   ['n', 'cr'],
+                \ ],
+                \ 'on_cmd' : [ 'Abolish', 'Subvert', 'S' ],
+                \ }
     " }}}
     " " clever-f.vim: 用f/F代替;来查找下一个字符 {{{
     " NeoBundleLazy 'rhysd/clever-f.vim', {
@@ -1564,14 +1527,80 @@ if s:is_plugin_group_enabled('navigation') "{{{
         augroup END
     endif
     " }}}
-    " vim-abolish: :%S/box{,es}/bag{,s}/g进行单复数、大小写对应的查找 {{{
-    NeoBundleLazy 'tpope/vim-abolish', {
-                \ 'on_map' : [
-                \   ['n', '<Plug>Coerce'],
-                \   ['n', 'cr'],
-                \ ],
-                \ 'on_cmd' : [ 'Abolish', 'Subvert', 'S' ],
+    " vim-easymotion: \\w启动word motion，\\f<字符>启动查找模式 {{{
+    if v:version >= '703'
+        NeoBundleLazy 'Lokaltog/vim-easymotion', {
+                    \ 'on_map' : [['n'] + map(
+                    \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
+                    \     '"<Leader><Leader>" . v:val')],
+                    \ }
+    else
+        " NeoBundleLazy 'Lokaltog/vim-easymotion', {
+        "             \ 'rev' : 'e41082',
+        "             \ 'on_map' : [['n'] + map(
+        "             \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
+        "             \     '"<Leader><Leader>" . v:val')],
+        "             \ }                                 " \\w启动word motion，\\f<字符>启动查找模式
+    endif
+    let g:EasyMotion_startofline = 0
+    let g:EasyMotion_smartcase = 1
+    let g:EasyMotion_do_shade = 1
+
+    if v:version >= '703'
+        let g:EasyMotion_use_upper = 1
+        let g:EasyMotion_keys = 'ASDGHKLQWERTYUIOPZXCVBNMFJ;'
+    endif
+
+    hi link EasyMotionTarget Search
+    hi link EasyMotionTarget2First IncSearch
+    hi link EasyMotionTarget2Second IncSearch
+    hi link EasyMotionShade Comment
+    " }}}
+endif
+" }}}
+
+if s:is_plugin_group_enabled('jumping') "{{{
+    " FSwitch: 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示，\of当前窗口 {{{
+    NeoBundleLazy 'derekwyatt/vim-fswitch', {
+                \ 'on_func' : ['FSwitch'],
+                \ 'on_cmd' : ['FSHere','FSRight','FSSplitRight','FSLeft','FSSplitLeft','FSAbove','FSSplitAbove','FSBelow','FSSplitBelow'],
                 \ }
+    let g:fsnonewfiles=1
+    " 可以用:A在.h/.cpp间切换
+    command! A :call FSwitch('%', '')
+    augroup fswitch_hack
+        au! BufEnter *.h,*.hpp
+                    \  let b:fswitchdst='cpp,c,ipp,cxx'
+                    \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!\<include/\w\+/!src/!,reg:!\<include/\(\w\+/\)\{2}!src/!,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
+        au! BufEnter *.c,*.cpp,cxx,*.ipp
+                    \  let b:fswitchdst='h,hpp'
+                    \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
+        au! BufEnter *.xml
+                    \  let b:fswitchdst='rnc'
+                    \| let b:fswitchlocs='./'
+        au! BufEnter *.rnc
+                    \  let b:fswitchdst='xml'
+                    \| let b:fswitchlocs='./'
+    augroup END
+
+    " Switch to the file and load it into the current window >
+    nmap <silent> [fswitch]o :FSHere<cr>
+    " Switch to the file and load it into the window on the right >
+    nmap <silent> [fswitch]l :FSRight<cr>
+    " Switch to the file and load it into a new window split on the right >
+    nmap <silent> [fswitch]L :FSSplitRight<cr>
+    " Switch to the file and load it into the window on the left >
+    nmap <silent> [fswitch]h :FSLeft<cr>
+    " Switch to the file and load it into a new window split on the left >
+    nmap <silent> [fswitch]H :FSSplitLeft<cr>
+    " Switch to the file and load it into the window above >
+    nmap <silent> [fswitch]k :FSAbove<cr>
+    " Switch to the file and load it into a new window split above >
+    nmap <silent> [fswitch]K :FSSplitAbove<cr>
+    " Switch to the file and load it into the window below >
+    nmap <silent> [fswitch]j :FSBelow<cr>
+    " Switch to the file and load it into a new window split below >
+    nmap <silent> [fswitch]J :FSSplitBelow<cr>
     " }}}
     " vim-bufsurf: :BufSurfForward/:BufSurfBack跳转到本窗口的下一个、上一个buffer（增强<C-I>/<C-O>） {{{
     NeoBundleLazy 'ton/vim-bufsurf', {
@@ -1581,64 +1610,30 @@ if s:is_plugin_group_enabled('navigation') "{{{
     nnoremap <silent> g<C-I> :BufSurfForward<CR>
     nnoremap <silent> g<C-O> :BufSurfBack<CR>
     " }}}
-    " " Yggdroot/indentLine: 以竖线标记各缩进块 {{{
-    " NeoBundleLazy 'Yggdroot/indentLine', {
-    "             \ 'on_cmd': [
-    "             \   'IndentLinesReset',   'IndentLinesToggle',   'IndentLinesEnable', 'IndentLinesDisable',
-    "             \   'LeadingSpaceEnable', 'LeadingSpaceDisable', 'LeadingSpaceToggle',
-    "             \ ],
-    "             \ 'on_path' : ['.*'],
-    "             \ }
-    "
-    " let g:indentLine_enabled = 1
-    "
-    " " 打开特定文件类型时，自动启用本插件。空表示应用于所有文件类型
-    " let g:indentLine_fileType = ['python']
-    " " 打开某些文件类型时，自动禁用本插件。空表示不自动禁用
-    " " let g:indentLine_fileTypeExclude = []
-    " " " 对于特定名称的缓冲区自动禁用
-    " " let g:indentLine_bufNameExclude = []
-    "
-    " " let g:indentLine_color_term = 0
-    " " let g:indentLine_color_gui = '#03303c'
-    " " let g:indentLine_color_tty_light = 7
-    " " let g:indentLine_color_tty_dark = 0
-    "
-    " " let g:indentLine_faster = 1
-    " " let g:indentLine_showFirstIndentLevel = 1
-    "
-    " " let g:indentLine_char = '|'
-    " " let g:indentLine_char = iconv(nr2char(0xa6, 1), "utf-8", &encoding) " '¦'
-    " let g:indentLine_char = iconv(nr2char(0x2506, 1), "utf-8", &encoding) " '┆'
-    " " let g:indentLine_char = iconv(nr2char(0x2502, 1), "utf-8", &encoding) " '│'
-    " " 首个缩进使用的字符
-    " let g:indentLine_first_char = iconv(nr2char(0x2506, 1), "utf-8", &encoding) " '┆'
-    "
-    " " 行首空格
-    " let g:indentLine_leadingSpaceEnabled = 0
-    " " let g:indentLine_leadingSpaceChar = '·'
-    " " let g:indentLine_leadingSpaceChar = iconv(nr2char(0x02F0，1), "utf-8", &encoding) " '˰'
-    " " }}}
-    " vim-indent-guides: 标记出各缩进块 {{{
-    NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
-                \ 'on_cmd':['IndentGuidesToggle','IndentGuidesEnable','IndentGuidesDisable'],
-                \ 'on_map':['<Plug>IndentGuides'],
-                \ }
-    let g:indent_guides_default_mapping = 0
-    let g:indent_guides_auto_colors = 0
-    let g:indent_guides_start_level = 2
-    let g:indent_guides_guide_size = 1
-    augroup IndentGuides_hack
-        autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#073642 ctermbg=0
-        autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#03303c ctermbg=0
-        autocmd filetype python :IndentGuidesEnable
-    augroup END
+    " vim-gf-user: 扩展gf {{{
+    NeoBundleLazy 'kana/vim-gf-user', {
+                \ 'on_cmd' : 'GfUserDefaultKeyMappings',
+                \ 'on_map' : [['nv', '<Plug>(gf-user-']],
+                \ 'depends' : [
+                \     'sgur/vim-gf-autoload',
+                \     'kana/vim-gf-diff',
+                \     'hujo/gf-user-vimfn',
+                \ ]}
     " }}}
-    " vim-niceblock: 增强对块选操作的支持 {{{
-    NeoBundleLazy 'kana/vim-niceblock', {
-                \ 'on_map' : ['v', 'I', 'A'],
+    " vim-ref: 按K查找各种资料 {{{
+    NeoBundleLazy 'thinca/vim-ref', {
+                \ 'on_cmd' : [
+                \   { 'name' : 'Ref', 'complete' : 'customlist,ref#complete' },
+                \ ],
+                \ 'on_unite' : 'ref',
+                \ 'on_map' : ['nv', 'K', '<Plug>(ref-keyword)'],
                 \ }
+    let g:ref_man_cmd = executable('man') ? 'man' : ''
     " }}}
+endif
+" }}}
+
+if s:is_plugin_group_enabled('tagging') "{{{
     " tagbar: 列出文件中所有类和方法。用<F9>调用 {{{
     NeoBundleLazy 'majutsushi/tagbar', {
                 \ 'on_cmd' : [
@@ -1816,54 +1811,13 @@ if s:is_plugin_group_enabled('navigation') "{{{
     "    "NeoBundle 'AutoTag'
     "endif
     "" }}}
-    " FSwitch: 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示，\of当前窗口 {{{
-    NeoBundleLazy 'derekwyatt/vim-fswitch', {
-                \ 'on_func' : ['FSwitch'],
-                \ 'on_cmd' : ['FSHere','FSRight','FSSplitRight','FSLeft','FSSplitLeft','FSAbove','FSSplitAbove','FSBelow','FSSplitBelow'],
-                \ }
-    let g:fsnonewfiles=1
-    " 可以用:A在.h/.cpp间切换
-    command! A :call FSwitch('%', '')
-    augroup fswitch_hack
-        au! BufEnter *.h,*.hpp
-                    \  let b:fswitchdst='cpp,c,ipp,cxx'
-                    \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!\<include/\w\+/!src/!,reg:!\<include/\(\w\+/\)\{2}!src/!,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
-        au! BufEnter *.c,*.cpp,cxx,*.ipp
-                    \  let b:fswitchdst='h,hpp'
-                    \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
-        au! BufEnter *.xml
-                    \  let b:fswitchdst='rnc'
-                    \| let b:fswitchlocs='./'
-        au! BufEnter *.rnc
-                    \  let b:fswitchdst='xml'
-                    \| let b:fswitchlocs='./'
-    augroup END
+endif
+" }}}
 
-    " Switch to the file and load it into the current window >
-    nmap <silent> [fswitch]o :FSHere<cr>
-    " Switch to the file and load it into the window on the right >
-    nmap <silent> [fswitch]l :FSRight<cr>
-    " Switch to the file and load it into a new window split on the right >
-    nmap <silent> [fswitch]L :FSSplitRight<cr>
-    " Switch to the file and load it into the window on the left >
-    nmap <silent> [fswitch]h :FSLeft<cr>
-    " Switch to the file and load it into a new window split on the left >
-    nmap <silent> [fswitch]H :FSSplitLeft<cr>
-    " Switch to the file and load it into the window above >
-    nmap <silent> [fswitch]k :FSAbove<cr>
-    " Switch to the file and load it into a new window split above >
-    nmap <silent> [fswitch]K :FSSplitAbove<cr>
-    " Switch to the file and load it into the window below >
-    nmap <silent> [fswitch]j :FSBelow<cr>
-    " Switch to the file and load it into a new window split below >
-    nmap <silent> [fswitch]J :FSSplitBelow<cr>
-    " }}}
-    " undotree: 列出修改历史，方便undo到一个特定的位置 {{{
-    NeoBundleLazy 'mbbill/undotree', {
-                \ 'on_cmd' : ['UndotreeToggle', 'UndotreeHide', 'UndotreeShow', 'UndotreeFocus'],
-                \ }
-    nnoremap <silent> <F5> :UndotreeToggle<CR>
-    " }}}
+if s:is_plugin_group_enabled('moving') "{{{
+    " 启用内置的matchit插件 {{{
+    runtime! macros/matchit.vim
+    "}}}
     " vim-tmux-navigator: 使用ctrl+i/j/k/l在vim及tmux间切换 {{{
     NeoBundleLazy 'christoomey/vim-tmux-navigator', {
                 \ 'on_cmd' : ['TmuxNavigateLeft', 'TmuxNavigateDown', 'TmuxNavigateUp', 'TmuxNavigateRight', 'TmuxNavigatePrevious'],
@@ -1884,28 +1838,10 @@ if s:is_plugin_group_enabled('navigation') "{{{
     nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
     nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
     " }}}
-    " 启用内置的matchit插件 {{{
-    runtime! macros/matchit.vim
-    "}}}
-    " vim-gf-user: 扩展gf {{{
-    NeoBundleLazy 'kana/vim-gf-user', {
-                \ 'on_cmd' : 'GfUserDefaultKeyMappings',
-                \ 'on_map' : [['nv', '<Plug>(gf-user-']],
-                \ 'depends' : [
-                \     'sgur/vim-gf-autoload',
-                \     'kana/vim-gf-diff',
-                \     'hujo/gf-user-vimfn',
-                \ ]}
-    " }}}
-    " vim-ref: 按K查找各种资料 {{{
-    NeoBundleLazy 'thinca/vim-ref', {
-                \ 'on_cmd' : [
-                \   { 'name' : 'Ref', 'complete' : 'customlist,ref#complete' },
-                \ ],
-                \ 'on_unite' : 'ref',
-                \ 'on_map' : ['nv', 'K', '<Plug>(ref-keyword)'],
+    " vim-niceblock: 增强对块选操作的支持 {{{
+    NeoBundleLazy 'kana/vim-niceblock', {
+                \ 'on_map' : ['v', 'I', 'A'],
                 \ }
-    let g:ref_man_cmd = executable('man') ? 'man' : ''
     " }}}
     " vim-expand-region: 选择模式下，按+/_扩展和收缩选区 {{{
     NeoBundleLazy 'terryma/vim-expand-region', {
@@ -3034,6 +2970,59 @@ if s:is_plugin_group_enabled('visual') "{{{
 
     " nmap <silent> <C-L>  <Plug>GoldenViewSplit
     " }}}
+    " " Yggdroot/indentLine: 以竖线标记各缩进块 {{{
+    " NeoBundleLazy 'Yggdroot/indentLine', {
+    "             \ 'on_cmd': [
+    "             \   'IndentLinesReset',   'IndentLinesToggle',   'IndentLinesEnable', 'IndentLinesDisable',
+    "             \   'LeadingSpaceEnable', 'LeadingSpaceDisable', 'LeadingSpaceToggle',
+    "             \ ],
+    "             \ 'on_path' : ['.*'],
+    "             \ }
+    "
+    " let g:indentLine_enabled = 1
+    "
+    " " 打开特定文件类型时，自动启用本插件。空表示应用于所有文件类型
+    " let g:indentLine_fileType = ['python']
+    " " 打开某些文件类型时，自动禁用本插件。空表示不自动禁用
+    " " let g:indentLine_fileTypeExclude = []
+    " " " 对于特定名称的缓冲区自动禁用
+    " " let g:indentLine_bufNameExclude = []
+    "
+    " " let g:indentLine_color_term = 0
+    " " let g:indentLine_color_gui = '#03303c'
+    " " let g:indentLine_color_tty_light = 7
+    " " let g:indentLine_color_tty_dark = 0
+    "
+    " " let g:indentLine_faster = 1
+    " " let g:indentLine_showFirstIndentLevel = 1
+    "
+    " " let g:indentLine_char = '|'
+    " " let g:indentLine_char = iconv(nr2char(0xa6, 1), "utf-8", &encoding) " '¦'
+    " let g:indentLine_char = iconv(nr2char(0x2506, 1), "utf-8", &encoding) " '┆'
+    " " let g:indentLine_char = iconv(nr2char(0x2502, 1), "utf-8", &encoding) " '│'
+    " " 首个缩进使用的字符
+    " let g:indentLine_first_char = iconv(nr2char(0x2506, 1), "utf-8", &encoding) " '┆'
+    "
+    " " 行首空格
+    " let g:indentLine_leadingSpaceEnabled = 0
+    " " let g:indentLine_leadingSpaceChar = '·'
+    " " let g:indentLine_leadingSpaceChar = iconv(nr2char(0x02F0，1), "utf-8", &encoding) " '˰'
+    " " }}}
+    " vim-indent-guides: 标记出各缩进块 {{{
+    NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
+                \ 'on_cmd':['IndentGuidesToggle','IndentGuidesEnable','IndentGuidesDisable'],
+                \ 'on_map':['<Plug>IndentGuides'],
+                \ }
+    let g:indent_guides_default_mapping = 0
+    let g:indent_guides_auto_colors = 0
+    let g:indent_guides_start_level = 2
+    let g:indent_guides_guide_size = 1
+    augroup IndentGuides_hack
+        autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#073642 ctermbg=0
+        autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#03303c ctermbg=0
+        autocmd filetype python :IndentGuidesEnable
+    augroup END
+    " }}}
 endif
 " }}}
 
@@ -3146,6 +3135,29 @@ if s:is_plugin_group_enabled('misc') "{{{
     "             \ }
     " " }}}
     " NeoBundle 'tyru/current-func-info.vim'
+    " vimple: :View查看ex命令输出等辅助功能 {{{
+    NeoBundleLazy 'dahu/vimple', {
+                \ 'on_map': [
+                \     ['n',
+                \       '<plug>vimple_ident_search', '<plug>vimple_ident_search_forward',
+                \       '[I', ']I',
+                \       '<plug>vimple_spell_suggest', 'z=',
+                \       '<plug>vimple_filter',
+                \     ],
+                \ ],
+                \ 'on_cmd': [
+                \     'G', 'StringScanner', 'Mkvimrc', 'BufTypeDo',
+                \     'BufMatchDo', 'QFargs', 'QFargslocal', 'LLargs',
+                \     'LLargslocal', 'QFbufs', 'LLbufs', 'QFdo',
+                \     'LLdo', 'Filter',
+                \     {'name': 'ReadIntoBuffer', 'complete': 'file'},
+                \     {'name': 'View', 'complete': 'command'},
+                \     {'name': 'ViewFT', 'complete': 'command'},
+                \     {'name': 'ViewExpr', 'complete': 'command'},
+                \     {'name': 'ViewSys', 'complete': 'command'},
+                \     'Collect', 'GCollect', 'Silently',
+                \ ]}
+    " }}}
 endif
 " }}}
 
