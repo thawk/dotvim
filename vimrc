@@ -1581,6 +1581,44 @@ if s:is_plugin_group_enabled('navigation') "{{{
     nnoremap <silent> g<C-I> :BufSurfForward<CR>
     nnoremap <silent> g<C-O> :BufSurfBack<CR>
     " }}}
+    " " Yggdroot/indentLine: 以竖线标记各缩进块 {{{
+    " NeoBundleLazy 'Yggdroot/indentLine', {
+    "             \ 'on_cmd': [
+    "             \   'IndentLinesReset',   'IndentLinesToggle',   'IndentLinesEnable', 'IndentLinesDisable',
+    "             \   'LeadingSpaceEnable', 'LeadingSpaceDisable', 'LeadingSpaceToggle',
+    "             \ ],
+    "             \ 'on_path' : ['.*'],
+    "             \ }
+    "
+    " let g:indentLine_enabled = 1
+    "
+    " " 打开特定文件类型时，自动启用本插件。空表示应用于所有文件类型
+    " let g:indentLine_fileType = ['python']
+    " " 打开某些文件类型时，自动禁用本插件。空表示不自动禁用
+    " " let g:indentLine_fileTypeExclude = []
+    " " " 对于特定名称的缓冲区自动禁用
+    " " let g:indentLine_bufNameExclude = []
+    "
+    " " let g:indentLine_color_term = 0
+    " " let g:indentLine_color_gui = '#03303c'
+    " " let g:indentLine_color_tty_light = 7
+    " " let g:indentLine_color_tty_dark = 0
+    "
+    " " let g:indentLine_faster = 1
+    " " let g:indentLine_showFirstIndentLevel = 1
+    "
+    " " let g:indentLine_char = '|'
+    " " let g:indentLine_char = iconv(nr2char(0xa6, 1), "utf-8", &encoding) " '¦'
+    " let g:indentLine_char = iconv(nr2char(0x2506, 1), "utf-8", &encoding) " '┆'
+    " " let g:indentLine_char = iconv(nr2char(0x2502, 1), "utf-8", &encoding) " '│'
+    " " 首个缩进使用的字符
+    " let g:indentLine_first_char = iconv(nr2char(0x2506, 1), "utf-8", &encoding) " '┆'
+    "
+    " " 行首空格
+    " let g:indentLine_leadingSpaceEnabled = 0
+    " " let g:indentLine_leadingSpaceChar = '·'
+    " " let g:indentLine_leadingSpaceChar = iconv(nr2char(0x02F0，1), "utf-8", &encoding) " '˰'
+    " " }}}
     " vim-indent-guides: 标记出各缩进块 {{{
     NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
                 \ 'on_cmd':['IndentGuidesToggle','IndentGuidesEnable','IndentGuidesDisable'],
@@ -3054,7 +3092,7 @@ if s:is_plugin_group_enabled('misc') "{{{
                 \ 'on_cmd' : ['UnicodeName', 'Digraphs', 'SearchUnicode', 'UnicodeTable', 'DownloadUnicode'],
                 \ 'on_func' : ['unicode#FindDigraphBy', 'unicode#FindUnicodeBy', 'unicode#Digraph', 'unicode#Download', 'unicode#UnicodeName'],
                 \ }
-    " nmap ga <Plug>(UnicodeGA)
+    nmap gA <Plug>(UnicodeGA)
     " }}}
     " vim-eunuch: Remove/Unlink/Move/SudoEdit/SudoWrite等UNIX命令 {{{
     NeoBundleLazy 'tpope/vim-eunuch', {
