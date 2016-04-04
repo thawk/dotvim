@@ -112,10 +112,7 @@ endfor
 
 " plugin_groups_include/plugin_groups_exclude列表中存放的是正则表达式
 " exclude all language-specific plugins by default
-let g:dotvim_settings.plugin_groups_exclude = get(
-            \ g:dotvim_user_settings,
-            \ 'plugin_groups_exclude',
-            \ ['cpp' , 'python' , 'haskell' , 'csharp' , 'web' , 'shell'])
+let g:dotvim_settings.plugin_groups_exclude = get(g:dotvim_user_settings, 'plugin_groups_exclude', [])
 let g:dotvim_settings.plugin_groups_include = get(g:dotvim_user_settings, 'plugin_groups_include', [])
 let g:dotvim_settings.disabled_plugins = get(g:dotvim_user_settings, 'disabled_plugins', [])
 " }}}
@@ -229,7 +226,12 @@ function! s:get_cache_dir(...) "{{{
     return path
 endfunction "}}}
 
+function! s:match_group(group_name, pattern)
+    return '.' . a:group_name . '.' =~ '\.' . substitute(a:pattern, '\.', '\\.', 'g') . '\.'
+endfunction
+
 function! s:is_plugin_group_enabled(group_name)
+    " group_name中可以用.进行分层。支持部分匹配
     for name in ["_plugin_groups", "_enabled_plugin_groups", "_disabled_plugin_groups"]
         if !has_key(g:dotvim_settings, name)
             let g:dotvim_settings[name] = []
@@ -248,7 +250,7 @@ function! s:is_plugin_group_enabled(group_name)
 
     " 在include中的优先级最高。include列表中，可以使用正则表达式
     for pattern in g:dotvim_settings.plugin_groups_include
-        if a:group_name =~ pattern
+        if s:match_group(a:group_name, pattern)
             call add(g:dotvim_settings._enabled_plugin_groups, a:group_name)
             return 1
         endif
@@ -256,7 +258,7 @@ function! s:is_plugin_group_enabled(group_name)
 
     " 在exclude中的组被禁用
     for pattern in g:dotvim_settings.plugin_groups_exclude
-        if a:group_name =~ pattern
+        if s:match_group(a:group_name, pattern)
             call add(g:dotvim_settings._disabled_plugin_groups, a:group_name)
             return 0
         endif
@@ -1092,8 +1094,7 @@ endif
 " }}}
 
 if s:is_plugin_group_enabled('editing') "{{{
-    " vim-easy-align: 代码对齐插件。普通模式下通过ga启动，visual模式通过回车启
-    " 用{{{
+    " vim-easy-align: 代码对齐插件。普通模式下通过ga启动，visual模式通过回车启用{{{
     NeoBundleLazy 'junegunn/vim-easy-align', {
                 \ 'on_map' : ['<Plug>(EasyAlign)', '<Plug>(LiveEasyAlign)', '<Plug>(EasyAlignRepeat)'],
                 \ 'on_cmd' : ['EasyAlign', 'LiveEasyAlign'],
@@ -1133,7 +1134,6 @@ if s:is_plugin_group_enabled('editing') "{{{
                     \ }
     endif
     " }}}
-
     " " vim-alignta: 代码对齐插件。通过\fa访问 {{{
     " NeoBundleLazy 'h1mesuke/vim-alignta', {
     "             \ 'on_cmd' : ['Alignta'],
@@ -1190,22 +1190,6 @@ if s:is_plugin_group_enabled('editing') "{{{
     "    let g:yankring_share_between_instances = 0
     "    let g:yankring_manual_clipboard_check = 1
     " }}}
-
-    " ExtractMatches: 可以拷贝匹配pattern的内容 {{{
-    NeoBundleLazy 'ExtractMatches', {
-                \ 'on_cmd' : [
-                \     'GrepToReg', 'YankMatches', 'YankUniqueMatches',
-                \     'PrintMatches', 'PrintUniqueMatches', 'SubstituteAndYank ',
-                \     'SubstituteAndYankUnique', 'PutMatches', 'PutUniqueMatches',
-                \ ],
-                \ }
-    " }}}
-
-    "" vis: 在块选后（<C-V>进行选择），:B cmd在选中内容中执行cmd {{{
-    "NeoBundleLazy 'vis', {
-    "    \ 'on_cmd' : ['B'],
-    "    \ }
-    "" }}}
     " vim-operator-replace: 双引号x_{motion} : 把{motion}涉及的内容替换为register x的内容 {{{
     NeoBundleLazy 'kana/vim-operator-replace', {
                 \ 'depends' : 'kana/vim-operator-user',
@@ -1231,6 +1215,9 @@ if s:is_plugin_group_enabled('editing') "{{{
     xmap <silent>sa <Plug>(operator-surround-append)
     xmap <silent>sd <Plug>(operator-surround-delete)
     xmap <silent>sr <Plug>(operator-surround-replace)
+    " }}}
+    " vim-pairs: ci/, di;, yi*, vi@, ca/, da;, ya*, va@ ... {{{
+    NeoBundle 'kurkale6ka/vim-pairs'
     " }}}
     " DrawIt: 使用横、竖线画图、制表。\di和\ds分别启、停画图模式。在模式中，hjkl移动光标，方向键画线 {{{
     NeoBundleLazy 'DrawIt', {
@@ -1320,12 +1307,6 @@ if s:is_plugin_group_enabled('editing') "{{{
     endif
     let g:CodeReviewer_reviewFile="review.rev"
     " }}}
-    " HiCursorWords: 高亮与光标下word一样的词 {{{
-    NeoBundle 'OrelSokolov/HiCursorWords'
-    let g:HiCursorWords_delay = 200
-    let g:HiCursorWords_hiGroupRegexp = ''
-    let g:HiCursorWords_debugEchoHiName = 0
-    " }}}
     " tcomment_vim: 注释工具。gc{motion}/gcc/<C-_>等 {{{
     NeoBundle 'tomtom/tcomment_vim'
     " }}}
@@ -1392,21 +1373,149 @@ if s:is_plugin_group_enabled('editing') "{{{
                 \ }
     nnoremap <silent> <F5> :UndotreeToggle<CR>
     " }}}
-    " FastFold: 编辑时不自动更新折叠，在保存或手工进行折叠操作时才更新。zuz刷
-    " 新{{{
+    " FastFold: 编辑时不自动更新折叠，在保存或手工进行折叠操作时才更新。zuz刷新{{{
     NeoBundleLazy 'Konfekt/FastFold', {
                 \ 'on_path' : ['.*'],
                 \ }
     let g:fastfold_savehook = 0
     " }}}
-
     " vim-fakeclip: 为vim在终端等场合提供&/+/"寄存器，其中&支持tmux/screen缓冲区 {{{
     NeoBundle 'kana/vim-fakeclip'
     " }}}
 endif
 " }}}
 
-if s:is_plugin_group_enabled('searching') "{{{
+if s:is_plugin_group_enabled('snippet') "{{{
+    " neosnippet: 代码模板引擎 "{{{
+    NeoBundleLazy 'Shougo/neosnippet', {
+                \ 'depends' : ['context_filetype.vim', 'Shougo/neosnippet-snippets'],
+                \ }
+
+    if g:dotvim_settings.snippet_engine == 'neosnippet'
+        call neobundle#config('neosnippet', {
+                    \ 'on_i' : 1,
+                    \ 'on_ft' : 'neosnippet',
+                    \ 'on_cmd' : ['NeoSnippetEdit'],
+                    \ 'on_map' : ['<Plug>(neosnippet_'],
+                    \ 'on_unite' : ['neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
+                    \ }
+
+        let g:neosnippet#snippets_directory = fnamemodify(finddir("snippets", &runtimepath), ":p")
+        let g:neosnippet#snippets_directory .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
+
+        let g:neosnippet#data_directory = s:get_cache_dir('neosnippet')
+
+        if !exists('g:neosnippet#scope_aliases')
+            let g:neosnippet#scope_aliases = {}
+        endif
+
+        let g:neosnippet#enable_snipmate_compatibility = 1
+
+        " mako模板也可以使用html
+        let g:neosnippet#scope_aliases['mako'] = 'html'
+
+        imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+        smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+        xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+        " SuperTab like snippets behavior.
+        imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+                    \ "\<Plug>(neosnippet_expand_or_jump)"
+                    \: pumvisible() ? "\<C-n>" : "\<TAB>"
+        smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+                    \ "\<Plug>(neosnippet_expand_or_jump)"
+                    \: "\<TAB>"
+
+        " For snippet_complete marker.
+        " if has('conceal')
+        "     set conceallevel=2 concealcursor=i
+        " endif
+
+        if neobundle#tap('neocomplete')
+            " 回车直接展开当前选中的snippet
+            " 不知为何，用inoremap时，是<Plug>(neosnippet_expand_or_jump)的文
+            " 字，而不是执行这个map。所以使用imap代替
+            imap <silent><expr> <CR> pumvisible() ?
+                        \ (neosnippet#expandable_or_jumpable() ?
+                        \ neocomplete#close_popup()."\<Plug>(neosnippet_expand_or_jump)" :
+                        \ neocomplete#close_popup()) : "\<CR>"
+            call neobundle#untap()
+        endif
+    endif
+    " }}}
+    " ultisnips: 以python实现的更强大的代码模板引擎 {{{
+    NeoBundleLazy 'SirVer/ultisnips', {
+                    \ 'depends' : 'honza/vim-snippets',
+                    \ }
+    if g:dotvim_settings.snippet_engine == 'ultisnips'
+        call neobundle#config('ultisnips', {
+                    \ 'on_i' : 1,
+                    \ 'lazy' : 0,
+                    \ })
+
+        let g:UltiSnipsSnippetsDir = s:vimrc_path . '/mysnippets'
+        let g:UltiSnipsSnippetDirectories=['UltiSnips', 'mysnippets']
+
+        let g:UltiSnipsEnableSnipMate = 1
+
+        " let g:UltiSnipsExpandTrigger       = '<TAB>'
+        " let g:UltiSnipsListSnippets        = '<C-TAB>'
+        "
+        " inoremap <silent><expr> <TAB>
+        "     \ pumvisible() ? "\<C-n>" :
+        "     \ (len(keys(UltiSnips#SnippetsInCurrentScope())) > 0 ?
+        "     \ "<C-R>=UltiSnips#ExpandSnippet()<CR>" : "\<TAB>")
+
+        let g:ulti_expand_or_jump_res = 0
+        function! ExpandSnippetOrJumpForwardOrReturn(next)
+            " 如果可以展开就展开，可以跳转就跳转，否则返回参数指定的值
+            let snippet = UltiSnips#ExpandSnippetOrJump()
+            if g:ulti_expand_or_jump_res > 0
+                return snippet
+            else
+                return a:next
+            endif
+        endfunction
+
+        " let g:UltiSnipsJumpForwardTrigger="<TAB>"
+        " let g:UltiSnipsJumpForwardTrigger="<NOP>"
+        " inoremap <silent><expr> <TAB>
+        "             \ pumvisible() ? "\<C-n>" :
+        "             \ "<C-R>=ExpandSnippetOrJumpForwardOrReturn('\<TAB>')<CR>"
+
+        " let g:UltiSnipsJumpBackwordTrigger = "<S-TAB>"
+        " " previous menu item, jump to previous placeholder or do nothing
+        " let g:UltiSnipsJumpBackwordTrigger = "<NOP>"
+        " inoremap <expr> <S-TAB>
+        "             \ pumvisible() ? "\<C-p>" :
+        "             \ "<C-R>=UltiSnips#JumpBackwards()<CR>"
+        "
+        " " jump to previous placeholder otherwise do nothing
+        " snoremap <buffer> <silent> <S-TAB>
+        "             \ <ESC>:call UltiSnips#JumpBackwards()<CR>
+
+        call neobundle#untap()
+
+        " 回车直接展开当前选中的snippet
+        if exists('*neocomplete#close_popup')
+            " 如果存在neocomplete，就用neocomplete#close_popup来关闭popup
+            " menu
+            inoremap <silent><expr> <CR>
+                        \ pumvisible() ?
+                        \ neocomplete#close_popup()."<C-R>=ExpandSnippetOrJumpForwardOrReturn('')<CR>" :
+                        \ "\<CR>"
+        else
+            inoremap <silent><expr> <CR>
+                        \ pumvisible() ?
+                        \ "<C-R>=ExpandSnippetOrJumpForwardOrReturn('\<C-y>')<CR>" :
+                        \ "\<CR>"
+        endif
+    endif
+    "}}}
+endif
+"}}}
+
+if s:is_plugin_group_enabled('navigation.searching') "{{{
     " vim-abolish: :%S/box{,es}/bag{,s}/g进行单复数、大小写对应的查找 {{{
     NeoBundleLazy 'tpope/vim-abolish', {
                 \ 'on_map' : [
@@ -1556,10 +1665,25 @@ if s:is_plugin_group_enabled('searching') "{{{
     hi link EasyMotionTarget2Second IncSearch
     hi link EasyMotionShade Comment
     " }}}
+    " HiCursorWords: 高亮与光标下word一样的词 {{{
+    NeoBundle 'OrelSokolov/HiCursorWords'
+    let g:HiCursorWords_delay = 200
+    let g:HiCursorWords_hiGroupRegexp = ''
+    let g:HiCursorWords_debugEchoHiName = 0
+    " }}}
+    " ExtractMatches: 可以拷贝匹配pattern的内容 {{{
+    NeoBundleLazy 'ExtractMatches', {
+                \ 'on_cmd' : [
+                \     'GrepToReg', 'YankMatches', 'YankUniqueMatches',
+                \     'PrintMatches', 'PrintUniqueMatches', 'SubstituteAndYank ',
+                \     'SubstituteAndYankUnique', 'PutMatches', 'PutUniqueMatches',
+                \ ],
+                \ }
+    " }}}
 endif
 " }}}
 
-if s:is_plugin_group_enabled('jumping') "{{{
+if s:is_plugin_group_enabled('navigation.jumping') "{{{
     " FSwitch: 在头文件和CPP文件间进行切换。用:A调用。\ol在右边分隔一个窗口显示，\of当前窗口 {{{
     NeoBundleLazy 'derekwyatt/vim-fswitch', {
                 \ 'on_func' : ['FSwitch'],
@@ -1633,7 +1757,7 @@ if s:is_plugin_group_enabled('jumping') "{{{
 endif
 " }}}
 
-if s:is_plugin_group_enabled('tagging') "{{{
+if s:is_plugin_group_enabled('navigation.tagging') "{{{
     " tagbar: 列出文件中所有类和方法。用<F9>调用 {{{
     NeoBundleLazy 'majutsushi/tagbar', {
                 \ 'on_cmd' : [
@@ -1814,7 +1938,7 @@ if s:is_plugin_group_enabled('tagging') "{{{
 endif
 " }}}
 
-if s:is_plugin_group_enabled('moving') "{{{
+if s:is_plugin_group_enabled('navigation.moving') "{{{
     " 启用内置的matchit插件 {{{
     runtime! macros/matchit.vim
     "}}}
@@ -1852,10 +1976,15 @@ if s:is_plugin_group_enabled('moving') "{{{
     vmap _ <Plug>(expand_region_shrink)
     nmap _ <Plug>(expand_region_shrink)
     " }}}
+    "" vis: 在块选后（<C-V>进行选择），:B cmd在选中内容中执行cmd {{{
+    "NeoBundleLazy 'vis', {
+    "    \ 'on_cmd' : ['B'],
+    "    \ }
+    "" }}}
 endif
 "}}}
 
-if s:is_plugin_group_enabled('autocomplete') "{{{
+if s:is_plugin_group_enabled('navigation.autocomplete') "{{{
     NeoBundleLazy 'Shougo/neocomplete' " {{{
     if g:dotvim_settings.autocomplete_method == 'neocomplete' && v:version >= '703' && has('lua')
         call neobundle#config('neocomplete', {
@@ -2049,138 +2178,7 @@ if s:is_plugin_group_enabled('autocomplete') "{{{
 endif
 "}}}
 
-if s:is_plugin_group_enabled('snippet') "{{{
-    " neosnippet: 代码模板引擎 "{{{
-    NeoBundleLazy 'Shougo/neosnippet', {
-                \ 'depends' : ['context_filetype.vim', 'Shougo/neosnippet-snippets'],
-                \ }
-
-    if g:dotvim_settings.snippet_engine == 'neosnippet'
-        call neobundle#config('neosnippet', {
-                    \ 'on_i' : 1,
-                    \ 'on_ft' : 'neosnippet',
-                    \ 'on_cmd' : ['NeoSnippetEdit'],
-                    \ 'on_map' : ['<Plug>(neosnippet_'],
-                    \ 'on_unite' : ['neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
-                    \ }
-
-        let g:neosnippet#snippets_directory = fnamemodify(finddir("snippets", &runtimepath), ":p")
-        let g:neosnippet#snippets_directory .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
-
-        let g:neosnippet#data_directory = s:get_cache_dir('neosnippet')
-
-        if !exists('g:neosnippet#scope_aliases')
-            let g:neosnippet#scope_aliases = {}
-        endif
-
-        let g:neosnippet#enable_snipmate_compatibility = 1
-
-        " mako模板也可以使用html
-        let g:neosnippet#scope_aliases['mako'] = 'html'
-
-        imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-        smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-        xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-        " SuperTab like snippets behavior.
-        imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-                    \ "\<Plug>(neosnippet_expand_or_jump)"
-                    \: pumvisible() ? "\<C-n>" : "\<TAB>"
-        smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-                    \ "\<Plug>(neosnippet_expand_or_jump)"
-                    \: "\<TAB>"
-
-        " For snippet_complete marker.
-        " if has('conceal')
-        "     set conceallevel=2 concealcursor=i
-        " endif
-
-        if neobundle#tap('neocomplete')
-            " 回车直接展开当前选中的snippet
-            " 不知为何，用inoremap时，是<Plug>(neosnippet_expand_or_jump)的文
-            " 字，而不是执行这个map。所以使用imap代替
-            imap <silent><expr> <CR> pumvisible() ?
-                        \ (neosnippet#expandable_or_jumpable() ?
-                        \ neocomplete#close_popup()."\<Plug>(neosnippet_expand_or_jump)" :
-                        \ neocomplete#close_popup()) : "\<CR>"
-            call neobundle#untap()
-        endif
-    endif
-    " }}}
-
-    " ultisnips: 以python实现的更强大的代码模板引擎 {{{
-    NeoBundleLazy 'SirVer/ultisnips', {
-                    \ 'depends' : 'honza/vim-snippets',
-                    \ }
-    if g:dotvim_settings.snippet_engine == 'ultisnips'
-        call neobundle#config('ultisnips', {
-                    \ 'on_i' : 1,
-                    \ 'lazy' : 0,
-                    \ })
-
-        let g:UltiSnipsSnippetsDir = s:vimrc_path . '/mysnippets'
-        let g:UltiSnipsSnippetDirectories=['UltiSnips', 'mysnippets']
-
-        let g:UltiSnipsEnableSnipMate = 1
-
-        " let g:UltiSnipsExpandTrigger       = '<TAB>'
-        " let g:UltiSnipsListSnippets        = '<C-TAB>'
-        "
-        " inoremap <silent><expr> <TAB>
-        "     \ pumvisible() ? "\<C-n>" :
-        "     \ (len(keys(UltiSnips#SnippetsInCurrentScope())) > 0 ?
-        "     \ "<C-R>=UltiSnips#ExpandSnippet()<CR>" : "\<TAB>")
-
-        let g:ulti_expand_or_jump_res = 0
-        function! ExpandSnippetOrJumpForwardOrReturn(next)
-            " 如果可以展开就展开，可以跳转就跳转，否则返回参数指定的值
-            let snippet = UltiSnips#ExpandSnippetOrJump()
-            if g:ulti_expand_or_jump_res > 0
-                return snippet
-            else
-                return a:next
-            endif
-        endfunction
-
-        " let g:UltiSnipsJumpForwardTrigger="<TAB>"
-        " let g:UltiSnipsJumpForwardTrigger="<NOP>"
-        " inoremap <silent><expr> <TAB>
-        "             \ pumvisible() ? "\<C-n>" :
-        "             \ "<C-R>=ExpandSnippetOrJumpForwardOrReturn('\<TAB>')<CR>"
-
-        " let g:UltiSnipsJumpBackwordTrigger = "<S-TAB>"
-        " " previous menu item, jump to previous placeholder or do nothing
-        " let g:UltiSnipsJumpBackwordTrigger = "<NOP>"
-        " inoremap <expr> <S-TAB>
-        "             \ pumvisible() ? "\<C-p>" :
-        "             \ "<C-R>=UltiSnips#JumpBackwards()<CR>"
-        "
-        " " jump to previous placeholder otherwise do nothing
-        " snoremap <buffer> <silent> <S-TAB>
-        "             \ <ESC>:call UltiSnips#JumpBackwards()<CR>
-
-        call neobundle#untap()
-
-        " 回车直接展开当前选中的snippet
-        if exists('*neocomplete#close_popup')
-            " 如果存在neocomplete，就用neocomplete#close_popup来关闭popup
-            " menu
-            inoremap <silent><expr> <CR>
-                        \ pumvisible() ?
-                        \ neocomplete#close_popup()."<C-R>=ExpandSnippetOrJumpForwardOrReturn('')<CR>" :
-                        \ "\<CR>"
-        else
-            inoremap <silent><expr> <CR>
-                        \ pumvisible() ?
-                        \ "<C-R>=ExpandSnippetOrJumpForwardOrReturn('\<C-y>')<CR>" :
-                        \ "\<CR>"
-        endif
-    endif
-    "}}}
-endif
-"}}}
-
-if s:is_plugin_group_enabled('textobj') "{{{
+if s:is_plugin_group_enabled('navigation.textobj') "{{{
     " vim-textobj-indent: 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进） {{{
     NeoBundle 'kana/vim-textobj-indent', {
                \ 'depends' : 'kana/vim-textobj-user',
@@ -2203,9 +2201,6 @@ if s:is_plugin_group_enabled('textobj') "{{{
     NeoBundle 'thinca/vim-textobj-comment', {
                \ 'depends' : 'kana/vim-textobj-user',
                \ }
-    " }}}
-    " vim-pairs: ci/, di;, yi*, vi@, ca/, da;, ya*, va@ ... {{{
-    NeoBundle 'kurkale6ka/vim-pairs'
     " }}}
 endif
 " }}}
@@ -2253,7 +2248,7 @@ if s:is_plugin_group_enabled('scm') "{{{
 endif
 " }}}
 
-if s:is_plugin_group_enabled('cpp') "{{{
+if s:is_plugin_group_enabled('development.cpp') "{{{
     " clang_complete: 使用clang编译器进行上下文补全 {{{
     NeoBundleLazy 'Rip-Rip/clang_complete'
     if (g:dotvim_settings.cpp_complete_method == 'clang_complete'
@@ -2463,7 +2458,7 @@ if s:is_plugin_group_enabled('cpp') "{{{
 endif
 " }}}
 
-if s:is_plugin_group_enabled('arduino') "{{{
+if s:is_plugin_group_enabled('development.arduino') "{{{
     " arduvim: 提供了更多的Arduino关键字，并且可以根据需要生成自己的库的关键字 {{{
     NeoBundleLazy 'z3t0/arduvim', {
                 \ 'on_ft' : ['arduino'],
@@ -2475,7 +2470,7 @@ if s:is_plugin_group_enabled('arduino') "{{{
 endif
 " }}}
 
-if s:is_plugin_group_enabled('python') "{{{
+if s:is_plugin_group_enabled('development.python') "{{{
     " jedi-vim: 强大的Python补全、pydoc查询工具。 \g：跳到变量赋值点或函数定义；\d：函数定义；K：查询文档；\r：改名；\n：列出对使用一个名称的所有位置 {{{
     NeoBundleLazy 'davidhalter/jedi-vim', {
                 \ 'on_ft' : ['python', 'python3'],
@@ -2505,10 +2500,16 @@ if s:is_plugin_group_enabled('python') "{{{
     NeoBundleLazy 'hynek/vim-python-pep8-indent', {
                 \ 'on_ft' : ['python', 'python3'],
                 \ }
+    " vim-bundle-mako: python的make模板支持 {{{
+    NeoBundleLazy 'sophacles/vim-bundle-mako', {
+                \ 'on_ft' : ['mako'],
+                \ 'on_path' : ['.*\.mako'],
+                \ }
+    " }}}
 endif
 " }}}
 
-if s:is_plugin_group_enabled('haskell') "{{{
+if s:is_plugin_group_enabled('development.haskell') "{{{
     " neco-ghc: 结合neocomplete补全haskell {{{
     NeoBundleLazy 'eagletmt/neco-ghc'
     if executable('ghc-mod')
@@ -2558,7 +2559,7 @@ if s:is_plugin_group_enabled('haskell') "{{{
 endif
 " }}}
 
-if s:is_plugin_group_enabled('csharp') "{{{
+if s:is_plugin_group_enabled('development.csharp') "{{{
     " vim-csharp: C#文件的支持 {{{
     NeoBundleLazy 'OrangeT/vim-csharp', {
                 \ 'on_ft' : ['csharp'],
@@ -2567,7 +2568,7 @@ if s:is_plugin_group_enabled('csharp') "{{{
 endif
 " }}}
 
-if s:is_plugin_group_enabled('web') "{{{
+if s:is_plugin_group_enabled('development.web') "{{{ 前端开发
     " Emmet.vim: 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>, {{{
     NeoBundleLazy 'mattn/emmet-vim', {
                 \ 'on_ft' : ['xml','html','css','sass','scss','less'],
@@ -2578,25 +2579,26 @@ if s:is_plugin_group_enabled('web') "{{{
         autocmd FileType {xml,html,css,sass,scss,less} imap <buffer> <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
     augroup END
     " }}}
+    " xml.vim: 辅助编写XML文件 {{{
     NeoBundleLazy 'othree/xml.vim', {
                 \ 'on_ft' : ['xml'],
-                \ }                                             " 辅助编写XML文件
+                \ }
+    " }}}
+    " vim-json: 对JSON文件提供语法高亮 {{{
     NeoBundleLazy 'elzr/vim-json', {
                 \ 'on_ft' : ['json'],
                 \ 'on_path' : ['.*\.jsonp\?'],
-                \ }                                             " 对JSON文件提供语法高亮
+                \ }
+    " }}}
+    " javascript-libraries-syntax.vim: Javascript语法高亮 {{{
     NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {
                 \ 'on_ft' : ['javascript', 'js'],
-                \ }                                             " Javascript语法高亮
-    NeoBundleLazy 'sophacles/vim-bundle-mako', {
-                \ 'on_ft' : ['mako'],
-                \ 'on_path' : ['.*\.mako'],
-                \ }                                             " python的Mako模板支持
-
+                \ }
+    " }}}
 endif
 " }}}
 
-if s:is_plugin_group_enabled('shell') "{{{
+if s:is_plugin_group_enabled('development.shell') "{{{
     " Conque-GDB: 在vim中进行gdb调试 {{{
     NeoBundleLazy 'Conque-GDB'
     if executable("gdb")
@@ -2723,7 +2725,26 @@ if s:is_plugin_group_enabled('shell') "{{{
 endif
 " }}}
 
-if s:is_plugin_group_enabled('doc') "{{{
+if s:is_plugin_group_enabled('doc') "{{{ 文档编写，如OrgMode、AsciiDoc等
+    " context_filetype.vim: 在文件中根据上下文确定当前的filetype，如识别出html中内嵌js、css {{{
+    NeoBundleLazy 'Shougo/context_filetype.vim', {
+                \ }
+    " }}}
+    " SyntaxRange: 在一段文字中使用特别的语法高亮 {{{
+    NeoBundleLazy 'SyntaxRange', {
+                \ 'depends': ['ingo-library'],
+                \ 'on_ft': ['asciidoc', 'markdown', 'mkdc'],
+                \ 'on_cmd': [
+                \     'SyntaxIgnore',
+                \     {'name': 'SyntaxInclude', 'complete': 'syntax'},
+                \ ]}
+    let g:my_sub_syntaxes = []
+    for lang in ['bat', 'c', 'cpp', 'cucumber', 'java', 'javascript', 'json', 'python', 'ruby', 'sh', 'typescript', 'vim', 'xml', 'yaml']
+        if !empty(findfile("syntax/" . lang . ".vim", &runtimepath))
+            call add(g:my_sub_syntaxes, lang)
+        endif
+    endfor
+    " }}}
     " vim-orgmode: 对emacs的org文件的支持 {{{
     NeoBundleLazy 'jceb/vim-orgmode', {
                 \ 'depends' : [
@@ -2755,25 +2776,15 @@ if s:is_plugin_group_enabled('doc') "{{{
                 \ 'on_ft' : ['asciidoc'],
                 \ }
     " }}}
+    " " vim-markdown-concealed: markdown支持，并且利用conceal功能隐藏不需要的字符 {{{
+    " NeoBundleLazy 'prurigro/vim-markdown-concealed', {
+    "             \ 'on_ft' : ['markdown'],
+    "             \ }
+    " " }}}
 endif
 " }}}
 
-if s:is_plugin_group_enabled('syntax') "{{{
-    " SyntaxRange: 在一段文字中使用特别的语法高亮 {{{
-    NeoBundleLazy 'SyntaxRange', {
-                \ 'depends': ['ingo-library'],
-                \ 'on_ft': ['asciidoc', 'markdown', 'mkdc'],
-                \ 'on_cmd': [
-                \     'SyntaxIgnore',
-                \     {'name': 'SyntaxInclude', 'complete': 'syntax'},
-                \ ]}
-    let g:my_sub_syntaxes = []
-    for lang in ['bat', 'c', 'cpp', 'cucumber', 'java', 'javascript', 'json', 'python', 'ruby', 'sh', 'typescript', 'vim', 'xml', 'yaml']
-        if !empty(findfile("syntax/" . lang . ".vim", &runtimepath))
-            call add(g:my_sub_syntaxes, lang)
-        endif
-    endfor
-    " }}}
+if s:is_plugin_group_enabled('syntax') "{{{ 为一些文件提供语法高亮
     " csv.vim: 增加对CSV文件（逗号分隔文件）的支持 {{{
     NeoBundleLazy 'chrisbra/csv.vim', {
                 \ 'on_ft' : ['csv'],
@@ -2810,7 +2821,7 @@ if s:is_plugin_group_enabled('syntax') "{{{
 endif
 " }}}
 
-if s:is_plugin_group_enabled('visual') "{{{
+if s:is_plugin_group_enabled('visual') "{{{ 界面增强
     " vim-airline: 增强的statusline {{{
     NeoBundle 'vim-airline/vim-airline', {
                 \ 'depends': ['vim-airline/vim-airline-themes', 'unicode.vim'],
@@ -3125,15 +3136,6 @@ if s:is_plugin_group_enabled('misc') "{{{
     " [<C-Q> :cpfile (Note that <C-Q> only works in a terminal if you disable
     " ]<C-Q> :cnfile flow control: stty -ixon)
     " }}}
-    " context_filetype.vim: 在文件中根据上下文确定当前的filetype，如识别出html中内嵌js、css {{{
-    NeoBundleLazy 'Shougo/context_filetype.vim', {
-                \ }
-    " }}}
-    " " vim-markdown-concealed: markdown支持，并且利用conceal功能隐藏不需要的字符 {{{
-    " NeoBundleLazy 'prurigro/vim-markdown-concealed', {
-    "             \ 'on_ft' : ['markdown'],
-    "             \ }
-    " " }}}
     " NeoBundle 'tyru/current-func-info.vim'
     " vimple: :View查看ex命令输出等辅助功能 {{{
     NeoBundleLazy 'dahu/vimple', {

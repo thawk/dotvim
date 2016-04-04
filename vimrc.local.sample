@@ -1,9 +1,11 @@
 let g:dotvim_user_settings = {}
 let g:dotvim_user_settings.disabled_plugins = []
 
-" 有效的插件组请参见vimrc中的plugin_groups
+" 有效的插件组请参见vimrc中的plugin_groups。可以用development、navigation禁用
+" 一大类插件，也可以用cpp、python等禁用指定的分组。
+" 可以通过 echo g:dotvim_settings._plugin_groups 获得所有分组的列表
 "let g:dotvim_user_settings.plugin_groups_exclude = []
-let g:dotvim_user_settings.plugin_groups_exclude = ['cpp' , 'python' , 'haskell' , 'csharp' , 'web' , 'shell']
+"let g:dotvim_user_settings.plugin_groups_exclude = ['development']
 let g:dotvim_user_settings.plugin_groups_include = []
 
 "let g:dotvim_user_settings.autocomplete_method = 'neocomplete'
