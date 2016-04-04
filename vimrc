@@ -1338,18 +1338,6 @@ if s:is_plugin_group_enabled('editing') "{{{
         let g:syntastic_python_python_exec = 'python2'
     endif
     " }}}
-    " vim-scriptease: 辅助编写vim脚本的工具 {{{
-    NeoBundleLazy 'tpope/vim-scriptease', {
-                \ 'on_ft' : ['vim', 'help'],
-                \ 'on_cmd' : [
-                \     { 'name' : 'PP', 'complete' : 'expression' },
-                \     { 'name' : 'PPmsg', 'complete' : 'expression' },
-                \     { 'name' : 'Verbose', 'complete' : 'command' },
-                \     { 'name' : 'Time', 'complete' : 'command' },
-                \     'Scriptnames', 'Runtime', 'Disarm', 'Ve', 'Vedit', 'Vopen', 'Vsplit', 'Vvsplit', 'Vtabedit', 'Vpedit', 'Vread', 'Console',
-                \ ],
-                \ }
-    " }}}
     " vim-repeat: 把.能重复的操作扩展到一些插件中的操作 {{{
     NeoBundleLazy 'tpope/vim-repeat', {
                 \ 'on_map' : ['n', '.', 'u', 'U', '<C-R>'],
@@ -2568,6 +2556,10 @@ if s:is_plugin_group_enabled('development.csharp') "{{{
 endif
 " }}}
 
+if s:is_plugin_group_enabled('development.viml') "{{{ VimimL，Vim的编程语言
+endif
+" }}}
+
 if s:is_plugin_group_enabled('development.web') "{{{ 前端开发
     " Emmet.vim: 快速编写XML文件。如 div>p#foo$*3>a 再按 <C-Y>, {{{
     NeoBundleLazy 'mattn/emmet-vim', {
@@ -2981,59 +2973,62 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
 
     " nmap <silent> <C-L>  <Plug>GoldenViewSplit
     " }}}
-    " " Yggdroot/indentLine: 以竖线标记各缩进块 {{{
-    " NeoBundleLazy 'Yggdroot/indentLine', {
-    "             \ 'on_cmd': [
-    "             \   'IndentLinesReset',   'IndentLinesToggle',   'IndentLinesEnable', 'IndentLinesDisable',
-    "             \   'LeadingSpaceEnable', 'LeadingSpaceDisable', 'LeadingSpaceToggle',
-    "             \ ],
-    "             \ 'on_path' : ['.*'],
-    "             \ }
-    "
-    " let g:indentLine_enabled = 1
-    "
-    " " 打开特定文件类型时，自动启用本插件。空表示应用于所有文件类型
-    " let g:indentLine_fileType = ['python']
-    " " 打开某些文件类型时，自动禁用本插件。空表示不自动禁用
-    " " let g:indentLine_fileTypeExclude = []
-    " " " 对于特定名称的缓冲区自动禁用
-    " " let g:indentLine_bufNameExclude = []
-    "
-    " " let g:indentLine_color_term = 0
-    " " let g:indentLine_color_gui = '#03303c'
-    " " let g:indentLine_color_tty_light = 7
-    " " let g:indentLine_color_tty_dark = 0
-    "
-    " " let g:indentLine_faster = 1
-    " " let g:indentLine_showFirstIndentLevel = 1
-    "
-    " " let g:indentLine_char = '|'
-    " " let g:indentLine_char = iconv(nr2char(0xa6, 1), "utf-8", &encoding) " '¦'
-    " let g:indentLine_char = iconv(nr2char(0x2506, 1), "utf-8", &encoding) " '┆'
-    " " let g:indentLine_char = iconv(nr2char(0x2502, 1), "utf-8", &encoding) " '│'
-    " " 首个缩进使用的字符
-    " let g:indentLine_first_char = iconv(nr2char(0x2506, 1), "utf-8", &encoding) " '┆'
-    "
-    " " 行首空格
-    " let g:indentLine_leadingSpaceEnabled = 0
-    " " let g:indentLine_leadingSpaceChar = '·'
-    " " let g:indentLine_leadingSpaceChar = iconv(nr2char(0x02F0，1), "utf-8", &encoding) " '˰'
-    " " }}}
-    " vim-indent-guides: 标记出各缩进块 {{{
-    NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
-                \ 'on_cmd':['IndentGuidesToggle','IndentGuidesEnable','IndentGuidesDisable'],
-                \ 'on_map':['<Plug>IndentGuides'],
+    " Yggdroot/indentLine: 以竖线标记各缩进块 {{{
+    NeoBundleLazy 'Yggdroot/indentLine', {
+                \ 'on_cmd': [
+                \   'IndentLinesReset',   'IndentLinesToggle',   'IndentLinesEnable', 'IndentLinesDisable',
+                \   'LeadingSpaceEnable', 'LeadingSpaceDisable', 'LeadingSpaceToggle',
+                \ ],
+                \ 'on_path' : ['.*'],
+                \ 'disabled' : 1,
                 \ }
-    let g:indent_guides_default_mapping = 0
-    let g:indent_guides_auto_colors = 0
-    let g:indent_guides_start_level = 2
-    let g:indent_guides_guide_size = 1
-    augroup IndentGuides_hack
-        autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#073642 ctermbg=0
-        autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#03303c ctermbg=0
-        autocmd filetype python :IndentGuidesEnable
-    augroup END
+
+    if neobundle#tap('indentLine')
+        let g:indentLine_enabled = 1
+
+        " 打开特定文件类型时，自动启用本插件。空表示应用于所有文件类型
+        let g:indentLine_fileType = ['python']
+        " 打开某些文件类型时，自动禁用本插件。空表示不自动禁用
+        " let g:indentLine_fileTypeExclude = []
+        " " 对于特定名称的缓冲区自动禁用
+        " let g:indentLine_bufNameExclude = []
+
+        " let g:indentLine_color_term = 0
+        " let g:indentLine_color_gui = '#03303c'
+        " let g:indentLine_color_tty_light = 7
+        " let g:indentLine_color_tty_dark = 0
+
+        " let g:indentLine_faster = 1
+        " let g:indentLine_showFirstIndentLevel = 1
+
+        " let g:indentLine_char = '|'
+        " let g:indentLine_char = iconv(nr2char(0xa6, 1), "utf-8", &encoding) " '¦'
+        let g:indentLine_char = iconv(nr2char(0x2506, 1), "utf-8", &encoding) " '┆'
+        " let g:indentLine_char = iconv(nr2char(0x2502, 1), "utf-8", &encoding) " '│'
+        " 首个缩进使用的字符
+        let g:indentLine_first_char = iconv(nr2char(0x2506, 1), "utf-8", &encoding) " '┆'
+
+        " 行首空格
+        let g:indentLine_leadingSpaceEnabled = 0
+        " let g:indentLine_leadingSpaceChar = '·'
+        " let g:indentLine_leadingSpaceChar = iconv(nr2char(0x02F0，1), "utf-8", &encoding) " '˰'
+    endif
     " }}}
+    " " vim-indent-guides: 标记出各缩进块 {{{
+    " NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
+    "             \ 'on_cmd':['IndentGuidesToggle','IndentGuidesEnable','IndentGuidesDisable'],
+    "             \ 'on_map':['<Plug>IndentGuides'],
+    "             \ }
+    " let g:indent_guides_default_mapping = 0
+    " let g:indent_guides_auto_colors = 0
+    " let g:indent_guides_start_level = 2
+    " let g:indent_guides_guide_size = 1
+    " augroup IndentGuides_hack
+    "     autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#073642 ctermbg=0
+    "     autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#03303c ctermbg=0
+    "     autocmd filetype python :IndentGuidesEnable
+    " augroup END
+    " " }}}
 endif
 " }}}
 
@@ -3137,6 +3132,18 @@ if s:is_plugin_group_enabled('misc') "{{{
     " ]<C-Q> :cnfile flow control: stty -ixon)
     " }}}
     " NeoBundle 'tyru/current-func-info.vim'
+    " vim-scriptease: 辅助编写vim脚本的工具 {{{
+    NeoBundleLazy 'tpope/vim-scriptease', {
+                \ 'on_ft' : ['vim', 'help'],
+                \ 'on_cmd' : [
+                \     { 'name' : 'PP', 'complete' : 'expression' },
+                \     { 'name' : 'PPmsg', 'complete' : 'expression' },
+                \     { 'name' : 'Verbose', 'complete' : 'command' },
+                \     { 'name' : 'Time', 'complete' : 'command' },
+                \     'Scriptnames', 'Runtime', 'Disarm', 'Ve', 'Vedit', 'Vopen', 'Vsplit', 'Vvsplit', 'Vtabedit', 'Vpedit', 'Vread', 'Console',
+                \ ],
+                \ }
+    " }}}
     " vimple: :View查看ex命令输出等辅助功能 {{{
     NeoBundleLazy 'dahu/vimple', {
                 \ 'on_map': [
