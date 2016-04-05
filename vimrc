@@ -890,6 +890,8 @@ if s:is_plugin_group_enabled('unite') "{{{
         endif
 
         autocmd! FileType unite call s:unite_my_settings()
+
+        call neobundle#untap()
     endif
     function! s:unite_my_settings() "{{{
         silent! unmap <buffer> <c-l>
@@ -1079,16 +1081,19 @@ if s:is_plugin_group_enabled('unite') "{{{
 
     if neobundle#tap('unite-outline') && neobundle#tap('unite-fold')
         nnoremap <silent> [unite]o  :<C-u>Unite fold outline -no-quit -no-start-insert -vertical -toggle -winwidth=40<CR>
+        call neobundle#untap()
     endif
 
     if neobundle#tap('unite-tselect')
         nnoremap g<C-]> :<C-u>Unite -immediately tselect:<C-r>=expand('<cword>')<CR><CR>
         nnoremap g] :<C-u>Unite tselect:<C-r>=expand('<cword>')<CR><CR>
+        call neobundle#untap()
     endif
 
     if neobundle#tap('vim-versions')
         nnoremap <silent> [unite]v :<C-u>UniteVersions status<CR>
         nnoremap <silent> [unite]l :<C-u>UniteVersions log<CR>
+        call neobundle#untap()
     endif
     " }}}
 endif
@@ -1133,6 +1138,8 @@ if s:is_plugin_group_enabled('editing') "{{{
                     \ 'pattern': ' \ze\(' . join(kw, '\|') . '\)',
                     \ 'left_margin': 0, 'right_margin': 0
                     \ }
+
+        call neobundle#untap()
     endif
     " }}}
     " " vim-alignta: 代码对齐插件。通过\fa访问 {{{
@@ -2163,6 +2170,8 @@ if s:is_plugin_group_enabled('navigation.autocomplete') "{{{
             let g:tmuxcomplete#trigger = ''
         endif
         " }}}
+
+        call neobundle#untap()
     endif
 endif
 "}}}
@@ -2327,7 +2336,8 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
         " 选择一个backend
         if g:dotvim_settings.cpp_complete_method == 'marching.snowdrop'
             " 使用vim-snowdrop
-            function! neobundle#tapped.hooks.on_post_source(bundle)
+            let bundle = neobundle#get('vim-marching')
+            function! bundle.hooks.on_post_source(bundle)
                 NeoBundleSource "vim-snowdrop"
             endfunction
             let g:marching_backend = 'snowdrop'             " 通过vim-snowdrop调用libclang
@@ -2369,6 +2379,8 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
 
         " Not skip
         let g:neocomplete#skip_auto_completion_time = ""
+
+        call neobundle#untap()
     endif
     " }}}
     " vim-clang-format: 使用clang编译器进行上下文补全 {{{
@@ -2535,6 +2547,8 @@ if s:is_plugin_group_enabled('development.haskell') "{{{
 
         " 控制cabal缩进
         " let g:cabal_indent_section = 2
+
+        call neobundle#untap()
     endif
     " }}}
     " ref-hoogle: 让vim-ref插件支持hoogle {{{
@@ -2542,7 +2556,9 @@ if s:is_plugin_group_enabled('development.haskell') "{{{
     if !neobundle#tap('vim-ref') && executable('hoogle')
         call neobundle#config('ref-hoogle', {
                     \ 'on_ft' : ['haskell'],
-                    \ }
+                    \ })
+
+        call neobundle#untap()
     endif
     " }}}
 endif
@@ -2655,6 +2671,8 @@ if s:is_plugin_group_enabled('development.shell') "{{{
         vmap [repl]s :<C-U>'<,'>VimShellSendString<CR>
         " 提示执行命令
         map  [repl]p :<C-U>VimShellSendString<SPACE>
+
+        call neobundle#untap()
     endif
     " }}}
     " slimux: 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\rs发送当前行或选区，\rp提示输入命令，\ra重复上一命令，\rk重复上个key序列 {{{
@@ -2979,6 +2997,8 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
 
         " nmap <silent> <C-L>  <Plug>GoldenViewSplit
+
+        call neobundle#untap()
     endif
     " }}}
     " Yggdroot/indentLine: 以竖线标记各缩进块 {{{
@@ -3019,6 +3039,8 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         let g:indentLine_leadingSpaceEnabled = 0
         " let g:indentLine_leadingSpaceChar = '·'
         " let g:indentLine_leadingSpaceChar = iconv(nr2char(0x02F0，1), "utf-8", &encoding) " '˰'
+
+        call neobundle#untap()
     endif
     " }}}
     " " vim-indent-guides: 标记出各缩进块 {{{
