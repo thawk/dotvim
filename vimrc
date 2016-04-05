@@ -837,59 +837,60 @@ if s:is_plugin_group_enabled('unite') "{{{
                 \     {'name' : 'UniteLast', 'complete' : 'customlist,unite#complete#buffer_name'},
                 \     {'name' : 'UniteBookmarkAdd', 'complete' : 'file'},
                 \ ]}
-    let bundle = neobundle#get('unite.vim')
-    function! bundle.hooks.on_source(bundle)
-        call unite#custom#source(
-                    \ 'file_rec,file_rec/async,grep',
-                    \ 'ignore_pattern',
-                    \ join([
-                    \ '\%(^\|/\)\.$',
-                    \ '\~$',
-                    \ '\.\%(o\|a\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|gcov\)$',
-                    \ '\%(^\|/\)gcc-[0-9]\+\%(\.[0-9]\+\)*/',
-                    \ '\%(^\|/\)doc/html/',
-                    \ '\%(^\|/\)stage/',
-                    \ '\%(^\|/\)boost\%(\|_\w\+\)/',
-                    \ '\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)',
-                    \ ], '\|'))
+    if neobundle#tap('unite.vim')
+        function! neobundle#hooks.on_post_source(bundle)
+            call unite#custom#source(
+                        \ 'file_rec,file_rec/async,grep',
+                        \ 'ignore_pattern',
+                        \ join([
+                        \ '\%(^\|/\)\.$',
+                        \ '\~$',
+                        \ '\.\%(o\|a\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\|gcno\|gcda\|gcov\)$',
+                        \ '\%(^\|/\)gcc-[0-9]\+\%(\.[0-9]\+\)*/',
+                        \ '\%(^\|/\)doc/html/',
+                        \ '\%(^\|/\)stage/',
+                        \ '\%(^\|/\)boost\%(\|_\w\+\)/',
+                        \ '\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)',
+                        \ ], '\|'))
 
-        call unite#filters#matcher_default#use(['matcher_fuzzy'])
-        call unite#filters#sorter_default#use(['sorter_rank'])
-        " let g:unite_source_rec_max_cache_files = 0
-        " call unite#custom#source('file_rec,file_rec/async', 'max_candidates', 0)
-    endfunction
+            call unite#filters#matcher_default#use(['matcher_fuzzy'])
+            call unite#filters#sorter_default#use(['sorter_rank'])
+            " let g:unite_source_rec_max_cache_files = 0
+            " call unite#custom#source('file_rec,file_rec/async', 'max_candidates', 0)
+        endfunction
 
-    let g:unite_enable_start_insert = 1
-    "let g:unite_enable_short_source_names = 1
+        let g:unite_enable_start_insert = 1
+        "let g:unite_enable_short_source_names = 1
 
-    let g:unite_enable_ignore_case = 1
-    let g:unite_enable_smart_case = 1
+        let g:unite_enable_ignore_case = 1
+        let g:unite_enable_smart_case = 1
 
-    let g:unite_data_directory = s:get_cache_dir('unite')
-    let g:unite_source_session_path = s:get_cache_dir('session')
-    let g:unite_source_grep_default_opts = "-iHn --color=never"
+        let g:unite_data_directory = s:get_cache_dir('unite')
+        let g:unite_source_session_path = s:get_cache_dir('session')
+        let g:unite_source_grep_default_opts = "-iHn --color=never"
 
-    let g:unite_winheight = winheight("%") / 2
-    " let g:unite_winwidth = winwidth("%") / 2
-    let g:unite_winwidth = 40
+        let g:unite_winheight = winheight("%") / 2
+        " let g:unite_winwidth = winwidth("%") / 2
+        let g:unite_winwidth = 40
 
-    if g:dotvim_settings.ag_path != ""
-        " Use ag in unite grep source.
-        let g:unite_source_grep_command = g:dotvim_settings.ag_path
-        let g:unite_source_grep_default_opts =
-                    \ '--line-numbers --nocolor --nogroup --hidden --ignore ''.hg''' .
-                    \ ' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr''' .
-                    \ ' --ignore ''gcc-[0-9]+(\.[0-9]+)*'''
-        let g:unite_source_grep_recursive_opt = ''
-    elseif executable('ack-grep')
-        " Use ack in unite grep source.
-        let g:unite_source_grep_command = 'ack-grep'
-        let g:unite_source_grep_default_opts =
-                    \ '--no-heading --no-color -a -H'
-        let g:unite_source_grep_recursive_opt = ''
+        if g:dotvim_settings.ag_path != ""
+            " Use ag in unite grep source.
+            let g:unite_source_grep_command = g:dotvim_settings.ag_path
+            let g:unite_source_grep_default_opts =
+                        \ '--line-numbers --nocolor --nogroup --hidden --ignore ''.hg''' .
+                        \ ' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr''' .
+                        \ ' --ignore ''gcc-[0-9]+(\.[0-9]+)*'''
+            let g:unite_source_grep_recursive_opt = ''
+        elseif executable('ack-grep')
+            " Use ack in unite grep source.
+            let g:unite_source_grep_command = 'ack-grep'
+            let g:unite_source_grep_default_opts =
+                        \ '--no-heading --no-color -a -H'
+            let g:unite_source_grep_recursive_opt = ''
+        endif
+
+        autocmd! FileType unite call s:unite_my_settings()
     endif
-
-    autocmd! FileType unite call s:unite_my_settings()
     function! s:unite_my_settings() "{{{
         silent! unmap <buffer> <c-l>
 
@@ -2964,14 +2965,21 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
     " GoldenView.Vim: <F8>/<S-F8>当前窗口与主窗口交换 {{{
     NeoBundle 'zhaocai/GoldenView.Vim'
 
-    let g:goldenview__enable_default_mapping = 0
-    " nmap <silent> <C-N>  <Plug>GoldenViewNext
-    " nmap <silent> <C-P>  <Plug>GoldenViewPrevious
+    if neobundle#tap('GoldenView.Vim')
+        function! neobundle#hooks.on_post_source(bundle)
+            " 忽略CodeReviewer窗口
+            call add(g:goldenview__ignore_urule['filetype'], 'rev')
+        endfunction
 
-    nmap <silent> <F8>   <Plug>GoldenViewSwitchMain
-    nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
+        let g:goldenview__enable_default_mapping = 0
+        " nmap <silent> <C-N>  <Plug>GoldenViewNext
+        " nmap <silent> <C-P>  <Plug>GoldenViewPrevious
 
-    " nmap <silent> <C-L>  <Plug>GoldenViewSplit
+        nmap <silent> <F8>   <Plug>GoldenViewSwitchMain
+        nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
+
+        " nmap <silent> <C-L>  <Plug>GoldenViewSplit
+    endif
     " }}}
     " Yggdroot/indentLine: 以竖线标记各缩进块 {{{
     NeoBundleLazy 'Yggdroot/indentLine', {
