@@ -525,8 +525,8 @@ let g:vimsyn_folding .= 'P' " fold python   script
 let g:vimsyn_folding .= 'r' " fold ruby     script
 let g:vimsyn_folding .= 't' " fold tcl      script
 
-let g:load_doxygen_syntax = 1 " 启用源代码中的doxygen注释高亮
-let g:doxygen_enhanced_color = 1    " 对Doxygen注释使用非标准高亮
+let g:load_doxygen_syntax = 0 " 启用源代码中的doxygen注释高亮
+let g:doxygen_enhanced_color = 0    " 对Doxygen注释使用非标准高亮
 
 let g:is_bash	   = 1  " 如果没有#!行，缺省认为shell脚本用的是bash
 
@@ -2980,15 +2980,14 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
                 \   'LeadingSpaceEnable', 'LeadingSpaceDisable', 'LeadingSpaceToggle',
                 \ ],
                 \ 'on_path' : ['.*'],
-                \ 'disabled' : 1,
                 \ }
 
     if neobundle#tap('indentLine')
         let g:indentLine_enabled = 1
 
-        " 打开特定文件类型时，自动启用本插件。空表示应用于所有文件类型
-        let g:indentLine_fileType = ['python']
-        " 打开某些文件类型时，自动禁用本插件。空表示不自动禁用
+        " " 打开特定文件类型时，自动启用本插件。空表示应用于所有文件类型
+        " let g:indentLine_fileType = ['python']
+        " " 打开某些文件类型时，自动禁用本插件。空表示不自动禁用
         " let g:indentLine_fileTypeExclude = []
         " " 对于特定名称的缓冲区自动禁用
         " let g:indentLine_bufNameExclude = []
