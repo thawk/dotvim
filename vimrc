@@ -2846,7 +2846,7 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         endif
 
         let g:airline_section_a = '%{bufnr("%")} ' . g:airline_section_a
-        let g:airline_section_y = g:airline_section_y . '%{&bomb ? "[BOM]" : ""}'
+        " let g:airline_section_y = g:airline_section_y . '%{&bomb ? "[BOM]" : ""}'
     endfunction
 
     " if neobundle#is_installed("vcscommand.vim")
