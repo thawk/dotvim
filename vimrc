@@ -3364,9 +3364,12 @@ else
 endif
 " }}}
 
-" 用jk/kj退出编辑模式 {{{
+" 用jk/kj退出编辑模式和命令模式 {{{
 inoremap jk <Esc>
+cnoremap jk <Esc>
+
 inoremap kj <Esc>
+cnoremap kj <Esc>
 " }}}
 
 " 其它 {{{
