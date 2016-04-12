@@ -1025,6 +1025,10 @@ if s:is_plugin_group_enabled('unite') "{{{
     " unite的key binding {{{
     nnoremap [unite]S :<C-U>Unite source<CR>
 
+    nnoremap <silent> [unite]r :<C-u>UniteResume -no-start-insert<CR>
+    nnoremap <silent> [unite]n :<C-u>UniteNext<CR>
+    nnoremap <silent> [unite]N :<C-u>UnitePrevious<CR>
+
     nnoremap <silent> [unite]y :<C-U>Unite -buffer-name=yanks history/yank -default-action=append register<CR>
     nnoremap <silent> [unite]w :<C-u>UniteWithCursorWord -buffer-name=register buffer file_mru bookmark file<CR>
     " nnoremap <silent> [unite]c :<C-u>Unite change jump<CR>
@@ -1059,9 +1063,6 @@ if s:is_plugin_group_enabled('unite') "{{{
     nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag<CR>
     " nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
     nnoremap <silent> [unite]t :<C-U>Unite -buffer-name=tabs tab<CR>
-    " nnoremap <silent> [unite]U :<C-u>UniteResume -no-quit<CR>
-    " nnoremap <silent> [unite]u :<C-u>UniteResume<CR>
-    nnoremap <silent> [unite]r :<C-u>UniteResume -no-start-insert<CR>
     " nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files buffer file_rec:! file_mru bookmark<cr><c-u>
     nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files bookmark directory_mru<CR>
     nnoremap <silent> [unite]ma :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
