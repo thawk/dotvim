@@ -74,6 +74,8 @@ endif
 if !executable(g:dotvim_settings.global_command)
     let g:dotvim_settings.global_command = ""
 endif
+" global的版本。6以上可以使用新的选项
+let g:dotvim_settings.global_version = 5
 
 " 确定libclang的位置 {{{
 let g:dotvim_settings.libclang_path = ""
@@ -999,7 +1001,12 @@ if s:is_plugin_group_enabled('unite') "{{{
                     \ 'on_source': ['unite.vim'],
                     \ })
 
-        let g:unite_source_gtags_result_option = 'ctags-x'
+        " 旧版本global需要设置一些兼容选项
+        if g:dotvim_settings.global_version < 6
+            let g:unite_source_gtags_ref_option = 'r'
+            let g:unite_source_gtags_def_option = ''
+            let g:unite_source_gtags_result_option = 'ctags-x'
+        endif
 
         nnoremap [unite-tag]] :<C-u>Unite gtags/context<CR>
         nnoremap [unite-tag]s :<C-u>Unite gtags/ref<CR>
