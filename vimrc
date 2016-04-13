@@ -941,62 +941,62 @@ if s:is_plugin_group_enabled('unite') "{{{
     " }}}
     " unite-outline: 提供代码的大纲。通过\fo访问 {{{
     NeoBundleLazy 'Shougo/unite-outline', {
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
     " neoyank.vim: unite的history/yank源，提供历史yank缓冲区。通过\fy访问 {{{
     NeoBundle 'Shougo/neoyank.vim', {
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ 'on_path' : '.*',
                 \ }
     let g:neoyank#file = s:path_join(s:get_cache_dir('neoyank'), 'history_yank')
     " }}}
     " unite-mark: 列出所有标记点 {{{
     NeoBundleLazy 'tacroe/unite-mark', {
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
     " unite-help: 查找vim的帮助 {{{
     NeoBundleLazy 'shougo/unite-help', {
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
     " unite-tag: 跳转到光标下的tag。通过\fT访问 {{{
     NeoBundleLazy 'tsukkee/unite-tag', {
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
     " unite-colorscheme: 列出所有配色方案 {{{
     NeoBundleLazy 'ujihisa/unite-colorscheme', {
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
     " unite-quickfix: 过滤quickfix窗口（如在编译结果中查找） {{{
     NeoBundleLazy 'osyo-manga/unite-quickfix', {
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
     " vim-unite-history: 搜索命令历史 {{{
     NeoBundleLazy 'thinca/vim-unite-history', {
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
     " unite-tselect: 跳转到光标下的tag。通过g]和g<C-]>访问 {{{
     NeoBundleLazy 'eiiches/unite-tselect', {
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
     " vim-versions: 支持svn/git，\fv 看未提交的文件列表，\fl 看更新日志 {{{
     NeoBundleLazy 'hrsh7th/vim-versions', {
                 \ 'on_cmd' : ['UniteVersions'],
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
     " unite-gtags: Unite下调用gtags {{{
     NeoBundleLazy 'thawk/unite-gtags'
     if g:dotvim_settings.global_command != ''
         call neobundle#config('unite-gtags', {
-                    \ 'on_source': 'unite.vim',
+                    \ 'on_source': ['unite.vim'],
                     \ })
 
         let g:unite_source_gtags_result_option = 'ctags-x'
@@ -1150,7 +1150,7 @@ if s:is_plugin_group_enabled('editing') "{{{
     " " vim-alignta: 代码对齐插件。通过\fa访问 {{{
     " NeoBundleLazy 'h1mesuke/vim-alignta', {
     "             \ 'on_cmd' : ['Alignta'],
-    "             \ 'on_source' : 'unite.vim',
+    "             \ 'on_source' : ['unite.vim'],
     "             \ }
     " " 对齐
     " " :[range]Alignta [arguments] 或 [range]Align [arguments]
@@ -1398,7 +1398,7 @@ if s:is_plugin_group_enabled('snippet') "{{{
                     \ 'on_ft' : 'neosnippet',
                     \ 'on_cmd' : ['NeoSnippetEdit'],
                     \ 'on_map' : ['<Plug>(neosnippet_'],
-                    \ 'on_source': 'unite.vim',
+                    \ 'on_source': ['unite.vim'],
                     \ }
 
         let g:neosnippet#snippets_directory = fnamemodify(finddir("snippets", &runtimepath), ":p")
@@ -1751,7 +1751,7 @@ if s:is_plugin_group_enabled('navigation.jumping') "{{{
                 \   { 'name' : 'Ref', 'complete' : 'customlist,ref#complete' },
                 \ ],
                 \ 'on_map' : ['nv', 'K', '<Plug>(ref-keyword)'],
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ }
     let g:ref_man_cmd = executable('man') ? 'man' : ''
     " }}}
@@ -2383,7 +2383,7 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
                         \     'SnowdropGotoDefinition', 'SnowdropEchoTypeof',
                         \     'SnowdropEchoResultTypeof', 'SnowdropFixit',
                         \ ],
-                        \ 'on_source': 'unite.vim',
+                        \ 'on_source': ['unite.vim'],
                         \ })
 
             function! neobundle#hooks.on_source(bundle)
@@ -2673,7 +2673,7 @@ if s:is_plugin_group_enabled('development.shell') "{{{
                 \    'VimShellSendString', 'VimShellSendBuffer', 'VimShellClose',
                 \ ],
                 \ 'on_map' : ['<Plug>(vimshell_'],
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ }
     if neobundle#tap('vimshell')
         let g:vimshell_data_directory=s:get_cache_dir('vimshell')
@@ -2747,7 +2747,7 @@ if s:is_plugin_group_enabled('development.shell') "{{{
     " neossh.vim: 支持ssh://协议 {{{
     NeoBundleLazy 'Shougo/neossh.vim', {
                 \ 'on_ft' : ['vimfiler', 'vimshell'],
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
     " vimshell-ssh: 在vimshell中iexe ssh连接服务器 {{{
@@ -3108,7 +3108,7 @@ if s:is_plugin_group_enabled('misc') "{{{
                 \              ],
                 \ 'on_map' : ['<Plug>(vimfiler_'],
                 \ 'explorer' : 1,
-                \ 'on_source': 'unite.vim',
+                \ 'on_source': ['unite.vim'],
                 \ }
     " 文件管理器，通过 :VimFiler 启动。
     " c : copy, m : move, r : rename,
