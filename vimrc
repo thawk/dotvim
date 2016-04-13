@@ -993,11 +993,13 @@ if s:is_plugin_group_enabled('unite') "{{{
                 \ }
     " }}}
     " unite-gtags: Unite下调用gtags {{{
-    NeoBundleLazy 'hewes/unite-gtags'
+    NeoBundleLazy 'thawk/unite-gtags'
     if g:dotvim_settings.global_command != ''
         call neobundle#config('unite-gtags', {
                     \ 'on_source': 'unite.vim',
                     \ })
+
+        let g:unite_source_gtags_result_option = 'ctags-x'
 
         nnoremap [unite-tag]] :<C-u>Unite gtags/context<CR>
         nnoremap [unite-tag]s :<C-u>Unite gtags/ref<CR>
@@ -1009,6 +1011,8 @@ if s:is_plugin_group_enabled('unite') "{{{
         nnoremap [unite-tag]e :<C-u>UniteWithCursorWord gtags/grep<CR>
         nnoremap [unite-tag]E :<C-u>Unite gtags/grep:
         nnoremap [unite-tag]f :<C-u>Unite gtags/file<CR>
+        nnoremap [unite-tag]p :<C-u>Unite gtags/path<CR>
+        nnoremap [unite-tag]P :<C-u>Unite gtags/path:
     endif
     " }}}
     " tabpagebuffer.vim: 记录一个tab中包含的buffer {{{
@@ -2252,10 +2256,6 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
     NeoBundleLazy 'Rip-Rip/clang_complete'
     if (g:dotvim_settings.cpp_complete_method == 'clang_complete'
                 \ && !(g:dotvim_settings.libclang_path == "" && !executable('clang')))
-        call neobundle#config('clang_complete', {
-                    \ 'on_ft' : ['c', 'cpp'],
-                    \ })
-
         " clang编译方法：
         "
         " svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
@@ -2267,46 +2267,62 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
         " 要把Release/lib/libclang.so和Release/lib/clang目录拷贝到g:clang_library_path
         " 指向的位置，这样clang就可以比较快速地进行补全了。
 
-        " 使用NeoComplete触发补全
-        let g:clang_complete_auto = 0
-        let g:clang_auto_select = 0
-        let g:clang_complete_copen = 0  " open quickfix window on error.
-        let g:clang_hl_errors = 1       " highlight the warnings and errors the same way clang
-        "let g:clang_jumpto_declaration_key = '<C-]>'
-        "let g:clang_jumpto_back_key = '<C-T>'
-        let g:clang_default_keymappings = 0
-        let g:clang_user_options = '-std=c++11 -stdlib=libc++'
-        let g:clang_complete_macros = 1
+        if neobundle#tap('clang_complete')
+            call neobundle#config({
+                        \ 'on_ft' : ['c', 'cpp'],
+                        \ })
 
-        if g:dotvim_settings.libclang_path != ""
-            let g:clang_use_library = 1
-            let g:clang_library_path = g:dotvim_settings.libclang_path
+            function! neobundle#hooks.on_source(bundle)
+                " 使用NeoComplete触发补全
+                let g:clang_complete_auto = 0
+                let g:clang_auto_select = 0
+                let g:clang_complete_copen = 0  " open quickfix window on error.
+                let g:clang_hl_errors = 1       " highlight the warnings and errors the same way clang
+                "let g:clang_jumpto_declaration_key = '<C-]>'
+                "let g:clang_jumpto_back_key = '<C-T>'
+                let g:clang_default_keymappings = 0
+                let g:clang_user_options = '-std=c++11 -stdlib=libc++'
+                let g:clang_complete_macros = 1
+
+                if g:dotvim_settings.libclang_path != ""
+                    let g:clang_use_library = 1
+                    let g:clang_library_path = g:dotvim_settings.libclang_path
+                endif
+            endfunction
+
+            call neobundle#untap()
         endif
     endif
     " }}}
     " vim-clang: 使用clang编译器进行上下文补全 {{{
     NeoBundleLazy 'justmao945/vim-clang'
     if g:dotvim_settings.cpp_complete_method == 'vim-clang' && executable('clang')
-        call neobundle#config('vim-clang', {
-                    \ 'on_ft' : ['c', 'cpp'],
-                    \ })
+        if neobundle#tap('vim-clang')
+            call neobundle#config({
+                        \ 'on_ft' : ['c', 'cpp'],
+                        \ })
 
-        " 使用NeoComplete触发补全
-        let g:clang_auto = 0
-        " default 'longest' can not work with neocomplete
-        let g:clang_c_completeopt = 'menuone,preview'
-        let g:clang_cpp_completeopt = 'menuone,preview'
+            function! neobundle#hooks.on_source(bundle)
+                " 使用NeoComplete触发补全
+                let g:clang_auto = 0
+                " default 'longest' can not work with neocomplete
+                let g:clang_c_completeopt = 'menuone,preview'
+                let g:clang_cpp_completeopt = 'menuone,preview'
 
-        " disable diagnostics
-        let g:clang_diagsopt = ''
+                " disable diagnostics
+                let g:clang_diagsopt = ''
 
-        if !exists('g:clang_cpp_options')
-            let g:clang_cpp_options = ''
-        endif
-        let g:clang_cpp_options .= ' -std=c++11 -stdlib=libc++'
+                if !exists('g:clang_cpp_options')
+                    let g:clang_cpp_options = ''
+                endif
+                let g:clang_cpp_options .= ' -std=c++11 -stdlib=libc++'
 
-        if g:dotvim_settings.clang_include_path != ""
-            let g:clang_cpp_options .= " -I " . g:dotvim_settings.clang_include_path
+                if g:dotvim_settings.clang_include_path != ""
+                    let g:clang_cpp_options .= " -I " . g:dotvim_settings.clang_include_path
+                endif
+            endfunction
+
+            call neobundle#untap()
         endif
     endif
     " }}}
@@ -2316,16 +2332,6 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
                     \ }
     if g:dotvim_settings.cpp_complete_method =~ 'marching.*'
                 \ && !(g:dotvim_settings.libclang_path == "" && !executable('clang'))
-        call neobundle#config('vim-marching', {
-                    \ 'on_ft' : ['c', 'cpp'],
-                    \ 'on_cmd' : [
-                    \     'MarchingBufferClearCache', 'MarchingDebugLog'],
-                    \ 'on_map' : [['i', '<Plug>(marching_']],
-                    \ })
-
-        let g:marching_enable_neocomplete = 1
-        let g:marching_clang_command_option = ' -std=c++11 -stdlib=libc++'
-
         if g:dotvim_settings.cpp_complete_method == 'marching' " 自动选择方式
             if g:dotvim_settings.libclang_path != ""
                 let g:dotvim_settings.cpp_complete_method = 'marching.snowdrop'
@@ -2334,54 +2340,69 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
             endif
         endif
 
-        " 选择一个backend
-        if g:dotvim_settings.cpp_complete_method == 'marching.snowdrop'
-            " 使用vim-snowdrop
-            let bundle = neobundle#get('vim-marching')
-            function! bundle.hooks.on_post_source(bundle)
-                NeoBundleSource "vim-snowdrop"
-            endfunction
-            let g:marching_backend = 'snowdrop'             " 通过vim-snowdrop调用libclang
-        elseif g:dotvim_settings.cpp_complete_method == 'marching.async'
-            let g:marching_backend = 'clang_command'        " 异步
-        else
-            let g:marching_backend = 'sync_clang_command'   " 同步
-        endif
+        if neobundle#tap('vim-marching')
+            call neobundle#config({
+                        \ 'on_ft' : ['c', 'cpp'],
+                        \ 'on_cmd' : [
+                        \     'MarchingBufferClearCache', 'MarchingDebugLog'],
+                        \ 'on_map' : [['i', '<Plug>(marching_']],
+                        \ })
 
-        " call extend(s:neocompl_force_omni_patterns, {
-        "             \ 'marching#complete' : '\%(\.\|->\|::\)\h\w*'})
+            let g:marching_enable_neocomplete = 1
+            let g:marching_clang_command_option = ' -std=c++11 -stdlib=libc++'
+
+            " 选择一个backend
+            if g:dotvim_settings.cpp_complete_method == 'marching.snowdrop'
+                " 使用vim-snowdrop
+                function! neobundle#hooks.on_post_source(bundle)
+                    NeoBundleSource "vim-snowdrop"
+                endfunction
+                let g:marching_backend = 'snowdrop'             " 通过vim-snowdrop调用libclang
+            elseif g:dotvim_settings.cpp_complete_method == 'marching.async'
+                let g:marching_backend = 'clang_command'        " 异步
+            else
+                let g:marching_backend = 'sync_clang_command'   " 同步
+            endif
+
+            " call extend(s:neocompl_force_omni_patterns, {
+            "             \ 'marching#complete' : '\%(\.\|->\|::\)\h\w*'})
+
+            call neobundle#untap()
+        endif
     endif
     " }}}
     " vim-snowdrop: libclang的python封装 {{{
     NeoBundleLazy 'osyo-manga/vim-snowdrop'
     if g:dotvim_settings.libclang_path != ""
-        call neobundle#config('vim-snowdrop', {
-                    \ 'on_cmd' : [
-                    \     'SnowdropVerify', 'SnowdropEchoClangVersion',
-                    \     'SnowdropLogs', 'SnowdropClearLogs',
-                    \     'SnowdropEchoIncludes', 'SnowdropErrorCheck',
-                    \     'SnowdropGotoDefinition', 'SnowdropEchoTypeof',
-                    \     'SnowdropEchoResultTypeof', 'SnowdropFixit',
-                    \ ],
-                    \ 'on_source': 'unite.vim',
-                    \ })
-    endif
+        if neobundle#tap('vim-snowdrop')
+            call neobundle#config({
+                        \ 'on_cmd' : [
+                        \     'SnowdropVerify', 'SnowdropEchoClangVersion',
+                        \     'SnowdropLogs', 'SnowdropClearLogs',
+                        \     'SnowdropEchoIncludes', 'SnowdropErrorCheck',
+                        \     'SnowdropGotoDefinition', 'SnowdropEchoTypeof',
+                        \     'SnowdropEchoResultTypeof', 'SnowdropFixit',
+                        \ ],
+                        \ 'on_source': 'unite.vim',
+                        \ })
 
-    if neobundle#tap('vim-snowdrop')
-        let g:snowdrop#libclang_directory = fnamemodify(g:dotvim_settings.libclang_path, ':p:h')
-        let g:snowdrop#libclang_file      = fnamemodify(g:dotvim_settings.libclang_path, ':p:t')
+            function! neobundle#hooks.on_source(bundle)
+                let g:snowdrop#libclang_directory = fnamemodify(g:dotvim_settings.libclang_path, ':p:h')
+                let g:snowdrop#libclang_file      = fnamemodify(g:dotvim_settings.libclang_path, ':p:t')
 
-        " Enable code completion in neocomplete.vim.
-        let g:neocomplete#sources#snowdrop#enable = 1
+                " Enable code completion in neocomplete.vim.
+                let g:neocomplete#sources#snowdrop#enable = 1
 
-        let g:snowdrop#command_options = {
-                    \ "cpp" : "-std=c++1y",
-                    \ }
+                let g:snowdrop#command_options = {
+                            \ "cpp" : "-std=c++1y",
+                            \ }
 
-        " Not skip
-        let g:neocomplete#skip_auto_completion_time = ""
+                " Not skip
+                let g:neocomplete#skip_auto_completion_time = ""
+            endfunction
 
-        call neobundle#untap()
+            call neobundle#untap()
+        endif
     endif
     " }}}
     " vim-clang-format: 使用clang编译器进行上下文补全 {{{
@@ -3174,29 +3195,29 @@ if s:is_plugin_group_enabled('misc') "{{{
                 \ ],
                 \ }
     " }}}
-    " vimple: :View查看ex命令输出等辅助功能 {{{
-    NeoBundleLazy 'dahu/vimple', {
-                \ 'on_map': [
-                \     ['n',
-                \       '<plug>vimple_ident_search', '<plug>vimple_ident_search_forward',
-                \       '[I', ']I',
-                \       '<plug>vimple_spell_suggest', 'z=',
-                \       '<plug>vimple_filter',
-                \     ],
-                \ ],
-                \ 'on_cmd': [
-                \     'G', 'StringScanner', 'Mkvimrc', 'BufTypeDo',
-                \     'BufMatchDo', 'QFargs', 'QFargslocal', 'LLargs',
-                \     'LLargslocal', 'QFbufs', 'LLbufs', 'QFdo',
-                \     'LLdo', 'Filter',
-                \     {'name': 'ReadIntoBuffer', 'complete': 'file'},
-                \     {'name': 'View', 'complete': 'command'},
-                \     {'name': 'ViewFT', 'complete': 'command'},
-                \     {'name': 'ViewExpr', 'complete': 'command'},
-                \     {'name': 'ViewSys', 'complete': 'command'},
-                \     'Collect', 'GCollect', 'Silently',
-                \ ]}
-    " }}}
+    " " vimple: :View查看ex命令输出等辅助功能 {{{
+    " NeoBundleLazy 'dahu/vimple', {
+    "             \ 'on_map': [
+    "             \     ['n',
+    "             \       '<plug>vimple_ident_search', '<plug>vimple_ident_search_forward',
+    "             \       '[I', ']I',
+    "             \       '<plug>vimple_spell_suggest', 'z=',
+    "             \       '<plug>vimple_filter',
+    "             \     ],
+    "             \ ],
+    "             \ 'on_cmd': [
+    "             \     'G', 'StringScanner', 'Mkvimrc', 'BufTypeDo',
+    "             \     'BufMatchDo', 'QFargs', 'QFargslocal', 'LLargs',
+    "             \     'LLargslocal', 'QFbufs', 'LLbufs', 'QFdo',
+    "             \     'LLdo', 'Filter',
+    "             \     {'name': 'ReadIntoBuffer', 'complete': 'file'},
+    "             \     {'name': 'View', 'complete': 'command'},
+    "             \     {'name': 'ViewFT', 'complete': 'command'},
+    "             \     {'name': 'ViewExpr', 'complete': 'command'},
+    "             \     {'name': 'ViewSys', 'complete': 'command'},
+    "             \     'Collect', 'GCollect', 'Silently',
+    "             \ ]}
+    " " }}}
 endif
 " }}}
 
@@ -3383,6 +3404,27 @@ cnoremap kj <Esc>
 " nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 " }}}
 
+" }}}
+
+" 自定义命令 {{{
+function! OutputSplitWindow(...)
+  " this function output the result of the Ex command into a split scratch buffer
+  let cmd = join(a:000, ' ')
+  let temp_reg = @"
+  redir @"
+  silent! execute cmd
+  redir END
+  let output = copy(@")
+  let @" = temp_reg
+  if empty(output)
+    echoerr "no output"
+  else
+    new
+    setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted
+    put! =output
+  endif
+endfunction
+command! -nargs=+ -complete=command Output call OutputSplitWindow(<f-args>)
 " }}}
 
 " color scheme and statusline {{{
