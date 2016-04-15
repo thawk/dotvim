@@ -741,11 +741,11 @@ nmap <Leader>r [repl]
 xmap <Leader>r [repl]
 
 nnoremap [tag] <Nop>
-nmap <C-\> [tag]
-nnoremap [tag] <C-\>
+nmap <C-\><C-\> [tag]
+" nnoremap [tag] <C-\>
 
 nnoremap [unite-tag] <Nop>
-nmap <C-\><C-\> [unite-tag]
+nmap <C-\> [unite-tag]
 
 nnoremap [ctrlsf] <Nop>
 vnoremap [ctrlsf] <Nop>
@@ -1008,18 +1008,19 @@ if s:is_plugin_group_enabled('unite') "{{{
             let g:unite_source_gtags_result_option = 'ctags-x'
         endif
 
-        nnoremap [unite-tag]] :<C-u>Unite gtags/context<CR>
-        nnoremap [unite-tag]s :<C-u>Unite gtags/ref<CR>
-        nnoremap [unite-tag]S :<C-u>Unite gtags/ref:
-        nnoremap [unite-tag]g :<C-u>Unite gtags/def<CR>
-        nnoremap [unite-tag]G :<C-u>Unite gtags/def:
-        nnoremap [unite-tag]t :<C-u>UniteWithCursorWord gtags/grep<CR>
-        nnoremap [unite-tag]T :<C-u>Unite gtags/grep:
-        nnoremap [unite-tag]e :<C-u>UniteWithCursorWord gtags/grep<CR>
-        nnoremap [unite-tag]E :<C-u>Unite gtags/grep:
-        nnoremap [unite-tag]f :<C-u>Unite gtags/file<CR>
-        nnoremap [unite-tag]p :<C-u>Unite gtags/path<CR>
-        nnoremap [unite-tag]P :<C-u>Unite gtags/path:
+        nnoremap <silent> [unite-tag]] :<C-u>Unite -immediately gtags/context<CR>
+        nnoremap <silent> [unite-tag]<C-]> :<C-u>Unite -immediately gtags/context<CR>
+        nnoremap <silent> [unite-tag]s :<C-u>Unite -immediately gtags/ref<CR>
+        nnoremap <silent> [unite-tag]S :<C-u>Unite gtags/completion -default-action-list_refereces<CR>
+        nnoremap <silent> [unite-tag]g :<C-u>Unite -immediately gtags/def<CR>
+        nnoremap <silent> [unite-tag]G :<C-u>Unite gtags/completion -default-action-list_definitions<CR>
+        nnoremap <silent> [unite-tag]t :<C-u>UniteWithCursorWord -immediately gtags/grep<CR>
+        nnoremap <silent> [unite-tag]T :<C-u>Unite gtags/grep:
+        nnoremap <silent> [unite-tag]e :<C-u>UniteWithCursorWord -immediately gtags/grep<CR>
+        nnoremap <silent> [unite-tag]E :<C-u>Unite gtags/grep:
+        nnoremap <silent> [unite-tag]f :<C-u>Unite gtags/file<CR>
+        nnoremap <silent> [unite-tag]p :<C-u>UniteWithCursorWord -immediately gtags/path<CR>
+        nnoremap <silent> [unite-tag]P :<C-u>Unite gtags/path:
     endif
     " }}}
     " tabpagebuffer.vim: 记录一个tab中包含的buffer {{{
