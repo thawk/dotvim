@@ -730,11 +730,6 @@ xnoremap [unite] <Nop>
 nmap <Leader>f [unite]
 xmap <Leader>f [unite]
 
-nnoremap [unite2] <Nop>
-xnoremap [unite2] <Nop>
-nmap <Leader>F [unite2]
-xmap <Leader>F [unite2]
-
 nnoremap [repl] <Nop>
 xnoremap [repl] <Nop>
 nmap <Leader>r [repl]
@@ -1040,18 +1035,27 @@ if s:is_plugin_group_enabled('unite') "{{{
     nnoremap <silent> [unite]r :<C-u>UniteResume -no-start-insert<CR>
     nnoremap <silent> [unite]n :<C-u>UniteNext<CR>
     nnoremap <silent> [unite]N :<C-u>UnitePrevious<CR>
+    nnoremap <silent> [unite]C :<C-u>UniteClose<CR>
 
     nnoremap <silent> [unite]y :<C-U>Unite -buffer-name=yanks history/yank -default-action=append register<CR>
-    nnoremap <silent> [unite]w :<C-u>UniteWithCursorWord -buffer-name=register buffer file_mru bookmark file<CR>
+    " nnoremap <silent> [unite]w :<C-u>UniteWithCursorWord -buffer-name=register buffer file_mru bookmark file<CR>
     " nnoremap <silent> [unite]c :<C-u>Unite change jump<CR>
-    " nnoremap <silent> [unite]R :<C-u>Unite -buffer-name=resume resume<CR>
-    " nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
-    nnoremap <silent> [unite]G :<C-u>Unite grep -buffer-name=search -no-quit<CR>
-    nnoremap <silent> [unite2]G :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit<CR>
-    " nnoremap <silent> [unite]G :<C-u>UniteWithCursorWord grep -buffer-name=search -no-quit<CR>
-    "nnoremap <silent> [unite]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
-    nnoremap <silent> [unite]g :<C-u>Unite grep:! -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
-    nnoremap <silent> [unite2]g :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -start-insert -input=<C-R><C-W><CR>
+
+    " 小写查找grep当前word
+    " 在project目录下找
+    nnoremap <silent> [unite]gg :<C-u>Unite grep:<C-R>=FindVcsRoot("")<CR> -buffer-name=search -no-quit -no-start-insert -input=<C-R><C-W><CR>
+    " 在当前目录下找
+    nnoremap <silent> [unite]gc :<C-u>Unite grep:. -buffer-name=search -no-quit -no-start-insert -input=<C-R><C-W><CR>
+    " 在当前文件所在目录下找
+    nnoremap <silent> [unite]gb :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -no-start-insert -input=<C-R><C-W><CR>
+
+    " 大写需要输入查找内容
+    " 在project目录下找
+    nnoremap <silent> [unite]GG :<C-u>Unite grep:<C-R>=FindVcsRoot("")<CR> -buffer-name=search -no-quit -no-start-insert<CR>
+    " 在当前目录下找
+    nnoremap <silent> [unite]GC :<C-u>Unite grep:. -buffer-name=search -no-quit -no-start-insert<CR>
+    " 在当前文件所在目录下找
+    nnoremap <silent> [unite]GB :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -no-start-insert<CR>
 
     nnoremap <silent> [unite]/ :<C-U>Unite line -buffer-name=search -start-insert -input=<C-R><C-W><CR>
     nnoremap <silent> [unite]? :<C-U>Unite line -buffer-name=search -start-insert<CR>
@@ -1060,18 +1064,14 @@ if s:is_plugin_group_enabled('unite') "{{{
     nnoremap <silent> [unite]b :<C-u>Unite -buffer-name=files buffer_tab -start-insert<CR>
     nnoremap <silent> [unite]B :<C-u>Unite -buffer-name=files buffer file_mru -start-insert<CR>
     nnoremap <silent> [unite]c :<C-u>Unite -buffer-name=files file buffer file/new -start-insert<CR>
-    nnoremap <silent> [unite]C :<C-u>UniteClose<CR>
+
     " nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
-    nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps -start-insert help<CR>
-    nnoremap <silent> [unite]H :<C-U>UniteWithCursorWord -buffer-name=helps help<CR>
+    nnoremap <silent> [unite]H :<C-U>Unite -buffer-name=helps -start-insert help<CR>
+    nnoremap <silent> [unite]h :<C-U>UniteWithCursorWord -buffer-name=helps help<CR>
     nnoremap <silent> [unite]M :<C-U>Unite mark<CR>
+
     " nnoremap <silent> [unite]m :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build<CR>
-    nnoremap <silent> [unite]Q :<C-u>Unite poslist<CR>
     nnoremap <silent> [unite]q :<C-u>Unite quickfix -no-quit<CR>
-    " nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
-    " nnoremap <silent> [unite]s :<C-u>Unite -start-insert session<CR>
-    "nnoremap <silent> [unite]T :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
-    "nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag tag/include<CR>
     nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag<CR>
     " nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
     nnoremap <silent> [unite]t :<C-U>Unite -buffer-name=tabs tab<CR>
