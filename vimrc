@@ -998,8 +998,8 @@ if s:is_plugin_group_enabled('unite') "{{{
 
         " 旧版本global需要设置一些兼容选项
         if g:dotvim_settings.global_version < 6
-            let g:unite_source_gtags_ref_option = 'r'
-            let g:unite_source_gtags_def_option = ''
+            let g:unite_source_gtags_ref_option = 'rse'
+            let g:unite_source_gtags_def_option = 'e'
             let g:unite_source_gtags_result_option = 'ctags-x'
         endif
 
@@ -1083,13 +1083,13 @@ if s:is_plugin_group_enabled('unite') "{{{
     if s:is_windows
         nnoremap <silent> [unite]F
                     \ :<C-u>Unite -buffer-name=files -multi-line
-                    \ file jump_point file_point buffer
-                    \ file_rec:! file_mru file/new<CR>
+                    \ jump_point file_point buffer
+                    \ file_rec:<C-R>=FindVcsRoot('')<CR> file_mru file/new:<C-R>=expand("%:p:h")<CR><CR>
     else
         nnoremap <silent> [unite]F
                     \ :<C-u>Unite -buffer-name=files -multi-line
-                    \ file jump_point file_point buffer
-                    \ file_rec/async:! file_mru file/new<CR>
+                    \ jump_point file_point buffer
+                    \ file_rec/async:<C-R>=FindVcsRoot('')<CR> file_mru file/new:<C-R>=expand("%:p:h")<CR><CR>
     endif
 
     if neobundle#tap('unite-outline') && neobundle#tap('unite-fold')
