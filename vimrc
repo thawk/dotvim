@@ -1006,9 +1006,9 @@ if s:is_plugin_group_enabled('unite') "{{{
         nnoremap <silent> [unite-tag]] :<C-u>Unite -immediately gtags/context<CR>
         nnoremap <silent> [unite-tag]<C-]> :<C-u>Unite -immediately gtags/context<CR>
         nnoremap <silent> [unite-tag]s :<C-u>Unite -immediately gtags/ref<CR>
-        nnoremap <silent> [unite-tag]S :<C-u>Unite gtags/completion -default-action-list_refereces<CR>
+        nnoremap <silent> [unite-tag]S :<C-u>Unite gtags/completion -default-action=list_refereces<CR>
         nnoremap <silent> [unite-tag]g :<C-u>Unite -immediately gtags/def<CR>
-        nnoremap <silent> [unite-tag]G :<C-u>Unite gtags/completion -default-action-list_definitions<CR>
+        nnoremap <silent> [unite-tag]G :<C-u>Unite gtags/completion -default-action=list_definitions<CR>
         nnoremap <silent> [unite-tag]t :<C-u>UniteWithCursorWord -immediately gtags/grep<CR>
         nnoremap <silent> [unite-tag]T :<C-u>Unite gtags/grep:
         nnoremap <silent> [unite-tag]e :<C-u>UniteWithCursorWord -immediately gtags/grep<CR>
