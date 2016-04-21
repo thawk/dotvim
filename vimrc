@@ -3092,8 +3092,12 @@ endif
 " }}}
 
 if s:is_plugin_group_enabled('misc') "{{{
-    " LargeFile: 在打开大文件时，禁用语法高亮以提供打开速度 {{{
-    NeoBundle 'LargeFile'
+    " " LargeFile: 在打开大文件时，禁用语法高亮以提供打开速度 {{{
+    " NeoBundle 'LargeFile'
+    " " }}}
+    " vim-hugefile: 打开大文件时，禁用一些功能，提供打开速度 {{{
+    NeoBundle 'mhinz/vim-hugefile'
+    " let g:hugefile_trigger_size = 2 " MiB
     " }}}
     " vimfiler: 文件管理器 {{{
     NeoBundleLazy 'Shougo/vimfiler', {
