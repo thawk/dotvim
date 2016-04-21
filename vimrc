@@ -1015,7 +1015,7 @@ if s:is_plugin_group_enabled('unite') "{{{
         nnoremap <silent> [unite-tag]E :<C-u>Unite gtags/grep:
         nnoremap <silent> [unite-tag]f :<C-u>Unite gtags/file<CR>
         nnoremap <silent> [unite-tag]p :<C-u>UniteWithCursorWord -immediately gtags/path<CR>
-        nnoremap <silent> [unite-tag]P :<C-u>Unite gtags/path:
+        nnoremap <silent> [unite-tag]P :<C-u>Unite gtags/path:<CR>
     endif
     " }}}
     " tabpagebuffer.vim: 记录一个tab中包含的buffer {{{
