@@ -1407,7 +1407,7 @@ if s:is_plugin_group_enabled('snippet') "{{{
                     \ 'on_cmd' : ['NeoSnippetEdit'],
                     \ 'on_map' : ['<Plug>(neosnippet_'],
                     \ 'on_source': ['unite.vim'],
-                    \ }
+                    \ })
 
         let g:neosnippet#snippets_directory = fnamemodify(finddir("snippets", &runtimepath), ":p")
         let g:neosnippet#snippets_directory .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")

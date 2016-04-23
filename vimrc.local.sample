@@ -23,4 +23,4 @@ let g:dotvim_user_settings.plugin_groups_include = []
 " let g:dotvim_user_settings.cpp_complete_method = 'vim-clang'
 
 " global的版本。6以上可以使用新的选项
-let g:dotvim_settings.global_version = 6
+let g:dotvim_user_settings.global_version = 6
