@@ -3439,7 +3439,7 @@ command! -nargs=+ -complete=command Output call OutputSplitWindow(<f-args>)
 
 " color scheme and statusline {{{
 let &background=g:dotvim_settings.background
-execute "colorscheme " . g:dotvim_settings.colorscheme
+execute "silent! colorscheme " . g:dotvim_settings.colorscheme
 
 "set statusline=%<%n:\ %f\ %h%m%r\ %=%k%y[%{&ff},%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
 set statusline=%<%n:                " Buffer number
