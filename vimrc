@@ -795,7 +795,7 @@ if s:is_plugin_group_enabled('core') "{{{
     " vimproc: 用于异步执行命令的插件，被其它插件依赖 {{{
     if (s:is_windows)
         " Windows下需要固定为与dll对应的版本
-        NeoBundle 'Shougo/vimproc', { 'rev' : 'f96e476' }
+        NeoBundle 'Shougo/vimproc', { 'rev' : 'f9269f38' }
         if has("win64") && filereadable(s:vimrc_path . "/win32/vimproc_win64.dll")
             let g:vimproc_dll_path = s:vimrc_path . "/win32/vimproc_win64.dll"
         elseif has("win32") && filereadable(s:vimrc_path . "/win32/vimproc_win32.dll")
@@ -804,10 +804,7 @@ if s:is_plugin_group_enabled('core') "{{{
     else
         NeoBundle 'Shougo/vimproc', {
                     \ 'build' : {
-                    \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
-                    \     'cygwin' : 'make -f make_cygwin.mak && touch -t 200001010000.00 autoload/vimproc_cygwin.dll',
-                    \     'mac' : 'make -f make_mac.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
-                    \     'unix' : 'make -f make_unix.mak && touch -t 200001010000.00 autoload/vimproc_unix.so',
+                    \     'others' : 'make',
                     \ },
                     \ }
     endif
@@ -3032,15 +3029,18 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
     endif
     " }}}
     " Yggdroot/indentLine: 以竖线标记各缩进块 {{{
-    NeoBundleLazy 'Yggdroot/indentLine', {
-                \ 'on_cmd': [
-                \   'IndentLinesReset',   'IndentLinesToggle',   'IndentLinesEnable', 'IndentLinesDisable',
-                \   'LeadingSpaceEnable', 'LeadingSpaceDisable', 'LeadingSpaceToggle',
-                \ ],
-                \ 'on_path' : ['.*'],
-                \ }
+    NeoBundleLazy 'Yggdroot/indentLine'
 
-    if neobundle#tap('indentLine')
+    " gvim下经常出现一个空格占两个字符的宽度
+    if !s:is_gui
+        call neobundle#config('indentLine', {
+                    \ 'on_cmd': [
+                    \   'IndentLinesReset',   'IndentLinesToggle',   'IndentLinesEnable', 'IndentLinesDisable',
+                    \   'LeadingSpaceEnable', 'LeadingSpaceDisable', 'LeadingSpaceToggle',
+                    \ ],
+                    \ 'on_path' : ['.*'],
+                    \ })
+
         let g:indentLine_enabled = 1
 
         " " 打开特定文件类型时，自动启用本插件。空表示应用于所有文件类型
@@ -3059,7 +3059,7 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         " let g:indentLine_showFirstIndentLevel = 1
 
         " let g:indentLine_char = '|'
-        " let g:indentLine_char = iconv(nr2char(0xa6, 1), "utf-8", &encoding) " '¦'
+        " let g:indentLine_char = iconv(nr2char(0xa6, 1), "utf-8", &encoding) " '|'
         let g:indentLine_char = iconv(nr2char(0x2506, 1), "utf-8", &encoding) " '┆'
         " let g:indentLine_char = iconv(nr2char(0x2502, 1), "utf-8", &encoding) " '│'
         " 首个缩进使用的字符
@@ -3068,9 +3068,7 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         " 行首空格
         let g:indentLine_leadingSpaceEnabled = 0
         " let g:indentLine_leadingSpaceChar = '·'
-        " let g:indentLine_leadingSpaceChar = iconv(nr2char(0x02F0，1), "utf-8", &encoding) " '˰'
-
-        call neobundle#untap()
+        " let g:indentLine_leadingSpaceChar = iconv(nr2char(0x02F0，1), "utf-8", &encoding) " '?'
     endif
     " }}}
     " " vim-indent-guides: 标记出各缩进块 {{{
