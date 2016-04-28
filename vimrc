@@ -172,7 +172,7 @@ function! GetSvnBranchOfPath(path)
     if len(m)
         let url = m[1]
 
-        if url =~ ".*/trunk\\($\\|.*\\)"
+        if url =~ ".*/trunk\\($\\|/.*\\)"
             let branch_info["type"] = "trunk"
             let branch_info["branch"] = ""
         else
