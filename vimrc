@@ -888,49 +888,19 @@ if s:is_plugin_group_enabled('unite') "{{{
         call neobundle#untap()
     endif
     function! s:unite_my_settings() "{{{
-        silent! unmap <buffer> <c-l>
+        imap <silent><buffer><expr>     <C-s>  unite#do_action('split')
+        imap <silent><buffer><expr>     <C-v>  unite#do_action('vsplit')
+        imap <silent><buffer>           jj     <Plug>(unite_insert_leave)
+        imap <silent><buffer><expr>     j      unite#smart_map('j', '')
 
-        nmap <buffer> <ESC>      <Plug>(unite_exit)
-        imap <buffer> jj      <Plug>(unite_insert_leave)
-
-        imap <buffer><expr> j unite#smart_map('j', '')
-        imap <buffer> <TAB>   <Plug>(unite_select_next_line)
-        imap <buffer> <S-TAB>   <Plug>(unite_select_previous_line)
-
-        imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
-        imap <buffer> '     <Plug>(unite_quick_match_default_action)
-        nmap <buffer> '     <Plug>(unite_quick_match_default_action)
-        imap <buffer><expr> x
-                    \ unite#smart_map('x', "\<Plug>(unite_choose_action)")
-        nmap <buffer> <C-n>	<Plug>(unite_rotate_next_source)
-        nmap <buffer> <C-p>	<Plug>(unite_rotate_previous_source)
-        nmap <buffer> x     <Plug>(unite_choose_action)
-        nmap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
-        imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
-        imap <buffer> <C-y>     <Plug>(unite_narrowing_path)
-        nmap <buffer> <C-y>     <Plug>(unite_narrowing_path)
-        nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
-        nmap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
-        imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
-        nnoremap <silent><buffer><expr> l
-                    \ unite#smart_map('l', unite#do_action('default'))
-
-        let unite = unite#get_current_unite()
-        if unite.profile_name ==# 'search'
-            nnoremap <silent><buffer><expr> r     unite#do_action('replace')
-        else
-            nnoremap <silent><buffer><expr> r     unite#do_action('rename')
-        endif
-
+        nnoremap <silent><buffer>       <ESC> <Plug>(unite_exit)
         nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
-        nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
+        nnoremap <silent><buffer><expr> v      unite#do_action('vsplit')
+        nnoremap <silent><buffer><expr> s      unite#do_action('split')
+
+        nnoremap <silent><buffer><expr> S      unite#mappings#set_current_filters(
                     \ empty(unite#mappings#get_current_filters()) ?
                     \ ['sorter_reverse'] : [])
-
-        nnoremap <silent><buffer><expr> v     unite#do_action('vimfiler')
-
-        " Runs "split" action by <C-s>.
-        imap <silent><buffer><expr> <C-s>     unite#do_action('split')
     endfunction "}}}
     " }}}
     " unite-outline: 提供代码的大纲。通过\fo访问 {{{
@@ -987,7 +957,7 @@ if s:is_plugin_group_enabled('unite') "{{{
                 \ }
     " }}}
     " unite-gtags: Unite下调用gtags {{{
-    NeoBundleLazy 'thawk/unite-gtags'
+    NeoBundleLazy 'hewes/unite-gtags'
     if g:dotvim_settings.global_command != ''
         call neobundle#config('unite-gtags', {
                     \ 'on_source': ['unite.vim'],
@@ -1946,7 +1916,9 @@ endif
 
 if s:is_plugin_group_enabled('navigation.moving') "{{{
     " 启用内置的matchit插件 {{{
-    runtime! macros/matchit.vim
+    if filereadable($VIMRUNTIME . "/macros/matchit.vim")
+        source $VIMRUNTIME/macros/matchit.vim
+    endif
     "}}}
     " vim-tmux-navigator: 使用ctrl+i/j/k/l在vim及tmux间切换 {{{
     NeoBundleLazy 'christoomey/vim-tmux-navigator', {
@@ -3417,6 +3389,7 @@ cnoremap kj <Esc>
 " }}}
 
 " 自定义命令 {{{
+"   Output {{{
 function! OutputSplitWindow(...)
   " this function output the result of the Ex command into a split scratch buffer
   let cmd = join(a:000, ' ')
@@ -3435,6 +3408,20 @@ function! OutputSplitWindow(...)
   endif
 endfunction
 command! -nargs=+ -complete=command Output call OutputSplitWindow(<f-args>)
+" }}}
+
+" SyntaxId {{{
+function! s:syntax_id()
+      return synIDattr(synID(line('.'), col('.'), 0), 'name')
+  endfunction
+  command! SyntaxId echo s:syntax_id()
+" }}}
+
+" diff commands --- {{{
+command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+command! -bar ToggleDiff if &diff | execute 'windo diffoff'  | else
+      \                           | execute 'windo diffthis' | endif
+" }}}
 " }}}
 
 " color scheme and statusline {{{
