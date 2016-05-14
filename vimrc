@@ -847,7 +847,7 @@ if s:is_plugin_group_enabled('unite') "{{{
                         \ '\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)',
                         \ ], '\|'))
 
-            call unite#filters#matcher_default#use(['matcher_fuzzy'])
+            call unite#filters#matcher_default#use(['matcher_context'])
             call unite#filters#sorter_default#use(['sorter_rank'])
             " let g:unite_source_rec_max_cache_files = 0
             " call unite#custom#source('file_rec,file_rec/async', 'max_candidates', 0)
