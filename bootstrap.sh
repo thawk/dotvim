@@ -25,3 +25,9 @@ then
     make
     cd ${OLDPWD}
 fi
+
+if [ ! -f "${vim_path}/bundle/unicode.vim/autoload/unicode/UnicodeData.txt" ]
+then
+    mkdir -p "${vim_path}/bundle/unicode.vim/autoload/unicode"
+    cp "${vim_path}/UnicodeData.txt" "${vim_path}/bundle/unicode.vim/autoload/unicode/"
+fi
