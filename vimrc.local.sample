@@ -24,3 +24,5 @@ let g:dotvim_user_settings.plugin_groups_include = []
 
 " global的版本。6以上可以使用新的选项
 let g:dotvim_user_settings.global_version = 6
+
+let g:dotvim_user_settings.neobundle_max_processes = '3'

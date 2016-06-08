@@ -102,6 +102,8 @@ if v:version >= '704' && has('python')
 else
     let g:dotvim_settings.snippet_engine = 'neosnippet'
 endif
+
+let g:dotvim_settings.neobundle_max_processes = '8'
 " }}}
 
 " {{{ 使用用户本地设置覆盖缺省设置
@@ -785,6 +787,7 @@ call neobundle#begin()
 
 let g:neobundle_default_git_protocol = 'https'
 let g:neobundle#install_process_timeout = 1500
+let g:neobundle#install_max_processes = g:dotvim_settings.neobundle_max_processes
 
 " 使用submodule管理NeoBundle
 " " Let NeoBundle manage NeoBundle
