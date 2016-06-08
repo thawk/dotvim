@@ -2843,6 +2843,11 @@ if s:is_plugin_group_enabled('syntax') "{{{ 为一些文件提供语法高亮
                 \ 'on_ft' : ['po'],
                 \ }
     " }}}
+    " vim-diff-fold: 折叠diff/patch文件 {{{
+    NeoBundleLazy 'sgeb/vim-diff-fold', {
+                \ 'on_ft' : ['diff', 'patch'],
+                \ }
+    " }}}
 endif
 " }}}
 
