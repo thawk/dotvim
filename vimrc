@@ -57,25 +57,31 @@ let g:dotvim_settings.notes_directory = ['~/vim-notes']
 let g:dotvim_settings.cache_dir = '~/.vim_cache'
 
 " 一些工具的路径
-let g:dotvim_settings.ag_path = ''
+let g:dotvim_settings.commands = {}
+let g:dotvim_settings.commands.ag = ''
 if executable("ag")
-    let g:dotvim_settings.ag_path = 'ag'
+    let g:dotvim_settings.commands.ag = 'ag'
 endif
 
-let g:dotvim_settings.ctags_path = ''
+let g:dotvim_settings.commands.ctags = ''
 if executable("ctags")
-    let g:dotvim_settings.ctags_path = 'ctags'
+    let g:dotvim_settings.commands.ctags = 'ctags'
 endif
 
-let g:dotvim_settings.global_command = $GTAGSGLOBAL
-if g:dotvim_settings.global_command == ''
-    let g:dotvim_settings.global_command = "global"
+let g:dotvim_settings.commands.global = $GTAGSGLOBAL
+if g:dotvim_settings.commands.global == ''
+    let g:dotvim_settings.commands.global = "global"
 endif
-if !executable(g:dotvim_settings.global_command)
-    let g:dotvim_settings.global_command = ""
+if !executable(g:dotvim_settings.commands.global)
+    let g:dotvim_settings.commands.global = ""
 endif
 " global的版本。6以上可以使用新的选项
 let g:dotvim_settings.global_version = 5
+
+let g:dotvim_settings.commands.git = ''
+if executable("git")
+    let g:dotvim_settings.commands.git = 'git'
+endif
 
 " 确定libclang的位置 {{{
 let g:dotvim_settings.libclang_path = ""
@@ -110,7 +116,11 @@ let g:dotvim_settings.neobundle_max_processes = '8'
 " override defaults with the ones specified in g:dotvim_user_settings
 for key in keys(g:dotvim_settings)
     if has_key(g:dotvim_user_settings, key)
-        let g:dotvim_settings[key] = g:dotvim_user_settings[key]
+        if type(g:dotvim_settings) == type({})
+            call extend(g:dotvim_settings[key], g:dotvim_user_settings[key])
+        else
+            let g:dotvim_settings[key] = g:dotvim_user_settings[key]
+        endif
     endif
 endfor
 
@@ -565,8 +575,8 @@ endif
 let c_space_errors=1
 let java_space_errors=1
 
-if g:dotvim_settings.ag_path != ""
-    exec 'set grepprg=' . g:dotvim_settings.ag_path . '\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow'
+if g:dotvim_settings.commands.ag != ""
+    exec 'set grepprg=' . g:dotvim_settings.commands.ag . '\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow'
     set grepformat=%f:%l:%c:%m
 endif
 " }}}
@@ -788,6 +798,9 @@ call neobundle#begin()
 let g:neobundle_default_git_protocol = 'https'
 let g:neobundle#install_process_timeout = 1500
 let g:neobundle#install_max_processes = g:dotvim_settings.neobundle_max_processes
+if executable(g:dotvim_settings.commands.git)
+    let g:neobundle#types#git#command_path = g:dotvim_settings.commands.git
+endif
 
 " 使用submodule管理NeoBundle
 " " Let NeoBundle manage NeoBundle
@@ -798,7 +811,8 @@ if s:is_plugin_group_enabled('core') "{{{
     " vimproc: 用于异步执行命令的插件，被其它插件依赖 {{{
     if (s:is_windows)
         " Windows下需要固定为与dll对应的版本
-        NeoBundle 'Shougo/vimproc', { 'rev' : 'f9269f38' }
+        " 可到 https://github.com/koron/vim-kaoriya/releases 下载编译好的DLL
+        NeoBundle 'Shougo/vimproc', { 'rev' : '9269f38' }
         if has("win64") && filereadable(s:vimrc_path . "/win32/vimproc_win64.dll")
             let g:vimproc_dll_path = s:vimrc_path . "/win32/vimproc_win64.dll"
         elseif has("win32") && filereadable(s:vimrc_path . "/win32/vimproc_win32.dll")
@@ -870,9 +884,9 @@ if s:is_plugin_group_enabled('unite') "{{{
         " let g:unite_winwidth = winwidth("%") / 2
         let g:unite_winwidth = 40
 
-        if g:dotvim_settings.ag_path != ""
+        if g:dotvim_settings.commands.ag != ""
             " Use ag in unite grep source.
-            let g:unite_source_grep_command = g:dotvim_settings.ag_path
+            let g:unite_source_grep_command = g:dotvim_settings.commands.ag
             let g:unite_source_grep_default_opts =
                         \ '--line-numbers --nocolor --nogroup --hidden --ignore ''.hg''' .
                         \ ' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr''' .
@@ -961,7 +975,7 @@ if s:is_plugin_group_enabled('unite') "{{{
     " }}}
     " unite-gtags: Unite下调用gtags {{{
     NeoBundleLazy 'hewes/unite-gtags'
-    if g:dotvim_settings.global_command != ''
+    if g:dotvim_settings.commands.global != ''
         call neobundle#config('unite-gtags', {
                     \ 'on_source': ['unite.vim'],
                     \ })
@@ -1264,7 +1278,7 @@ if s:is_plugin_group_enabled('editing') "{{{
     NeoBundleLazy 'mbbill/echofunc'
 
     " 启用global后，将不用ctags，因此echofunc.vim会失效
-    if g:dotvim_settings.global_command == ''
+    if g:dotvim_settings.commands.global == ''
         call neobundle#config('echofunc', {
                     \ 'on_ft' : ['c', 'cpp'],
                     \ })
@@ -1410,7 +1424,7 @@ if s:is_plugin_group_enabled('snippet') "{{{
         "     set conceallevel=2 concealcursor=i
         " endif
 
-        if neobundle#tap('neocomplete')
+        if exists('*neocomplete#close_popup')
             " 回车直接展开当前选中的snippet
             " 不知为何，用inoremap时，是<Plug>(neosnippet_expand_or_jump)的文
             " 字，而不是执行这个map。所以使用imap代替
@@ -1529,8 +1543,8 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
                 \     {'name': 'LAckHelp', 'complete': 'help'},
                 \     'AckWindow', 'LAckWindow',
                 \ ]}
-    if g:dotvim_settings.ag_path != ""
-        let g:ackprg = g:dotvim_settings.ag_path . " --nogroup --column --smart-case --follow"
+    if g:dotvim_settings.commands.ag != ""
+        let g:ackprg = g:dotvim_settings.commands.ag . " --nogroup --column --smart-case --follow"
     endif
 
     " let g:ackhighlight = 1
@@ -1559,8 +1573,8 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
                 \     {'name': 'CtrlSF', 'complete': 'customlist,ctrlsf#comp#Completion'},
                 \     'CtrlSFOpen', 'CtrlSFUpdate', 'CtrlSFClose', 'CtrlSFClearHL', 'CtrlSFToggle',
                 \ ]}
-    if g:dotvim_settings.ag_path != ""
-        let g:ctrlsf_ackprg = g:dotvim_settings.ag_path
+    if g:dotvim_settings.commands.ag != ""
+        let g:ctrlsf_ackprg = g:dotvim_settings.commands.ag
     endif
 
     let g:ctrlsf_default_root = 'project'
@@ -1645,9 +1659,10 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
     hi link EasyMotionShade Comment
     " }}}
     " HiCursorWords: 高亮与光标下word一样的词 {{{
-    NeoBundle 'OrelSokolov/HiCursorWords'
+    NeoBundle 'ihacklog/HiCursorWords'
     let g:HiCursorWords_delay = 200
-    let g:HiCursorWords_hiGroupRegexp = ''
+    " let g:HiCursorWords_hiGroupRegexp = ''
+    let g:HiCursorWords_hiGroupRegexp = 'Identifier|vimOperParen'
     let g:HiCursorWords_debugEchoHiName = 0
     " }}}
     " ExtractMatches: 可以拷贝匹配pattern的内容 {{{
@@ -1750,7 +1765,7 @@ if s:is_plugin_group_enabled('navigation.tagging') "{{{
     nnoremap <silent> g<F9> :<C-U>TagbarCurrentTag fs<CR>
     nnoremap <silent> <F9> :<C-U>TagbarToggle<CR>
 
-    let g:tagbar_ctags_bin = g:dotvim_settings.ctags_path
+    let g:tagbar_ctags_bin = g:dotvim_settings.commands.ctags
 
     let g:tagbar_type_jam = {
                 \ 'ctagstype' : 'jam',
@@ -1793,7 +1808,7 @@ if s:is_plugin_group_enabled('navigation.tagging') "{{{
     " }}}
     " gtags.vim: 直接调用gtags查找符号 {{{
     NeoBundleLazy 'harish2704/gtags.vim'
-    if g:dotvim_settings.global_command != ''
+    if g:dotvim_settings.commands.global != ''
         call neobundle#config('gtags.vim', {
                     \ 'on_cmd' : [
                     \     { 'name' : 'Gtags', 'complete' : 'custom,GtagsCandidate' },
@@ -1997,22 +2012,27 @@ if s:is_plugin_group_enabled('navigation.autocomplete') "{{{
                     \ 'scheme' : expand(g:dotvim_settings.cache_dir.'/.gosh_completions')
                     \ }
 
-        " Plugin key-mappings.
-        inoremap <silent><expr><C-g>     neocomplete#undo_completion()
-        inoremap <silent><expr><C-l>     neocomplete#complete_common_string()
+        " 安装neocomplete后才进行相关的map
+        if neobundle#tap('neocomplete')
+            function! neobundle#hooks.on_source(bundle)
+                " Plugin key-mappings.
+                inoremap <silent><expr><C-g>     neocomplete#undo_completion()
+                inoremap <silent><expr><C-l>     neocomplete#complete_common_string()
 
-        " Recommended key-mappings.
-        " <CR>: close popup and save indent.
-        inoremap <silent><expr><CR>  neocomplete#smart_close_popup() . "\<CR>"
-        " " <TAB>: next.
-        " inoremap <silent><expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-        " " <S-TAB>: prev.
-        " inoremap <silent><expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
-        " <C-h>, <BS>: close popup and delete backword char.
-        inoremap <silent><expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-        inoremap <silent><expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-        inoremap <silent><expr><C-y>  neocomplete#close_popup()
-        inoremap <silent><expr><C-e>  neocomplete#cancel_popup()
+                " Recommended key-mappings.
+                " <CR>: close popup and save indent.
+                inoremap <silent><expr><CR>  neocomplete#smart_close_popup() . "\<CR>"
+                " " <TAB>: next.
+                " inoremap <silent><expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+                " " <S-TAB>: prev.
+                " inoremap <silent><expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
+                " <C-h>, <BS>: close popup and delete backword char.
+                inoremap <silent><expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+                inoremap <silent><expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+                inoremap <silent><expr><C-y>  neocomplete#close_popup()
+                inoremap <silent><expr><C-e>  neocomplete#cancel_popup()
+            endfunction
+        endif
 
         " Enable omni completion.
         autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -3449,7 +3469,12 @@ command! -bar ToggleDiff if &diff | execute 'windo diffoff'  | else
 
 " color scheme and statusline {{{
 let &background=g:dotvim_settings.background
-execute "silent! colorscheme " . g:dotvim_settings.colorscheme
+if !empty(globpath(&rtp, 'colors/'.g:dotvim_settings.colorscheme.'.vim'))
+    " 只有在colorscheme存在时才载入
+    execute "silent! colorscheme " . g:dotvim_settings.colorscheme
+else
+    colorscheme desert
+endif
 
 "set statusline=%<%n:\ %f\ %h%m%r\ %=%k%y[%{&ff},%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
 set statusline=%<%n:                " Buffer number
