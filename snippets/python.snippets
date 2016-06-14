@@ -26,7 +26,7 @@ snippet skel
 	${1:description}""")
 	
 		parser.add_argument('-v', '--verbose', action="store_true", dest="verbose", default=False, help=u"Be moderatery verbose")
-		parser.add_argument('-s', '--silent',  action="store_true", dest="silent", default=False, help=u"Only show warning and errors")
+		parser.add_argument('-q', '--quiet',  action="store_true", dest="quiet", default=False, help=u"Only show warning and errors")
 		parser.add_argument('--version',  action="version", version=VERSION, help=u"Show version and quit")
 		parser.add_argument('gateway_id', nargs=1, help=u"Gateway ID")
 	
@@ -40,7 +40,7 @@ snippet skel
 		# 日志初始化
 		log_format = u"%(asctime)s %(levelname)s %(message)s"
 	
-		if args.silent:
+		if args.quiet:
 			logging.basicConfig(level=logging.WARNING, format=log_format)
 		elif args.verbose:
 			logging.basicConfig(level=logging.DEBUG, format=log_format)
