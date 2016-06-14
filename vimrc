@@ -116,7 +116,7 @@ let g:dotvim_settings.neobundle_max_processes = '8'
 " override defaults with the ones specified in g:dotvim_user_settings
 for key in keys(g:dotvim_settings)
     if has_key(g:dotvim_user_settings, key)
-        if type(g:dotvim_settings) == type({})
+        if type(g:dotvim_settings[key]) == type({})
             call extend(g:dotvim_settings[key], g:dotvim_user_settings[key])
         else
             let g:dotvim_settings[key] = g:dotvim_user_settings[key]
