@@ -2606,9 +2606,6 @@ if s:is_plugin_group_enabled('development.web') "{{{ 前端开发
                 \ 'on_map' : ['<Plug>(Emmet'],
                 \ 'on_cmd' : ['EmmetInstall'],
                 \ }
-    augroup custom_Emmet
-        autocmd FileType {xml,html,css,sass,scss,less} imap <silent><buffer> <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
-    augroup END
     " }}}
     " xml.vim: 辅助编写XML文件 {{{
     NeoBundleLazy 'othree/xml.vim', {
