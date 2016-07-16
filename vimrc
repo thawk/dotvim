@@ -2519,15 +2519,27 @@ if s:is_plugin_group_enabled('development.python') "{{{
         call neobundle#untap()
     endif
     " }}}
-    "NeoBundle 'tmhedberg/SimpylFold'
+
     NeoBundleLazy 'hynek/vim-python-pep8-indent', {
                 \ 'on_ft' : ['python', 'python3'],
                 \ }
-    " vim-bundle-mako: python的make模板支持 {{{
+    " vim-bundle-mako: python的mako模板支持 {{{
     NeoBundleLazy 'sophacles/vim-bundle-mako', {
                 \ 'on_ft' : ['mako'],
                 \ 'on_path' : ['.*\.mako'],
                 \ }
+    " }}}
+
+    " SimpylFold: python语法折叠 {{{
+    NeoBundleLazy 'tmhedberg/SimpylFold', {
+                \ 'on_ft' : ['python', 'python3'],
+                \ }
+    if neobundle#tap('SimpylFold')
+        function! neobundle#hooks.on_source(bundle)
+            autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
+            autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
+        endfunction
+    endif
     " }}}
 endif
 " }}}
