@@ -103,7 +103,7 @@ endif
 let g:dotvim_settings.clang_include_path = fnamemodify(finddir("include",  g:dotvim_settings.libclang_path . "/clang/**"), ":p")
 " }}}
 
-if v:version >= '704' && has('python')
+if v:version >= '704' && (has('python') || has('python3'))
     let g:dotvim_settings.snippet_engine = 'ultisnips'
 else
     let g:dotvim_settings.snippet_engine = 'neosnippet'
