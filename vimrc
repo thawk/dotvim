@@ -52,7 +52,7 @@ let g:dotvim_settings.cpp_complete_method = 'marching'
 " let g:dotvim_settings.cpp_complete_method = 'vim-clang'
 let g:dotvim_settings.enable_cursorcolumn = 0
 let g:dotvim_settings.background = 'dark'
-let g:dotvim_settings.colorscheme = 'solarized'
+let g:dotvim_settings.colorscheme = 'base16-solarized-dark'
 let g:dotvim_settings.notes_directory = ['~/vim-notes']
 let g:dotvim_settings.cache_dir = '~/.vim_cache'
 
@@ -2954,6 +2954,8 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
 
     set noshowmode
 
+    let g:airline_solarized_normal_green = 1
+
     let g:unite_force_overwrite_statusline = 0
     let g:vimfiler_force_overwrite_statusline = 0
     let g:vimshell_force_overwrite_statusline = 0
@@ -3287,7 +3289,7 @@ let g:rehash256 = 1
 " }}}
 " base16-vim: Base16配色方案 {{{
 NeoBundle 'chriskempson/base16-vim'
-let g:base16_shell_path=s:vimrc_path . '/bundle/base16-shell'
+let g:base16_shell_path=s:vimrc_path . '/bundle/base16-shell/scripts'
 if !s:is_gui
     let g:base16colorspace=256
 endif
@@ -3477,11 +3479,27 @@ command! -bar ToggleDiff if &diff | execute 'windo diffoff'  | else
 " }}}
 
 " color scheme and statusline {{{
-let &background=g:dotvim_settings.background
 if !empty(globpath(&rtp, 'colors/'.g:dotvim_settings.colorscheme.'.vim'))
     " 只有在colorscheme存在时才载入
-    execute "silent! colorscheme " . g:dotvim_settings.colorscheme
+    if g:dotvim_settings.colorscheme =~ '^base16-'
+        " base16时，把airline的theme设置为base16，否则显示不对
+        let g:airline_theme = 'base16'
+
+        if filereadable(expand("~/.vimrc_background"))
+            " base16使用~/.vimrc_background指定的、最后一次使用的配色
+            let base16colorspace=256
+            source ~/.vimrc_background
+        else
+            let &background=g:dotvim_settings.background
+            execute "silent! colorscheme " . g:dotvim_settings.colorscheme
+        endif
+    else
+        let &background=g:dotvim_settings.background
+        execute "silent! colorscheme " . g:dotvim_settings.colorscheme
+    endif
 else
+    " 找不到需要的配色时，使用内置的配色
+    let &background=g:dotvim_settings.background
     colorscheme desert
 endif
 
