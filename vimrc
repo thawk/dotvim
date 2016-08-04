@@ -1687,16 +1687,16 @@ if s:is_plugin_group_enabled('navigation.jumping') "{{{
     " 可以用:A在.h/.cpp间切换
     command! A :call FSwitch('%', '')
     augroup fswitch_hack
-        au! BufEnter *.h,*.hpp
+        autocmd! BufEnter *.h,*.hpp
                     \  let b:fswitchdst='cpp,c,ipp,cxx'
                     \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!\<include/\w\+/!src/!,reg:!\<include/\(\w\+/\)\{2}!src/!,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
-        au! BufEnter *.c,*.cpp,cxx,*.ipp
+        autocmd! BufEnter *.c,*.cpp,cxx,*.ipp
                     \  let b:fswitchdst='h,hpp'
                     \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
-        au! BufEnter *.xml
+        autocmd! BufEnter *.xml
                     \  let b:fswitchdst='rnc'
                     \| let b:fswitchlocs='./'
-        au! BufEnter *.rnc
+        autocmd! BufEnter *.rnc
                     \  let b:fswitchdst='xml'
                     \| let b:fswitchlocs='./'
     augroup END
