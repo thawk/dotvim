@@ -2631,7 +2631,7 @@ if s:is_plugin_group_enabled('development.web') "{{{ 前端开发
                 \ }
     " }}}
     " vim-jinja: jinja2语法支持 {{{
-    NeoBundleLazy 'mitsuhiko/vim-jinja', {
+    NeoBundleLazy 'lepture/vim-jinja', {
                 \ 'on_path': '\.\(htm\|html\|jinja2\|j2\|jinja\)$',
                 \ }
     " }}}
