@@ -2630,6 +2630,11 @@ if s:is_plugin_group_enabled('development.web') "{{{ 前端开发
                 \ 'on_path' : ['.*\.jsonp\?'],
                 \ }
     " }}}
+    " vim-jinja: jinja2语法支持 {{{
+    NeoBundleLazy 'mitsuhiko/vim-jinja', {
+                \ 'on_path': '\.\(htm\|html\|jinja2\|j2\|jinja\)$',
+                \ }
+    " }}}
     " javascript-libraries-syntax.vim: Javascript语法高亮 {{{
     NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {
                 \ 'on_ft' : ['javascript', 'js'],
