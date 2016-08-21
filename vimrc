@@ -134,8 +134,7 @@ let g:dotvim_settings.disabled_plugins = get(g:dotvim_user_settings, 'disabled_p
 
 " Helper Functions {{{
 function! s:RemoveTrailingSpace() "{{{
-    if $VIM_HATE_SPACE_ERRORS != '0' &&
-                \(&filetype == 'c' || &filetype == 'cpp' || &filetype == 'vim')
+    if $VIM_HATE_SPACE_ERRORS != '0' && index(['c', 'cpp', 'vim', 'python'], &filetype) >= 0
         normal m`
         silent! :%s/\s\+$//e
         normal ``
@@ -1424,16 +1423,13 @@ if s:is_plugin_group_enabled('snippet') "{{{
         "     set conceallevel=2 concealcursor=i
         " endif
 
-        if exists('*neocomplete#close_popup')
-            " 回车直接展开当前选中的snippet
-            " 不知为何，用inoremap时，是<Plug>(neosnippet_expand_or_jump)的文
-            " 字，而不是执行这个map。所以使用imap代替
-            imap <silent><expr> <CR> pumvisible() ?
-                        \ (neosnippet#expandable_or_jumpable() ?
-                        \ neocomplete#close_popup()."\<Plug>(neosnippet_expand_or_jump)" :
-                        \ neocomplete#close_popup()) : "\<CR>"
-            call neobundle#untap()
-        endif
+        " 回车直接展开当前选中的snippet
+        " 不知为何，用inoremap时，是<Plug>(neosnippet_expand_or_jump)的文
+        " 字，而不是执行这个map。所以使用imap代替
+        imap <silent><expr> <CR> pumvisible() ?
+                    \ (neosnippet#expandable_or_jumpable() ?
+                    \ "\<C-y>\<Plug>(neosnippet_expand_or_jump)" :
+                    \ "\<C-y>") : "\<CR>"
     endif
     " }}}
     " ultisnips: 以python实现的更强大的代码模板引擎 {{{
@@ -1490,19 +1486,10 @@ if s:is_plugin_group_enabled('snippet') "{{{
         call neobundle#untap()
 
         " 回车直接展开当前选中的snippet
-        if exists('*neocomplete#close_popup')
-            " 如果存在neocomplete，就用neocomplete#close_popup来关闭popup
-            " menu
-            inoremap <silent><expr> <CR>
-                        \ pumvisible() ?
-                        \ neocomplete#close_popup()."<C-R>=ExpandSnippetOrJumpForwardOrReturn('')<CR>" :
-                        \ "\<CR>"
-        else
-            inoremap <silent><expr> <CR>
-                        \ pumvisible() ?
-                        \ "<C-R>=ExpandSnippetOrJumpForwardOrReturn('\<C-y>')<CR>" :
-                        \ "\<CR>"
-        endif
+        inoremap <silent><expr> <CR>
+                    \ pumvisible() ?
+                    \ "\<C-y><C-R>=ExpandSnippetOrJumpForwardOrReturn('')<CR>" :
+                    \ "\<CR>"
     endif
     "}}}
 endif
@@ -2021,7 +2008,7 @@ if s:is_plugin_group_enabled('navigation.autocomplete') "{{{
 
                 " Recommended key-mappings.
                 " <CR>: close popup and save indent.
-                inoremap <silent><expr><CR>  neocomplete#smart_close_popup() . "\<CR>"
+                inoremap <silent><expr><CR>  pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
                 " " <TAB>: next.
                 " inoremap <silent><expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
                 " " <S-TAB>: prev.
@@ -2535,10 +2522,9 @@ if s:is_plugin_group_enabled('development.python') "{{{
                 \ 'on_ft' : ['python', 'python3'],
                 \ }
     if neobundle#tap('SimpylFold')
-        function! neobundle#hooks.on_source(bundle)
-            autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
-            autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
-        endfunction
+        let g:SimpylFold_docstring_preview = 1
+
+        call neobundle#untap()
     endif
     " }}}
 endif
