@@ -691,18 +691,19 @@ autocmd FileType xml           let b:vimgrep_files="**/*.xml"
 autocmd FileType jam           let b:vimgrep_files="**/*.jam **/Jam*"
 " }}}
 
-" 自动打开quickfix窗口 {{{
-" Automatically open, but do not go to (if there are errors) the quickfix /
-" location list window, or close it when is has become empty.
-"
-" Note: Must allow nesting of autocmds to enable any customizations for quickfix
-" buffers.
-" Note: Normally, :cwindow jumps to the quickfix window if the command opens it
-" (but not if it's already open). However, as part of the autocmd, this doesn't
-" seem to happen.
-autocmd QuickFixCmdPost [^l]* nested botright cwindow
-autocmd QuickFixCmdPost    l* nested botright lwindow
-" }}}
+" 与vim-dispatch冲突，禁用。 https://github.com/tpope/vim-dispatch/issues/145
+" " 自动打开quickfix窗口 {{{
+" " Automatically open, but do not go to (if there are errors) the quickfix /
+" " location list window, or close it when is has become empty.
+" "
+" " Note: Must allow nesting of autocmds to enable any customizations for quickfix
+" " buffers.
+" " Note: Normally, :cwindow jumps to the quickfix window if the command opens it
+" " (but not if it's already open). However, as part of the autocmd, this doesn't
+" " seem to happen.
+" autocmd QuickFixCmdPost [^l]* nested botright cwindow
+" autocmd QuickFixCmdPost    l* nested botright lwindow
+" " }}}
 
 " python autocommands {{{
 " 设定python的makeprg
