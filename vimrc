@@ -973,7 +973,7 @@ if s:is_plugin_group_enabled('unite') "{{{
                 \ }
     " }}}
     " unite-gtags: Unite下调用gtags {{{
-    NeoBundleLazy 'hewes/unite-gtags'
+    NeoBundleLazy 'thawk/unite-gtags'
     if g:dotvim_settings.commands.global != ''
         call neobundle#config('unite-gtags', {
                     \ 'on_source': ['unite.vim'],
@@ -2876,7 +2876,7 @@ endif
 
 if s:is_plugin_group_enabled('visual') "{{{ 界面增强
     " vim-airline: 增强的statusline {{{
-    NeoBundle 'vim-airline/vim-airline', {
+    NeoBundle 'thawk/vim-airline', {
                 \ 'depends': ['vim-airline/vim-airline-themes', 'unicode.vim'],
                 \ }
     let bundle = neobundle#get('vim-airline')
