@@ -2872,6 +2872,11 @@ if s:is_plugin_group_enabled('syntax') "{{{ 为一些文件提供语法高亮
                 \ 'on_ft' : ['diff', 'patch'],
                 \ }
     " }}}
+    " pcet: 转换引擎pcet_*.xml的语法高亮和unite-outline支持 {{{
+    NeoBundleLazy 'thawk/vim-pcet', {
+                \ 'on_path' : ['pcet_.*\.xml'],
+                \ }
+    " }}}
 endif
 " }}}
 
