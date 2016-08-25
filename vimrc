@@ -1077,7 +1077,7 @@ if s:is_plugin_group_enabled('unite') "{{{
     endif
 
     if neobundle#tap('unite-outline') && neobundle#tap('unite-fold')
-        nnoremap <silent> [unite]o  :<C-u>Unite fold outline -no-quit -no-start-insert -vertical -toggle -winwidth=40<CR>
+        nnoremap <silent> [unite]o  :<C-u>Unite outline fold -no-quit -no-start-insert -vertical -toggle -winwidth=40<CR>
         call neobundle#untap()
     endif
 
@@ -2874,7 +2874,7 @@ if s:is_plugin_group_enabled('syntax') "{{{ 为一些文件提供语法高亮
     " }}}
     " pcet: 转换引擎pcet_*.xml的语法高亮和unite-outline支持 {{{
     NeoBundleLazy 'thawk/vim-pcet', {
-                \ 'on_path' : ['pcet_.*\.xml'],
+                \ 'on_source': ['unite-outline'],
                 \ }
     " }}}
 endif
@@ -3324,6 +3324,11 @@ syntax enable
 " 检查有没有需要安装的插件 {{{
 " Installation check.
 NeoBundleCheck
+
+if !has('vim_starting')
+    " Call on_source hook when reloading .vimrc.
+    call neobundle#call_hook('on_source')
+endif
 " }}}
 " }}}
 
