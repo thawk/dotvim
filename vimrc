@@ -737,6 +737,8 @@ autocmd FileType task call ForceFileEncoding('utf-8')
 " }}}
 
 " 用于各插件的热键前缀 {{{
+let mapleader = ','
+
 nnoremap [unite] <Nop>
 xnoremap [unite] <Nop>
 nmap <Leader>f [unite]
@@ -748,21 +750,21 @@ nmap <Leader>r [repl]
 xmap <Leader>r [repl]
 
 nnoremap [tag] <Nop>
-nmap <C-\><C-\> [tag]
+nmap <C-Leader><C-Leader> [tag]
 " nnoremap [tag] <C-\>
 
 nnoremap [unite-tag] <Nop>
-nmap <C-\> [unite-tag]
+nmap <C-Leader> [unite-tag]
 
 nnoremap [ctrlsf] <Nop>
 vnoremap [ctrlsf] <Nop>
-nmap \s [ctrlsf]
-vmap \s [ctrlsf]
+nmap <Leader>s [ctrlsf]
+vmap <Leader>s [ctrlsf]
 
 nnoremap [grep] <Nop>
 vnoremap [grep] <Nop>
-nmap \S [grep]
-vmap \S [grep]
+nmap <Leader>S [grep]
+vmap <Leader>S [grep]
 
 nnoremap [code] <Nop>
 nmap <Leader>c [code]
@@ -1016,7 +1018,7 @@ if s:is_plugin_group_enabled('unite') "{{{
     " unite的key binding {{{
     nnoremap <silent> [unite]S :<C-U>Unite source<CR>
 
-    nnoremap <silent> [unite]r :<C-u>UniteResume -no-start-insert<CR>
+    nnoremap <silent> [unite]r :<C-u>UniteResume -no-start-insert -toggle<CR>
     nnoremap <silent> [unite]n :<C-u>UniteNext<CR>
     nnoremap <silent> [unite]N :<C-u>UnitePrevious<CR>
     nnoremap <silent> [unite]C :<C-u>UniteClose<CR>
@@ -1076,8 +1078,13 @@ if s:is_plugin_group_enabled('unite') "{{{
                     \ file_rec/async:<C-R>=FindVcsRoot('')<CR> file_mru file/new:<C-R>=expand("%:p:h")<CR><CR>
     endif
 
-    if neobundle#tap('unite-outline') && neobundle#tap('unite-fold')
-        nnoremap <silent> [unite]o  :<C-u>Unite outline fold -no-quit -no-start-insert -vertical -toggle -winwidth=40<CR>
+    if neobundle#tap('unite-outline')
+        nnoremap <silent> [unite]o  :<C-u>Unite outline -buffer-name=outline -no-quit -no-start-insert -vertical -toggle -winwidth=45<CR>
+        call neobundle#untap()
+    endif
+
+    if neobundle#tap('unite-fold')
+        nnoremap <silent> [unite]O  :<C-u>Unite fold -buffer-name=outline -no-quit -no-start-insert -vertical -toggle -winwidth=45<CR>
         call neobundle#untap()
     endif
 
@@ -1532,7 +1539,7 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
                 \     'AckWindow', 'LAckWindow',
                 \ ]}
     if g:dotvim_settings.commands.ag != ""
-        let g:ackprg = g:dotvim_settings.commands.ag . " --nogroup --column --smart-case --follow"
+        let g:ackprg = g:dotvim_settings.commands.ag . " --vimgrep --nogroup --column --smart-case --follow"
     endif
 
     " let g:ackhighlight = 1
@@ -3349,8 +3356,8 @@ endif
 " }}}
 
 " 简化对常用目录的访问 {{{
-"用,cd进入当前目录
-nmap ,cd :cd <C-R>=expand("%:p:h")<CR><CR>
+" "用,cd进入当前目录
+" nmap ,cd :cd <C-R>=expand("%:p:h")<CR><CR>
 " "用,e可以打开当前目录下的文件
 " nmap ,e :e <C-R>=escape(expand("%:p:h")."/", ' \')<CR>
 " "在命令中，可以用 %/ 得到当前目录。如 :e %/
