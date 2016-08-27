@@ -750,11 +750,11 @@ nmap <Leader>r [repl]
 xmap <Leader>r [repl]
 
 nnoremap [tag] <Nop>
-nmap <C-Leader><C-Leader> [tag]
+nmap <C-\><C-\> [tag]
 " nnoremap [tag] <C-\>
 
 nnoremap [unite-tag] <Nop>
-nmap <C-Leader> [unite-tag]
+nmap <C-\> [unite-tag]
 
 nnoremap [ctrlsf] <Nop>
 vnoremap [ctrlsf] <Nop>
