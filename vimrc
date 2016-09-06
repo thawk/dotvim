@@ -1261,7 +1261,8 @@ if s:is_plugin_group_enabled('editing') "{{{
     "     endif
     " endif
     " " }}}
-    " vim-multiple-cursors: 同时编辑多处 {{{
+    " vim-multiple-cursors: 同时编辑多处。<C-n>选择当前word并跳到下一个相同
+    " word；<C-p>取消当前word，跳回上个；<C-x>跳过当前word到下一个 {{{
     NeoBundleLazy 'terryma/vim-multiple-cursors', {
                 \ 'on_map' : [ '<C-N>' ],
                 \ 'on_cmd' : [ 'MultipleCursorsFind' ],
@@ -1572,7 +1573,7 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
         let g:ctrlsf_ackprg = g:dotvim_settings.commands.ag
     endif
 
-    let g:ctrlsf_default_root = 'project'
+    let g:ctrlsf_default_root = 'project+fw'
 
     " 在project下找
     vmap <silent> [ctrlsf]s :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=FindVcsRoot('')<CR><CR>
