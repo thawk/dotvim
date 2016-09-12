@@ -3138,13 +3138,13 @@ if s:is_plugin_group_enabled('misc') "{{{
                 \                 'complete' : 'customlist,vimfiler#complete' },
                 \               { 'name' : 'VimFilerExplorer',
                 \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'Edit',
+                \               { 'name' : 'VimFilerEdit',
                 \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'Write',
+                \               { 'name' : 'VimFilerWrite',
                 \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'Read',
+                \               { 'name' : 'VimFilerRead',
                 \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'Source',
+                \               { 'name' : 'VimFilerSource',
                 \                 'complete' : 'customlist,vimfiler#complete' },
                 \              ],
                 \ 'on_map' : ['<Plug>(vimfiler_'],
@@ -3154,7 +3154,7 @@ if s:is_plugin_group_enabled('misc') "{{{
     " 文件管理器，通过 :VimFiler 启动。
     " c : copy, m : move, r : rename,
     let g:vimfiler_as_default_explorer = 1
-    let g:vimfiler_define_wrapper_commands = 1
+    let g:vimfiler_define_wrapper_commands = 0
     let g:vimfiler_data_directory = s:get_cache_dir('vimfiler')
 
     " 切换侧边栏
