@@ -1045,11 +1045,11 @@ if s:is_plugin_group_enabled('unite') "{{{
 
     nnoremap <silent> [unite]/ :<C-U>Unite line -buffer-name=search -start-insert -input=<C-R><C-W><CR>
     nnoremap <silent> [unite]? :<C-U>Unite line -buffer-name=search -start-insert<CR>
-    "nnoremap <silent> [unite]B :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
-    nnoremap <silent> [unite]f :<C-u>Unite -buffer-name=files file:<C-R>=expand("%:p:h")<CR> buffer file/new:<C-R>=expand("%:p:h")<CR> -start-insert<CR>
     nnoremap <silent> [unite]b :<C-u>Unite -buffer-name=files buffer_tab -start-insert<CR>
     nnoremap <silent> [unite]B :<C-u>Unite -buffer-name=files buffer file_mru -start-insert<CR>
-    nnoremap <silent> [unite]c :<C-u>Unite -buffer-name=files file buffer file/new -start-insert<CR>
+    nnoremap <silent> [unite]c :<C-u>UniteWithCurrentDir -buffer-name=files file buffer file/new -start-insert<CR>
+    nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file buffer file/new -start-insert<CR>
+    nnoremap <silent> [unite]p :<C-u>UniteWithProjectDir -buffer-name=files file buffer file/new -start-insert<CR>
 
     " nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
     nnoremap <silent> [unite]H :<C-U>Unite -buffer-name=helps -start-insert help<CR>
