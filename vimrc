@@ -1,5 +1,3 @@
-scriptencoding utf-8
-
 " 判断当前环境 {{{
 " 判断操作系统
 let s:is_windows = has("win32") || has("win64")
@@ -15,6 +13,14 @@ let s:vimrc_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 if s:is_windows " windows下把vimrc目录下的win32加入到路径中，以便使用该目录下的工具
     let $PATH = $PATH . ";" . s:vimrc_path . '\win32'
 endif
+" }}}
+
+" 设置encoding {{{
+if !s:is_windows
+    set encoding=utf-8
+endif
+
+scriptencoding utf-8
 " }}}
 
 " 插件组命名及选择要使用的插件及插件组 {{{
@@ -439,9 +445,6 @@ set cinwords=if,else,while,do,for,switch,case
 " Visual {{{
 let &termencoding = &encoding
 if (s:is_windows)
-    "set encoding=ucs-4
-    "set encoding=utf-8
-    " set encoding=utf-8
     "set guifont=Bitstream_Vera_Sans_Mono\ 12
     "set guifont=Courier_New:h12
     set guifont=Powerline_Consolas:h12,Consolas:h12,Courier_New:h12
@@ -453,7 +456,6 @@ if (s:is_windows)
     "language messages zh_CN.utf-8
     language messages en_US
 else
-    set encoding=utf-8
     set guifont=DejaVu\ Sans\ Mono\ 14
     set guifontwide=WenQuanYi\ Bitmap\ Song\ 14
 endif
@@ -2937,20 +2939,19 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         " let g:airline_symbols.readonly = "RO"
         " let g:airline_symbols.linenr = "LN"
 
-        " 需要通过iconv来得到各个字符在当前encoding下的对应字符
-        let g:airline_left_sep = iconv(nr2char(0xe0b0, 1), "utf-8", &encoding)
-        let g:airline_left_alt_sep = iconv(nr2char(0xe0b1, 1), "utf-8", &encoding)
+        let g:airline_left_sep = ""
+        let g:airline_left_alt_sep = ""
         " 由于在非utf-8时，这些特殊字符都只占半个字符宽度，右半是空白，因此右
         " 边的分隔符变成三角加空白，得不到想要的效果。所以只保留左边的
         let g:airline_right_sep = " "
         let g:airline_right_alt_sep = "|"
-        " let g:airline_right_sep = iconv(nr2char(0xe0b2, 1), "utf-8", &encoding)
-        " let g:airline_right_alt_sep = iconv(nr2char(0xe0b3, 1), "utf-8", &encoding)
+        " let g:airline_right_sep = ""
+        " let g:airline_right_alt_sep = ""
 
-        let g:airline_symbols.branch = iconv(nr2char(0xe0a0, 1), "utf-8", &encoding)
-        let g:airline_symbols.readonly = iconv(nr2char(0xe0a2, 1), "utf-8", &encoding)
-        let g:airline_symbols.linenr = iconv(nr2char(0xe0a1, 1), "utf-8", &encoding)
-        let g:airline_symbols.paste = iconv(nr2char(0x2225, 1), "utf-8", &encoding)
+        let g:airline_symbols.branch = ""
+        let g:airline_symbols.readonly = ""
+        let g:airline_symbols.linenr = ""
+        let g:airline_symbols.paste = "∥"
         " let g:airline_symbols.paste = "PASTE"
         " let g:airline_symbols.paste = 'ρ'
         " let g:airline_symbols.whitespace = " "
@@ -3090,11 +3091,10 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         " let g:indentLine_showFirstIndentLevel = 1
 
         " let g:indentLine_char = '|'
-        " let g:indentLine_char = iconv(nr2char(0xa6, 1), "utf-8", &encoding) " '|'
-        let g:indentLine_char = iconv(nr2char(0x2506, 1), "utf-8", &encoding) " '┆'
-        " let g:indentLine_char = iconv(nr2char(0x2502, 1), "utf-8", &encoding) " '│'
+        let g:indentLine_char = '┆'
+        " let g:indentLine_char = '│'
         " 首个缩进使用的字符
-        let g:indentLine_first_char = iconv(nr2char(0x2506, 1), "utf-8", &encoding) " '┆'
+        let g:indentLine_first_char = '┆'
 
         " 行首空格
         let g:indentLine_leadingSpaceEnabled = 0
