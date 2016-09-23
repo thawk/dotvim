@@ -549,10 +549,6 @@ let g:sh_fold_enabled = 0      " default, no syntax folding
 let g:sh_fold_enabled += 1     " enable function folding
 let g:sh_fold_enabled += 2     " enable heredoc folding
 let g:sh_fold_enabled += 4     " enable if/do/for folding
-
-" 启用XML文件语法折叠，在打开大XML时可能会慢一些。参见:help xml-folding
-let g:xml_syntax_folding = 1
-autocmd FileType xml setlocal foldmethod=syntax
 " }}}
 
 " Coding {{{
@@ -584,52 +580,58 @@ endif
 
 " Auto commands " {{{
 
+" define a group `vimrc` and initialize. {{{
+augroup vimrc
+  autocmd!
+augroup END
+" }}}
+
 " Misc {{{
 if (s:is_windows)
-    autocmd GUIEnter * simalt ~x " 启动时自动全屏
+    autocmd vimrc GUIEnter * simalt ~x " 启动时自动全屏
 endif
 
-autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif " restore position in file
+autocmd vimrc BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif " restore position in file
 
 " automatically open and close the popup menu / preview window
-autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+autocmd vimrc CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 " }}}
 
 " Filetype detection " {{{
-autocmd BufRead,BufNewFile {Gemfile,Rakefile,Capfile,*.rake,config.ru} setf ruby
-autocmd BufRead,BufNewFile {*.md,*.mkd,*.markdown} setf markdown
-autocmd BufRead,BufNewFile {COMMIT_EDITMSG}  setf gitcommit
-autocmd BufRead,BufNewFile TDM*C,TDM*H       setf c
-autocmd BufRead,BufNewFile *.dox             setf cpp    " Doxygen
-autocmd BufRead,BufNewFile *.cshtml          setf cshtml
+autocmd vimrc BufRead,BufNewFile {Gemfile,Rakefile,Capfile,*.rake,config.ru} setf ruby
+autocmd vimrc BufRead,BufNewFile {*.md,*.mkd,*.markdown} setf markdown
+autocmd vimrc BufRead,BufNewFile {COMMIT_EDITMSG}  setf gitcommit
+autocmd vimrc BufRead,BufNewFile TDM*C,TDM*H       setf c
+autocmd vimrc BufRead,BufNewFile *.dox             setf cpp    " Doxygen
+autocmd vimrc BufRead,BufNewFile *.cshtml          setf cshtml
 
 "" Remove trailing spaces for C/C++ and Vim files
-autocmd BufWritePre *                  call s:RemoveTrailingSpace()
+autocmd vimrc BufWritePre *                  call s:RemoveTrailingSpace()
 
-autocmd BufRead,BufNewFile todo.txt,done.txt           setf todo
-autocmd BufRead,BufNewFile *.mm                        setf xml
-autocmd BufRead,BufNewFile *.proto                     setf proto
-autocmd BufRead,BufNewFile Jamfile*,Jamroot*,*.jam     setf jam
-autocmd BufRead,BufNewFile pending.data,completed.data setf task
-autocmd BufRead,BufNewFile *.ipp                       setf cpp
+autocmd vimrc BufRead,BufNewFile todo.txt,done.txt           setf todo
+autocmd vimrc BufRead,BufNewFile *.mm                        setf xml
+autocmd vimrc BufRead,BufNewFile *.proto                     setf proto
+autocmd vimrc BufRead,BufNewFile Jamfile*,Jamroot*,*.jam     setf jam
+autocmd vimrc BufRead,BufNewFile pending.data,completed.data setf task
+autocmd vimrc BufRead,BufNewFile *.ipp                       setf cpp
 " }}}
 
 " Filetype related autosettings " {{{
-autocmd FileType diff  setlocal shiftwidth=4 tabstop=4
-" autocmd FileType html  setlocal autoindent indentexpr= shiftwidth=2 tabstop=2
-autocmd FileType changelog setlocal textwidth=76
+autocmd vimrc FileType diff  setlocal shiftwidth=4 tabstop=4
+" autocmd vimrc FileType html  setlocal autoindent indentexpr= shiftwidth=2 tabstop=2
+autocmd vimrc FileType changelog setlocal textwidth=76
 " 把-等符号也作为xml文件的有效关键字，可以用Ctrl-N补全带-等字符的属性名
-autocmd FileType {xml,xslt} setlocal iskeyword=@,-,\:,48-57,_,128-167,224-235
+autocmd vimrc FileType {xml,xslt} setlocal iskeyword=@,-,\:,48-57,_,128-167,224-235
 if executable("tidy")
-    autocmd FileType xml        exe 'setlocal equalprg=tidy\ -quiet\ -indent\ -xml\ -raw\ --show-errors\ 0\ --wrap\ 0\ --vertical-space\ 1\ --indent-spaces\ 4'
+    autocmd vimrc FileType xml        exe 'setlocal equalprg=tidy\ -quiet\ -indent\ -xml\ -raw\ --show-errors\ 0\ --wrap\ 0\ --vertical-space\ 1\ --indent-spaces\ 4'
 elseif executable("xmllint")
-    autocmd FileType xml        exe 'setlocal equalprg=xmllint\ --format\ --recover\ --encode\ UTF-8\ -'
+    autocmd vimrc FileType xml        exe 'setlocal equalprg=xmllint\ --format\ --recover\ --encode\ UTF-8\ -'
 endif
 
-autocmd FileType qf setlocal wrap linebreak
-autocmd FileType vim nnoremap <silent> <buffer> K :<C-U>help <C-R><C-W><CR>
-autocmd FileType man setlocal foldmethod=indent foldnestmax=2 foldenable nomodifiable nonumber shiftwidth=3 foldlevel=2
-autocmd FileType cs setlocal wrap
+autocmd vimrc FileType qf setlocal wrap linebreak
+autocmd vimrc FileType vim nnoremap <silent> <buffer> K :<C-U>help <C-R><C-W><CR>
+autocmd vimrc FileType man setlocal foldmethod=indent foldnestmax=2 foldenable nomodifiable nonumber shiftwidth=3 foldlevel=2
+autocmd vimrc FileType cs setlocal wrap
 
 " 如果系统中能找到jing（RELAX NG验证工具）
 if executable("jing")
@@ -646,13 +648,11 @@ if executable("jing")
             endif
         endif
     endfunction
-    augroup jing
-        autocmd FileType xml call s:jing_settings("xml")
-        autocmd FileType rnc call s:jing_settings("rnc")
-    augroup END
+    autocmd vimrc FileType xml call s:jing_settings("xml")
+    autocmd vimrc FileType rnc call s:jing_settings("rnc")
 endif
 
-"autocmd BufRead,BufNewFile *.adoc,*.asciidoc  set filetype=asciidoc
+"autocmd vimrc BufRead,BufNewFile *.adoc,*.asciidoc  set filetype=asciidoc
 function! MyAsciidocFoldLevel(lnum)
     let lt = getline(a:lnum)
     let fh = matchend(lt, '\V\^\(=\+\)\ze\s\+\S')
@@ -662,8 +662,8 @@ function! MyAsciidocFoldLevel(lnum)
     return '='
 endfunction
 
-autocmd BufNewFile *.adoc,*.asciidoc setlocal fileencoding=utf-8
-autocmd FileType asciidoc setlocal shiftwidth=2
+autocmd vimrc BufNewFile *.adoc,*.asciidoc setlocal fileencoding=utf-8
+autocmd vimrc FileType asciidoc setlocal shiftwidth=2
             \ tabstop=2
             \ textwidth=0 wrap formatoptions=cqnmB
             \ makeprg=asciidoc\ -o\ numbered\ -o\ toc\ -o\ data-uri\ $*\ %
@@ -679,18 +679,22 @@ autocmd FileType asciidoc setlocal shiftwidth=2
             \ suffixesadd=.asciidoc,.adoc
             \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
             \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
+
+" 启用XML文件语法折叠，在打开大XML时可能会慢一些。参见:help xml-folding
+let g:xml_syntax_folding = 1
+autocmd vimrc FileType xml setlocal foldmethod=syntax
 " }}}
 
 " 根据不同的文件类型设定g<F3>时应该查找的文件 {{{
-autocmd FileType *             let b:vimgrep_files=expand("%:e") == "" ? "**/*" : "**/*." . expand("%:e")
-autocmd FileType c,cpp         let b:vimgrep_files="**/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.ipp"
-autocmd FileType php           let b:vimgrep_files="**/*.php **/*.htm **/*.html"
-autocmd FileType cs            let b:vimgrep_files="**/*.cs"
-autocmd FileType vim           let b:vimgrep_files="**/*.vim"
-autocmd FileType javascript    let b:vimgrep_files="**/*.js **/*.htm **/*.html"
-autocmd FileType python        let b:vimgrep_files="**/*.py"
-autocmd FileType xml           let b:vimgrep_files="**/*.xml"
-autocmd FileType jam           let b:vimgrep_files="**/*.jam **/Jam*"
+autocmd vimrc FileType *             let b:vimgrep_files=expand("%:e") == "" ? "**/*" : "**/*." . expand("%:e")
+autocmd vimrc FileType c,cpp         let b:vimgrep_files="**/*.cpp **/*.cxx **/*.c **/*.h **/*.hpp **/*.ipp"
+autocmd vimrc FileType php           let b:vimgrep_files="**/*.php **/*.htm **/*.html"
+autocmd vimrc FileType cs            let b:vimgrep_files="**/*.cs"
+autocmd vimrc FileType vim           let b:vimgrep_files="**/*.vim"
+autocmd vimrc FileType javascript    let b:vimgrep_files="**/*.js **/*.htm **/*.html"
+autocmd vimrc FileType python        let b:vimgrep_files="**/*.py"
+autocmd vimrc FileType xml           let b:vimgrep_files="**/*.xml"
+autocmd vimrc FileType jam           let b:vimgrep_files="**/*.jam **/Jam*"
 " }}}
 
 " 与vim-dispatch冲突，禁用。 https://github.com/tpope/vim-dispatch/issues/145
@@ -703,37 +707,37 @@ autocmd FileType jam           let b:vimgrep_files="**/*.jam **/Jam*"
 " " Note: Normally, :cwindow jumps to the quickfix window if the command opens it
 " " (but not if it's already open). However, as part of the autocmd, this doesn't
 " " seem to happen.
-" autocmd QuickFixCmdPost [^l]* nested botright cwindow
-" autocmd QuickFixCmdPost    l* nested botright lwindow
+" autocmd vimrc QuickFixCmdPost [^l]* nested botright cwindow
+" autocmd vimrc QuickFixCmdPost    l* nested botright lwindow
 " " }}}
 
 " python autocommands {{{
 " 设定python的makeprg
 if executable("python2")
-    autocmd FileType python setlocal makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+    autocmd vimrc FileType python setlocal makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 else
-    autocmd FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+    autocmd vimrc FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 endif
 
-"autocmd FileType python set errorformat=%C\ %.%#,%A\ \ File\ \"%f\"\\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-autocmd FileType python setlocal errorformat=%[%^(]%\\+('%m'\\,\ ('%f'\\,\ %l\\,\ %v\\,%.%#
-autocmd FileType python setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+"autocmd vimrc FileType python set errorformat=%C\ %.%#,%A\ \ File\ \"%f\"\\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+autocmd vimrc FileType python setlocal errorformat=%[%^(]%\\+('%m'\\,\ ('%f'\\,\ %l\\,\ %v\\,%.%#
+autocmd vimrc FileType python setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 " }}}
 
 " Text file encoding autodetection {{{
-autocmd BufReadPre  *.gb               call SetFileEncodings('gbk')
-autocmd BufReadPre  *.big5             call SetFileEncodings('big5')
-autocmd BufReadPre  *.nfo              call SetFileEncodings('cp437') | set ambiwidth=single
-autocmd BufReadPre  *.php              call SetFileEncodings('utf-8')
-autocmd BufReadPre  *.lua              call SetFileEncodings('utf-8')
-autocmd BufReadPost *.gb,*.big5,*.nfo,*.php,*.lua  call RestoreFileEncodings()
+autocmd vimrc BufReadPre  *.gb               call SetFileEncodings('gbk')
+autocmd vimrc BufReadPre  *.big5             call SetFileEncodings('big5')
+autocmd vimrc BufReadPre  *.nfo              call SetFileEncodings('cp437') | set ambiwidth=single
+autocmd vimrc BufReadPre  *.php              call SetFileEncodings('utf-8')
+autocmd vimrc BufReadPre  *.lua              call SetFileEncodings('utf-8')
+autocmd vimrc BufReadPost *.gb,*.big5,*.nfo,*.php,*.lua  call RestoreFileEncodings()
 
-autocmd BufWinEnter *.txt              call CheckFileEncoding()
+autocmd vimrc BufWinEnter *.txt              call CheckFileEncoding()
 
 " 强制用UTF-8打开vim文件
-autocmd BufReadPost  .vimrc,*.vim nested     call ForceFileEncoding('utf-8')
+autocmd vimrc BufReadPost  .vimrc,*.vim nested     call ForceFileEncoding('utf-8')
 
-autocmd FileType task call ForceFileEncoding('utf-8')
+autocmd vimrc FileType task call ForceFileEncoding('utf-8')
 " }}}
 
 " }}}
@@ -904,7 +908,7 @@ if s:is_plugin_group_enabled('unite') "{{{
             let g:unite_source_grep_recursive_opt = ''
         endif
 
-        autocmd! FileType unite call s:unite_my_settings()
+        autocmd! vimrc FileType unite call s:unite_my_settings()
 
         call neobundle#untap()
     endif
@@ -1616,15 +1620,13 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
         nmap <silent>[mark]C <Plug>MarkAllClear
 
         " 在插件载入后再执行修改颜色的操作
-        augroup Mark
-            autocmd VimEnter *
-                        \ highlight MarkWord1 ctermbg=DarkCyan    ctermfg=Black guibg=#8CCBEA guifg=Black |
-                        \ highlight MarkWord2 ctermbg=DarkMagenta ctermfg=Black guibg=#FF7272 guifg=Black |
-                        \ highlight MarkWord3 ctermbg=DarkYellow  ctermfg=Black guibg=#FFDB72 guifg=Black |
-                        \ highlight MarkWord4 ctermbg=DarkGreen   ctermfg=Black guibg=#FFB3FF guifg=Black |
-                        \ highlight MarkWord5 ctermbg=DarkRed     ctermfg=Black guibg=#9999FF guifg=Black |
-                        \ highlight MarkWord6 ctermbg=DarkBlue    ctermfg=Black guibg=#A4E57E guifg=Black
-        augroup END
+        autocmd vimrc VimEnter *
+                    \ highlight MarkWord1 ctermbg=DarkCyan    ctermfg=Black guibg=#8CCBEA guifg=Black |
+                    \ highlight MarkWord2 ctermbg=DarkMagenta ctermfg=Black guibg=#FF7272 guifg=Black |
+                    \ highlight MarkWord3 ctermbg=DarkYellow  ctermfg=Black guibg=#FFDB72 guifg=Black |
+                    \ highlight MarkWord4 ctermbg=DarkGreen   ctermfg=Black guibg=#FFB3FF guifg=Black |
+                    \ highlight MarkWord5 ctermbg=DarkRed     ctermfg=Black guibg=#9999FF guifg=Black |
+                    \ highlight MarkWord6 ctermbg=DarkBlue    ctermfg=Black guibg=#A4E57E guifg=Black
     endif
     " }}}
     " vim-easymotion: \\w启动word motion，\\f<字符>启动查找模式 {{{
@@ -1684,20 +1686,18 @@ if s:is_plugin_group_enabled('navigation.jumping') "{{{
     let g:fsnonewfiles=1
     " 可以用:A在.h/.cpp间切换
     command! A :call FSwitch('%', '')
-    augroup fswitch_hack
-        autocmd! BufEnter *.h,*.hpp
-                    \  let b:fswitchdst='cpp,c,ipp,cxx'
-                    \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!\<include/\w\+/!src/!,reg:!\<include/\(\w\+/\)\{2}!src/!,reg:!\<include/\(\w\+/\)\{3}!src/!,reg:!\<include/\(\w\+/\)\{4}!src/!,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
-        autocmd! BufEnter *.c,*.cpp,cxx,*.ipp
-                    \  let b:fswitchdst='h,hpp'
-                    \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
-        autocmd! BufEnter *.xml
-                    \  let b:fswitchdst='rnc'
-                    \| let b:fswitchlocs='./'
-        autocmd! BufEnter *.rnc
-                    \  let b:fswitchdst='xml'
-                    \| let b:fswitchlocs='./'
-    augroup END
+    autocmd! vimrc BufEnter *.h,*.hpp
+                \  let b:fswitchdst='cpp,c,ipp,cxx'
+                \| let b:fswitchlocs='reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|,reg:!\<include/\w\+/!src/!,reg:!\<include/\(\w\+/\)\{2}!src/!,reg:!\<include/\(\w\+/\)\{3}!src/!,reg:!\<include/\(\w\+/\)\{4}!src/!,reg:!sscc\(/[^/]\+\|\)/.*!libs\1/**!'
+    autocmd! vimrc BufEnter *.c,*.cpp,cxx,*.ipp
+                \  let b:fswitchdst='h,hpp'
+                \| let b:fswitchlocs='reg:/src/include/,reg:|/src|/include/**|,ifrel:|/src/|../include|,reg:|libs/.*|**|'
+    autocmd! vimrc BufEnter *.xml
+                \  let b:fswitchdst='rnc'
+                \| let b:fswitchlocs='./'
+    autocmd! vimrc BufEnter *.rnc
+                \  let b:fswitchdst='xml'
+                \| let b:fswitchlocs='./'
 
     " Switch to the file and load it into the current window >
     nmap <silent> [fswitch]o :FSHere<cr>
@@ -2033,16 +2033,16 @@ if s:is_plugin_group_enabled('navigation.autocomplete') "{{{
         endif
 
         " Enable omni completion.
-        autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-        autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-        autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-        autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+        autocmd vimrc FileType css setlocal omnifunc=csscomplete#CompleteCSS
+        autocmd vimrc FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+        autocmd vimrc FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+        autocmd vimrc FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
         if neobundle#is_installed("jedi-vim")
-            autocmd FileType python setlocal omnifunc=jedi#completions
+            autocmd vimrc FileType python setlocal omnifunc=jedi#completions
             let g:jedi#completions_enabled = 0
             let g:jedi#auto_vim_configuration = 0 " 解决neocomplete下自动补第一个候选项的问题
         else
-            autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+            autocmd vimrc FileType python setlocal omnifunc=pythoncomplete#Complete
         endif
 
         if !exists('g:neocomplete#force_omni_input_patterns')
@@ -2111,16 +2111,16 @@ if s:is_plugin_group_enabled('navigation.autocomplete') "{{{
         inoremap <silent><expr><C-e>  neocomplcache#cancel_popup()
 
         " Enable omni completion.
-        autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-        autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-        autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-        autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+        autocmd vimrc FileType css setlocal omnifunc=csscomplete#CompleteCSS
+        autocmd vimrc FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+        autocmd vimrc FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+        autocmd vimrc FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
         if neobundle#is_installed("jedi-vim")
-            autocmd FileType python setlocal omnifunc=jedi#completions
+            autocmd vimrc FileType python setlocal omnifunc=jedi#completions
             let g:jedi#completions_enabled = 0
             let g:jedi#auto_vim_configuration = 0 " 解决neocomplete下自动补第一个候选项的问题
         else
-            autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+            autocmd vimrc FileType python setlocal omnifunc=pythoncomplete#Complete
         endif
 
         " Enable heavy omni completion.
@@ -2428,10 +2428,10 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
                     \ }
 
         " map to <Leader>cf in C++ code
-        autocmd FileType c,cpp,objc nnoremap <silent><buffer>[code]f :<C-u>ClangFormat<CR>
-        autocmd FileType c,cpp,objc vnoremap <silent><buffer>[code]f :ClangFormat<CR>
+        autocmd vimrc FileType c,cpp,objc nnoremap <silent><buffer>[code]f :<C-u>ClangFormat<CR>
+        autocmd vimrc FileType c,cpp,objc vnoremap <silent><buffer>[code]f :ClangFormat<CR>
         " if you install vim-operator-user
-        autocmd FileType c,cpp,objc map <silent><buffer><LocalLeader>x <Plug>(operator-clang-format)
+        autocmd vimrc FileType c,cpp,objc map <silent><buffer><LocalLeader>x <Plug>(operator-clang-format)
     endif
     " }}}
     " " vim-cpplint: <F7>执行cpplint检查（要求PATH中能找到cpplint.py） {{{
@@ -2509,7 +2509,7 @@ if s:is_plugin_group_enabled('development.python') "{{{
         let g:jedi#rename_command = "<leader>r"
         let g:jedi#documentation_command = "K"
 
-        autocmd FileType python
+        autocmd vimrc FileType python
                     \ nmap <silent><buffer> [tag]] <leader>d
                     \ | nmap <silent><buffer> [tag]g <leader>d
                     \ | nmap <silent><buffer> [tag]s <leader>n
@@ -2797,7 +2797,7 @@ if s:is_plugin_group_enabled('doc') "{{{ 文档编写，如OrgMode、AsciiDoc等
                 \ ],
                 \ 'on_ft' : ['org'],
                 \ }
-    autocmd BufRead,BufNewFile *.org setf org
+    autocmd vimrc BufRead,BufNewFile *.org setf org
     " }}}
     " timl: VimL编写的Clojure语言 {{{
     NeoBundleLazy 'tpope/timl', {
@@ -2854,7 +2854,7 @@ if s:is_plugin_group_enabled('syntax') "{{{ 为一些文件提供语法高亮
     NeoBundleLazy 'wps.vim', {
                 \ 'on_ft' : ['wps'],
                 \ }
-    autocmd BufRead,BufNewFile *.wps,*.sbs,*.fms setf wps
+    autocmd vimrc BufRead,BufNewFile *.wps,*.sbs,*.fms setf wps
     " }}}
     " lbdbq: 支持lbdb {{{
     NeoBundleLazy 'lbdbq', {
@@ -3111,11 +3111,9 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
     " let g:indent_guides_auto_colors = 0
     " let g:indent_guides_start_level = 2
     " let g:indent_guides_guide_size = 1
-    " augroup IndentGuides_hack
-    "     autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#073642 ctermbg=0
-    "     autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#03303c ctermbg=0
-    "     autocmd filetype python :IndentGuidesEnable
-    " augroup END
+    " autocmd vimrc VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#073642 ctermbg=0
+    " autocmd vimrc VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#03303c ctermbg=0
+    " autocmd vimrc filetype python :IndentGuidesEnable
     " " }}}
 endif
 " }}}
