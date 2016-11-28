@@ -17,6 +17,9 @@ snippet skel
 
 	VERSION=u'`strftime('%Y%m%d')`'
 
+    def main(**kwargs):
+		${0}
+
 	if __name__ == '__main__':
 		sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
 		sys.stderr = codecs.getwriter(locale.getpreferredencoding())(sys.stderr)
@@ -28,7 +31,7 @@ snippet skel
 		parser.add_argument('-v', '--verbose', action='store_true', dest='verbose', default=False, help=u'Be moderatery verbose')
 		parser.add_argument('-q', '--quiet',  action='store_true', dest='quiet', default=False, help=u'Only show warning and errors')
 		parser.add_argument('--version',  action='version', version=VERSION, help=u'Show version and quit')
-		parser.add_argument('gateway_id', nargs=1, help=u'Gateway ID')
+		parser.add_argument('gateway_id', nargs='1', help=u'Gateway ID')
 	
 		args = parser.parse_args()
 	
@@ -47,5 +50,5 @@ snippet skel
 		else:
 			logging.basicConfig(level=logging.INFO, format=log_format)
 	
-		${0}
+        main(*args)
 
