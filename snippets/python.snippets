@@ -21,8 +21,10 @@ snippet skel
 		${0:pass}
 
 	if __name__ == '__main__':
+		reload(sys)
 		sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
 		sys.stderr = codecs.getwriter(locale.getpreferredencoding())(sys.stderr)
+		sys.setdefaultencoding(locale.getpreferredencoding())
 	
 		parser = argparse.ArgumentParser(
 			description=u'''\
