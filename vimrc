@@ -2543,6 +2543,15 @@ if s:is_plugin_group_enabled('development.python') "{{{
         call neobundle#untap()
     endif
     " }}}
+
+    " vim-behave: 对behave测试框架的支持 {{{
+    NeoBundleLazy 'rooprob/vim-behave', {
+                \ 'on_ft' : ['behave'],
+                \ 'on_path' : ['.*\.feature', '.*\.story'],
+                \ 'on_cmd' : ['Behave', 'BehaveJump'],
+                \ }
+    " }}}
+
 endif
 " }}}
 
