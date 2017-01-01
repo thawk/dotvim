@@ -1398,119 +1398,63 @@ endif
 " }}}
 
 if s:is_plugin_group_enabled('snippet') "{{{
-    " neosnippet: 代码模板引擎 "{{{
-    NeoBundleLazy 'Shougo/neosnippet', {
-                \ 'depends' : ['context_filetype.vim', 'Shougo/neosnippet-snippets'],
-                \ }
-
-    if g:dotvim_settings.snippet_engine == 'neosnippet'
-        call neobundle#config('neosnippet', {
-                    \ 'on_i' : 1,
-                    \ 'on_ft' : 'neosnippet',
-                    \ 'on_cmd' : ['NeoSnippetEdit'],
-                    \ 'on_map' : ['<Plug>(neosnippet_'],
-                    \ 'on_source': ['unite.vim'],
-                    \ })
-
-        let g:neosnippet#snippets_directory = fnamemodify(finddir("snippets", &runtimepath), ":p")
-        let g:neosnippet#snippets_directory .= "," . fnamemodify(finddir("/neosnippet/autoload/neosnippet/snippets", &runtimepath), ":p")
-
-        let g:neosnippet#data_directory = s:get_cache_dir('neosnippet')
-
-        if !exists('g:neosnippet#scope_aliases')
-            let g:neosnippet#scope_aliases = {}
-        endif
-
-        let g:neosnippet#enable_snipmate_compatibility = 1
-
-        " mako模板也可以使用html
-        let g:neosnippet#scope_aliases['mako'] = 'html'
-
-        imap <silent> <C-k>     <Plug>(neosnippet_expand_or_jump)
-        smap <silent> <C-k>     <Plug>(neosnippet_expand_or_jump)
-        xmap <silent> <C-k>     <Plug>(neosnippet_expand_target)
-
-        " SuperTab like snippets behavior.
-        imap <silent> <expr><TAB> neosnippet#expandable_or_jumpable() ?
-                    \ "\<Plug>(neosnippet_expand_or_jump)"
-                    \: pumvisible() ? "\<C-n>" : "\<TAB>"
-        smap <silent> <expr><TAB> neosnippet#expandable_or_jumpable() ?
-                    \ "\<Plug>(neosnippet_expand_or_jump)"
-                    \: "\<TAB>"
-
-        " For snippet_complete marker.
-        " if has('conceal')
-        "     set conceallevel=2 concealcursor=i
-        " endif
-
-        " 回车直接展开当前选中的snippet
-        " 不知为何，用inoremap时，是<Plug>(neosnippet_expand_or_jump)的文
-        " 字，而不是执行这个map。所以使用imap代替
-        imap <silent><expr> <CR> pumvisible() ?
-                    \ (neosnippet#expandable_or_jumpable() ?
-                    \ "\<C-y>\<Plug>(neosnippet_expand_or_jump)" :
-                    \ "\<C-y>") : "\<CR>"
-    endif
-    " }}}
-    " ultisnips: 以python实现的更强大的代码模板引擎 {{{
+    " ultisnips: 以python实现的代码模板引擎 {{{
     NeoBundleLazy 'SirVer/ultisnips', {
-                    \ 'depends' : 'honza/vim-snippets',
-                    \ }
-    if g:dotvim_settings.snippet_engine == 'ultisnips'
-        call neobundle#config('ultisnips', {
-                    \ 'on_i' : 1,
-                    \ 'lazy' : 0,
-                    \ })
+                \ 'depends' : 'honza/vim-snippets',
+                \ }
+    call neobundle#config('ultisnips', {
+                \ 'on_i' : 1,
+                \ 'lazy' : 0,
+                \ })
 
-        let g:UltiSnipsSnippetsDir = s:vimrc_path . '/mysnippets'
-        let g:UltiSnipsSnippetDirectories=['UltiSnips', 'mysnippets']
+    let g:UltiSnipsSnippetsDir = s:vimrc_path . '/mysnippets'
+    let g:UltiSnipsSnippetDirectories=['UltiSnips', 'mysnippets']
 
-        let g:UltiSnipsEnableSnipMate = 1
+    let g:UltiSnipsEnableSnipMate = 1
 
-        " let g:UltiSnipsExpandTrigger       = '<TAB>'
-        " let g:UltiSnipsListSnippets        = '<C-TAB>'
-        "
-        " inoremap <silent><expr> <TAB>
-        "     \ pumvisible() ? "\<C-n>" :
-        "     \ (len(keys(UltiSnips#SnippetsInCurrentScope())) > 0 ?
-        "     \ "<C-R>=UltiSnips#ExpandSnippet()<CR>" : "\<TAB>")
+    " let g:UltiSnipsExpandTrigger       = '<TAB>'
+    " let g:UltiSnipsListSnippets        = '<C-TAB>'
+    "
+    " inoremap <silent><expr> <TAB>
+    "     \ pumvisible() ? "\<C-n>" :
+    "     \ (len(keys(UltiSnips#SnippetsInCurrentScope())) > 0 ?
+    "     \ "<C-R>=UltiSnips#ExpandSnippet()<CR>" : "\<TAB>")
 
-        let g:ulti_expand_or_jump_res = 0
-        function! ExpandSnippetOrJumpForwardOrReturn(next)
-            " 如果可以展开就展开，可以跳转就跳转，否则返回参数指定的值
-            let snippet = UltiSnips#ExpandSnippetOrJump()
-            if g:ulti_expand_or_jump_res > 0
-                return snippet
-            else
-                return a:next
-            endif
-        endfunction
+    let g:ulti_expand_or_jump_res = 0
+    function! ExpandSnippetOrJumpForwardOrReturn(next)
+        " 如果可以展开就展开，可以跳转就跳转，否则返回参数指定的值
+        let snippet = UltiSnips#ExpandSnippetOrJump()
+        if g:ulti_expand_or_jump_res > 0
+            return snippet
+        else
+            return a:next
+        endif
+    endfunction
 
-        " let g:UltiSnipsJumpForwardTrigger="<TAB>"
-        " let g:UltiSnipsJumpForwardTrigger="<NOP>"
-        " inoremap <silent><expr> <TAB>
-        "             \ pumvisible() ? "\<C-n>" :
-        "             \ "<C-R>=ExpandSnippetOrJumpForwardOrReturn('\<TAB>')<CR>"
+    " let g:UltiSnipsJumpForwardTrigger="<TAB>"
+    " let g:UltiSnipsJumpForwardTrigger="<NOP>"
+    " inoremap <silent><expr> <TAB>
+    "             \ pumvisible() ? "\<C-n>" :
+    "             \ "<C-R>=ExpandSnippetOrJumpForwardOrReturn('\<TAB>')<CR>"
 
-        " let g:UltiSnipsJumpBackwordTrigger = "<S-TAB>"
-        " " previous menu item, jump to previous placeholder or do nothing
-        " let g:UltiSnipsJumpBackwordTrigger = "<NOP>"
-        " inoremap <expr> <S-TAB>
-        "             \ pumvisible() ? "\<C-p>" :
-        "             \ "<C-R>=UltiSnips#JumpBackwards()<CR>"
-        "
-        " " jump to previous placeholder otherwise do nothing
-        " snoremap <buffer> <silent> <S-TAB>
-        "             \ <ESC>:call UltiSnips#JumpBackwards()<CR>
+    " let g:UltiSnipsJumpBackwordTrigger = "<S-TAB>"
+    " " previous menu item, jump to previous placeholder or do nothing
+    " let g:UltiSnipsJumpBackwordTrigger = "<NOP>"
+    " inoremap <expr> <S-TAB>
+    "             \ pumvisible() ? "\<C-p>" :
+    "             \ "<C-R>=UltiSnips#JumpBackwards()<CR>"
+    "
+    " " jump to previous placeholder otherwise do nothing
+    " snoremap <buffer> <silent> <S-TAB>
+    "             \ <ESC>:call UltiSnips#JumpBackwards()<CR>
 
-        call neobundle#untap()
+    call neobundle#untap()
 
-        " 回车直接展开当前选中的snippet
-        inoremap <silent><expr> <CR>
-                    \ pumvisible() ?
-                    \ "\<C-y><C-R>=ExpandSnippetOrJumpForwardOrReturn('')<CR>" :
-                    \ "\<CR>"
-    endif
+    " 回车直接展开当前选中的snippet
+    inoremap <silent><expr> <CR>
+                \ pumvisible() ?
+                \ "\<C-y><C-R>=ExpandSnippetOrJumpForwardOrReturn('')<CR>" :
+                \ "\<CR>"
     "}}}
 endif
 "}}}
