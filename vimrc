@@ -2783,7 +2783,7 @@ if s:is_plugin_group_enabled('doc') "{{{ 文档编写，如OrgMode、AsciiDoc等
     "             \ 'on_ft' : ['markdown'],
     "             \ }
     " " }}}
-    " vim-taskwarrior: 支持TaskWarrior
+    " vim-taskwarrior: 支持TaskWarrior {{{
     NeoBundleLazy 'blindFS/vim-taskwarrior'
     if executable('task')
         call neobundle#config('vim-taskwarrior', {
@@ -2798,6 +2798,7 @@ if s:is_plugin_group_enabled('doc') "{{{ 文档编写，如OrgMode、AsciiDoc等
                 \ })
         let g:task_rc_override = 'rc.defaultheight=0'
     endif
+    " }}}
 endif
 " }}}
 
