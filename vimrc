@@ -1136,7 +1136,7 @@ if s:is_plugin_group_enabled('editing') "{{{
 
         " 对齐C/C++注释
         let g:easy_align_delimiters['/'] = {
-                    \  'pattern': '\/\/\|\/\*',
+                    \ 'pattern': '\/\/\|\/\*',
                     \ 'delimiter_align': 'l', 'ignore_groups': ['!Comment']
                     \ }
 
