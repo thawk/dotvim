@@ -1,11 +1,11 @@
 snippet modeline
-	#!/usr/bin/env python
+	#!/usr/bin/env python2
 	# vim: set fileencoding=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4:
 
 	${0}
 
 snippet skel
-	#!/usr/bin/python
+	#!/usr/bin/env python2
 	# vim: set fileencoding=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4:
 
 	# Imports
@@ -17,7 +17,7 @@ snippet skel
 
 	VERSION=u'`strftime("%Y%m%d")`'
 
-	def main(**kwargs):
+	def main(**args):
 		${0:pass}
 
 	if __name__ == '__main__':
@@ -39,8 +39,13 @@ snippet skel
 	
 		# 对解释出来的参数进行编码转换
 		for k in vars(args):
-			if isinstance(getattr(args, k), str):
-				setattr(args, k, unicode(getattr(args, k), locale.getpreferredencoding()).strip())
+		    v = getattr(args, k)
+		    if isinstance(v, str):
+		        setattr(args, k, unicode(v, locale.getpreferredencoding()).strip())
+		    elif isinstance(v, list):
+		        setattr(
+		            args, k,
+		            [unicode(s, locale.getpreferredencoding()).strip() if isinstance(s, str) else s for s in v])
 	
 		# 日志初始化
 		log_format = u'%(asctime)s %(levelname)s %(message)s'
@@ -52,5 +57,5 @@ snippet skel
 		else:
 			logging.basicConfig(level=logging.INFO, format=log_format)
 	
-		main(*args)
+		main(**vars(args))
 
