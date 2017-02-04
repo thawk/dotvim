@@ -1,6 +1,6 @@
 snippet skel "框架" b
 # language: zh-CN
-功能: $1
+功能: ${1:`!p snip.rv=re.sub(r'\.[^.]*$', '', snip.fn)`}
 
 	场景: $2
 		假如$3
