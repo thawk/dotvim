@@ -1394,6 +1394,9 @@ if s:is_plugin_group_enabled('editing') "{{{
     " vim-fakeclip: 为vim在终端等场合提供&/+/"寄存器，其中&支持tmux/screen缓冲区 {{{
     NeoBundle 'kana/vim-fakeclip'
     " }}}
+    " vim-bracketed-paste: 支持bracketed paste mode，在支持此功能的终端下，自动进入paste模式 {{{
+    NeoBundle 'ConradIrwin/vim-bracketed-paste'
+    " }}}
 endif
 " }}}
 
