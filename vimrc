@@ -769,8 +769,8 @@ vmap <Leader>s [ctrlsf]
 
 nnoremap [grep] <Nop>
 vnoremap [grep] <Nop>
-nmap <Leader>S [grep]
-vmap <Leader>S [grep]
+nmap <Leader>g [grep]
+vmap <Leader>g [grep]
 
 nnoremap [code] <Nop>
 nmap <Leader>c [code]
@@ -1508,9 +1508,9 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
     " let g:ack_use_dispatch = 1
 
     " 在项目目录下找，可能退化为当前目录
-    vmap <silent> [grep]s :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=FindVcsRoot('')<CR><CR>
-    nmap <silent> [grep]s :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=FindVcsRoot('')<CR><CR>
-    nmap <silent> [grep]S :<C-U>Ack!<SPACE>
+    vmap <silent> [grep]g :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=FindVcsRoot('')<CR><CR>
+    nmap <silent> [grep]g :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=FindVcsRoot('')<CR><CR>
+    nmap <silent> [grep]G :<C-U>Ack!<SPACE>
 
     " 在当前文件目录下找
     vmap <silent> [grep]b :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
