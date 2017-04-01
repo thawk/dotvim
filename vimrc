@@ -245,6 +245,18 @@ function! s:get_cache_dir(...) "{{{
     return path
 endfunction "}}}
 
+function! s:buffer_dir_exe(args) "{{{ 在当前缓冲区目录下执行命令
+    let olddir = getcwd()
+    try
+        exe 'cd' fnameescape(expand("%:p:h"))
+        exe join(a:args)
+    finally
+        exe 'cd' fnameescape(olddir)
+    endtry
+endfunction
+command! -nargs=* -complete=command BufferDirExe :call s:buffer_dir_exe([<f-args>])
+"}}}
+
 function! s:match_group(group_name, pattern)
     return '.' . a:group_name . '.' =~ '\.' . substitute(a:pattern, '\.', '\\.', 'g') . '\.'
 endfunction
@@ -287,40 +299,6 @@ function! s:is_plugin_group_enabled(group_name)
     call add(g:dotvim_settings._enabled_plugin_groups, a:group_name)
     return 1
 endfunction
-
-function! FindVcsRoot(path) " {{{
-    let vcs_folder = ['.git', '.hg', '.svn', '.bzr', '_darcs']
-
-    let path = a:path
-    if empty(path)
-        let path = expand('%:p:h')
-    else
-        let path = fnamemodify(path, ':p')
-    endif
-
-    let vcs_dir = ''
-    for vcs in vcs_folder
-        let vcs_dir = finddir(vcs, path.';')
-        if !empty(vcs_dir)
-            if vcs == '.svn' " 对于旧svn版本，可能连续多层目录都有.svn，以最上层的为根
-                let root = fnamemodify(vcs_dir, ':p:h')
-                let parent = fnamemodify(root, ':h')
-                while parent != root
-                    if !isdirectory(parent . "/" . vcs) " 上层目录没有.svn子目录
-                        break
-                    endif
-                    let root = parent
-                    let parent = fnamemodify(root, ':h')
-                endwhile
-                return root
-            else
-                return fnamemodify(vcs_dir, ':h')
-            endif
-        endif
-    endfor
-
-    return path
-endfunction " }}}
 
 " s:VisualSelection(): 返回当前被选中的文字 {{{
 " Thanks to xolox!
@@ -839,6 +817,28 @@ if s:is_plugin_group_enabled('core') "{{{
                     \ }
     endif
     " }}}
+    " vim-projectroot: 在项目根目录执行或找出项目的根目录 {{{
+    NeoBundleLazy 'dbakker/vim-projectroot', {
+                \ 'on_cmd' : [
+                \     {'name' : 'ProjectRootExe', 'complete' : 'command'},
+                \     {'name' : 'ProjectRootCD', 'complete' : 'file'},
+                \     {'name' : 'ProjectRootLCD', 'complete' : 'file'},
+                \     {'name' : 'ProjectBufArgs', 'complete' : 'file'},
+                \     {'name' : 'ProjectBufFirst', 'complete' : 'file'},
+                \     {'name' : 'ProjectBufLast', 'complete' : 'file'},
+                \     {'name' : 'ProjectBufDo', 'complete' : 'command'},
+                \     {'name' : 'ProjectBufNext', 'complete' : 'file'},
+                \     {'name' : 'ProjectBufPrev', 'complete' : 'file'},
+                \ ],
+                \ 'on_func' : [
+                \     'projectroot#get',
+                \     'projectroot#guess',
+                \     'projectroot#exe',
+                \     'projectroot#cd',
+                \     'projectroot#buffers',
+                \     'projectroot#bufnext',
+                \ ]}
+    " }}}
 endif
 " }}}
 
@@ -1040,7 +1040,7 @@ if s:is_plugin_group_enabled('unite') "{{{
 
     " 小写查找grep当前word
     " 在project目录下找
-    nnoremap <silent> [unite]gg :<C-u>Unite grep:<C-R>=FindVcsRoot("")<CR> -buffer-name=search -no-quit -no-start-insert -input=<C-R><C-W><CR>
+    nnoremap <silent> [unite]gg :<C-u>Unite grep:<C-R>=projectroot#guess()<CR> -buffer-name=search -no-quit -no-start-insert -input=<C-R><C-W><CR>
     " 在当前目录下找
     nnoremap <silent> [unite]gc :<C-u>Unite grep:. -buffer-name=search -no-quit -no-start-insert -input=<C-R><C-W><CR>
     " 在当前文件所在目录下找
@@ -1048,7 +1048,7 @@ if s:is_plugin_group_enabled('unite') "{{{
 
     " 大写需要输入查找内容
     " 在project目录下找
-    nnoremap <silent> [unite]GG :<C-u>Unite grep:<C-R>=FindVcsRoot("")<CR> -buffer-name=search -no-quit -no-start-insert<CR>
+    nnoremap <silent> [unite]GG :<C-u>Unite grep:<C-R>=projectroot#guess()<CR> -buffer-name=search -no-quit -no-start-insert<CR>
     " 在当前目录下找
     nnoremap <silent> [unite]GC :<C-u>Unite grep:. -buffer-name=search -no-quit -no-start-insert<CR>
     " 在当前文件所在目录下找
@@ -1081,12 +1081,12 @@ if s:is_plugin_group_enabled('unite') "{{{
         nnoremap <silent> [unite]F
                     \ :<C-u>Unite -buffer-name=files -multi-line
                     \ jump_point file_point buffer
-                    \ file_rec:<C-R>=FindVcsRoot('')<CR> file_mru file/new:<C-R>=expand("%:p:h")<CR><CR>
+                    \ file_rec:<C-R>=projectroot#guess()<CR> file_mru file/new:<C-R>=expand("%:p:h")<CR><CR>
     else
         nnoremap <silent> [unite]F
                     \ :<C-u>Unite -buffer-name=files -multi-line
                     \ jump_point file_point buffer
-                    \ file_rec/async:<C-R>=FindVcsRoot('')<CR> file_mru file/new:<C-R>=expand("%:p:h")<CR><CR>
+                    \ file_rec/async:<C-R>=projectroot#guess()<CR> file_mru file/new:<C-R>=expand("%:p:h")<CR><CR>
     endif
 
     if neobundle#tap('unite-outline')
@@ -1508,17 +1508,19 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
     " let g:ack_use_dispatch = 1
 
     " 在项目目录下找，可能退化为当前目录
-    vmap <silent> [grep]g :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=FindVcsRoot('')<CR><CR>
-    nmap <silent> [grep]g :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=FindVcsRoot('')<CR><CR>
-    nmap <silent> [grep]G :<C-U>Ack!<SPACE>
+    vmap <silent> [grep]g :<C-U>ProjectRootExe Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
+    nmap <silent> [grep]g :<C-U>ProjectRootExe Ack! <C-R>=expand('<cword>')<CR><CR>
+    nmap <silent> [grep]G :<C-U>ProjectRootExe Ack!<SPACE>
 
     " 在当前文件目录下找
     vmap <silent> [grep]b :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
     nmap <silent> [grep]b :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=expand('%:p:h')<CR><CR>
+    nmap <silent> [grep]B :<C-U>BufferDirExe Ack!<SPACE>
 
     " 在当前目录下找
-    vmap <silent> [grep]c :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=getcwd()<CR><CR>
-    nmap <silent> [grep]c :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=getcwd()<CR><CR>
+    vmap <silent> [grep]c :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
+    nmap <silent> [grep]c :<C-U>Ack! <C-R>=expand('<cword>')<CR><CR>
+    nmap <silent> [grep]C :<C-U>Ack!<SPACE>
     "}}}
     " ctrlsf.vim: 快速查找及编辑 {{{
     NeoBundleLazy 'dyng/ctrlsf.vim', {
@@ -1531,20 +1533,23 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
         let g:ctrlsf_ackprg = g:dotvim_settings.commands.ag
     endif
 
-    let g:ctrlsf_default_root = 'project+fw'
+    " let g:ctrlsf_default_root = 'project+fw'
+    let g:ctrlsf_default_root = 'cwd'
 
     " 在project下找
-    vmap <silent> [ctrlsf]s :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=FindVcsRoot('')<CR><CR>
-    nmap <silent> [ctrlsf]s :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=FindVcsRoot('')<CR><CR>
-    nmap <silent> [ctrlsf]S <Plug>CtrlSFPrompt -regex<SPACE>
+    vmap <silent> [ctrlsf]s :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=projectroot#guess()<CR><CR>
+    nmap <silent> [ctrlsf]s :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=projectroot#guess()<CR><CR>
+    nmap <silent> [ctrlsf]S :<C-U>ProjectRootExe CtrlSF -regex<SPACE>
 
     " 在当前文件目录下找
     vmap <silent> [ctrlsf]b :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
     nmap <silent> [ctrlsf]b :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=expand('%:p:h')<CR><CR>
+    nmap <silent> [ctrlsf]B :<C-U>ProjectRootExe CtrlSF<SPACE>
 
     " 在当前目录下找
     vmap <silent> [ctrlsf]c :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=getcwd()<CR><CR>
     nmap <silent> [ctrlsf]c :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=getcwd()<CR><CR>
+    nmap <silent> [ctrlsf]C :<C-U>CtrlSF<SPACE>
 
     nmap <silent> [ctrlsf]p <Plug>CtrlSFPwordPath
     nmap <silent> [ctrlsf]P <Plug>CtrlSFPwordExec
