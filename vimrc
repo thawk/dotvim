@@ -1035,6 +1035,7 @@ if s:is_plugin_group_enabled('unite') "{{{
     nnoremap <silent> [unite]C :<C-u>UniteClose<CR>
 
     nnoremap <silent> [unite]y :<C-U>Unite -buffer-name=yanks history/yank -default-action=append register<CR>
+    nnoremap <silent> [unite]Y :<C-U>Unite -buffer-name=yanks history/yank -default-action=insert register<CR>
     " nnoremap <silent> [unite]w :<C-u>UniteWithCursorWord -buffer-name=register buffer file_mru bookmark file<CR>
     " nnoremap <silent> [unite]c :<C-u>Unite change jump<CR>
 
