@@ -2809,6 +2809,18 @@ if s:is_plugin_group_enabled('doc') "{{{ 文档编写，如OrgMode、AsciiDoc等
         let g:task_rc_override = 'rc.defaultheight=0'
     endif
     " }}}
+    " wmgraphviz.vim: 提供对Graphviz dot的支持，包括编译、snippet等 {{{
+    NeoBundleLazy 'wannesm/wmgraphviz.vim', {
+                \ 'on_ft' : 'dot',
+                \ 'on_path' : '.*\.\(gv\|dot\)$',
+                \ 'on_cmd' : [
+                \     'GraphvizCompile', 'GraphvizCompilePS', 'GraphvizCompilePDF',
+                \     'GraphvizCompileDot', 'GraphvizCompileNeato', 'GraphvizCompileCirco',
+                \     'GraphvizCompileFdp', 'GraphvizCompileSfdp', 'GraphvizCompileTwopi',
+                \     'GraphvizCompileToLaTeX',
+                \     'GraphvizShow', 'GraphvizInteractive'
+                \ ]}
+    " }}}
 endif
 " }}}
 
@@ -2816,7 +2828,7 @@ if s:is_plugin_group_enabled('syntax') "{{{ 为一些文件提供语法高亮
     " csv.vim: 增加对CSV文件（逗号分隔文件）的支持 {{{
     NeoBundleLazy 'chrisbra/csv.vim', {
                 \ 'on_ft' : ['csv'],
-                \ 'on_path' : '.*\.csv',
+                \ 'on_path' : '.*\.csv$',
                 \ }
     " }}}
     " wps.vim: syntax highlight for RockBox wps file {{{
