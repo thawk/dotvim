@@ -998,6 +998,7 @@ if s:is_plugin_group_enabled('unite') "{{{
             let g:unite_source_gtags_ref_option = 'rse'
             let g:unite_source_gtags_def_option = 'e'
             let g:unite_source_gtags_result_option = 'ctags-x'
+            let g:unite_source_gtags_enable_nearness = 1
         endif
 
         nnoremap <silent> [unite-tag]] :<C-u>Unite -immediately gtags/context<CR>
