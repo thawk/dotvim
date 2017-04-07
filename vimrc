@@ -2820,6 +2820,7 @@ if s:is_plugin_group_enabled('doc') "{{{ 文档编写，如OrgMode、AsciiDoc等
                 \     'GraphvizCompileToLaTeX',
                 \     'GraphvizShow', 'GraphvizInteractive'
                 \ ]}
+    let g:WMGraphviz_output = 'png'
     " }}}
 endif
 " }}}
