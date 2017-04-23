@@ -45,7 +45,7 @@ let g:dotvim_settings.default_indent = 4
 if v:version >= '703' && has('lua')
     let g:dotvim_settings.autocomplete_method = 'neocomplete'
 else
-    let g:dotvim_settings.autocomplete_method = 'neocomplcache'
+    let g:dotvim_settings.autocomplete_method = ''
 endif
 
 " marching有三种backend，不指定则自动选一种
@@ -770,7 +770,6 @@ vmap <Leader>m [mark]
 " Brief help
 " :NeoBundleList          - list configured bundles
 " :NeoBundleInstall(!)    - install(update) bundles
-" :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 
 " Loading NeoBundle {{{
 filetype off                   " Required!
@@ -982,12 +981,6 @@ if s:is_plugin_group_enabled('unite') "{{{
                 \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
-    " vim-versions: 支持svn/git，\fv 看未提交的文件列表，\fl 看更新日志 {{{
-    NeoBundleLazy 'hrsh7th/vim-versions', {
-                \ 'on_cmd' : ['UniteVersions'],
-                \ 'on_source': ['unite.vim'],
-                \ }
-    " }}}
     " unite-gtags: Unite下调用gtags {{{
     NeoBundleLazy 'thawk/unite-gtags'
     if g:dotvim_settings.commands.global != ''
@@ -1109,12 +1102,6 @@ if s:is_plugin_group_enabled('unite') "{{{
         nnoremap <silent> g] :<C-u>Unite tselect:<C-r>=expand('<cword>')<CR><CR>
         call neobundle#untap()
     endif
-
-    if neobundle#tap('vim-versions')
-        nnoremap <silent> [unite]v :<C-u>UniteVersions status<CR>
-        nnoremap <silent> [unite]l :<C-u>UniteVersions log<CR>
-        call neobundle#untap()
-    endif
     " }}}
 endif
 " }}}
@@ -1162,62 +1149,6 @@ if s:is_plugin_group_enabled('editing') "{{{
         call neobundle#untap()
     endif
     " }}}
-    " " vim-alignta: 代码对齐插件。通过\fa访问 {{{
-    " NeoBundleLazy 'h1mesuke/vim-alignta', {
-    "             \ 'on_cmd' : ['Alignta'],
-    "             \ 'on_source' : ['unite.vim'],
-    "             \ }
-    " " 对齐
-    " " :[range]Alignta [arguments] 或 [range]Align [arguments]
-    " " 参数：
-    " " g/regex 或 v/regex 过滤行
-    " "
-    " " :Alignta = 对齐等号
-    " " :Alignta = 对齐等号，
-    " " :Alignta <- b 对齐b字符
-    "
-    " let s:comment_leadings = '^\s*\("\|#\|/\*\|//\|<!--\)'
-    "
-    " let g:unite_source_alignta_preset_arguments = [
-    "             \ ["Align at ' '", '\S\+'],
-    "             \ ["Declaration", 'v/^\w\+:\|' . s:comment_leadings . ' <<1:2 \(\S\+;\|\w\+()\(\s*const\)\?\s*;\|\w\+,\|\w\+);\?\) \(\/\/.*\|\/\*.*\)\?'],
-    "             \ ["Align at '='", '=>\='],
-    "             \ ["Align at ':'", '01 :'],
-    "             \ ["Align at ','", '10 \(,\s*\)\@<=\S'],
-    "             \ ["Align at '|'", '|'   ],
-    "             \ ["Align at ')'", '0 )' ],
-    "             \ ["Align at ']'", '0 ]' ],
-    "             \ ["Align at '}'", '}'   ],
-    "             \]
-    "
-    " let g:unite_source_alignta_preset_options = [
-    "             \ ["Not in comment ".s:comment_leadings, 'v/' . s:comment_leadings],
-    "             \ ["Justify Left",      '<<' ],
-    "             \ ["Justify Center",    '||' ],
-    "             \ ["Justify Right",     '>>' ],
-    "             \ ["Justify None",      '==' ],
-    "             \ ["Shift Left",        '<-' ],
-    "             \ ["Shift Right",       '->' ],
-    "             \ ["Shift Left  [Tab]", '<--'],
-    "             \ ["Shift Right [Tab]", '-->'],
-    "             \ ["Margin 0:0",        '0'  ],
-    "             \ ["Margin 0:1",        '01' ],
-    "             \ ["Margin 1:0",        '10' ],
-    "             \ ["Margin 1:1",        '1'  ],
-    "             \ ["In comment ".s:comment_leadings, 'g/' . s:comment_leadings],
-    "             \]
-    " unlet s:comment_leadings
-    "
-    " " 在没选中文本时，按[unite]a选择需要用的选项，再选中要操作的文本，[unite]a进行操作
-    " nnoremap <silent> [unite]a :<C-u>Unite alignta:options -no-start-insert<CR>
-    " xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments -no-start-insert<CR>
-    " " }}}
-    "" YankRing.vim: 在粘贴时，按了p之后，可以按<C-P>粘贴存放在剪切板历史中的内容 {{{
-    "NeoBundle 'YankRing.vim'
-    "    let g:yankring_persist = 0              "不把yankring持久化
-    "    let g:yankring_share_between_instances = 0
-    "    let g:yankring_manual_clipboard_check = 1
-    " }}}
     " vim-operator-replace: 双引号x_{motion} : 把{motion}涉及的内容替换为register x的内容 {{{
     NeoBundleLazy 'kana/vim-operator-replace', {
                 \ 'depends' : 'kana/vim-operator-user',
@@ -1253,32 +1184,7 @@ if s:is_plugin_group_enabled('editing') "{{{
                 \ 'on_cmd' : ['DIstart', 'DIsngl', 'DIdbl', 'DrawIt'],
                 \ }
     " }}}
-    " " vim-notes: :Note创建新的笔记 {{{
-    " NeoBundleLazy 'xolox/vim-notes', {
-    "             \ 'on_cmd' : [
-    "             \     {'name': 'Note', 'complete': 'customlist,xolox#notes#cmd_complete'},
-    "             \     {'name': 'DeleteNote', 'complete': 'customlist,xolox#notes#cmd_complete'},
-    "             \     {'name': 'SearchNotes', 'complete': 'customlist,xolox#notes#keyword_complete'},
-    "             \     'RelatedNotes', 'RecentNotes', 'MostRecentNote', 'ShowTaggedNotes', 'IndexTaggedNotes',
-    "             \     'NoteToMarkdown', 'NoteToMediawiki', 'NoteToHtml', 'NoteFromSelectedText',
-    "             \     'SplitNoteFromSelectedText', 'TabNoteFromSelectedText',
-    "             \ ],
-    "             \ 'on_ft' : ['notes'],
-    "             \ 'depends' : [
-    "             \     'xolox/vim-misc',
-    "             \ ],
-    "             \ }
-    " " let g:notes_suffix = '.markdown'
-    " if exists('g:dotvim_settings.notes_directory')
-    "     if type(g:dotvim_settings.notes_directory) == type([])
-    "         let g:notes_directories = g:dotvim_settings.notes_directory
-    "     else
-    "         let g:notes_directories = [g:dotvim_settings.notes_directory]
-    "     endif
-    " endif
-    " " }}}
-    " vim-multiple-cursors: 同时编辑多处。<C-n>选择当前word并跳到下一个相同
-    " word；<C-p>取消当前word，跳回上个；<C-x>跳过当前word到下一个 {{{
+    " vim-multiple-cursors: 同时编辑多处。<C-n>选择当前word并跳到下一个相同word；<C-p>取消当前word，跳回上个；<C-x>跳过当前word到下一个 {{{
     NeoBundleLazy 'terryma/vim-multiple-cursors', {
                 \ 'on_map' : [ '<C-N>' ],
                 \ 'on_cmd' : [ 'MultipleCursorsFind' ],
@@ -1297,16 +1203,6 @@ if s:is_plugin_group_enabled('editing') "{{{
             exe 'NeoCompleteUnlock'
         endif
     endfunction
-    " }}}
-    " echofunc: 在插入模式下输入(时，会在statusline显示函数的签名，对于有多个重载的函数，可通过<A-->/<A-=>进行切换 {{{
-    NeoBundleLazy 'mbbill/echofunc'
-
-    " 启用global后，将不用ctags，因此echofunc.vim会失效
-    if g:dotvim_settings.commands.global == ''
-        call neobundle#config('echofunc', {
-                    \ 'on_ft' : ['c', 'cpp'],
-                    \ })
-    endif
     " }}}
     " 为函数插入Doxygen注释。在函数名所在行输入 :Dox 即可 {{{
     NeoBundleLazy 'DoxygenToolkit.vim', {
@@ -1477,18 +1373,6 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
                 \ 'on_cmd' : [ 'Abolish', 'Subvert', 'S' ],
                 \ }
     " }}}
-    " " clever-f.vim: 用f/F代替;来查找下一个字符 {{{
-    " NeoBundleLazy 'rhysd/clever-f.vim', {
-    "             \ 'on_map' : [['n', 'f', 'F', 't', 'T']],
-    "             \ }
-    " " }}}
-    " " glowshi-ft.vim: 增强的f/t {{{
-    " NeoBundleLazy 'saihoooooooo/glowshi-ft.vim', {
-    "             \ 'on_map' : [
-    "             \     ['n', '<Plug>', 'f', 'F', 't', 'T', ';', ','],
-    "             \ ],
-    "             \ }
-    " " }}}
     " ack.vim: 用ack/ag快速查找文件 "{{{
     NeoBundleLazy 'mileszs/ack.vim', {
                 \ 'on_cmd' : [
@@ -1598,27 +1482,18 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
                     \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
                     \     '"<Leader><Leader>" . v:val')],
                     \ }
-    else
-        " NeoBundleLazy 'Lokaltog/vim-easymotion', {
-        "             \ 'rev' : 'e41082',
-        "             \ 'on_map' : [['n'] + map(
-        "             \     ['f', 'F', 's', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N'],
-        "             \     '"<Leader><Leader>" . v:val')],
-        "             \ }                                 " \\w启动word motion，\\f<字符>启动查找模式
-    endif
-    let g:EasyMotion_startofline = 0
-    let g:EasyMotion_smartcase = 1
-    let g:EasyMotion_do_shade = 1
+        let g:EasyMotion_startofline = 0
+        let g:EasyMotion_smartcase = 1
+        let g:EasyMotion_do_shade = 1
 
-    if v:version >= '703'
         let g:EasyMotion_use_upper = 1
         let g:EasyMotion_keys = 'ASDGHKLQWERTYUIOPZXCVBNMFJ;'
-    endif
 
-    hi link EasyMotionTarget Search
-    hi link EasyMotionTarget2First IncSearch
-    hi link EasyMotionTarget2Second IncSearch
-    hi link EasyMotionShade Comment
+        hi link EasyMotionTarget Search
+        hi link EasyMotionTarget2First IncSearch
+        hi link EasyMotionTarget2Second IncSearch
+        hi link EasyMotionShade Comment
+    endif
     " }}}
     " HiCursorWords: 高亮与光标下word一样的词 {{{
     NeoBundle 'ihacklog/HiCursorWords'
@@ -1767,8 +1642,8 @@ if s:is_plugin_group_enabled('navigation.tagging') "{{{
                 \ }
     " }}}
     " gtags.vim: 直接调用gtags查找符号 {{{
-    NeoBundleLazy 'harish2704/gtags.vim'
     if g:dotvim_settings.commands.global != ''
+        NeoBundleLazy 'harish2704/gtags.vim'
         call neobundle#config('gtags.vim', {
                     \ 'on_cmd' : [
                     \     { 'name' : 'Gtags', 'complete' : 'custom,GtagsCandidate' },
@@ -1783,7 +1658,7 @@ if s:is_plugin_group_enabled('navigation.tagging') "{{{
         let g:Gtags_Auto_Update = 1
         let g:Gtags_Auto_Map = 0
         let g:Gtags_No_Auto_Jump = 0
-        let g:GtagsCscope_Auto_Load = 1
+        let g:GtagsCscope_Auto_Load = 0
 
         " 如果光标在定义上，就找引用，如果在引用上就找定义
         nmap <silent> [tag]<C-]> :GtagsCursor<CR>
@@ -1831,64 +1706,8 @@ if s:is_plugin_group_enabled('navigation.tagging') "{{{
         nmap <silent> [tag]cT :Gtags -l  -g --literal<SPACE>
         nmap <silent> [tag]cE :Gtags -l  -g<SPACE>
         nmap <silent> [tag]cP :Gtags -l  -P<SPACE>
-    else
-        " 不使用gtags的话，如果有cscope就使用cscope
-        if has("cscope") " {{{
-            " use both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
-            set cscopetag
-
-            " check cscope for definition of a symbol before checking ctags: set to 1
-            " if you want the reverse search order.
-            set csto=0
-
-            set nocscopeverbose
-
-            " add any cscope database in current directory
-            if filereadable("cscope.out")
-                cs add cscope.out
-                " else add the database pointed to by environment variable
-            elseif $CSCOPE_DB != ""
-                cs add $CSCOPE_DB
-            endif
-
-            " show msg when any other cscope db added
-            set cscopeverbose
-
-            set cscopequickfix=s-,c-,d-,i-,t-,e-
-
-            " <C-\>小写在当前窗口打开光标下的符号
-            nmap <silent> [tag]s :cs find s <C-R>=expand("<cword>")<CR><CR>
-            nmap <silent> [tag]g :cs find g <C-R>=expand("<cword>")<CR><CR>
-            nmap <silent> [tag]c :cs find c <C-R>=expand("<cword>")<CR><CR>
-            nmap <silent> [tag]t :cs find t <C-R>=expand("<cword>")<CR><CR>
-            nmap <silent> [tag]e :cs find e <C-R>=expand("<cword>")<CR><CR>
-            nmap <silent> [tag]f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-            nmap <silent> [tag]i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-            nmap <silent> [tag]d :cs find d <C-R>=expand("<cword>")<CR><CR>
-
-            " <C-<silent> \>大写在当前窗口打开命令行
-            nmap <silent> [tag]S :cs find s<SPACE>
-            nmap <silent> [tag]G :cs find g<SPACE>
-            nmap <silent> [tag]C :cs find c<SPACE>
-            nmap <silent> [tag]T :cs find t<SPACE>
-            nmap <silent> [tag]E :cs find e<SPACE>
-            nmap <silent> [tag]F :cs find f<SPACE>
-            nmap <silent> [tag]I :cs find i ^
-            nmap <silent> [tag]D :cs find d<SPACE>
-        endif " }}}
     endif
     " }}}
-    "" Intelligent_Tags: 自动为当前文件及其包含的文件生成tags {{{
-    "NeoBundle 'bahejl/Intelligent_Tags'
-    "
-    "    let g:Itags_Depth=3    " 缺省是1，当前文件及其包含的文件。-1表示无穷层
-    "    let g:Itags_Ctags_Flags="--c++-kinds=+p --fields=+iaS --extra=+q -R"
-    "    let g:Itags_header_mapping= {'h':['c', 'cpp', 'c++']}
-    "if executable("ctags")
-    "    NeoBundle 'thawk/Intelligent_Tags'              " 自动扫描所依赖的头文件，生成tags文件
-    "    "NeoBundle 'AutoTag'
-    "endif
-    "" }}}
 endif
 " }}}
 
@@ -1941,8 +1760,8 @@ endif
 "}}}
 
 if s:is_plugin_group_enabled('navigation.autocomplete') "{{{
-    NeoBundleLazy 'Shougo/neocomplete' " {{{
     if g:dotvim_settings.autocomplete_method == 'neocomplete' && v:version >= '703' && has('lua')
+        NeoBundleLazy 'Shougo/neocomplete' " {{{
         call neobundle#config('neocomplete', {
                     \ 'on_i' : 1,
                     \ })
@@ -1992,6 +1811,8 @@ if s:is_plugin_group_enabled('navigation.autocomplete') "{{{
                 inoremap <silent><expr><C-y>  neocomplete#close_popup()
                 inoremap <silent><expr><C-e>  neocomplete#cancel_popup()
             endfunction
+
+            call neobundle#untap()
         endif
 
         " Enable omni completion.
@@ -2021,89 +1842,12 @@ if s:is_plugin_group_enabled('navigation.autocomplete') "{{{
                     \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
         let g:neocomplete#force_omni_input_patterns.python =
                     \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+        " }}}
     endif
-    " }}}
 
-    NeoBundleLazy 'Shougo/neocomplcache' " {{{
-    if g:dotvim_settings.autocomplete_method == 'neocomplcache'
-                \ && !(v:version >= '703' && has('lua'))
-        call neobundle#config('neocomplcache', {
-                    \ 'on_i' : 1,
-                    \ })
+    if neobundle#tap('neocomplete')
+        call neobundle#untap()
 
-        "let g:neocomplcache_enable_debug = 1
-        let g:neocomplcache_enable_at_startup = 1
-        " Disable auto completion, if set to 1, must use <C-x><C-u>
-        let g:neocomplcache_disable_auto_complete = 0
-        " Use smartcase.
-        let g:neocomplcache_enable_smart_case = 1
-        " Use camel case completion.
-        let g:neocomplcache_enable_camel_case_completion = 1
-        " Use underbar completion.
-        let g:neocomplcache_enable_underbar_completion = 1
-        " Set minimum syntax keyword length.
-        let g:neocomplcache_min_syntax_length = 3
-        let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-        let g:neocomplcache_enable_auto_select = 0
-        let g:neocomplcache_auto_completion_start_length = 3
-        let g:neocomplcache_temporary_dir=s:get_cache_dir('neocomplete')
-
-        " Define dictionary.
-        let g:neocomplcache_dictionary_filetype_lists = {
-                    \ 'default' : '',
-                    \ 'vimshell' : expand(g:dotvim_settings.cache_dir.'/.vimshell_hist'),
-                    \ 'scheme' : expand(g:dotvim_settings.cache_dir.'/.gosh_completions')
-                    \ }
-
-        inoremap <silent><expr><C-x><C-f>  neocomplcache#manual_filename_complete()
-
-        " Plugin key-mappings.
-        inoremap <silent><expr><C-g>     neocomplcache#undo_completion()
-        inoremap <silent><expr><C-l>     neocomplcache#complete_common_string()
-
-        " Recommended key-mappings.
-        " <CR>: close popup and save indent.
-        inoremap <silent><expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
-        " <TAB>: completion.
-        "inoremap <silent><expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-        " <C-h>, <BS>: close popup and delete backword char.
-        inoremap <silent><expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-        inoremap <silent><expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-        inoremap <silent><expr><C-y>  neocomplcache#close_popup()
-        inoremap <silent><expr><C-e>  neocomplcache#cancel_popup()
-
-        " Enable omni completion.
-        autocmd vimrc FileType css setlocal omnifunc=csscomplete#CompleteCSS
-        autocmd vimrc FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-        autocmd vimrc FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-        autocmd vimrc FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-        if neobundle#is_installed("jedi-vim")
-            autocmd vimrc FileType python setlocal omnifunc=jedi#completions
-            let g:jedi#completions_enabled = 0
-            let g:jedi#auto_vim_configuration = 0 " 解决neocomplete下自动补第一个候选项的问题
-        else
-            autocmd vimrc FileType python setlocal omnifunc=pythoncomplete#Complete
-        endif
-
-        " Enable heavy omni completion.
-        if !exists('g:neocomplcache_force_omni_patterns')
-            let g:neocomplcache_force_omni_patterns = {}
-        endif
-        let g:neocomplcache_force_overwrite_completefunc = 1
-        let g:neocomplcache_force_omni_patterns.c =
-                    \ '[^.[:digit:] *\t]\%(\.\|->\)'
-        let g:neocomplcache_force_omni_patterns.cpp =
-                    \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-        let g:neocomplcache_force_omni_patterns.objc =
-                    \ '[^.[:digit:] *\t]\%(\.\|->\)'
-        let g:neocomplcache_force_omni_patterns.objcpp =
-                    \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-        let g:neocomplcache_force_omni_patterns.python =
-                    \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-    endif
-    " }}}
-
-    if neobundle#tap('neocomplete') || neobundle#tap('neocomplcache')
         " neoinclude.vim: 对include进行补全 {{{
         NeoBundleLazy 'Shougo/neoinclude.vim', {
                     \ 'on_i' : 1,
@@ -2135,8 +1879,6 @@ if s:is_plugin_group_enabled('navigation.autocomplete') "{{{
             let g:tmuxcomplete#trigger = ''
         endif
         " }}}
-
-        call neobundle#untap()
     endif
 endif
 "}}}
@@ -2200,14 +1942,14 @@ if s:is_plugin_group_enabled('scm') "{{{
     nnoremap <silent> [code]u :<C-U>VCSUpdate<CR>
     nnoremap <silent> [code]v :<C-U>VCSVimDiff<CR>
     " }}}
-    " vim-fugitive: GIT前端 {{{
-    NeoBundleLazy 'tpope/vim-fugitive'
-    if executable('git')
-        call neobundle#config('vim-fugitive', {
-                \ 'lazy' : 0,
-                \ })
-    endif
-    " }}}
+    " " vim-fugitive: GIT前端 {{{
+    " NeoBundleLazy 'tpope/vim-fugitive'
+    " if executable('git')
+    "     call neobundle#config('vim-fugitive', {
+    "             \ 'lazy' : 0,
+    "             \ })
+    " endif
+    " " }}}
 endif
 " }}}
 
@@ -2396,12 +2138,6 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
         autocmd vimrc FileType c,cpp,objc map <silent><buffer><LocalLeader>x <Plug>(operator-clang-format)
     endif
     " }}}
-    " " vim-cpplint: <F7>执行cpplint检查（要求PATH中能找到cpplint.py） {{{
-    " NeoBundleLazy 'funorpain/vim-cpplint', {
-    "             \ 'filetyhpes' : ['c', 'cpp'],
-    "             \ 'external_commands' : 'cpplint.py',
-    "             \ }
-    " " }}}
     " wandbox-vim: 在http://melpon.org/wandbox/上运行当前缓冲区的C++代码 {{{
     NeoBundleLazy 'rhysd/wandbox-vim', {
                 \ 'on_cmd' : [
@@ -2477,12 +2213,6 @@ if s:is_plugin_group_enabled('development.python') "{{{
     NeoBundleLazy 'hynek/vim-python-pep8-indent', {
                 \ 'on_ft' : ['python', 'python3'],
                 \ }
-    " vim-bundle-mako: python的mako模板支持 {{{
-    NeoBundleLazy 'sophacles/vim-bundle-mako', {
-                \ 'on_ft' : ['mako'],
-                \ 'on_path' : ['.*\.mako'],
-                \ }
-    " }}}
 
     " SimpylFold: python语法折叠 {{{
     NeoBundleLazy 'tmhedberg/SimpylFold', {
@@ -2569,7 +2299,7 @@ if s:is_plugin_group_enabled('development.csharp') "{{{
 endif
 " }}}
 
-if s:is_plugin_group_enabled('development.viml') "{{{ VimimL，Vim的编程语言
+if s:is_plugin_group_enabled('development.viml') "{{{ VimL，Vim的编程语言
 endif
 " }}}
 
@@ -2597,6 +2327,14 @@ if s:is_plugin_group_enabled('development.web') "{{{ 前端开发
                 \ 'on_path': '\.\(htm\|html\|jinja2\|j2\|jinja\)$',
                 \ }
     " }}}
+
+    " vim-bundle-mako: python的mako模板支持 {{{
+    NeoBundleLazy 'sophacles/vim-bundle-mako', {
+                \ 'on_ft' : ['mako'],
+                \ 'on_path' : ['.*\.mako'],
+                \ }
+    " }}}
+
     " javascript-libraries-syntax.vim: Javascript语法高亮 {{{
     NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {
                 \ 'on_ft' : ['javascript', 'js'],
@@ -2726,11 +2464,6 @@ if s:is_plugin_group_enabled('development.shell') "{{{
                 \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
-    " vimshell-ssh: 在vimshell中iexe ssh连接服务器 {{{
-    NeoBundleLazy 'ujihisa/vimshell-ssh', {
-                \ 'on_ft' : ['vimshell'],
-                \ }
-    " }}}
 endif
 " }}}
 
@@ -2754,32 +2487,16 @@ if s:is_plugin_group_enabled('doc') "{{{ 文档编写，如OrgMode、AsciiDoc等
         endif
     endfor
     " }}}
-    " vim-orgmode: 对emacs的org文件的支持 {{{
-    NeoBundleLazy 'jceb/vim-orgmode', {
-                \ 'depends' : [
-                \   'NrrwRgn',
-                \   'speeddating.vim',
-                \ ],
-                \ 'on_ft' : ['org'],
-                \ }
-    autocmd vimrc BufRead,BufNewFile *.org setf org
-    " }}}
-    " timl: VimL编写的Clojure语言 {{{
-    NeoBundleLazy 'tpope/timl', {
-                \ 'on_ft' : ['timl'],
-                \ 'on_path' : ['.*\.tim\?'],
-                \ 'on_cmd' : [
-                \     'TLrepl', 'TLscratch', 'TLcopen',
-                \     { 'name' : 'TLinspect', 'complete' : 'expression' },
-                \     { 'name' : 'TLeval', 'complete' : 'customlist,timl#interactive#input_complete' },
-                \     { 'name' : 'TLsource', 'complete' : 'file' },
-                \ ],
-                \ }
-    if has('win32') && !exists('$APPCACHE')
-        " 设置缓存目录
-        let $APPCACHE=s:get_cache_dir('timl')
-    endif
-    " }}}
+    " " vim-orgmode: 对emacs的org文件的支持 {{{
+    " NeoBundleLazy 'jceb/vim-orgmode', {
+    "             \ 'depends' : [
+    "             \   'NrrwRgn',
+    "             \   'speeddating.vim',
+    "             \ ],
+    "             \ 'on_ft' : ['org'],
+    "             \ }
+    " autocmd vimrc BufRead,BufNewFile *.org setf org
+    " " }}}
     " vim-asciidoc: AsciiDoc的语法高亮 {{{
     NeoBundleLazy 'asciidoc/vim-asciidoc', {
                 \ 'on_ft' : ['asciidoc'],
@@ -2790,22 +2507,6 @@ if s:is_plugin_group_enabled('doc') "{{{ 文档编写，如OrgMode、AsciiDoc等
     "             \ 'on_ft' : ['markdown'],
     "             \ }
     " " }}}
-    " vim-taskwarrior: 支持TaskWarrior {{{
-    NeoBundleLazy 'blindFS/vim-taskwarrior'
-    if executable('task')
-        call neobundle#config('vim-taskwarrior', {
-                \ 'on_cmd' : [
-                \     { 'name': 'TW', 'complete':'customlist,taskwarrior#complete#TW' },
-                \     'TWReportInfo', 'TWDeleteCompleted',
-                \     'TWEditTaskrc', 'TWEditVitrc', 'TWEditTaskopenrc',
-                \     'TWHistory', 'TWHistoryClear',
-                \     'TWBookmark', 'TWBookmarkClear',
-                \     'TWUndo',
-                \ ],
-                \ })
-        let g:task_rc_override = 'rc.defaultheight=0'
-    endif
-    " }}}
     " wmgraphviz.vim: 提供对Graphviz dot的支持，包括编译、snippet等 {{{
     NeoBundleLazy 'wannesm/wmgraphviz.vim', {
                 \ 'on_ft' : 'dot',
@@ -2834,16 +2535,6 @@ if s:is_plugin_group_enabled('syntax') "{{{ 为一些文件提供语法高亮
                 \ 'on_ft' : ['wps'],
                 \ }
     autocmd vimrc BufRead,BufNewFile *.wps,*.sbs,*.fms setf wps
-    " }}}
-    " lbdbq: 支持lbdb {{{
-    NeoBundleLazy 'lbdbq', {
-                \ 'on_map' : ['<LocalLeader>lb'],
-                \ }
-    " }}}
-    " gprof.vim: 对gprof文件提供语法高亮 {{{
-    NeoBundleLazy 'gprof.vim', {
-                \ 'on_ft' : ['gprof'],
-                \ }
     " }}}
     " po.vim: 用于编辑PO语言包文件。 {{{
     NeoBundleLazy 'po.vim', {
@@ -3039,7 +2730,7 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         call neobundle#untap()
     endif
     " }}}
-    " Yggdroot/indentLine: 以竖线标记各缩进块 {{{
+    " indentLine: 以竖线标记各缩进块 {{{
     NeoBundleLazy 'Yggdroot/indentLine'
 
     " gvim下经常出现一个空格占两个字符的宽度
@@ -3081,26 +2772,10 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         " let g:indentLine_leadingSpaceChar = iconv(nr2char(0x02F0，1), "utf-8", &encoding) " '?'
     endif
     " }}}
-    " " vim-indent-guides: 标记出各缩进块 {{{
-    " NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
-    "             \ 'on_cmd':['IndentGuidesToggle','IndentGuidesEnable','IndentGuidesDisable'],
-    "             \ 'on_map':['<Plug>IndentGuides'],
-    "             \ }
-    " let g:indent_guides_default_mapping = 0
-    " let g:indent_guides_auto_colors = 0
-    " let g:indent_guides_start_level = 2
-    " let g:indent_guides_guide_size = 1
-    " autocmd vimrc VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#073642 ctermbg=0
-    " autocmd vimrc VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#03303c ctermbg=0
-    " autocmd vimrc filetype python :IndentGuidesEnable
-    " " }}}
 endif
 " }}}
 
 if s:is_plugin_group_enabled('misc') "{{{
-    " " LargeFile: 在打开大文件时，禁用语法高亮以提供打开速度 {{{
-    " NeoBundle 'LargeFile'
-    " " }}}
     " vim-hugefile: 打开大文件时，禁用一些功能，提供打开速度 {{{
     NeoBundle 'mhinz/vim-hugefile'
     " let g:hugefile_trigger_size = 2 " MiB
@@ -3139,12 +2814,6 @@ if s:is_plugin_group_enabled('misc') "{{{
     nnoremap <silent> [unite]ec :<C-u>VimFiler<CR>
     nnoremap <silent> [unite]eb :<C-u>VimFiler <C-R>=expand("%:p:h")<CR><CR>
     " }}}
-    " " tpope/vim-characterize: ga会显示当前字符的更多信息 {{{
-    " NeoBundleLazy 'tpope/vim-characterize', {
-    "             \     'on_map' : ['<Plug>'],
-    "             \ }
-    " nmap <silent> ga <Plug>(characterize)
-    " " }}}
     " unicode.vim: ga会显示当前字符的更多信息，<C-X><C-G>/<C-X><C-Z>进行补全 {{{
     NeoBundleLazy 'chrisbra/unicode.vim', {
                 \ 'on_map' : [
@@ -3186,9 +2855,6 @@ if s:is_plugin_group_enabled('misc') "{{{
     " AutoFenc: 自动判别文件的编码 {{{
     NeoBundle 'AutoFenc'
     " }}}
-    "" vim-sleuth: 自动检测文件的'shiftwidth'和'expandtab' {{{
-    "NeoBundle 'tpope/vim-sleuth'
-    "" }}}
     " vim-unimpaired: 增加]及[开头的一系列快捷键，方便进行tab等的切换 {{{
     NeoBundle'tpope/vim-unimpaired'
     " [a     :previous  ]a     :next   [A :first  ]A : last
@@ -3213,29 +2879,6 @@ if s:is_plugin_group_enabled('misc') "{{{
                 \ ],
                 \ }
     " }}}
-    " " vimple: :View查看ex命令输出等辅助功能 {{{
-    " NeoBundleLazy 'dahu/vimple', {
-    "             \ 'on_map': [
-    "             \     ['n',
-    "             \       '<plug>vimple_ident_search', '<plug>vimple_ident_search_forward',
-    "             \       '[I', ']I',
-    "             \       '<plug>vimple_spell_suggest', 'z=',
-    "             \       '<plug>vimple_filter',
-    "             \     ],
-    "             \ ],
-    "             \ 'on_cmd': [
-    "             \     'G', 'StringScanner', 'Mkvimrc', 'BufTypeDo',
-    "             \     'BufMatchDo', 'QFargs', 'QFargslocal', 'LLargs',
-    "             \     'LLargslocal', 'QFbufs', 'LLbufs', 'QFdo',
-    "             \     'LLdo', 'Filter',
-    "             \     {'name': 'ReadIntoBuffer', 'complete': 'file'},
-    "             \     {'name': 'View', 'complete': 'command'},
-    "             \     {'name': 'ViewFT', 'complete': 'command'},
-    "             \     {'name': 'ViewExpr', 'complete': 'command'},
-    "             \     {'name': 'ViewSys', 'complete': 'command'},
-    "             \     'Collect', 'GCollect', 'Silently',
-    "             \ ]}
-    " " }}}
 endif
 " }}}
 
