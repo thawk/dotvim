@@ -737,18 +737,18 @@ nnoremap [tag] <Nop>
 nmap <C-\><C-\> [tag]
 " nnoremap [tag] <C-\>
 
-nnoremap [unite-tag] <Nop>
-nmap <C-\> [unite-tag]
-
-nnoremap [ctrlsf] <Nop>
-vnoremap [ctrlsf] <Nop>
-nmap <Leader>s [ctrlsf]
-vmap <Leader>s [ctrlsf]
-
-nnoremap [grep] <Nop>
-vnoremap [grep] <Nop>
-nmap <Leader>g [grep]
-vmap <Leader>g [grep]
+" nnoremap [unite-tag] <Nop>
+" nmap <C-\> [unite-tag]
+"
+" nnoremap [ctrlsf] <Nop>
+" vnoremap [ctrlsf] <Nop>
+" nmap <Leader>s [ctrlsf]
+" vmap <Leader>s [ctrlsf]
+"
+" nnoremap [grep] <Nop>
+" vnoremap [grep] <Nop>
+" nmap <Leader>g [grep]
+" vmap <Leader>g [grep]
 
 nnoremap [code] <Nop>
 nmap <Leader>c [code]
@@ -955,15 +955,17 @@ if s:is_plugin_group_enabled('unite') "{{{
                 \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
-    " unite-tag: 跳转到光标下的tag。通过\fT访问 {{{
-    NeoBundleLazy 'tsukkee/unite-tag', {
+    " unite-unicode: 根据unicode名称找字符 {{{
+    NeoBundleLazy 'MaryHal/unite-unicode', {
                 \ 'on_source': ['unite.vim'],
                 \ }
+    nnoremap <silent> <Leader>iu :<C-u>Unite unicode<CR>
     " }}}
     " unite-colorscheme: 列出所有配色方案 {{{
     NeoBundleLazy 'ujihisa/unite-colorscheme', {
                 \ 'on_source': ['unite.vim'],
                 \ }
+    nnoremap <silent> <Leader>Ts :<C-u>Unite colorscheme<CR>
     " }}}
     " unite-quickfix: 过滤quickfix窗口（如在编译结果中查找） {{{
     NeoBundleLazy 'osyo-manga/unite-quickfix', {
@@ -1001,19 +1003,20 @@ if s:is_plugin_group_enabled('unite') "{{{
             let g:unite_source_gtags_enable_nearness = 1
         endif
 
-        nnoremap <silent> [unite-tag]] :<C-u>Unite -immediately gtags/context<CR>
-        nnoremap <silent> [unite-tag]<C-]> :<C-u>Unite -immediately gtags/context<CR>
-        nnoremap <silent> [unite-tag]s :<C-u>Unite -immediately gtags/ref<CR>
-        nnoremap <silent> [unite-tag]S :<C-u>Unite gtags/completion -default-action=list_refereces<CR>
-        nnoremap <silent> [unite-tag]g :<C-u>Unite -immediately gtags/def<CR>
-        nnoremap <silent> [unite-tag]G :<C-u>Unite gtags/completion -default-action=list_definitions<CR>
-        nnoremap <silent> [unite-tag]t :<C-u>UniteWithCursorWord -immediately gtags/grep<CR>
-        nnoremap <silent> [unite-tag]T :<C-u>Unite gtags/grep:
-        nnoremap <silent> [unite-tag]e :<C-u>UniteWithCursorWord -immediately gtags/grep<CR>
-        nnoremap <silent> [unite-tag]E :<C-u>Unite gtags/grep:
-        nnoremap <silent> [unite-tag]f :<C-u>Unite gtags/file<CR>
-        nnoremap <silent> [unite-tag]p :<C-u>UniteWithCursorWord -immediately gtags/path<CR>
-        nnoremap <silent> [unite-tag]P :<C-u>Unite gtags/path::<CR>
+        autocmd vimrc FileType c,cpp,java,php
+                    \ nnoremap <silent><buffer> <Leader>s] :<C-u>Unite -immediately gtags/context<CR>
+                    \ | nnoremap <silent><buffer> <Leader>s<C-]> :<C-u>Unite -immediately gtags/context<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sr :<C-u>Unite -immediately gtags/ref<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sR :<C-u>Unite gtags/completion -default-action=list_refereces<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sd :<C-u>Unite -immediately gtags/def<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sD :<C-u>Unite gtags/completion -default-action=list_definitions<CR>
+                    \ | " nnoremapap <silent><buffer> <Leader>st :<C-u>UniteWithCursorWord -immediately gtags/grep<CR>
+                    \ | " nnoremapap <silent><buffer> <Leader>sT :<C-u>Unite gtags/grep:
+                    \ | " nnoremapap <silent><buffer> <Leader>se :<C-u>UniteWithCursorWord -immediately gtags/grep<CR>
+                    \ | " nnoremapap <silent><buffer> <Leader>sE :<C-u>Unite gtags/grep:
+                    \ | nnoremap <silent><buffer> <Leader>s/ :<C-u>Unite gtags/file<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sp :<C-u>UniteWithCursorWord -immediately gtags/path<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sP :<C-u>Unite gtags/path::<CR>
     endif
     " }}}
     " tabpagebuffer.vim: 记录一个tab中包含的buffer {{{
@@ -1510,19 +1513,19 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
     " let g:ack_use_dispatch = 1
 
     " 在项目目录下找，可能退化为当前目录
-    vmap <silent> [grep]g :<C-U>ProjectRootExe Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
-    nmap <silent> [grep]g :<C-U>ProjectRootExe Ack! <C-R>=expand('<cword>')<CR><CR>
-    nmap <silent> [grep]G :<C-U>ProjectRootExe Ack!<SPACE>
+    vmap <silent> <Leader>ss :<C-U>ProjectRootExe Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
+    nmap <silent> <Leader>ss :<C-U>ProjectRootExe Ack! <C-R>=expand('<cword>')<CR><CR>
+    nmap <silent> <Leader>sS :<C-U>ProjectRootExe Ack!<SPACE>
 
     " 在当前文件目录下找
-    vmap <silent> [grep]b :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
-    nmap <silent> [grep]b :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=expand('%:p:h')<CR><CR>
-    nmap <silent> [grep]B :<C-U>BufferDirExe Ack!<SPACE>
+    vmap <silent> <Leader>sb :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
+    nmap <silent> <Leader>sb :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=expand('%:p:h')<CR><CR>
+    nmap <silent> <Leader>sB :<C-U>BufferDirExe Ack!<SPACE>
 
     " 在当前目录下找
-    vmap <silent> [grep]c :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
-    nmap <silent> [grep]c :<C-U>Ack! <C-R>=expand('<cword>')<CR><CR>
-    nmap <silent> [grep]C :<C-U>Ack!<SPACE>
+    vmap <silent> <Leader>sc :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
+    nmap <silent> <Leader>sc :<C-U>Ack! <C-R>=expand('<cword>')<CR><CR>
+    nmap <silent> <Leader>sC :<C-U>Ack!<SPACE>
     "}}}
     " ctrlsf.vim: 快速查找及编辑 {{{
     NeoBundleLazy 'dyng/ctrlsf.vim', {
@@ -1539,24 +1542,24 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
     let g:ctrlsf_default_root = 'cwd'
 
     " 在project下找
-    vmap <silent> [ctrlsf]s :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=projectroot#guess()<CR><CR>
-    nmap <silent> [ctrlsf]s :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=projectroot#guess()<CR><CR>
-    nmap <silent> [ctrlsf]S :<C-U>ProjectRootExe CtrlSF -regex<SPACE>
+    vmap <silent> <Leader>sfp :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=projectroot#guess()<CR><CR>
+    nmap <silent> <Leader>sfp :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=projectroot#guess()<CR><CR>
+    nmap <silent> <Leader>sfP :<C-U>ProjectRootExe CtrlSF -regex<SPACE>
 
     " 在当前文件目录下找
-    vmap <silent> [ctrlsf]b :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
-    nmap <silent> [ctrlsf]b :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=expand('%:p:h')<CR><CR>
-    nmap <silent> [ctrlsf]B :<C-U>ProjectRootExe CtrlSF<SPACE>
+    vmap <silent> <Leader>sfb :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
+    nmap <silent> <Leader>sfb :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=expand('%:p:h')<CR><CR>
+    nmap <silent> <Leader>sfB :<C-U>ProjectRootExe CtrlSF<SPACE>
 
     " 在当前目录下找
-    vmap <silent> [ctrlsf]c :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=getcwd()<CR><CR>
-    nmap <silent> [ctrlsf]c :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=getcwd()<CR><CR>
-    nmap <silent> [ctrlsf]C :<C-U>CtrlSF<SPACE>
+    vmap <silent> <Leader>sfc :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=getcwd()<CR><CR>
+    nmap <silent> <Leader>sfc :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=getcwd()<CR><CR>
+    nmap <silent> <Leader>sfC :<C-U>CtrlSF<SPACE>
 
-    nmap <silent> [ctrlsf]p <Plug>CtrlSFPwordPath
-    nmap <silent> [ctrlsf]P <Plug>CtrlSFPwordExec
-    nnoremap <silent> [ctrlsf]o :CtrlSFOpen<CR>
-    nnoremap <silent> [ctrlsf]t :CtrlSFToggle<CR>
+    nmap <silent> <Leader>sfR <Plug>CtrlSFPwordPath
+    nmap <silent> <Leader>sfr <Plug>CtrlSFPwordExec
+    nnoremap <silent> <Leader>sfo :CtrlSFOpen<CR>
+    nnoremap <silent> <Leader>sft :CtrlSFToggle<CR>
     " }}}
     " Mark--Karkat: 可同时标记多个mark。\M显隐所有，\N清除所有Mark。\m标识当前word {{{
     NeoBundleLazy 'vernonrj/Mark--Karkat'
@@ -2460,18 +2463,12 @@ if s:is_plugin_group_enabled('development.python') "{{{
         let g:jedi#show_call_signatures = 2 " 在cmdline显示函数签名
         let g:jedi#popup_on_dot = 1
 
-        let g:jedi#goto_command = "<leader>d"
-        let g:jedi#goto_assignments_command = ""
+        let g:jedi#goto_command = "<Leader>s]"
+        let g:jedi#goto_assignments_command = "<Leader>sd"
         let g:jedi#completions_command = ""
-        let g:jedi#call_signatures_command = "<leader>n"
-        let g:jedi#usages_command = "<leader>n"
-        let g:jedi#rename_command = "<leader>r"
+        let g:jedi#usages_command = "<Leader>sr"
+        let g:jedi#rename_command = "<Leader>rr"
         let g:jedi#documentation_command = "K"
-
-        autocmd vimrc FileType python
-                    \ nmap <silent><buffer> [tag]] <leader>d
-                    \ | nmap <silent><buffer> [tag]g <leader>d
-                    \ | nmap <silent><buffer> [tag]s <leader>n
 
         call neobundle#untap()
     endif
@@ -3154,7 +3151,7 @@ if s:is_plugin_group_enabled('misc') "{{{
                 \   ['nxo','<Plug>'],
                 \   ['nx','<F4>'],
                 \   ['i', '<C-X><C-G>', '<C-X><C-Z>'],
-                \   ['n','<leader>un'],
+                \   ['n','<Leader>un'],
                 \ ],
                 \ 'on_cmd' : ['UnicodeName', 'Digraphs', 'SearchUnicode', 'UnicodeTable', 'DownloadUnicode'],
                 \ 'on_func' : ['unicode#FindDigraphBy', 'unicode#FindUnicodeBy', 'unicode#Digraph', 'unicode#Download', 'unicode#UnicodeName'],

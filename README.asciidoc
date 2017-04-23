@@ -96,6 +96,159 @@ vim的基本配置和所要安装的插件信息都存放在++vimrc++文件中�
 :NeoBundleInstall
 ----
 
+== 快捷键
+
+=== 搜索和符号tag `<Leader> s`
+
+.CtrlSF
+
+* <Leader>sfp : 项目目录下
+* <Leader>sfb : 当前文件目录下
+* <Leader>sfc : 当前目录下
+
+.Grep
+
+* <Leader>/ : 在项目内进行查找
+
+* <Leader>sp : 项目目录下
+* <Leader>sb : 当前文件目录下
+* <Leader>sc : 当前目录下
+
+.Symbol
+
+* <Leader>s] : context
+* <Leader>sr : 引用
+* <Leader>sd : 定义
+* <Leader>sn ：路径和文件名
+* <Leader>s/ ：当前文件中的符号
+
+=== 文档和帮助 `<Leader>h`
+
+* <Leader>hdb : describe bindings
+* <Leader>hdc : describe current character
+* <Leader>hm : 查找帮助
+
+=== Resume/Rename/Registers `<Leader>r`
+
+* <Leader>rl : 重新打开最近的Unite窗口
+
+* <Leader>rr : 将光标下的符号改名（jedi-vim）
+* <Leader>re : 列出kill-ring
+* <Leader>rm : 列出register
+* <Leader>ry : 列出kill-ring
+
+=== 项目 `<Leader>p`
+
+* <Leader>p' : 在项目目录下打开shell
+* <Leader>pf : 在项目目录下找文件
+* <Leader>pd : 在项目目录下找目录
+* <Leader>pD : 在项目目录下打开文件浏览器
+
+* <Leader>pg : 找项目中的tag
+* <Leader>p<C-g> : 更新tags
+
+* <Leader>pc : 编译构建
+* <Leader>pt : 在项目目录下打开目录树
+* <Leader>pT : 执行测试
+
+// === 编译 `<Leader>c`
+//
+// * <Leader>cc : use helm-make via projectile
+// * <Leader>cC : compile
+// * <Leader>cd : close compilation window
+// * <Leader>ck : kill compilation
+// * <Leader>cm : helm-make
+// * <Leader>cr : recompile
+
+=== 缓冲区 `<Leader>b`
+
+* <Leader>bb : 选择并切换缓冲区
+* <Leader>bd : 删除当前缓冲区
+* <Leader>bn : :bnext
+* <Leader>bp : :bprevious
+* <Leader>bR : :e
+* <Leader>bs : 打开或切换到scratch
+
+=== 文件 `<Leader>f`
+
+* <Leader>fb : 打开书签
+* <Leader>ff : 在当前文件目录找文件
+* <Leader>fs : 保存当前文件
+* <Leader>fS : 保存所有文件
+* <Leader>fr : 打开recent文件
+* <Leader>fl : 在当前文件目录找文件（纯文本）
+* <Leader>ft : 打开目录树
+* <Leader>fy : 显示当前文件的全路径
+
+=== 文本Text相关 `<Leader>x`
+
+* <Leader>xa : 对齐文本
+
+* <Leader>xtc : 交换两个字符
+* <Leader>xtw : 交换两个word
+* <Leader>xtl : 交换两行
+
+* <Leader>xu : 小写
+* <Leader>xU : 大写
+
+=== 插入内容 `<Leader>i`
+
+* <Leader>iu : 搜索并插入Unicode字符
+
+=== 切换开关 `<Leader>t`
+
+* <Leader>ti : 是否高亮显示indentation guide
+* <Leader>Ts : 选择colorscheme
+
+=== 窗口 `<Leader>w`
+
+* <Leader><Tab> : 切换窗口中的buffer
+* <Leader>wW : 切换窗口
+
+=== 注释 `<Leader>;`
+
+* <Leader>; : 注释 operator
+* <Leader>;; : 注释当前行
+
+=== 错误处理 `<Leader>e`
+
+* <Leader>el : 切换Syntastic
+* <Leader>en : 下一个错误
+* <Leader>ep : 上一个错误
+
+=== vim配置文件 `<Leader>fe`
+
+* <Leader>fed : 打开vimrc文件
+* <Leader>feR : 重新载入vimrc文件
+
+=== 版本控制git/svn `<Leader>g`
+
+* <Leader>gb : blame
+* <Leader>gfh : 文件历史
+* <Leader>gh : 库历史
+* <Leader>gs : status
+* <Leader>gd : diff
+
+=== 退出 `<Leader>q`
+
+* <Leader>qq : :qa
+* <Leader>qQ : :qa!
+* <Leader>qs : :xa
+
+=== `<Leader>j`
+
+* <Leader>jd : 在当前窗口打开文件浏览器
+* <Leader>jD : 在另一窗口打开文件浏览器
+* <Leader>jl : <Plug>(easymotion-bd-jk)
+* <Leader>jw : <Plug>(easymotion-s2)
+
+=== 其它
+
+* <Leader>? : 列出可用的按键
+* <Leader>au : UndotreeToggle
+* <Leader>j= : 格式化整个文件（mzgg=G`z）
+
+
 == 小技巧：使用端口443代替22来通过SSH协议访问github
 
 If you can't access github via standard port 22, you can add these
