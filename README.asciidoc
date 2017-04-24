@@ -102,152 +102,264 @@ vim的基本配置和所要安装的插件信息都存放在++vimrc++文件中�
 
 .CtrlSF
 
-* <Leader>sfp : 项目目录下
-* <Leader>sfb : 当前文件目录下
-* <Leader>sfc : 当前目录下
+[options="header"]
+|===
+| 快捷键      | 用途                       | 所属插件
+| <Leader>sfp | 项目目录下CtrlSF           | ctrlsf.vim
+| <Leader>sfb | 当前文件目录下CtrlSF       | ctrlsf.vim
+| <Leader>sfc | 当前目录下CtrlSF           | ctrlsf.vim
+| <Leader>sfP | 项目目录下CtrlSF当前词     | ctrlsf.vim
+| <Leader>sfB | 当前文件目录下CtrlSF当前词 | ctrlsf.vim
+| <Leader>sfC | 当前目录下CtrlSF当前词     | ctrlsf.vim
+|===
 
 .Grep
 
-* <Leader>/ : 在项目内进行查找
-
-* <Leader>sp : 项目目录下
-* <Leader>sb : 当前文件目录下
-* <Leader>sc : 当前目录下
+[options="header"]
+|===
+| 快捷键     | 用途                         | 所属插件
+| <Leader>/  | 在项目目录下进行搜索         | ack.vim
+| <Leader>sp | 项目目录下进行搜索           | ack.vim
+| <Leader>sb | 当前文件目录下进行搜索       | ack.vim
+| <Leader>sc | 当前目录下进行搜索           | ack.vim
+| <Leader>sP | 项目目录下进行搜索当前词     | ack.vim
+| <Leader>sB | 当前文件目录下进行搜索当前词 | ack.vim
+| <Leader>sC | 当前目录下进行搜索当前词     | ack.vim
+|===
 
 .Symbol
 
-* <Leader>s] : context
-* <Leader>sr : 引用
-* <Leader>sd : 定义
-* <Leader>sn ：路径和文件名
-* <Leader>s/ ：当前文件中的符号
+[options="header"]
+|===
+| 快捷键     | 用途                               | 所属插件
+| <Leader>s] | 根据上下文进行跳转到定义或引用     | unite-gtags/jedi.vim
+| <Leader>sr | 跳转到引用                         | unite-gtags/jedi.vim
+| <Leader>sd | 跳转到定义                         | unite-gtags/jedi.vim
+| <Leader>sn | 查找项目中的路径和文件名           | unite-gtags
+| <Leader>sR | 跳转到当前词的引用                 | unite-gtags/jedi.vim
+| <Leader>sD | 跳转到当前词的定义                 | unite-gtags/jedi.vim
+| <Leader>sN | 查找项目中匹配当前词的路径和文件名 | unite-gtags
+| <Leader>s/ | 列出当前文件中的符号               | unite-gtags
+|===
 
 === 文档和帮助 `<Leader>h`
 
-* <Leader>hdb : describe bindings
-* <Leader>hdc : describe current character
-* <Leader>hm : 查找帮助
+[options="header"]
+|===
+| 快捷键      | 用途                       | 所属插件
+| <Leader>hdb | describe bindings          | unite.vim
+| <Leader>hdc | describe current character | unicode.vim
+| <Leader>hm  | 查找帮助                   | unite-help
+|===
 
 === Resume/Rename/Registers `<Leader>r`
 
-* <Leader>rl : 重新打开最近的Unite窗口
-
-* <Leader>rr : 将光标下的符号改名（jedi-vim）
-* <Leader>re : 列出kill-ring
-* <Leader>rm : 列出register
-* <Leader>ry : 列出kill-ring
+[options="header"]
+|===
+| 快捷键     | 用途                    | 所属插件
+| <Leader>rl | 重新打开最近的Unite窗口 | unite.vim
+| <Leader>rr | 将光标下的符号改名      | jedi.vim
+// | <Leader>re | 列出kill-ring           | neoyank.vim
+| <Leader>rm | 列出register            | unite.vim
+| <Leader>ry | 列出kill-ring           | neoyank.vim
+|===
 
 === 项目 `<Leader>p`
 
-* <Leader>p' : 在项目目录下打开shell
-* <Leader>pf : 在项目目录下找文件
-* <Leader>pd : 在项目目录下找目录
-* <Leader>pD : 在项目目录下打开文件浏览器
+[options="header"]
+|===
+| 快捷键         | 用途                       | 所属插件
+| <Leader>p'     | 在项目目录下打开shell      | vimshell
+| <Leader>pf     | 在项目目录下找文件         | unite.vim
+| <Leader>pd     | 在项目目录下找目录         | unite.vim
+| <Leader>pD     | 在项目目录下打开文件浏览器 | vimfiler
 
-* <Leader>pg : 找项目中的tag
-* <Leader>p<C-g> : 更新tags
+| <Leader>pg     | 找项目中的tag              | unite-gtags
+| <Leader>p<C-g> | 更新tags                   | gtags.vim
 
-* <Leader>pc : 编译构建
-* <Leader>pt : 在项目目录下打开目录树
-* <Leader>pT : 执行测试
+| <Leader>pc     | 编译构建                   | vim-dispatch
+| <Leader>pC     | Clean                      | vim-dispatch
+| <Leader>pt     | 在项目目录下打开目录树     | vimfiler
+| <Leader>pT     | 执行测试                   | vim-dispatch
+|===
 
 // === 编译 `<Leader>c`
 //
-// * <Leader>cc : use helm-make via projectile
-// * <Leader>cC : compile
-// * <Leader>cd : close compilation window
-// * <Leader>ck : kill compilation
-// * <Leader>cm : helm-make
-// * <Leader>cr : recompile
+// [options="header"]
+// |===
+// | 快捷键     | 用途                         | 所属插件
+// | <Leader>cc | use helm-make via projectile |
+// | <Leader>cC | compile                      |
+// | <Leader>cd | close compilation window     |
+// | <Leader>ck | kill compilation             |
+// | <Leader>cm | helm-make                    |
+// | <Leader>cr | recompile                    |
+// |===
 
 === 缓冲区 `<Leader>b`
 
-* <Leader>bb : 选择并切换缓冲区
-* <Leader>bd : 删除当前缓冲区
-* <Leader>bn : :bnext
-* <Leader>bp : :bprevious
-* <Leader>bR : :e
-* <Leader>bs : 打开或切换到scratch
+[options="header"]
+|===
+| 快捷键     | 用途                | 所属插件
+| <Leader>bb | 选择并切换缓冲区    | unite.vim
+| <Leader>bd | 删除当前缓冲区      | 内置
+| <Leader>bn | :bnext              | 内置
+| <Leader>bp | :bprevious          | 内置
+| <Leader>bR | :e                  | 内置
+| <Leader>bs | 打开或切换到scratch | scratch.vim
+|===
 
 === 文件 `<Leader>f`
 
-* <Leader>fb : 打开书签
-* <Leader>ff : 在当前文件目录找文件
-* <Leader>fs : 保存当前文件
-* <Leader>fS : 保存所有文件
-* <Leader>fr : 打开recent文件
-* <Leader>fl : 在当前文件目录找文件（纯文本）
-* <Leader>ft : 打开目录树
-* <Leader>fy : 显示当前文件的全路径
+[options="header"]
+|===
+| 快捷键     | 用途                           | 所属插件
+| <Leader>f` | 在当前文件目录打开shell        | vimshell
+| <Leader>fb | 打开书签                       | unite.vim
+| <Leader>ff | 在当前文件目录找文件           | unite.vim
+| <Leader>fs | 保存当前文件                   | 内置
+| <Leader>fS | 保存所有文件                   | 内置
+| <Leader>fr | 打开recent文件                 | neomru.vim
+// | <Leader>fl | 在当前文件目录找文件（纯文本） | unite.vim
+| <Leader>ft | 打开目录树                     | vimfiler
+| <Leader>fy | 显示当前文件的全路径           | 内置
+| <Leader>fo | 打开文件的大纲                 | unite-outline
+| <Leader>fO | 打开文件的Folding              | unite-fold
+| <Leader>f/ | 在当前文件中查找               | unite.vim
+|===
 
 === 文本Text相关 `<Leader>x`
 
-* <Leader>xa : 对齐文本
+[options="header"]
+|===
+| 快捷键      | 用途         | 所属插件
+| <Leader>xa  | 对齐文本     | vim-easy-align
 
-* <Leader>xtc : 交换两个字符
-* <Leader>xtw : 交换两个word
-* <Leader>xtl : 交换两行
-
-* <Leader>xu : 小写
-* <Leader>xU : 大写
+// | <Leader>xtc | 交换两个字符 | 内置
+// | <Leader>xtw | 交换两个word | 内置
+// | <Leader>xtl | 交换两行     | 内置
+|===
 
 === 插入内容 `<Leader>i`
 
-* <Leader>iu : 搜索并插入Unicode字符
+[options="header"]
+|===
+| 快捷键     | 用途                  | 所属插件
+| <Leader>iu | 搜索并插入Unicode字符 | unite-unicode
+|===
 
 === 切换开关 `<Leader>t`
 
-* <Leader>ti : 是否高亮显示indentation guide
-* <Leader>Ts : 选择colorscheme
+[options="header"]
+|===
+| 快捷键      | 用途                          | 所属插件
+| <Leader>ti  | 是否高亮显示indentation guide | indentLine
+| <Leader>Ts  | 选择colorscheme               | unite-colorscheme
+// | <Leader>tha | 切换高亮当前词                |
+|===
 
 === 窗口 `<Leader>w`
 
-* <Leader><Tab> : 切换窗口中的buffer
-* <Leader>wW : 切换窗口
+[options="header"]
+|===
+| 快捷键        | 用途                     | 所属插件
+| <Leader><Tab> | 当前窗口切换为上一buffer | 内置
+| <Leader>ww    | 切换到下一个窗口         | 内置
+// | <Leader>wW    | 选择并切换窗口           |
+|===
 
-=== 注释 `<Leader>;`
-
-* <Leader>; : 注释 operator
-* <Leader>;; : 注释当前行
+// === 注释 `<Leader>;`
+//
+// [options="header"]
+// |===
+// | 快捷键     | 用途          | 所属插件
+// | <Leader>;  | 注释 operator | tcomment_vim
+// | <Leader>;; | 注释当前行    | tcomment_vim
+// |===
 
 === 错误处理 `<Leader>e`
 
-* <Leader>el : 切换Syntastic
-* <Leader>en : 下一个错误
-* <Leader>ep : 上一个错误
+[options="header"]
+|===
+| 快捷键     | 用途          | 所属插件
+// | <Leader>el | 切换Syntastic | syntastic
+| <Leader>en | 下一个错误    | 内置
+| <Leader>ep | 上一个错误    | 内置
+|===
 
-=== vim配置文件 `<Leader>fe`
-
-* <Leader>fed : 打开vimrc文件
-* <Leader>feR : 重新载入vimrc文件
+// === vim配置文件 `<Leader>fe`
+//
+// [options="header"]
+// |===
+// | 快捷键      | 用途              | 所属插件
+// | <Leader>fed | 打开vimrc文件     | 内置
+// | <Leader>feR | 重新载入vimrc文件 | 内置
+// |===
 
 === 版本控制git/svn `<Leader>g`
 
-* <Leader>gb : blame
-* <Leader>gfh : 文件历史
-* <Leader>gh : 库历史
-* <Leader>gs : status
-* <Leader>gd : diff
+[options="header"]
+|===
+| 快捷键      | 用途     | 所属插件
+| <Leader>gb  | blame    | vcscommand.vim
+| <Leader>gh  | 文件历史 | vcscommand.vim
+| <Leader>gs  | status   | vcscommand.vim
+| <Leader>gd  | diff     | vcscommand.vim
+|===
 
 === 退出 `<Leader>q`
 
-* <Leader>qq : :qa
-* <Leader>qQ : :qa!
-* <Leader>qs : :xa
+[options="header"]
+|===
+| 快捷键     | 用途 | 所属插件
+| <Leader>qq | :qa  | 内置
+| <Leader>qQ | :qa! | 内置
+| <Leader>qs | :xa  | 内置
+|===
 
-=== `<Leader>j`
+=== 跳转 `<Leader>j`
 
-* <Leader>jd : 在当前窗口打开文件浏览器
-* <Leader>jD : 在另一窗口打开文件浏览器
-* <Leader>jl : <Plug>(easymotion-bd-jk)
-* <Leader>jw : <Plug>(easymotion-s2)
+[options="header"]
+|===
+| 快捷键     | 用途                     | 所属插件
+| <Leader>jd | 在当前窗口打开文件浏览器 | vimfiler
+| <Leader>jD | 在另一窗口打开文件浏览器 | vimfiler
+| <Leader>jl | <Plug>(easymotion-bd-jk) | vim-easymotion
+| <Leader>jw | <Plug>(easymotion-s2)    | vim-easymotion
+|===
+
+=== 代码跳转 `<Leader>mg`
+
+[options="header"]
+|===
+| 快捷键      | 用途               | 所属插件
+| <Leader>mga | 在.h和.cpp间切换   | vim-fswitch
+// | <Leader>mgt | 切换到单元测试文件 |
+|===
+
+=== REPL `<Leader>ms`
+
+小写保持焦点在当前缓冲区，大写切换到REPL窗口。
+
+[options="header"]
+|===
+| 快捷键      | 用途           | 所属插件
+| <Leader>msb | 发送整个缓冲区 | vimshell/slimux
+| <Leader>msl | 发送当前行     | vimshell/slimux
+| <Leader>msr | 发送选中内容   | vimshell/slimux
+| <Leader>msq | 关闭           | vimshell/slimux
+| <Leader>mse | 重复上一次     | slimux
+|===
 
 === 其它
 
-* <Leader>? : 列出可用的按键
-* <Leader>au : UndotreeToggle
-* <Leader>j= : 格式化整个文件（mzgg=G`z）
-
+[options="header"]
+|===
+| 快捷键     | 用途                       | 所属插件
+| <Leader>?  | 列出可用的按键             | unite.vim
+| <Leader>au | UndotreeToggle             | undotree
+| <Leader>j= | 格式化整个文件（mzgg=G`z） | 内置
+|===
 
 == 小技巧：使用端口443代替22来通过SSH协议访问github
 
