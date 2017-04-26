@@ -183,18 +183,18 @@ vim的基本配置和所要安装的插件信息都存放在++vimrc++文件中�
 | <Leader>pT     | 执行测试                   | vim-dispatch
 |===
 
-// === 编译 `<Leader>c`
-//
-// [options="header"]
-// |===
-// | 快捷键     | 用途                         | 所属插件
-// | <Leader>cc | use helm-make via projectile |
+=== 编译 `<Leader>c`
+
+[options="header"]
+|===
+| 快捷键     | 用途 | 所属插件
+| <Leader>cc | 编译 |
 // | <Leader>cC | compile                      |
 // | <Leader>cd | close compilation window     |
 // | <Leader>ck | kill compilation             |
 // | <Leader>cm | helm-make                    |
 // | <Leader>cr | recompile                    |
-// |===
+|===
 
 === 缓冲区 `<Leader>b`
 

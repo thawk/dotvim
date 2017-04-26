@@ -3047,6 +3047,7 @@ nnoremap zM zM:echo 'foldlevel: ' . &foldlevel<CR>
 " 一些方便编译的快捷键 {{{
 if exists(":Make")  " vim-dispatch提供了异步的make
     nnoremap <silent> <Leader>pc :<C-U>Make<CR>
+    nnoremap <silent> <Leader>cc :<C-U>Make<CR>
     nnoremap <silent> <Leader>pT :<C-U>Make unittest<CR>
     nnoremap <silent> <Leader>pC :<C-U>Make clean<CR>
     nnoremap <silent> [make]s :<C-U>Make stage<CR>
