@@ -2181,9 +2181,9 @@ if s:is_plugin_group_enabled('development.python') "{{{
         let g:jedi#popup_on_dot = 1
 
         let g:jedi#goto_command = "<Leader>s]"
-        let g:jedi#goto_assignments_command = "<Leader>sd"
+        let g:jedi#goto_assignments_command = "<Leader>sD"
         let g:jedi#completions_command = ""
-        let g:jedi#usages_command = "<Leader>sr"
+        let g:jedi#usages_command = "<Leader>sR"
         let g:jedi#rename_command = "<Leader>rr"
         let g:jedi#documentation_command = "K"
 
