@@ -1518,6 +1518,8 @@ if s:is_plugin_group_enabled('navigation.jumping') "{{{
 
     " Switch to the file and load it into the current window >
     nmap <silent> <Leader>mga :FSHere<CR>
+    " Switch to the file and load it into a new window split on the right >
+    nmap <silent> <Leader>mgA :FSSplitRight<CR>
     " Switch to the file and load it into the window on the right >
     nmap <silent> <Leader>mgl :FSRight<CR>
     " Switch to the file and load it into a new window split on the right >
@@ -2343,15 +2345,15 @@ if s:is_plugin_group_enabled('development.shell') "{{{
                     \     { 'name' : 'ConqueTermTab', 'complete' : 'shellcmd' },
                     \ ],
                     \ })
-        " ,r - run
-        " ,c - continue
-        " ,n - next
-        " ,s - step
-        " ,p - print 光标下的标识符
-        " ,b - toggle breakpoint
-        " ,f - finish
-        " ,t - backtrace
-        let g:ConqueGdb_Leader = ','
+        " ,dr - run
+        " ,dc - continue
+        " ,dn - next
+        " ,ds - step
+        " ,dp - print 光标下的标识符
+        " ,db - toggle breakpoint
+        " ,df - finish
+        " ,dt - backtrace
+        let g:ConqueGdb_Leader = ',d'
     endif
     " }}}
     " vimshell: Shell，:VimShell {{{

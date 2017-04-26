@@ -98,7 +98,9 @@ vim的基本配置和所要安装的插件信息都存放在++vimrc++文件中�
 
 == 快捷键
 
-=== 搜索和符号tag `<Leader> s`
+参照 link:http://spacemacs.org/[spacemacs] 风格进行快捷键设置，将快捷键按功能分组而不是按插件分组，更便于记忆。
+
+=== 搜索和符号查找 `<Leader>s`
 
 .CtrlSF
 
@@ -183,32 +185,6 @@ vim的基本配置和所要安装的插件信息都存放在++vimrc++文件中�
 | <Leader>pT     | 执行测试                   | vim-dispatch
 |===
 
-=== 编译 `<Leader>c`
-
-[options="header"]
-|===
-| 快捷键     | 用途 | 所属插件
-| <Leader>cc | 编译 |
-// | <Leader>cC | compile                      |
-// | <Leader>cd | close compilation window     |
-// | <Leader>ck | kill compilation             |
-// | <Leader>cm | helm-make                    |
-// | <Leader>cr | recompile                    |
-|===
-
-=== 缓冲区 `<Leader>b`
-
-[options="header"]
-|===
-| 快捷键     | 用途                | 所属插件
-| <Leader>bb | 选择并切换缓冲区    | unite.vim
-| <Leader>bd | 删除当前缓冲区      | 内置
-| <Leader>bn | :bnext              | 内置
-| <Leader>bp | :bprevious          | 内置
-| <Leader>bR | :e                  | 内置
-| <Leader>bs | 打开或切换到scratch | scratch.vim
-|===
-
 === 文件 `<Leader>f`
 
 [options="header"]
@@ -226,6 +202,48 @@ vim的基本配置和所要安装的插件信息都存放在++vimrc++文件中�
 | <Leader>fo | 打开文件的大纲                 | unite-outline
 | <Leader>fO | 打开文件的Folding              | unite-fold
 | <Leader>f/ | 在当前文件中查找               | unite.vim
+|===
+
+=== 缓冲区 `<Leader>b`
+
+[options="header"]
+|===
+| 快捷键     | 用途                | 所属插件
+| <Leader>bb | 选择并切换缓冲区    | unite.vim
+| <Leader>bd | 删除当前缓冲区      | 内置
+| <Leader>bn | :bnext              | 内置
+| <Leader>bp | :bprevious          | 内置
+| <Leader>bR | :e                  | 内置
+| <Leader>bs | 打开或切换到scratch | scratch.vim
+|===
+
+=== 调试 `<Leader>d`
+
+[options="header"]
+|===
+| 快捷键     | 用途                | 所属插件
+| <Leader>db | 设置/切换断点       | Conque-GDB
+| <Leader>dd | 删除断点            | Conque-GDB
+| <Leader>dc | 继续运行，Continue  | Conque-GDB
+| <Leader>dr | 开始运行，Run       | Conque-GDB
+| <Leader>dn | 单步步过，Next      | Conque-GDB
+| <Leader>ds | 单步进入，Step      | Conque-GDB
+| <Leader>dp | 打印，Print         | Conque-GDB
+| <Leader>df | 执行到返回，Finish  | Conque-GDB
+| <Leader>dt | 打印堆栈，Backtrace | Conque-GDB
+|===
+
+=== 编译 `<Leader>c`
+
+[options="header"]
+|===
+| 快捷键     | 用途 | 所属插件
+| <Leader>cc | 编译 |
+// | <Leader>cC | compile                      |
+// | <Leader>cd | close compilation window     |
+// | <Leader>ck | kill compilation             |
+// | <Leader>cm | helm-make                    |
+// | <Leader>cr | recompile                    |
 |===
 
 === 文本Text相关 `<Leader>x`
@@ -332,8 +350,9 @@ vim的基本配置和所要安装的插件信息都存放在++vimrc++文件中�
 
 [options="header"]
 |===
-| 快捷键      | 用途               | 所属插件
-| <Leader>mga | 在.h和.cpp间切换   | vim-fswitch
+| 快捷键      | 用途                       | 所属插件
+| <Leader>mga | 在.h和.cpp间切换           | vim-fswitch
+| <Leader>mgA | 在.h和.cpp间切换（新窗口） | vim-fswitch
 // | <Leader>mgt | 切换到单元测试文件 |
 |===
 
