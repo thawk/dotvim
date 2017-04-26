@@ -2517,6 +2517,9 @@ if s:is_plugin_group_enabled('doc') "{{{ 文档编写，如OrgMode、AsciiDoc等
                 \     'GraphvizShow', 'GraphvizInteractive'
                 \ ]}
     let g:WMGraphviz_output = 'png'
+
+    autocmd vimrc FileType dot
+                \   nnoremap <silent><buffer> <Leader>cc :<C-u>GraphvizCompile<CR>
     " }}}
 endif
 " }}}
