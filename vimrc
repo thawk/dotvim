@@ -721,12 +721,7 @@ autocmd vimrc FileType task call ForceFileEncoding('utf-8')
 " }}}
 
 " 用于各插件的热键前缀 {{{
-let mapleader = ','
-
-nnoremap [mark] <Nop>
-vnoremap [mark] <Nop>
-nmap <Leader>m [mark]
-vmap <Leader>m [mark]
+let mapleader = ' '
 " }}}
 
 " Plugins {{{
@@ -1014,62 +1009,45 @@ if s:is_plugin_group_enabled('unite') "{{{
     nnoremap <silent> <Leader>ff :<C-u>UniteWithBufferDir -buffer-name=files -start-insert file buffer file/new<CR>
     nnoremap <silent> <Leader>fb :<C-u>Unite -buffer-name=files bookmark directory_mru<CR>
 
-    nnoremap <silent> <Leader>f/ :<C-U>Unite line -buffer-name=search -start-insert -input=<C-R><C-W><CR>
-    nnoremap <silent> <Leader>f? :<C-U>Unite line -buffer-name=search -start-insert<CR>
-    " ======
-    " nnoremap <silent> <Leader>pf :<C-u>UniteWithProjectDir -buffer-name=files -multi-line file_rec/async<CR>
-    " nnoremap <silent> <Leader>pd :<C-u>UniteWithProjectDir -buffer-name=directories -multi-line directory_rec/async<CR>
+    nnoremap <silent> <Leader>f? :<C-U>Unite line -buffer-name=search -start-insert -input=<C-R><C-W><CR>
+    nnoremap <silent> <Leader>f/ :<C-U>Unite line -buffer-name=search -start-insert<CR>
 
-    nnoremap <silent> [unite]S :<C-U>Unite source<CR>
+    nnoremap <silent> <Leader>us :<C-U>Unite source<CR>
 
-    nnoremap <silent> [unite]n :<C-u>UniteNext<CR>
-    nnoremap <silent> [unite]N :<C-u>UnitePrevious<CR>
-    nnoremap <silent> [unite]C :<C-u>UniteClose<CR>
+    nnoremap <silent> <Leader>un :<C-u>UniteNext<CR>
+    nnoremap <silent> <Leader>up :<C-u>UnitePrevious<CR>
+    nnoremap <silent> <Leader>uc :<C-u>UniteClose<CR>
+    nnoremap <silent> <Leader>ur :<C-u>UniteResume -no-start-insert -toggle<CR>
+    " }}}
 
-    " nnoremap <silent> [unite]w :<C-u>UniteWithCursorWord -buffer-name=register buffer file_mru bookmark file<CR>
-    " nnoremap <silent> [unite]c :<C-u>Unite change jump<CR>
-
-    " " 小写查找grep当前word
-    " " 在project目录下找
-    " nnoremap <silent> [unite]gg :<C-u>Unite grep:<C-R>=projectroot#guess()<CR> -buffer-name=search -no-quit -no-start-insert -input=<C-R><C-W><CR>
-    " " 在当前目录下找
-    " nnoremap <silent> [unite]gc :<C-u>Unite grep:. -buffer-name=search -no-quit -no-start-insert -input=<C-R><C-W><CR>
-    " " 在当前文件所在目录下找
-    " nnoremap <silent> [unite]gb :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -no-start-insert -input=<C-R><C-W><CR>
-    "
-    " " 大写需要输入查找内容
-    " " 在project目录下找
-    " nnoremap <silent> [unite]GG :<C-u>Unite grep:<C-R>=projectroot#guess()<CR> -buffer-name=search -no-quit -no-start-insert<CR>
-    " " 在当前目录下找
-    " nnoremap <silent> [unite]GC :<C-u>Unite grep:. -buffer-name=search -no-quit -no-start-insert<CR>
-    " " 在当前文件所在目录下找
-    " nnoremap <silent> [unite]GB :<C-u>Unite grep:<C-R>=expand("%:p:h")<CR> -buffer-name=search -no-quit -no-start-insert<CR>
-    "
-    " nnoremap <silent> [unite]c :<C-u>UniteWithCurrentDir -buffer-name=files file buffer file/new -start-insert<CR>
-
-    " nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
-    " nnoremap <silent> [unite]M :<C-U>Unite mark<CR>
-
-    " nnoremap <silent> [unite]m :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build<CR>
-    " nnoremap <silent> [unite]q :<C-u>Unite quickfix -no-quit<CR>
-    " nnoremap <silent> [unite]T :<C-U>UniteWithCursorWord -buffer-name=tags tag<CR>
-    " " nnoremap <silent> [unite]t :<C-U>wall<CR><ESC>:Unite -buffer-name=build -no-quit build::test<CR>
-    " nnoremap <silent> [unite]t :<C-U>Unite -buffer-name=tabs tab<CR>
-    " " nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files buffer file_rec:! file_mru bookmark<CR><c-u>
-    " nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
-
-    " if s:is_windows
-    "     nnoremap <silent> [unite]F
-    "                 \ :<C-u>Unite -buffer-name=files -multi-line
-    "                 \ jump_point file_point buffer
-    "                 \ file_rec:<C-R>=projectroot#guess()<CR> file_mru file/new:<C-R>=expand("%:p:h")<CR><CR>
-    " else
-    "     nnoremap <silent> [unite]F
-    "                 \ :<C-u>Unite -buffer-name=files -multi-line
-    "                 \ jump_point file_point buffer
-    "                 \ file_rec/async:<C-R>=projectroot#guess()<CR> file_mru file/new:<C-R>=expand("%:p:h")<CR><CR>
-    " endif
-
+    " unite的menu {{{
+    let g:unite_source_menu_menus = get(g:,'unite_source_menu_menus',{})
+    let leader_str = substitute(mapleader, ' ', '<Space>', '')
+    let g:unite_source_menu_menus.leader_bindings = {
+                \ 'description' : '快捷键'
+                \ }
+    let g:unite_source_menu_menus.leader_bindings.command_candidates = [
+                \ ['▷ <Leader>s  →        +搜索和Symbol查找', 'Unite  mapping -input='.leader_str.'s'],
+                \ ['▷ <Leader>h  →              +文档和帮助', 'Unite  mapping -input='.leader_str.'h'],
+                \ ['▷ <Leader>r  → +Resume/Rename/Registers', 'Unite  mapping -input='.leader_str.'r'],
+                \ ['▷ <Leader>p  →                +项目相关', 'Unite  mapping -input='.leader_str.'p'],
+                \ ['▷ <Leader>f  →                +文件相关', 'Unite  mapping -input='.leader_str.'f'],
+                \ ['▷ <Leader>b  →              +缓冲区相关', 'Unite  mapping -input='.leader_str.'b'],
+                \ ['▷ <Leader>d  →                    +调试', 'Unite  mapping -input='.leader_str.'d'],
+                \ ['▷ <Leader>c  →                    +编译', 'Unite  mapping -input='.leader_str.'c'],
+                \ ['▷ <Leader>x  →                +文本相关', 'Unite  mapping -input='.leader_str.'x'],
+                \ ['▷ <Leader>i  →                +插入内容', 'Unite  mapping -input='.leader_str.'i'],
+                \ ['▷ <Leader>t  →                +切换开关', 'Unite  mapping -input='.leader_str.'h'],
+                \ ['▷ <Leader>w  →                +窗口相关', 'Unite  mapping -input='.leader_str.'w'],
+                \ ['▷ <Leader>g  →                +版本控制', 'Unite  mapping -input='.leader_str.'g'],
+                \ ['▷ <Leader>q  →                    +退出', 'Unite  mapping -input='.leader_str.'q'],
+                \ ['▷ <Leader>j  →                    +跳转', 'Unite  mapping -input='.leader_str.'j'],
+                \ ['▷ <Leader>mg →                +代码跳转', 'Unite  mapping -input='.leader_str.'mg'],
+                \ ['▷ <Leader>ms →                    +REPL', 'Unite  mapping -input='.leader_str.'ms'],
+                \ ['▷ <Leader>?  →           列出可用的按键', 'Unite  mapping'],
+                \ ['▷ <Leader>au →             切换UndoTree', 'normal <Leader>au'],
+                \ ]
+    nnoremap <silent> <Leader> :Unite -silent -start-insert menu:leader_bindings<CR>
     " }}}
 endif
 " }}}
@@ -1421,19 +1399,24 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
         call neobundle#config('Mark--Karkat', {
                 \ 'on_cmd' : ['Mark', 'MarkClear', 'Marks', 'MarkLoad', 'MarkSave', 'MarkPalette'],
                 \ 'on_map' : [
-                \     '<Plug>MarkSet', '<Plug>MarkRegex', '<Plug>MarkClear', '<Plug>MarkToggle',
-                \     '<Plug>MarkAllClear',
-                \     '<Leader>n', '<Leader>*', '<Leader>#', '<Leader>/', '<Leader>?',
+                \     '<Plug>Mark',
                 \ ],
                 \ })
 
-        nmap <silent><unique> [mark]m <Plug>MarkSet
-        xmap <silent><unique> [mark]m <Plug>MarkSet
-        nmap <silent><unique> [mark]r <Plug>MarkRegex
-        xmap <silent><unique> [mark]r <Plug>MarkRegex
-        nmap <silent><unique> [mark]c <Plug>MarkClear
-        nmap <silent>[mark]M <Plug>MarkToggle
-        nmap <silent>[mark]C <Plug>MarkAllClear
+        nmap <silent><unique> <Leader>mm <Plug>MarkSet
+        xmap <silent><unique> <Leader>mm <Plug>MarkSet
+        nmap <silent><unique> <Leader>mr <Plug>MarkRegex
+        xmap <silent><unique> <Leader>mr <Plug>MarkRegex
+        nmap <silent><unique> <Leader>mc <Plug>MarkClear
+        nmap <silent><unique> <Leader>mM <Plug>MarkToggle
+        nmap <silent><unique> <Leader>mC <Plug>MarkAllClear
+
+        nmap <silent><unique> <Leader>mn <Plug>MarkSearchCurrentNext
+        nmap <silent><unique> <Leader>mp <Plug>MarkSearchCurrentPrev
+        nmap <silent><unique> <Leader>mN <Plug>MarkSearchAnyNext
+        nmap <silent><unique> <Leader>mP <Plug>MarkSearchAnyPrev
+        nmap <silent><unique> <Plug>IgnoreMarkSearchNext <Plug>MarkSearchNext
+        nmap <silent><unique> <Plug>IgnoreMarkSearchPrev <Plug>MarkSearchPrev
 
         " 在插件载入后再执行修改颜色的操作
         autocmd vimrc VimEnter *
@@ -1728,7 +1711,7 @@ if s:is_plugin_group_enabled('navigation.moving') "{{{
     " }}}
     " vim-expand-region: 选择模式下，按+/_扩展和收缩选区 {{{
     NeoBundleLazy 'terryma/vim-expand-region', {
-                \ 'on_map' : [['nv', '<Plug>']],
+                \ 'on_map' : [['nv', '<Plug>(expand_region_']],
                 \ }
     nmap <silent> + <Plug>(expand_region_expand)
     vmap <silent> + <Plug>(expand_region_expand)
@@ -1898,10 +1881,7 @@ if s:is_plugin_group_enabled('scm') "{{{
     " vcscommand.vim: SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件 {{{
     NeoBundleLazy 'vcscommand.vim', {
                 \ 'on_map' : [
-                \     '<Plug>VCSAdd', '<Plug>VCSAnnotate', '<Plug>VCSCommit', '<Plug>VCSDelete', '<Plug>VCSDiff',
-                \     '<Plug>VCSGotoOriginal', '<Plug>VCSClearAndGotoOriginal', '<Plug>VCSInfo', '<Plug>VCSLock',
-                \     '<Plug>VCSLog', '<Plug>VCSRevert', '<Plug>VCSReview', '<Plug>VCSSplitAnnotate', '<Plug>VCSStatus',
-                \     '<Plug>VCSUnlock', '<Plug>VCSUpdate', '<Plug>VCSVimDiff',
+                \     '<Plug>VCS',
                 \ ],
                 \ 'on_cmd' : ['VCSAdd', 'VCSAnnotate', 'VCSBlame', 'VCSCommit', 'VCSDelete', 'VCSDiff', 'VCSGotoOriginal', 'VCSInfo', 'VCSLock', 'VCSLog', 'VCSRemove', 'VCSRevert', 'VCSReview', 'VCSStatus', 'VCSUnlock', 'VCSUpdate', 'VCSVimDiff', 'VCSCommandDisableBufferSetup', 'VCSCommandEnableBufferSetup', 'VCSReload'],
                 \ }
@@ -2999,10 +2979,6 @@ endif
 " }}}
 
 " 光标移动 {{{
-" 正常模式下，空格及Shift-空格滚屏
-noremap <SPACE> <C-F>
-noremap <S-SPACE> <C-B>
-
 " Key mappings to ease browsing long lines
 nnoremap <Down>      gj
 nnoremap <Up>        gk
