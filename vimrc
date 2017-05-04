@@ -1461,12 +1461,18 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
         omap <Leader>jw <Plug>(easymotion-s2)
     endif
     " }}}
-    " HiCursorWords: 高亮与光标下word一样的词 {{{
-    NeoBundle 'ihacklog/HiCursorWords'
+    " vim-highlight-cursor-words: 高亮与光标下word一样的词 {{{
+    NeoBundle 'pboettch/vim-highlight-cursor-words'
+
     let g:HiCursorWords_delay = 200
     " let g:HiCursorWords_hiGroupRegexp = ''
-    let g:HiCursorWords_hiGroupRegexp = 'Identifier|vimOperParen'
+    " let g:HiCursorWords_hiGroupRegexp = 'Identifier\|vimOperParen'
     let g:HiCursorWords_debugEchoHiName = 0
+    let g:HiCursorWords_visible = 1
+    " let g:HiCursorWords_style = ''
+    let g:HiCursorWords_linkStyle = 'Underlined'
+
+    nmap <Leader>sh :call HiCursorWords_toggle()<CR>
     " }}}
     " ExtractMatches: 可以拷贝匹配pattern的内容 {{{
     NeoBundleLazy 'ExtractMatches', {
