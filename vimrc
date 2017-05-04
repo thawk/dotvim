@@ -41,6 +41,7 @@ endif
 
 " 设置缺省值 {{{
 let g:dotvim_settings = {}
+let g:dotvim_settings.mapleader = ' '
 let g:dotvim_settings.default_indent = 4
 if v:version >= '703' && has('lua')
     let g:dotvim_settings.autocomplete_method = 'neocomplete'
@@ -721,7 +722,7 @@ autocmd vimrc FileType task call ForceFileEncoding('utf-8')
 " }}}
 
 " 用于各插件的热键前缀 {{{
-let mapleader = ' '
+let mapleader = g:dotvim_settings.mapleader
 " }}}
 
 " Plugins {{{
@@ -1048,6 +1049,8 @@ if s:is_plugin_group_enabled('unite') "{{{
                 \ ['▷ <Leader>au →             切换UndoTree', 'normal <Leader>au'],
                 \ ]
     nnoremap <silent> <Leader> :Unite -silent -start-insert menu:leader_bindings<CR>
+    " 误按<Leader>后可以马上按<Esc>取消
+    nnoremap <silent> <Leader><Esc> <Nop>
     " }}}
 endif
 " }}}

@@ -100,6 +100,8 @@ vim的基本配置和所要安装的插件信息都存放在++vimrc++文件中�
 
 参照 link:http://spacemacs.org/[spacemacs] 风格进行快捷键设置，将快捷键按功能分组而不是按插件分组，更便于记忆。
 
+NOTE: ``<Leader>``是``<Space>``。
+
 === 搜索和符号查找 `<Leader>s`
 
 .CtrlSF
@@ -379,16 +381,4 @@ vim的基本配置和所要安装的插件信息都存放在++vimrc++文件中�
 | <Leader>au | UndotreeToggle             | undotree
 | <Leader>j= | 格式化整个文件（mzgg=G`z） | 内置
 |===
-
-== 小技巧：使用端口443代替22来通过SSH协议访问github
-
-If you can't access github via standard port 22, you can add these
-lines to ++~/.ssh/config++ to access github through https port:
-
---------------------
-Host github.com
-  Hostname ssh.github.com
-  User git
-  Port 443
---------------------
 
