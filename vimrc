@@ -992,9 +992,40 @@ if s:is_plugin_group_enabled('unite') "{{{
     nnoremap <silent> <Leader>fO  :<C-u>Unite fold -buffer-name=outline -no-quit -no-start-insert -vertical -toggle -winwidth=45<CR>
 
     " }}}
+    " unite的menu {{{
+    let g:unite_source_menu_menus = get(g:,'unite_source_menu_menus',{})
+    let leader_str = substitute(mapleader, ' ', '<Space>', '')
+    let g:unite_source_menu_menus.leader_bindings = {
+                \ 'description' : '快捷键'
+                \ }
+    let g:unite_source_menu_menus.leader_bindings.command_candidates = [
+                \ ['▷ <Leader>?  →           列出可用的按键', 'Unite  mapping'],
+                \ ['▷ <Leader>au →             切换UndoTree', 'normal <Leader>au'],
+                \ ['▷ <Leader>b  →              +缓冲区相关', 'Unite  mapping -input='.leader_str.'b'],
+                \ ['▷ <Leader>c  →                    +编译', 'Unite  mapping -input='.leader_str.'c'],
+                \ ['▷ <Leader>d  →                    +调试', 'Unite  mapping -input='.leader_str.'d'],
+                \ ['▷ <Leader>f  →                +文件相关', 'Unite  mapping -input='.leader_str.'f'],
+                \ ['▷ <Leader>g  →                +版本控制', 'Unite  mapping -input='.leader_str.'g'],
+                \ ['▷ <Leader>h  →              +文档和帮助', 'Unite  mapping -input='.leader_str.'h'],
+                \ ['▷ <Leader>i  →                +插入内容', 'Unite  mapping -input='.leader_str.'i'],
+                \ ['▷ <Leader>j  →                    +跳转', 'Unite  mapping -input='.leader_str.'j'],
+                \ ['▷ <Leader>mg →                +代码跳转', 'Unite  mapping -input='.leader_str.'mg'],
+                \ ['▷ <Leader>ms →                    +REPL', 'Unite  mapping -input='.leader_str.'ms'],
+                \ ['▷ <Leader>p  →                +项目相关', 'Unite  mapping -input='.leader_str.'p'],
+                \ ['▷ <Leader>q  →                    +退出', 'Unite  mapping -input='.leader_str.'q'],
+                \ ['▷ <Leader>r  → +Resume/Rename/Registers', 'Unite  mapping -input='.leader_str.'r'],
+                \ ['▷ <Leader>s  →        +搜索和Symbol查找', 'Unite  mapping -input='.leader_str.'s'],
+                \ ['▷ <Leader>t  →                +切换开关', 'Unite  mapping -input='.leader_str.'h'],
+                \ ['▷ <Leader>u  →                   +Unite', 'Unite  mapping -input='.leader_str.'u'],
+                \ ['▷ <Leader>w  →                +窗口相关', 'Unite  mapping -input='.leader_str.'w'],
+                \ ['▷ <Leader>x  →                +文本相关', 'Unite  mapping -input='.leader_str.'x'],
+                \ ]
+    " }}}
     " unite的key binding {{{
     nnoremap <silent> <Leader>? :<C-u>Unite -auto-resize -buffer-name=mappings mapping<CR>
     nnoremap <silent> <Leader>hdb :<C-u>Unite -auto-resize -buffer-name=mappings mapping<CR>
+    nnoremap <silent> <Leader>hdf :<C-u>Unite -auto-resize -buffer-name=functions function<CR>
+    nnoremap <silent> <Leader>hdv :<C-u>Unite -auto-resize -buffer-name=variables output:let<CR>
     nnoremap <silent> <Leader>rl :<C-u>UniteResume -no-start-insert -toggle<CR>
     nnoremap <silent> <Leader>ry :<C-U>Unite -buffer-name=yanks -default-action=append history/yank<CR>
     nnoremap <silent> <Leader>rY :<C-U>Unite -buffer-name=yanks -default-action=insert history/yank<CR>
@@ -1008,6 +1039,7 @@ if s:is_plugin_group_enabled('unite') "{{{
     nnoremap <silent> <Leader>bB :<C-u>Unite -buffer-name=buffers -start-insert buffer<CR>
 
     nnoremap <silent> <Leader>ff :<C-u>UniteWithBufferDir -buffer-name=files -start-insert file buffer file/new<CR>
+    nnoremap <silent> <Leader>fF :<C-u>Unite -buffer-name=files -start-insert file buffer file/new<CR>
     nnoremap <silent> <Leader>fb :<C-u>Unite -buffer-name=files bookmark directory_mru<CR>
 
     nnoremap <silent> <Leader>f? :<C-U>Unite line -buffer-name=search -start-insert -input=<C-R><C-W><CR>
@@ -1019,35 +1051,8 @@ if s:is_plugin_group_enabled('unite') "{{{
     nnoremap <silent> <Leader>up :<C-u>UnitePrevious<CR>
     nnoremap <silent> <Leader>uc :<C-u>UniteClose<CR>
     nnoremap <silent> <Leader>ur :<C-u>UniteResume -no-start-insert -toggle<CR>
-    " }}}
+    nnoremap <silent> <Leader>um :<C-u>Unite output:message<CR>
 
-    " unite的menu {{{
-    let g:unite_source_menu_menus = get(g:,'unite_source_menu_menus',{})
-    let leader_str = substitute(mapleader, ' ', '<Space>', '')
-    let g:unite_source_menu_menus.leader_bindings = {
-                \ 'description' : '快捷键'
-                \ }
-    let g:unite_source_menu_menus.leader_bindings.command_candidates = [
-                \ ['▷ <Leader>s  →        +搜索和Symbol查找', 'Unite  mapping -input='.leader_str.'s'],
-                \ ['▷ <Leader>h  →              +文档和帮助', 'Unite  mapping -input='.leader_str.'h'],
-                \ ['▷ <Leader>r  → +Resume/Rename/Registers', 'Unite  mapping -input='.leader_str.'r'],
-                \ ['▷ <Leader>p  →                +项目相关', 'Unite  mapping -input='.leader_str.'p'],
-                \ ['▷ <Leader>f  →                +文件相关', 'Unite  mapping -input='.leader_str.'f'],
-                \ ['▷ <Leader>b  →              +缓冲区相关', 'Unite  mapping -input='.leader_str.'b'],
-                \ ['▷ <Leader>d  →                    +调试', 'Unite  mapping -input='.leader_str.'d'],
-                \ ['▷ <Leader>c  →                    +编译', 'Unite  mapping -input='.leader_str.'c'],
-                \ ['▷ <Leader>x  →                +文本相关', 'Unite  mapping -input='.leader_str.'x'],
-                \ ['▷ <Leader>i  →                +插入内容', 'Unite  mapping -input='.leader_str.'i'],
-                \ ['▷ <Leader>t  →                +切换开关', 'Unite  mapping -input='.leader_str.'h'],
-                \ ['▷ <Leader>w  →                +窗口相关', 'Unite  mapping -input='.leader_str.'w'],
-                \ ['▷ <Leader>g  →                +版本控制', 'Unite  mapping -input='.leader_str.'g'],
-                \ ['▷ <Leader>q  →                    +退出', 'Unite  mapping -input='.leader_str.'q'],
-                \ ['▷ <Leader>j  →                    +跳转', 'Unite  mapping -input='.leader_str.'j'],
-                \ ['▷ <Leader>mg →                +代码跳转', 'Unite  mapping -input='.leader_str.'mg'],
-                \ ['▷ <Leader>ms →                    +REPL', 'Unite  mapping -input='.leader_str.'ms'],
-                \ ['▷ <Leader>?  →           列出可用的按键', 'Unite  mapping'],
-                \ ['▷ <Leader>au →             切换UndoTree', 'normal <Leader>au'],
-                \ ]
     nnoremap <silent> <Leader> :Unite -silent -start-insert menu:leader_bindings<CR>
     " 误按<Leader>后可以马上按<Esc>取消
     nnoremap <silent> <Leader><Esc> <Nop>

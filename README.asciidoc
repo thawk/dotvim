@@ -150,10 +150,12 @@ NOTE: ``<Leader>``是``<Space>``。
 
 [options="header"]
 |===
-| 快捷键      | 用途                       | 所属插件
-| <Leader>hdb | describe bindings          | unite.vim
-| <Leader>hdc | describe current character | unicode.vim
-| <Leader>hm  | 查找帮助                   | unite-help
+| 快捷键      | 用途                      | 所属插件
+| <Leader>hdb | describe bindings         | unite.vim
+| <Leader>hdc | 显示当前字符的Unicode名称 | unicode.vim
+| <Leader>hdf | 列出所有vim函数           | unite.vim
+| <Leader>hdv | 列出所有vim变量           | unite.vim
+| <Leader>hm  | 查找帮助                  | unite-help
 |===
 
 === Resume/Rename/Registers `<Leader>r`
@@ -274,8 +276,8 @@ NOTE: ``<Leader>``是``<Space>``。
 |===
 | 快捷键      | 用途                          | 所属插件
 | <Leader>ti  | 是否高亮显示indentation guide | indentLine
-| <Leader>Ts  | 选择colorscheme               | unite-colorscheme
-// | <Leader>tha | 切换高亮当前词                |
+| <Leader>ts  | 选择colorscheme               | unite-colorscheme
+| <Leader>tha | 切换高亮当前词                |
 |===
 
 === 窗口 `<Leader>w`
@@ -370,6 +372,19 @@ NOTE: ``<Leader>``是``<Space>``。
 | <Leader>msr | 发送选中内容   | vimshell/slimux
 | <Leader>msq | 关闭           | vimshell/slimux
 | <Leader>mse | 重复上一次     | slimux
+|===
+
+=== Unite `<Leader>u`
+
+[options="header"]
+|===
+| 快捷键     | 用途                  | 所属插件
+| <Leader>ur | 打开或关闭Unite窗口   | unite.vim
+| <Leader>uc | 打开或关闭Unite窗口   | unite.vim
+| <Leader>up | 跳到Unite窗口的上一项 | unite.vim
+| <Leader>un | 跳到Unite窗口的下一项 | unite.vim
+| <Leader>us | 列出所有Unite的源     | unite.vim
+| <Leader>um | 列出message           | unite.vim
 |===
 
 === 其它
