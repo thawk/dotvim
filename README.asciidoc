@@ -2,8 +2,6 @@
 
 个人使用的vim配置文件。本文档主要描述配置文件的安装和更新方法。
 
-关于本配置文件的更多使用技巧可参见： https://github.com/thawk/wiki/wiki/vim
-
 == 安装
 
 . 从++github.com++上clone到本地
@@ -150,12 +148,16 @@ NOTE: ``<Leader>``是``<Space>``。
 
 [options="header"]
 |===
-| 快捷键      | 用途                      | 所属插件
-| <Leader>hdb | describe bindings         | unite.vim
-| <Leader>hdc | 显示当前字符的Unicode名称 | unicode.vim
-| <Leader>hdf | 列出所有vim函数           | unite.vim
-| <Leader>hdv | 列出所有vim变量           | unite.vim
-| <Leader>hm  | 查找帮助                  | unite-help
+| 快捷键           | 用途                               | 所属插件
+| <Leader>hdb      | describe bindings                  | unite.vim
+| <Leader>hdc      | 显示当前字符的Unicode名称          | unicode.vim
+| <Leader>hdf      | 列出所有vim函数                    | unite.vim
+| <Leader>hdv      | 列出所有vim变量                    | unite.vim
+| <Leader>h<Space> | 查找帮助                           | unite-help
+| <Leader>hm       | 查找man pages                      | vim-ref
+| <Leader>hM       | 查找man pages（当前word）          | vim-ref
+| <Leader>ha       | 用apropos查找man pages             | unite-apropos
+| <Leader>hA       | 用apropos查找man pages（当前word） | unite-apropos
 |===
 
 === Resume/Rename/Registers `<Leader>r`

@@ -896,7 +896,7 @@ if s:is_plugin_group_enabled('unite') "{{{
     NeoBundleLazy 'Shougo/unite-outline', {
                 \ 'on_source': ['unite.vim'],
                 \ }
-    nnoremap <silent> <Leader>fo  :<C-u>Unite outline -buffer-name=outline -no-quit -no-start-insert -vertical -toggle -winwidth=45<CR>
+    nnoremap <silent> <Leader>fo  :<C-U>Unite outline -buffer-name=outline -no-quit -no-start-insert -vertical -toggle -winwidth=45<CR>
     " }}}
     " neoyank.vim: unite的history/yank源，提供历史yank缓冲区。通过\fy访问 {{{
     NeoBundle 'Shougo/neoyank.vim', {
@@ -914,20 +914,30 @@ if s:is_plugin_group_enabled('unite') "{{{
     NeoBundleLazy 'shougo/unite-help', {
                 \ 'on_source': ['unite.vim'],
                 \ }
-    nnoremap <silent> <Leader>hm :<C-U>Unite -buffer-name=helps -start-insert help<CR>
-    nnoremap <silent> <Leader>hM :<C-U>UniteWithCursorWord -buffer-name=helps help<CR>
+    nnoremap <silent> <Leader>h<Space> :<C-U>Unite -buffer-name=helps -start-insert help<CR>
+    " }}}
+    " unite-apropos: 用apropos查找man pages {{{
+    NeoBundleLazy 'blindFS/unite-apropos'
+    if executable('apropos')
+        call neobundle#config('unite-apropos', {
+                    \ 'on_source': ['unite.vim'],
+                    \ })
+
+        nnoremap <silent> <Leader>ha :<C-U>Unite -buffer-name=helps -start-insert apropos<CR>
+        nnoremap <silent> <Leader>hA :<C-U>UniteWithCursorWord -buffer-name=helps apropos<CR>
+    endif
     " }}}
     " unite-unicode: 根据unicode名称找字符 {{{
     NeoBundleLazy 'MaryHal/unite-unicode', {
                 \ 'on_source': ['unite.vim'],
                 \ }
-    nnoremap <silent> <Leader>iu :<C-u>Unite unicode<CR>
+    nnoremap <silent> <Leader>iu :<C-U>Unite unicode<CR>
     " }}}
     " unite-colorscheme: 列出所有配色方案 {{{
     NeoBundleLazy 'ujihisa/unite-colorscheme', {
                 \ 'on_source': ['unite.vim'],
                 \ }
-    nnoremap <silent> <Leader>Ts :<C-u>Unite colorscheme<CR>
+    nnoremap <silent> <Leader>Ts :<C-U>Unite colorscheme<CR>
     " }}}
     " unite-quickfix: 过滤quickfix窗口（如在编译结果中查找） {{{
     NeoBundleLazy 'osyo-manga/unite-quickfix', {
@@ -943,8 +953,8 @@ if s:is_plugin_group_enabled('unite') "{{{
     NeoBundleLazy 'eiiches/unite-tselect', {
                 \ 'on_source': ['unite.vim'],
                 \ }
-    nnoremap <silent> g<C-]> :<C-u>Unite -immediately tselect:<C-r>=expand('<cword>')<CR><CR>
-    nnoremap <silent> g] :<C-u>Unite tselect:<C-r>=expand('<cword>')<CR><CR>
+    nnoremap <silent> g<C-]> :<C-U>Unite -immediately tselect:<C-R>=expand('<cword>')<CR><CR>
+    nnoremap <silent> g] :<C-U>Unite tselect:<C-R>=expand('<cword>')<CR><CR>
     " }}}
     " unite-gtags: Unite下调用gtags {{{
     NeoBundleLazy 'thawk/unite-gtags'
@@ -962,19 +972,19 @@ if s:is_plugin_group_enabled('unite') "{{{
         endif
 
         autocmd vimrc FileType c,cpp,java,php
-                    \   nnoremap <silent><buffer> <Leader>s] :<C-u>Unite -immediately gtags/context<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sR :<C-u>Unite -immediately gtags/ref<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sr :<C-u>Unite gtags/completion -default-action=list_refereces<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sD :<C-u>Unite -immediately gtags/def<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sd :<C-u>Unite gtags/completion -default-action=list_definitions<CR>
-                    \ | nnoremap <silent><buffer> <Leader>pg :<C-u>Unite gtags/completion -default-action=list_definitions<CR>
-                    \ | " nnoremapap <silent><buffer> <Leader>st :<C-u>UniteWithCursorWord -immediately gtags/grep<CR>
-                    \ | " nnoremapap <silent><buffer> <Leader>sT :<C-u>Unite gtags/grep:
-                    \ | " nnoremapap <silent><buffer> <Leader>se :<C-u>UniteWithCursorWord -immediately gtags/grep<CR>
-                    \ | " nnoremapap <silent><buffer> <Leader>sE :<C-u>Unite gtags/grep:
-                    \ | nnoremap <silent><buffer> <Leader>s/ :<C-u>Unite gtags/file<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sn :<C-u>UniteWithCursorWord -immediately gtags/path<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sN :<C-u>Unite gtags/path::<CR>
+                    \   nnoremap <silent><buffer> <Leader>s] :<C-U>Unite -immediately gtags/context<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sR :<C-U>Unite -immediately gtags/ref<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sr :<C-U>Unite gtags/completion -default-action=list_refereces<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sD :<C-U>Unite -immediately gtags/def<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sd :<C-U>Unite gtags/completion -default-action=list_definitions<CR>
+                    \ | nnoremap <silent><buffer> <Leader>pg :<C-U>Unite gtags/completion -default-action=list_definitions<CR>
+                    \ | " nnoremapap <silent><buffer> <Leader>st :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
+                    \ | " nnoremapap <silent><buffer> <Leader>sT :<C-U>Unite gtags/grep:
+                    \ | " nnoremapap <silent><buffer> <Leader>se :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
+                    \ | " nnoremapap <silent><buffer> <Leader>sE :<C-U>Unite gtags/grep:
+                    \ | nnoremap <silent><buffer> <Leader>s/ :<C-U>Unite gtags/file<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sn :<C-U>UniteWithCursorWord -immediately gtags/path<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sN :<C-U>Unite gtags/path::<CR>
     endif
     " }}}
     " tabpagebuffer.vim: 记录一个tab中包含的buffer {{{
@@ -985,11 +995,11 @@ if s:is_plugin_group_enabled('unite') "{{{
     let g:neomru#file_mru_path = s:path_join(s:get_cache_dir('neomru'), 'file')
     let g:neomru#directory_mru_path = s:path_join(s:get_cache_dir('neomru'), 'directory')
 
-    nnoremap <silent> <Leader>fr :<C-u>Unite -buffer-name=files -start-insert file_mru<CR>
+    nnoremap <silent> <Leader>fr :<C-U>Unite -buffer-name=files -start-insert file_mru<CR>
     " }}}
     " unite-fold: fold {{{
     NeoBundle 'osyo-manga/unite-fold'
-    nnoremap <silent> <Leader>fO  :<C-u>Unite fold -buffer-name=outline -no-quit -no-start-insert -vertical -toggle -winwidth=45<CR>
+    nnoremap <silent> <Leader>fO  :<C-U>Unite fold -buffer-name=outline -no-quit -no-start-insert -vertical -toggle -winwidth=45<CR>
 
     " }}}
     " unite的menu {{{
@@ -1022,36 +1032,39 @@ if s:is_plugin_group_enabled('unite') "{{{
                 \ ]
     " }}}
     " unite的key binding {{{
-    nnoremap <silent> <Leader>? :<C-u>Unite -auto-resize -buffer-name=mappings mapping<CR>
-    nnoremap <silent> <Leader>hdb :<C-u>Unite -auto-resize -buffer-name=mappings mapping<CR>
-    nnoremap <silent> <Leader>hdf :<C-u>Unite -auto-resize -buffer-name=functions function<CR>
-    nnoremap <silent> <Leader>hdv :<C-u>Unite -auto-resize -buffer-name=variables output:let<CR>
-    nnoremap <silent> <Leader>rl :<C-u>UniteResume -no-start-insert -toggle<CR>
+    nnoremap <silent> <Leader>? :<C-U>Unite -auto-resize -buffer-name=mappings mapping<CR>
+    nnoremap <silent> <Leader>hdb :<C-U>Unite -auto-resize -buffer-name=mappings mapping<CR>
+    nnoremap <silent> <Leader>hdf :<C-U>Unite -auto-resize -buffer-name=functions function<CR>
+    nnoremap <silent> <Leader>hdv :<C-U>Unite -auto-resize -buffer-name=variables output:let<CR>
+    nnoremap <silent> <Leader>rl :<C-U>UniteResume -no-start-insert -toggle<CR>
     nnoremap <silent> <Leader>ry :<C-U>Unite -buffer-name=yanks -default-action=append history/yank<CR>
     nnoremap <silent> <Leader>rY :<C-U>Unite -buffer-name=yanks -default-action=insert history/yank<CR>
     nnoremap <silent> <Leader>rm :<C-U>Unite -buffer-name=registers -default-action=append register<CR>
     nnoremap <silent> <Leader>rM :<C-U>Unite -buffer-name=registers -default-action=insert register<CR>
 
-    nnoremap <silent> <Leader>pf :<C-u>UniteWithProjectDir -buffer-name=files -start-insert file file/new<CR>
-    nnoremap <silent> <Leader>pd :<C-u>UniteWithProjectDir -buffer-name=direectories -start-insert directory directory/new<CR>
+    nnoremap <silent> <Leader>pf :<C-U>UniteWithProjectDir -buffer-name=files -start-insert file file/new<CR>
+    nnoremap <silent> <Leader>pd :<C-U>UniteWithProjectDir -buffer-name=direectories -start-insert directory directory/new<CR>
 
-    nnoremap <silent> <Leader>bb :<C-u>Unite -buffer-name=buffers -start-insert buffer_tab<CR>
-    nnoremap <silent> <Leader>bB :<C-u>Unite -buffer-name=buffers -start-insert buffer<CR>
+    nnoremap <silent> <Leader>bb :<C-U>Unite -buffer-name=buffers -start-insert buffer_tab<CR>
+    nnoremap <silent> <Leader>bB :<C-U>Unite -buffer-name=buffers -start-insert buffer<CR>
 
-    nnoremap <silent> <Leader>ff :<C-u>UniteWithBufferDir -buffer-name=files -start-insert file buffer file/new<CR>
-    nnoremap <silent> <Leader>fF :<C-u>Unite -buffer-name=files -start-insert file buffer file/new<CR>
-    nnoremap <silent> <Leader>fb :<C-u>Unite -buffer-name=files bookmark directory_mru<CR>
+    nnoremap <silent> <Leader>ff :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file buffer file/new<CR>
+    nnoremap <silent> <Leader>fF :<C-U>Unite -buffer-name=files -start-insert file buffer file/new<CR>
+    nnoremap <silent> <Leader>fb :<C-U>Unite -buffer-name=files bookmark directory_mru<CR>
+
+    nnoremap <silent> <Leader>sn :<C-U>UniteWithProjectDir -immediately -input=<C-R>expand('<cword>')<CR> file_rec<CR>
+    nnoremap <silent> <Leader>sN :<C-U>UniteWithProjectDir file_rec<CR>
 
     nnoremap <silent> <Leader>f? :<C-U>Unite line -buffer-name=search -start-insert -input=<C-R><C-W><CR>
     nnoremap <silent> <Leader>f/ :<C-U>Unite line -buffer-name=search -start-insert<CR>
 
     nnoremap <silent> <Leader>us :<C-U>Unite source<CR>
 
-    nnoremap <silent> <Leader>un :<C-u>UniteNext<CR>
-    nnoremap <silent> <Leader>up :<C-u>UnitePrevious<CR>
-    nnoremap <silent> <Leader>uc :<C-u>UniteClose<CR>
-    nnoremap <silent> <Leader>ur :<C-u>UniteResume -no-start-insert -toggle<CR>
-    nnoremap <silent> <Leader>um :<C-u>Unite output:message<CR>
+    nnoremap <silent> <Leader>un :<C-U>UniteNext<CR>
+    nnoremap <silent> <Leader>up :<C-U>UnitePrevious<CR>
+    nnoremap <silent> <Leader>uc :<C-U>UniteClose<CR>
+    nnoremap <silent> <Leader>ur :<C-U>UniteResume -no-start-insert -toggle<CR>
+    nnoremap <silent> <Leader>um :<C-U>Unite output:message<CR>
 
     nnoremap <silent> <Leader> :Unite -silent -start-insert menu:leader_bindings<CR>
     " 误按<Leader>后可以马上按<Esc>取消
@@ -1561,6 +1574,8 @@ if s:is_plugin_group_enabled('navigation.jumping') "{{{
                 \ 'on_source': ['unite.vim'],
                 \ }
     let g:ref_man_cmd = executable('man') ? 'man' : ''
+    nnoremap <silent> <Leader>hm :<C-U>Unite -buffer-name=helps -start-insert ref/man<CR>
+    nnoremap <silent> <Leader>hM :<C-U>UniteWithCursorWord -buffer-name=helps ref/man<CR>
     " }}}
 endif
 " }}}
@@ -1749,7 +1764,7 @@ if s:is_plugin_group_enabled('navigation.autocomplete') "{{{
 
         "let g:neocomplete_enable_debug = 1
         let g:neocomplete#enable_at_startup = 1
-        " Disable auto completion, if set to 1, must use <C-x><C-u>
+        " Disable auto completion, if set to 1, must use <C-x><C-U>
         let g:neocomplete#disable_auto_complete = 0
         " Use smartcase.
         let g:neocomplete#enable_smart_case = 1
@@ -2109,7 +2124,7 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
                     \ }
 
         " map to <Leader>cf in C++ code
-        autocmd vimrc FileType c,cpp,objc nnoremap <silent><buffer>[code]f :<C-u>ClangFormat<CR>
+        autocmd vimrc FileType c,cpp,objc nnoremap <silent><buffer>[code]f :<C-U>ClangFormat<CR>
         autocmd vimrc FileType c,cpp,objc vnoremap <silent><buffer>[code]f :ClangFormat<CR>
         " if you install vim-operator-user
         autocmd vimrc FileType c,cpp,objc map <silent><buffer><LocalLeader>x <Plug>(operator-clang-format)
@@ -2129,7 +2144,7 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
                 \ 'function_prefix' : 'wandbox',
                 \ }
     let g:wandbox#echo_command = 'echomsg'
-    noremap <silent> [make]w :<C-u>Wandbox<CR>
+    noremap <silent> [make]w :<C-U>Wandbox<CR>
 
     " Set default compilers for each filetype
     let g:wandbox#default_compiler = get(g:, 'wandbox#default_compiler', {
@@ -2515,7 +2530,7 @@ if s:is_plugin_group_enabled('doc') "{{{ 文档编写，如OrgMode、AsciiDoc等
     let g:WMGraphviz_output = 'png'
 
     autocmd vimrc FileType dot
-                \   nnoremap <silent><buffer> <Leader>cc :<C-u>GraphvizCompile<CR>
+                \   nnoremap <silent><buffer> <Leader>cc :<C-U>GraphvizCompile<CR>
     " }}}
 endif
 " }}}
@@ -2809,13 +2824,13 @@ if s:is_plugin_group_enabled('misc') "{{{
     let g:vimfiler_data_directory = s:get_cache_dir('vimfiler')
 
     " 切换侧边栏
-    nnoremap <silent> <Leader>pD :<C-u>VimFiler -project<CR>
-    nnoremap <silent> <Leader>pt :<C-u>VimFiler -project -explorer -parent<CR>
-    nnoremap <silent> <Leader>fd :<C-u>VimFilerBufferDir<CR>
-    nnoremap <silent> <Leader>fD :<C-u>VimFilerBufferDir -split<CR>
-    nnoremap <silent> <Leader>ft :<C-u>VimFilerBufferDir -explorer -parent<CR>
-    nnoremap <silent> <Leader>jd :<C-u>VimFilerCurrentDir<CR>
-    nnoremap <silent> <Leader>jD :<C-u>VimFilerCurrentDir -split<CR>
+    nnoremap <silent> <Leader>pD :<C-U>VimFiler -project<CR>
+    nnoremap <silent> <Leader>pt :<C-U>VimFiler -project -explorer -parent<CR>
+    nnoremap <silent> <Leader>fd :<C-U>VimFilerBufferDir<CR>
+    nnoremap <silent> <Leader>fD :<C-U>VimFilerBufferDir -split<CR>
+    nnoremap <silent> <Leader>ft :<C-U>VimFilerBufferDir -explorer -parent<CR>
+    nnoremap <silent> <Leader>jd :<C-U>VimFilerCurrentDir<CR>
+    nnoremap <silent> <Leader>jD :<C-U>VimFilerCurrentDir -split<CR>
     " }}}
     " unicode.vim: ga会显示当前字符的更多信息，<C-X><C-G>/<C-X><C-Z>进行补全 {{{
     NeoBundleLazy 'chrisbra/unicode.vim', {
