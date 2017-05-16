@@ -931,7 +931,8 @@ if s:is_plugin_group_enabled('unite') "{{{
     NeoBundleLazy 'MaryHal/unite-unicode', {
                 \ 'on_source': ['unite.vim'],
                 \ }
-    nnoremap <silent> <Leader>iu :<C-U>Unite unicode<CR>
+    nnoremap <silent> <Leader>iu :<C-U>Unite -default-action=append unicode<CR>
+    nnoremap <silent> <Leader>iU :<C-U>Unite -default-action=insert unicode<CR>
     " }}}
     " unite-colorscheme: 列出所有配色方案 {{{
     NeoBundleLazy 'ujihisa/unite-colorscheme', {
@@ -1907,33 +1908,79 @@ endif
 " }}}
 
 if s:is_plugin_group_enabled('scm') "{{{
-    " vcscommand.vim: SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件 {{{
-    NeoBundleLazy 'vcscommand.vim', {
-                \ 'on_map' : [
-                \     '<Plug>VCS',
+    " vc.vim {{{
+    NeoBundleLazy 'juneedahamed/vc.vim', {
+                \ 'on_cmd' : [
+                \     {'name' : 'VCAdd',                  'complete' : 'customlist,vc#cmpt#Add'},
+                \     {'name' : 'VCBlame',                'complete' : 'customlist,vc#cmpt#Blame'},
+                \     {'name' : 'VCBrowse'},
+                \     {'name' : 'VCBrowseBookMarks'},
+                \     {'name' : 'VCBrowseBuffer'},
+                \     {'name' : 'VCBrowseMyList'},
+                \     {'name' : 'VCBrowseRepo',           'complete' : 'customlist,vc#cmpt#BrowseRepo'},
+                \     {'name' : 'VCBrowseWorkingCopy',    'complete' : 'dir'},
+                \     {'name' : 'VCBrowseWorkingCopyRec', 'complete' : 'dir'},
+                \     {'name' : 'VCClearCache'},
+                \     {'name' : 'VCCommit',               'complete' : 'customlist,vc#cmpt#Commit'},
+                \     {'name' : 'VCCopy',                 'complete' : 'customlist,vc#cmpt#Copy'},
+                \     {'name' : 'VCDefaultrepo',          'complete' : 'customlist,vc#cmpt#Repos'},
+                \     {'name' : 'VCDiff',                 'complete' : 'customlist,vc#cmpt#Diff'},
+                \     {'name' : 'VCFetch',                'complete' : 'customlist,vc#cmpt#Fetch'},
+                \     {'name' : 'VCIncoming',             'complete' : 'customlist,vc#cmpt#Incoming'},
+                \     {'name' : 'VCInfo',                 'complete' : 'customlist,vc#cmpt#Info'},
+                \     {'name' : 'VCLog',                  'complete' : 'customlist,vc#cmpt#Log'},
+                \     {'name' : 'VCMove',                 'complete' : 'customlist,vc#cmpt#Move'},
+                \     {'name' : 'VCOutgoing',             'complete' : 'customlist,vc#cmpt#Outgoing'},
+                \     {'name' : 'VCPull',                 'complete' : 'customlist,vc#cmpt#Pull'},
+                \     {'name' : 'VCPush',                 'complete' : 'customlist,vc#cmpt#Push'},
+                \     {'name' : 'VCRevert',               'complete' : 'customlist,vc#cmpt#Revert'},
+                \     {'name' : 'VCStatus',               'complete' : 'customlist,vc#cmpt#Status'},
                 \ ],
-                \ 'on_cmd' : ['VCSAdd', 'VCSAnnotate', 'VCSBlame', 'VCSCommit', 'VCSDelete', 'VCSDiff', 'VCSGotoOriginal', 'VCSInfo', 'VCSLock', 'VCSLog', 'VCSRemove', 'VCSRevert', 'VCSReview', 'VCSStatus', 'VCSUnlock', 'VCSUpdate', 'VCSVimDiff', 'VCSCommandDisableBufferSetup', 'VCSCommandEnableBufferSetup', 'VCSReload'],
                 \ }
-    let g:VCSCommandDisableMappings = 1
+    let g:vc_allow_leader_mappings = 0
 
-    nnoremap <silent> <Leader>ga :<C-U>VCSAdd<CR>
-    nnoremap <silent> <Leader>gb :<C-U>VCSAnnotate! -g<CR>
-    nnoremap <silent> <Leader>gc :<C-U>VCSCommit<CR>
-    nnoremap <silent> <Leader>gD :<C-U>VCSDelete<CR>
-    nnoremap <silent> <Leader>gd :<C-U>VCSVimDiff<CR>
-    nnoremap <silent> <Leader>gG :<C-U>VCSGotoOriginal!<CR>
-    nnoremap <silent> <Leader>gg :<C-U>VCSGotoOriginal<CR>
-    nnoremap <silent> <Leader>gh :<C-U>VCSLog<CR>
-    nnoremap <silent> <Leader>gi :<C-U>VCSInfo<CR>
-    nnoremap <silent> <Leader>gL :<C-U>VCSLock<CR>
-    nnoremap <silent> <Leader>gn :<C-U>let tmp_lnum=line('.')<CR>:VCSAnnotate -g<CR>:keepjumps execute <C-R>=tmp_lnum<CR><CR>:unlet tmp_lnum<CR>
-    nnoremap <silent> <Leader>gp :<C-U>VCSVimDiff PREV<CR>
-    nnoremap <silent> <Leader>gq :<C-U>VCSRevert<CR>
-    nnoremap <silent> <Leader>gr :<C-U>VCSReview<CR>
-    nnoremap <silent> <Leader>gs :<C-U>VCSStatus<CR>
-    nnoremap <silent> <Leader>gU :<C-U>VCSUnlock<CR>
-    nnoremap <silent> <Leader>gu :<C-U>VCSUpdate<CR>
+    nnoremap <silent> <Leader>ga :<C-U>VCAdd<CR>
+    nnoremap <silent> <Leader>gb :<C-U>VCBlame<CR>
+    nnoremap <silent> <Leader>gc :<C-U>VCCommit<CR>
+    nnoremap <silent> <Leader>gd :<C-U>VCDiff<CR>
+    nnoremap <silent> <Leader>gD :<C-U>VCDiff!<CR>
+    nnoremap <silent> <Leader>gh :<C-U>VCLog<CR>
+    nnoremap <silent> <Leader>gi :<C-U>VCInfo<CR>
+    nnoremap <silent> <Leader>gn :<C-U>VCBlame<CR>
+    nnoremap <silent> <Leader>gp :<C-U>VCDiff PREV<CR>
+    nnoremap <silent> <Leader>gr :<C-U>VCRevert<CR>
+    nnoremap <silent> <Leader>gs :<C-U>VCStatus<CR>
+    nnoremap <silent> <Leader>gsc :<C-U>VCStatus .<CR>
+    nnoremap <silent> <Leader>gsq :<C-U>VCStatus -qu<CR>
+    nnoremap <silent> <Leader>gsu :<C-U>VCStatus -u<CR>
     " }}}
+    " " vcscommand.vim: SVN前端。\cv进行diff，\cn查看每行是谁改的，\cl查看修订历史，\cG关闭VCS窗口回到源文件 {{{
+    " NeoBundleLazy 'vcscommand.vim', {
+    "             \ 'on_map' : [
+    "             \     '<Plug>VCS',
+    "             \ ],
+    "             \ 'on_cmd' : ['VCSAdd', 'VCSAnnotate', 'VCSBlame', 'VCSCommit', 'VCSDelete', 'VCSDiff', 'VCSGotoOriginal', 'VCSInfo', 'VCSLock', 'VCSLog', 'VCSRemove', 'VCSRevert', 'VCSReview', 'VCSStatus', 'VCSUnlock', 'VCSUpdate', 'VCSVimDiff', 'VCSCommandDisableBufferSetup', 'VCSCommandEnableBufferSetup', 'VCSReload'],
+    "             \ }
+    " let g:VCSCommandDisableMappings = 1
+    "
+    " nnoremap <silent> <Leader>ga :<C-U>VCSAdd<CR>
+    " nnoremap <silent> <Leader>gb :<C-U>VCSAnnotate! -g<CR>
+    " nnoremap <silent> <Leader>gc :<C-U>VCSCommit<CR>
+    " nnoremap <silent> <Leader>gD :<C-U>VCSDelete<CR>
+    " nnoremap <silent> <Leader>gd :<C-U>VCSVimDiff<CR>
+    " nnoremap <silent> <Leader>gG :<C-U>VCSGotoOriginal!<CR>
+    " nnoremap <silent> <Leader>gg :<C-U>VCSGotoOriginal<CR>
+    " nnoremap <silent> <Leader>gh :<C-U>VCSLog<CR>
+    " nnoremap <silent> <Leader>gi :<C-U>VCSInfo<CR>
+    " nnoremap <silent> <Leader>gL :<C-U>VCSLock<CR>
+    " nnoremap <silent> <Leader>gn :<C-U>let tmp_lnum=line('.')<CR>:VCSAnnotate -g<CR>:keepjumps execute <C-R>=tmp_lnum<CR><CR>:unlet tmp_lnum<CR>
+    " nnoremap <silent> <Leader>gp :<C-U>VCSVimDiff PREV<CR>
+    " nnoremap <silent> <Leader>gq :<C-U>VCSRevert<CR>
+    " nnoremap <silent> <Leader>gr :<C-U>VCSReview<CR>
+    " nnoremap <silent> <Leader>gs :<C-U>VCSStatus<CR>
+    " nnoremap <silent> <Leader>gU :<C-U>VCSUnlock<CR>
+    " nnoremap <silent> <Leader>gu :<C-U>VCSUpdate<CR>
+    " " }}}
     " " vim-fugitive: GIT前端 {{{
     " NeoBundleLazy 'tpope/vim-fugitive'
     " if executable('git')
@@ -2292,6 +2339,20 @@ endif
 " }}}
 
 if s:is_plugin_group_enabled('development.viml') "{{{ VimL，Vim的编程语言
+    " vim-scriptease: 辅助编写vim脚本的工具 {{{
+    NeoBundleLazy 'tpope/vim-scriptease', {
+                \ 'on_ft' : ['vim'],
+                \ 'on_map' : ['<Plug>Scriptease'],
+                \ 'on_cmd' : [
+                \     { 'name' : 'PP', 'complete' : 'expression' },
+                \     { 'name' : 'PPmsg', 'complete' : 'expression' },
+                \     { 'name' : 'Verbose', 'complete' : 'command' },
+                \     { 'name' : 'Time', 'complete' : 'command' },
+                \     'Console ', 'Disarm', 'Messages', 'Runtime', 'Scriptnames',
+                \     'Ve', 'Vedit', 'Vopen', 'Vpedit', 'Vread', 'Vsplit', 'Vtabedit', 'Vvsplit',
+                \ ],
+                \ }
+    " }}}
 endif
 " }}}
 
@@ -2888,18 +2949,6 @@ if s:is_plugin_group_enabled('misc') "{{{
     " [t     :tprevious ]t     :tnext  [T :tfirst ]T : tlast
     " [<C-Q> :cpfile (Note that <C-Q> only works in a terminal if you disable
     " ]<C-Q> :cnfile flow control: stty -ixon)
-    " }}}
-    " vim-scriptease: 辅助编写vim脚本的工具 {{{
-    NeoBundleLazy 'tpope/vim-scriptease', {
-                \ 'on_ft' : ['vim', 'help'],
-                \ 'on_cmd' : [
-                \     { 'name' : 'PP', 'complete' : 'expression' },
-                \     { 'name' : 'PPmsg', 'complete' : 'expression' },
-                \     { 'name' : 'Verbose', 'complete' : 'command' },
-                \     { 'name' : 'Time', 'complete' : 'command' },
-                \     'Scriptnames', 'Runtime', 'Disarm', 'Ve', 'Vedit', 'Vopen', 'Vsplit', 'Vvsplit', 'Vtabedit', 'Vpedit', 'Vread', 'Console',
-                \ ],
-                \ }
     " }}}
 endif
 " }}}
