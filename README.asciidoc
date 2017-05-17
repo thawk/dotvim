@@ -136,11 +136,9 @@ NOTE: ``<Leader>``是``<Space>``。
 | 快捷键     | 用途                               | 所属插件
 | <Leader>s] | 根据上下文进行跳转到定义或引用     | unite-gtags/jedi.vim
 | <Leader>sr | 跳转到引用                         | unite-gtags/jedi.vim
-| <Leader>sd | 跳转到定义                         | unite-gtags/jedi.vim
-| <Leader>sn | 查找项目中的路径和文件名           | unite-gtags
 | <Leader>sR | 跳转到当前词的引用                 | unite-gtags/jedi.vim
+| <Leader>sd | 跳转到定义                         | unite-gtags/jedi.vim
 | <Leader>sD | 跳转到当前词的定义                 | unite-gtags/jedi.vim
-| <Leader>sN | 查找项目中匹配当前词的路径和文件名 | unite-gtags
 | <Leader>s/ | 列出当前文件中的符号               | unite-gtags
 |===
 
@@ -195,19 +193,21 @@ NOTE: ``<Leader>``是``<Space>``。
 
 [options="header"]
 |===
-| 快捷键     | 用途                           | 所属插件
-| <Leader>f` | 在当前文件目录打开shell        | vimshell
-| <Leader>fb | 打开书签                       | unite.vim
-| <Leader>ff | 在当前文件目录找文件           | unite.vim
-| <Leader>fs | 保存当前文件                   | 内置
-| <Leader>fS | 保存所有文件                   | 内置
-| <Leader>fr | 打开recent文件                 | neomru.vim
+| 快捷键     | 用途                               | 所属插件
+| <Leader>f` | 在当前文件目录打开shell            | vimshell
+| <Leader>fb | 打开书签                           | unite.vim
+| <Leader>ff | 在当前文件目录找文件               | unite.vim
+| <Leader>fs | 保存当前文件                       | 内置
+| <Leader>fS | 保存所有文件                       | 内置
+| <Leader>fr | 打开recent文件                     | neomru.vim
 // | <Leader>fl | 在当前文件目录找文件（纯文本） | unite.vim
-| <Leader>ft | 打开目录树                     | vimfiler
-| <Leader>fy | 显示当前文件的全路径           | 内置
-| <Leader>fo | 打开文件的大纲                 | unite-outline
-| <Leader>fO | 打开文件的Folding              | unite-fold
-| <Leader>f/ | 在当前文件中查找               | unite.vim
+| <Leader>ft | 打开目录树                         | vimfiler
+| <Leader>fy | 显示当前文件的全路径               | 内置
+| <Leader>fo | 打开文件的大纲                     | unite-outline
+| <Leader>fO | 打开文件的Folding                  | unite-fold
+| <Leader>fp | 查找项目中的路径和文件名           | unite-gtags
+| <Leader>fP | 查找项目中匹配当前词的路径和文件名 | unite-gtags
+| <Leader>f/ | 在当前文件中查找                   | unite.vim
 |===
 
 === 缓冲区 `<Leader>b`
