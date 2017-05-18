@@ -1327,6 +1327,8 @@ if s:is_plugin_group_enabled('snippet') "{{{
                 \ pumvisible() ?
                 \ "\<C-y><C-R>=ExpandSnippetOrJumpForwardOrReturn('')<CR>" :
                 \ "\<CR>"
+    nnoremap <silent> <Leader>is :<C-U>Unite -default-action=append ultisnips<CR>
+    nnoremap <silent> <Leader>iS :<C-U>Unite -default-action=insert ultisnips<CR>
     "}}}
 endif
 "}}}
