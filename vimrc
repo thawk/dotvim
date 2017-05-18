@@ -979,13 +979,13 @@ if s:is_plugin_group_enabled('unite') "{{{
                     \ | nnoremap <silent><buffer> <Leader>sD :<C-U>Unite -immediately gtags/def<CR>
                     \ | nnoremap <silent><buffer> <Leader>sd :<C-U>Unite gtags/completion -default-action=list_definitions<CR>
                     \ | nnoremap <silent><buffer> <Leader>pg :<C-U>Unite gtags/completion -default-action=list_definitions<CR>
-                    \ | " nnoremapap <silent><buffer> <Leader>st :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
-                    \ | " nnoremapap <silent><buffer> <Leader>sT :<C-U>Unite gtags/grep:
-                    \ | " nnoremapap <silent><buffer> <Leader>se :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
-                    \ | " nnoremapap <silent><buffer> <Leader>sE :<C-U>Unite gtags/grep:
                     \ | nnoremap <silent><buffer> <Leader>s/ :<C-U>Unite gtags/file<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sn :<C-U>UniteWithCursorWord -immediately gtags/path<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sN :<C-U>Unite gtags/path::<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sn :<C-U>Unite gtags/path::<CR>
+                    \ | nnoremap <silent><buffer> <Leader>sN :<C-U>UniteWithCursorWord -immediately gtags/path<CR>
+                    "\ | nnoremapap <silent><buffer> <Leader>st :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
+                    "\ | nnoremapap <silent><buffer> <Leader>sT :<C-U>Unite gtags/grep:
+                    "\ | nnoremapap <silent><buffer> <Leader>se :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
+                    "\ | nnoremapap <silent><buffer> <Leader>sE :<C-U>Unite gtags/grep:
     endif
     " }}}
     " tabpagebuffer.vim: 记录一个tab中包含的buffer {{{
