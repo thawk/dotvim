@@ -1951,8 +1951,9 @@ if s:is_plugin_group_enabled('scm') "{{{
     nnoremap <silent> <Leader>gn :<C-U>VCBlame<CR>
     nnoremap <silent> <Leader>gp :<C-U>VCDiff PREV<CR>
     nnoremap <silent> <Leader>gr :<C-U>VCRevert<CR>
-    nnoremap <silent> <Leader>gs :<C-U>VCStatus<CR>
-    nnoremap <silent> <Leader>gsc :<C-U>VCStatus .<CR>
+    nnoremap <silent> <Leader>gs :<C-U>ProjectRootExe VCStatus<CR>
+    nnoremap <silent> <Leader>gsp :<C-U>ProjectRootExe VCStatus<CR>
+    nnoremap <silent> <Leader>gsb :<C-U>VCStatus .<CR>
     nnoremap <silent> <Leader>gsq :<C-U>VCStatus -qu<CR>
     nnoremap <silent> <Leader>gsu :<C-U>VCStatus -u<CR>
     " }}}
@@ -2888,10 +2889,11 @@ if s:is_plugin_group_enabled('misc') "{{{
 
     " 切换侧边栏
     nnoremap <silent> <Leader>pD :<C-U>VimFiler -project<CR>
-    nnoremap <silent> <Leader>pt :<C-U>VimFiler -project -explorer -parent<CR>
+    nnoremap <silent> <Leader>pt :<C-U>VimFiler -project -explorer -parent -direction=rightbelow<CR>
     nnoremap <silent> <Leader>fd :<C-U>VimFilerBufferDir<CR>
     nnoremap <silent> <Leader>fD :<C-U>VimFilerBufferDir -split<CR>
-    nnoremap <silent> <Leader>ft :<C-U>VimFilerBufferDir -explorer -parent<CR>
+    nnoremap <silent> <Leader>ft :<C-U>VimFilerBufferDir -explorer -parent -direction=rightbelow<CR>
+    nnoremap <silent> <Leader>bt :<C-U>VimFilerCurrentDir -explorer -parent -direction=rightbelow<CR>
     nnoremap <silent> <Leader>jd :<C-U>VimFilerCurrentDir<CR>
     nnoremap <silent> <Leader>jD :<C-U>VimFilerCurrentDir -split<CR>
     " }}}

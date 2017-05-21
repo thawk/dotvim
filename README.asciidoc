@@ -108,11 +108,11 @@ NOTE: ``<Leader>``是``<Space>``。
 |===
 | 快捷键      | 用途                       | 所属插件
 | <Leader>sfp | 项目目录下CtrlSF           | ctrlsf.vim
-| <Leader>sfb | 当前文件目录下CtrlSF       | ctrlsf.vim
-| <Leader>sfc | 当前目录下CtrlSF           | ctrlsf.vim
 | <Leader>sfP | 项目目录下CtrlSF当前词     | ctrlsf.vim
-| <Leader>sfB | 当前文件目录下CtrlSF当前词 | ctrlsf.vim
-| <Leader>sfC | 当前目录下CtrlSF当前词     | ctrlsf.vim
+| <Leader>sff | 当前文件目录下CtrlSF       | ctrlsf.vim
+| <Leader>sfF | 当前文件目录下CtrlSF当前词 | ctrlsf.vim
+| <Leader>sfb | 当前目录下CtrlSF           | ctrlsf.vim
+| <Leader>sfB | 当前目录下CtrlSF当前词     | ctrlsf.vim
 |===
 
 .Grep
@@ -122,11 +122,11 @@ NOTE: ``<Leader>``是``<Space>``。
 | 快捷键     | 用途                         | 所属插件
 | <Leader>/  | 在项目目录下进行搜索         | ack.vim
 | <Leader>sp | 项目目录下进行搜索           | ack.vim
-| <Leader>sb | 当前文件目录下进行搜索       | ack.vim
-| <Leader>sc | 当前目录下进行搜索           | ack.vim
 | <Leader>sP | 项目目录下进行搜索当前词     | ack.vim
-| <Leader>sB | 当前文件目录下进行搜索当前词 | ack.vim
-| <Leader>sC | 当前目录下进行搜索当前词     | ack.vim
+| <Leader>sf | 当前文件目录下进行搜索       | ack.vim
+| <Leader>sF | 当前文件目录下进行搜索当前词 | ack.vim
+| <Leader>sb | 当前目录下进行搜索           | ack.vim
+| <Leader>sB | 当前目录下进行搜索当前词     | ack.vim
 |===
 
 .Symbol
@@ -179,13 +179,13 @@ NOTE: ``<Leader>``是``<Space>``。
 | <Leader>pf     | 在项目目录下找文件         | unite.vim
 | <Leader>pd     | 在项目目录下找目录         | unite.vim
 | <Leader>pD     | 在项目目录下打开文件浏览器 | vimfiler
+| <Leader>pt     | 在项目目录下打开目录树     | vimfiler
 
 | <Leader>pg     | 找项目中的tag              | unite-gtags
 | <Leader>p<C-g> | 更新tags                   | gtags.vim
 
 | <Leader>pc     | 编译构建                   | vim-dispatch
 | <Leader>pC     | Clean                      | vim-dispatch
-| <Leader>pt     | 在项目目录下打开目录树     | vimfiler
 | <Leader>pT     | 执行测试                   | vim-dispatch
 |===
 
@@ -201,7 +201,7 @@ NOTE: ``<Leader>``是``<Space>``。
 | <Leader>fS | 保存所有文件                       | 内置
 | <Leader>fr | 打开recent文件                     | neomru.vim
 // | <Leader>fl | 在当前文件目录找文件（纯文本） | unite.vim
-| <Leader>ft | 打开目录树                         | vimfiler
+| <Leader>ft | 在文件目录下打开目录树                         | vimfiler
 | <Leader>fy | 显示当前文件的全路径               | 内置
 | <Leader>fo | 打开文件的大纲                     | unite-outline
 | <Leader>fO | 打开文件的Folding                  | unite-fold
@@ -214,13 +214,14 @@ NOTE: ``<Leader>``是``<Space>``。
 
 [options="header"]
 |===
-| 快捷键     | 用途                | 所属插件
-| <Leader>bb | 选择并切换缓冲区    | unite.vim
-| <Leader>bd | 删除当前缓冲区      | 内置
-| <Leader>bn | :bnext              | 内置
-| <Leader>bp | :bprevious          | 内置
-| <Leader>bR | :e                  | 内置
-| <Leader>bs | 打开或切换到scratch | scratch.vim
+| 快捷键     | 用途                         | 所属插件
+| <Leader>bb | 选择并切换缓冲区             | unite.vim
+| <Leader>bd | 删除当前缓冲区               | 内置
+| <Leader>bn | 打开下一缓冲区（:bnext）     | 内置
+| <Leader>bp | 打开上一缓冲区（:bprevious） | 内置
+| <Leader>bR | 重新载入当前文件（:e）       | 内置
+| <Leader>bs | 打开或切换到scratch          | scratch.vim
+| <Leader>bt | 在当前目录打开目录树         | scratch.vim
 |===
 
 === 调试 `<Leader>d`
@@ -270,6 +271,8 @@ NOTE: ``<Leader>``是``<Space>``。
 |===
 | 快捷键     | 用途                  | 所属插件
 | <Leader>iu | 搜索并插入Unicode字符 | unite-unicode
+| <Leader>is | 选择追加snippets | ultisnips
+| <Leader>iS | 选择插入snippets | ultisnips
 |===
 
 === 切换开关 `<Leader>t`
@@ -324,21 +327,30 @@ NOTE: ``<Leader>``是``<Space>``。
 
 [options="header"]
 |===
-| 快捷键      | 用途     | 所属插件
-| <Leader>gb  | blame    | vcscommand.vim
-| <Leader>gh  | 文件历史 | vcscommand.vim
-| <Leader>gs  | status   | vcscommand.vim
-| <Leader>gd  | diff     | vcscommand.vim
+| 快捷键      | 用途                                             | 所属插件
+| <Leader>ga  | 加入文件（VCAdd）                                | vc.vim
+| <Leader>gb  | 查看每行的最后修改人（VCBlame）                  | vc.vim
+| <Leader>gc  | 提交（VCCommit）                                 | vc.vim
+| <Leader>gd  | 列出修改点（VCDiff）                             | vc.vim
+| <Leader>gD  | 列出修改点（VCDiff!）                            | vc.vim
+| <Leader>gh  | 文件历史（VCLog）                                | vc.vim
+| <Leader>gi  | 文件历史（VCInfo）                               | vc.vim
+| <Leader>gi  | 查看文件信息（VCInfo）                           | vc.vim
+| <Leader>gs  | 查看整个库的状态（VCStatus）                     | vc.vim
+| <Leader>gsp | 同<Leader>gs                                     | vc.vim
+| <Leader>gsb | 查看当前目录的状态（VCStatus .）                 | vc.vim
+| <Leader>gsq | （SVN）查看有哪些变化的文件（VCStatus -qu）      | vc.vim
+| <Leader>gsu | （SVN）查看有哪些可以update的文件（VCStatus -u） | vc.vim
 |===
 
 === 退出 `<Leader>q`
 
 [options="header"]
 |===
-| 快捷键     | 用途 | 所属插件
-| <Leader>qq | :qa  | 内置
-| <Leader>qQ | :qa! | 内置
-| <Leader>qs | :xa  | 内置
+| 快捷键     | 用途                           | 所属插件
+| <Leader>qq | 退出Vim（:qa）                 | 内置
+| <Leader>qQ | 退出Vim（:qa!，放弃所有修改）  | 内置
+| <Leader>qs | 并退出Vim（:xa，保存所有文件） | 内置
 |===
 
 === 跳转 `<Leader>j`
@@ -394,7 +406,7 @@ NOTE: ``<Leader>``是``<Space>``。
 [options="header"]
 |===
 | 快捷键     | 用途                       | 所属插件
-| <Leader>?  | 列出可用的按键             | unite.vim
+| <Leader>?  | 列出可用的按键绑定         | unite.vim
 | <Leader>au | UndotreeToggle             | undotree
 | <Leader>j= | 格式化整个文件（mzgg=G`z） | 内置
 |===
