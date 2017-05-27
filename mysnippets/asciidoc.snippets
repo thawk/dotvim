@@ -1,3 +1,17 @@
+snippet skel
+// vim: set filetype=asciidoc fileencoding=utf-8:
+= ${1:`!v expand("%:t:r")`}
+:numbered:
+:encoding: UTF-8
+:toc: macro
+:toc-title: `!v "\u76ee\u5f55"`
+:data-uri:
+
+toc::[]
+
+${0}
+endsnippet
+
 snippet src "source list" b
 [source,${1}]
 ----
