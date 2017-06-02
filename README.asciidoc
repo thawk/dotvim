@@ -187,6 +187,8 @@ NOTE: ``<Leader>``是``<Space>``。
 | <Leader>pc     | 编译构建                   | vim-dispatch
 | <Leader>pC     | Clean                      | vim-dispatch
 | <Leader>pT     | 执行测试                   | vim-dispatch
+
+| <Leader>ps     | make stage                 | vim-dispatch
 |===
 
 === 文件 `<Leader>f`
@@ -362,6 +364,7 @@ NOTE: ``<Leader>``是``<Space>``。
 | <Leader>jD | 在另一窗口打开文件浏览器 | vimfiler
 | <Leader>jl | <Plug>(easymotion-bd-jk) | vim-easymotion
 | <Leader>jw | <Plug>(easymotion-s2)    | vim-easymotion
+| <Leader>j= | 格式化选区或整个buffer   | clang-format
 |===
 
 === 代码跳转 `<Leader>mg`

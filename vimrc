@@ -1372,14 +1372,14 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
     nmap <silent> <Leader>/  :<C-U>ProjectRootExe Ack!<SPACE>
 
     " 在当前文件目录下找
-    vmap <silent> <Leader>sB :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
-    nmap <silent> <Leader>sB :<C-U>Ack! <C-R>=expand('<cword>')<CR> <C-R>=expand('%:p:h')<CR><CR>
-    nmap <silent> <Leader>sb :<C-U>BufferDirExe Ack!<SPACE>
+    vmap <silent> <Leader>sF :<C-U>BufferDirExe Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
+    nmap <silent> <Leader>sF :<C-U>BufferDirExe Ack! <C-R>=expand('<cword>')<CR><CR>
+    nmap <silent> <Leader>sf :<C-U>BufferDirExe Ack!<SPACE>
 
     " 在当前目录下找
-    vmap <silent> <Leader>sC :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
-    nmap <silent> <Leader>sC :<C-U>Ack! <C-R>=expand('<cword>')<CR><CR>
-    nmap <silent> <Leader>sc :<C-U>Ack!<SPACE>
+    vmap <silent> <Leader>sB :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
+    nmap <silent> <Leader>sB :<C-U>Ack! <C-R>=expand('<cword>')<CR><CR>
+    nmap <silent> <Leader>sb :<C-U>Ack!<SPACE>
     "}}}
     " ctrlsf.vim: 快速查找及编辑 {{{
     NeoBundleLazy 'dyng/ctrlsf.vim', {
@@ -1657,53 +1657,6 @@ if s:is_plugin_group_enabled('navigation.tagging') "{{{
         let g:GtagsCscope_Auto_Load = 0
 
         nmap <silent> <Leader>p<C-g> :GtagsUpdate<CR>
-
-        " " 如果光标在定义上，就找引用，如果在引用上就找定义
-        " nmap <silent> [tag]<C-]> :GtagsCursor<CR>
-        " nmap <silent> [tag]f :Gtags -f %<CR>
-        "
-        " " <C-\>小写在当前窗口打开光标下的符号
-        " nmap <silent> [tag]s :Gtags -sr <C-R>=expand("<cword>")<CR><CR>
-        " nmap <silent> [tag]g :Gtags --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
-        " nmap <silent> [tag]t :Gtags -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
-        " nmap <silent> [tag]e :Gtags -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
-        " nmap <silent> [tag]p :Gtags -P <C-R>=expand("<cfile>:t")<CR><CR>
-        "
-        " " <C-\>c小写在当前窗口打开光标下的符号，限定在当前目录下的文件
-        " nmap <silent> [tag]cs :Gtags -l -sr <C-R>=expand("<cword>")<CR><CR>
-        " nmap <silent> [tag]cg :Gtags -l --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
-        " nmap <silent> [tag]ct :Gtags -l -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
-        " nmap <silent> [tag]ce :Gtags -l -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=expand("<cword>")<CR><CR>
-        " nmap <silent> [tag]cp :Gtags -l -P <C-R>=expand("<cfile>:t")<CR><CR>
-        "
-        " " <C-\>小写在当前窗口打开选中的符号
-        " vmap <silent> [tag]s :Gtags -sr <C-R>=s:VisualSelection()<CR><CR>
-        " vmap <silent> [tag]g :Gtags --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=s:VisualSelection()<CR><CR>
-        " vmap <silent> [tag]t :Gtags -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=s:VisualSelection()<CR><CR>
-        " vmap <silent> [tag]e :Gtags -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=s:VisualSelection()<CR><CR>
-        " vmap <silent> [tag]p :Gtags -P <C-R>=s:VisualSelection()<CR><CR>
-        "
-        " " <C-\>c小写在当前窗口打开选中的符号，限定在当前目录下的文件
-        " vmap <silent> [tag]cs :Gtags -l -sr <C-R>=s:VisualSelection()<CR><CR>
-        " vmap <silent> [tag]cg :Gtags -l --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=s:VisualSelection()<CR><CR>
-        " vmap <silent> [tag]ct :Gtags -l -g --literal --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=s:VisualSelection()<CR><CR>
-        " vmap <silent> [tag]ce :Gtags -l -g --from-here="<C-R>=line('.')<CR>:<C-R>=expand("%")<CR>" <C-R>=s:VisualSelection()<CR><CR>
-        " vmap <silent> [tag]cp :Gtags -l -P <C-R>=s:VisualSelection()<CR><CR>
-        "
-        "
-        " " <C-\>大写在当前窗口打开命令行
-        " nmap <silent> [tag]S :Gtags -sr<SPACE>
-        " nmap <silent> [tag]G :Gtags<SPACE>
-        " nmap <silent> [tag]T :Gtags -g --literal<SPACE>
-        " nmap <silent> [tag]E :Gtags -g<SPACE>
-        " nmap <silent> [tag]P :Gtags -P<SPACE>
-        "
-        " " <C-\>大写在当前窗口打开命令行，限定在当前目录下的文件
-        " nmap <silent> [tag]cS :Gtags -l  -sr<SPACE>
-        " nmap <silent> [tag]cG :Gtags -l<SPACE>
-        " nmap <silent> [tag]cT :Gtags -l  -g --literal<SPACE>
-        " nmap <silent> [tag]cE :Gtags -l  -g<SPACE>
-        " nmap <silent> [tag]cP :Gtags -l  -P<SPACE>
     endif
     " }}}
 endif
@@ -2173,8 +2126,8 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
                     \ }
 
         " map to <Leader>cf in C++ code
-        autocmd vimrc FileType c,cpp,objc nnoremap <silent><buffer>[code]f :<C-U>ClangFormat<CR>
-        autocmd vimrc FileType c,cpp,objc vnoremap <silent><buffer>[code]f :ClangFormat<CR>
+        autocmd vimrc FileType c,cpp,objc nnoremap <silent><buffer><Leader>j= :<C-U>ClangFormat<CR>
+        autocmd vimrc FileType c,cpp,objc vnoremap <silent><buffer><Leader>j= :ClangFormat<CR>
         " if you install vim-operator-user
         autocmd vimrc FileType c,cpp,objc map <silent><buffer><LocalLeader>x <Plug>(operator-clang-format)
     endif
@@ -3111,13 +3064,13 @@ if exists(":Make")  " vim-dispatch提供了异步的make
     nnoremap <silent> <Leader>cc :<C-U>Make<CR>
     nnoremap <silent> <Leader>pT :<C-U>Make unittest<CR>
     nnoremap <silent> <Leader>pC :<C-U>Make clean<CR>
-    nnoremap <silent> [make]s :<C-U>Make stage<CR>
+    nnoremap <silent> <Leader>ps :<C-U>Make stage<CR>
     nnoremap <silent> [make]d :<C-U>Make doc<CR>
 else
     nnoremap <silent> <Leader>pc :<C-U>make<CR>
     nnoremap <silent> <Leader>pT :<C-U>make unittest<CR>
     nnoremap <silent> <Leader>pC :<C-U>make clean<CR>
-    nnoremap <silent> [make]s :<C-U>make stage<CR>
+    nnoremap <silent> <Leader>ps :<C-U>make stage<CR>
     nnoremap <silent> [make]d :<C-U>make doc<CR>
 endif
 " }}}
