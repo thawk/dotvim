@@ -1282,7 +1282,7 @@ if s:is_plugin_group_enabled('snippet') "{{{
     let g:UltiSnipsSnippetsDir = s:vimrc_path . '/mysnippets'
     let g:UltiSnipsSnippetDirectories=['UltiSnips', 'mysnippets']
 
-    let g:UltiSnipsEnableSnipMate = 1
+    let g:UltiSnipsEnableSnipMate = 0
 
     " let g:UltiSnipsExpandTrigger       = '<TAB>'
     " let g:UltiSnipsListSnippets        = '<C-TAB>'
@@ -1327,8 +1327,7 @@ if s:is_plugin_group_enabled('snippet') "{{{
                 \ pumvisible() ?
                 \ "\<C-y><C-R>=ExpandSnippetOrJumpForwardOrReturn('')<CR>" :
                 \ "\<CR>"
-    nnoremap <silent> <Leader>is :<C-U>Unite -default-action=append ultisnips<CR>
-    nnoremap <silent> <Leader>iS :<C-U>Unite -default-action=insert ultisnips<CR>
+    nnoremap <silent> <Leader>is :<C-U>Unite ultisnips<CR>
     "}}}
 endif
 "}}}
@@ -2383,18 +2382,17 @@ if s:is_plugin_group_enabled('development.web') "{{{ 前端开发
                 \ 'on_path': '\.\(htm\|html\|jinja2\|j2\|jinja\)$',
                 \ }
     " }}}
-
     " vim-bundle-mako: python的mako模板支持 {{{
     NeoBundleLazy 'sophacles/vim-bundle-mako', {
                 \ 'on_ft' : ['mako'],
                 \ 'on_path' : ['.*\.mako'],
                 \ }
     " }}}
-
     " javascript-libraries-syntax.vim: Javascript语法高亮 {{{
     NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {
                 \ 'on_ft' : ['javascript', 'js'],
                 \ }
+    " let g:used_javascript_libs = 'jquery,angularjs,react,flux'
     " }}}
 endif
 " }}}
