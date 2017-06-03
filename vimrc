@@ -429,7 +429,8 @@ let &termencoding = &encoding
 if (s:is_windows)
     "set guifont=Bitstream_Vera_Sans_Mono\ 12
     "set guifont=Courier_New:h12
-    set guifont=Powerline_Consolas:h12,Consolas:h12,Courier_New:h12
+    "set guifont=Powerline_Consolas:h12,Consolas:h12,Courier_New:h12
+    set guifont=Menlo_for_Powerline:h12,Powerline_Consolas:h12,Consolas:h12,Courier_New:h12
     set guifontwide=NSimsun:h12
     "解决菜单乱码
     source $VIMRUNTIME/delmenu.vim
