@@ -62,6 +62,9 @@ let g:dotvim_settings.background = 'dark'
 let g:dotvim_settings.colorscheme = 'base16-solarized-dark'
 let g:dotvim_settings.notes_directory = ['~/vim-notes']
 let g:dotvim_settings.cache_dir = '~/.vim_cache'
+" airline的几种模式：powerline/unicode/ascii，分别使用powerline专有字符、
+" UNICODE字符、和普通ASCII字符，根据使用的字体进行选择
+let g:dotvim_settings.airline_mode = 'unicode'
 
 " 一些工具的路径
 let g:dotvim_settings.commands = {}
@@ -2615,44 +2618,72 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         let g:airline_symbols = {}
     endif
 
-    if &encoding == "utf-8"
-        " 开启powerline字体，可在 https://github.com/runsisi/consolas-font-for-powerline
-        " 找到增加了特定字符的Consolas字体。
-        " https://github.com/Lokaltog/powerline-fonts 在更多免费的字体
-        let g:airline_powerline_fonts=1
-
-        if s:is_windows
-            let g:airline_symbols.whitespace = " "
+    if g:dotvim_settings.airline_mode == 'powerline'
+        " 使用powerline字符
+        " https://github.com/abertsch/Menlo-for-Powerline 比较合适
+        " https://github.com/Lokaltog/powerline-fonts 有更多免费的字体
+        if &encoding ==? "utf-8"
+            " encoding是utf-8时，直接使用airline内置的字符即可，不需要特殊处理
+            let g:airline_powerline_fonts=1
         else
-            let g:airline_symbols.whitespace = "\u039e"
-            let g:airline_symbols.paste = "\u2225"
+            " encoding不是utf-8，目前vim-airline中的设置方式有问题，因此自行设置
+            " 这里没有设置的字符，采用比较安全的ascii
+            let g:airline_symbols_ascii=1
+
+            let g:airline_left_sep = ""
+            let g:airline_left_alt_sep = ""
+            " 由于在非utf-8时，这些特殊字符都只占半个字符宽度，右半是空白，因此右
+            " 边的分隔符变成三角加空白，得不到想要的效果。所以只保留左边的
+            let g:airline_right_sep = ""
+            let g:airline_right_alt_sep = "|"
+            " let g:airline_right_sep = ""
+            " let g:airline_right_alt_sep = ""
+
+            " ro=⊝, ws=☲, lnr=☰, mlnr=, br=ᚠ, nx=Ɇ, crypt=🔒
+            " let g:airline_symbols.branch = ""
+            let g:airline_symbols.branch = "ᚠ"
+            let g:airline_symbols.readonly = ""
+            let g:airline_symbols.linenr = "Ξ"
+            let g:airline_symbols.maxlinenr = ""
+            " let g:airline_symbols.paste = "∥"
+            let g:airline_symbols.paste = "PASTE"
+            " let g:airline_symbols.paste = 'ρ'
+            " let g:airline_symbols.whitespace = " "
+            let g:airline_symbols.whitespace = '☲'
+            let g:airline_symbols.notexists = 'Ɇ'
+            let g:airline_symbols.crypt = '🔒'
+            let g:airline_symbols.spell = 'SPELL'
+            let g:airline_symbols.modified = '+'
+            let g:airline_symbols.space = ' '
         endif
-    else
-        " let g:airline_left_sep = " "
-        " let g:airline_left_alt_sep = "|"
-        " let g:airline_right_sep = " "
-        " let g:airline_right_alt_sep = "|"
-        " let g:airline_symbols.branch = ""
-        " let g:airline_symbols.readonly = "RO"
-        " let g:airline_symbols.linenr = "LN"
+    elseif g:dotvim_settings.airline_mode == 'unicode'
+        " 这里没有设置的字符，采用比较安全的ascii
+        let g:airline_symbols_ascii=1
 
-        let g:airline_left_sep = ""
-        let g:airline_left_alt_sep = ""
-        " 由于在非utf-8时，这些特殊字符都只占半个字符宽度，右半是空白，因此右
-        " 边的分隔符变成三角加空白，得不到想要的效果。所以只保留左边的
-        let g:airline_right_sep = " "
-        let g:airline_right_alt_sep = "|"
-        " let g:airline_right_sep = ""
-        " let g:airline_right_alt_sep = ""
+        let g:airline_left_sep = ""
+        let g:airline_left_alt_sep = ""
+        let g:airline_right_sep = ""
+        let g:airline_right_alt_sep = ""
 
-        let g:airline_symbols.branch = ""
+        " ro=⊝, ws=☲, lnr=☰, mlnr=㏑, br=ᚠ, nx=Ɇ, crypt=🔒
+        " let g:airline_symbols.branch = ""
+        let g:airline_symbols.branch = "ᚠ"
         let g:airline_symbols.readonly = ""
-        let g:airline_symbols.linenr = ""
-        let g:airline_symbols.paste = "∥"
-        " let g:airline_symbols.paste = "PASTE"
+        let g:airline_symbols.linenr = "Ξ"
+        let g:airline_symbols.maxlinenr = "㏑"
+        " let g:airline_symbols.paste = "∥"
+        let g:airline_symbols.paste = "PASTE"
         " let g:airline_symbols.paste = 'ρ'
         " let g:airline_symbols.whitespace = " "
-        let g:airline_symbols.whitespace = 'Ξ'
+        let g:airline_symbols.whitespace = '☲'
+        let g:airline_symbols.notexists = 'Ɇ'
+        let g:airline_symbols.crypt = '🔒'
+        let g:airline_symbols.spell = 'SPELL'
+        let g:airline_symbols.modified = '+'
+        let g:airline_symbols.space = ' '
+    else
+        " 直接使用vim-airline内置的ascii即可
+        let g:airline_symbols_ascii=1
     endif
 
     set noshowmode

@@ -14,7 +14,14 @@ let g:dotvim_user_settings.plugin_groups_include = []
 "let g:dotvim_user_settings.notes_directory = ['~/vim-notes']
 "let g:dotvim_user_settings.default_indent = 4
 "let g:dotvim_user_settings.background = 'light'
-"let g:dotvim_user_settings.colorscheme = 'base16-solarized'
+let g:dotvim_user_settings.colorscheme = 'base16-solarized'
+
+" airline的几种模式：powerline/unicode/ascii，分别使用powerline专有字符、
+" UNICODE字符、和普通ASCII字符，根据使用的字体进行选择
+" let g:dotvim_user_settings.airline_mode = 'powerline'
+let g:dotvim_user_settings.airline_mode = 'unicode'
+" let g:dotvim_user_settings.airline_mode = 'ascii'
+
 " marching有三种backend，不指定则自动选一种
 " let g:dotvim_user_settings.cpp_complete_method = 'marching'
 " let g:dotvim_user_settings.cpp_complete_method = 'marching.snowdrop'
