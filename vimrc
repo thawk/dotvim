@@ -427,11 +427,9 @@ set cinwords=if,else,while,do,for,switch,case
 " Visual {{{
 let &termencoding = &encoding
 if (s:is_windows)
-    "set guifont=Bitstream_Vera_Sans_Mono\ 12
-    "set guifont=Courier_New:h12
-    "set guifont=Powerline_Consolas:h12,Consolas:h12,Courier_New:h12
-    set guifont=Menlo_for_Powerline:h12,Powerline_Consolas:h12,Consolas:h12,Courier_New:h12
-    set guifontwide=NSimsun:h12
+    set guifont=Menlo_for_Powerline:h12,Powerline_Consolas:h12,Bitstream\ Vera\ Sans\ Mono\ 12,Fixed\ 12,Consolas:h12,Courier_New:h12
+    set guifontwide=Microsoft\ Yahei\ 12,WenQuanYi\ Zen\ Hei\ 12,NSimsun:h12
+
     "解决菜单乱码
     source $VIMRUNTIME/delmenu.vim
     source $VIMRUNTIME/menu.vim
@@ -2640,9 +2638,7 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
             " let g:airline_right_sep = ""
             " let g:airline_right_alt_sep = ""
 
-            " ro=⊝, ws=☲, lnr=☰, mlnr=, br=ᚠ, nx=Ɇ, crypt=🔒
-            " let g:airline_symbols.branch = ""
-            let g:airline_symbols.branch = "ᚠ"
+            let g:airline_symbols.branch = ""
             let g:airline_symbols.readonly = ""
             let g:airline_symbols.linenr = "Ξ"
             let g:airline_symbols.maxlinenr = ""
@@ -2650,9 +2646,6 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
             let g:airline_symbols.paste = "PASTE"
             " let g:airline_symbols.paste = 'ρ'
             " let g:airline_symbols.whitespace = " "
-            let g:airline_symbols.whitespace = '☲'
-            let g:airline_symbols.notexists = 'Ɇ'
-            let g:airline_symbols.crypt = '🔒'
             let g:airline_symbols.spell = 'SPELL'
             let g:airline_symbols.modified = '+'
             let g:airline_symbols.space = ' '
@@ -2666,9 +2659,6 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         let g:airline_right_sep = ""
         let g:airline_right_alt_sep = ""
 
-        " ro=⊝, ws=☲, lnr=☰, mlnr=㏑, br=ᚠ, nx=Ɇ, crypt=🔒
-        " let g:airline_symbols.branch = ""
-        let g:airline_symbols.branch = "ᚠ"
         let g:airline_symbols.readonly = ""
         let g:airline_symbols.linenr = "Ξ"
         let g:airline_symbols.maxlinenr = "㏑"
@@ -2676,9 +2666,6 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         let g:airline_symbols.paste = "PASTE"
         " let g:airline_symbols.paste = 'ρ'
         " let g:airline_symbols.whitespace = " "
-        let g:airline_symbols.whitespace = '☲'
-        let g:airline_symbols.notexists = 'Ɇ'
-        let g:airline_symbols.crypt = '🔒'
         let g:airline_symbols.spell = 'SPELL'
         let g:airline_symbols.modified = '+'
         let g:airline_symbols.space = ' '
