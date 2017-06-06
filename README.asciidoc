@@ -142,6 +142,14 @@ NOTE: ``<Leader>``是``<Space>``。
 | <Leader>s/ | 列出当前文件中的符号               | unite-gtags
 |===
 
+.其他
+
+[options="header"]
+|===
+| 快捷键     | 用途            | 所属插件
+| <Leader>sc | :set nohlsearch | 内置
+|===
+
 === 文档和帮助 `<Leader>h`
 
 [options="header"]
@@ -189,6 +197,7 @@ NOTE: ``<Leader>``是``<Space>``。
 | <Leader>pT     | 执行测试                   | vim-dispatch
 
 | <Leader>ps     | make stage                 | vim-dispatch
+// | <Leader>pa     | 在实现和测试间跳转                 |
 |===
 
 === 文件 `<Leader>f`
@@ -210,6 +219,7 @@ NOTE: ``<Leader>``是``<Space>``。
 | <Leader>fp | 查找项目中的路径和文件名           | unite-gtags
 | <Leader>fP | 查找项目中匹配当前词的路径和文件名 | unite-gtags
 | <Leader>f/ | 在当前文件中查找                   | unite.vim
+// | <Leader>fL | locate                   | ?
 |===
 
 === 缓冲区 `<Leader>b`
@@ -224,6 +234,7 @@ NOTE: ``<Leader>``是``<Space>``。
 | <Leader>bR | 重新载入当前文件（:e）       | 内置
 | <Leader>bs | 打开或切换到scratch          | scratch.vim
 | <Leader>bt | 在当前目录打开目录树         | scratch.vim
+| <Leader>bw | 切换只读状态                 | 内置
 |===
 
 === 调试 `<Leader>d`
@@ -253,14 +264,17 @@ NOTE: ``<Leader>``是``<Space>``。
 // | <Leader>ck | kill compilation             |
 // | <Leader>cm | helm-make                    |
 // | <Leader>cr | recompile                    |
+| <Leader>cl | 注释选中行                    |
+| <Leader>c+动作 | 注释。如<Leader>cip注释一个段落                      |
 |===
 
 === 文本Text相关 `<Leader>x`
 
 [options="header"]
 |===
-| 快捷键      | 用途         | 所属插件
-| <Leader>xa  | 对齐文本     | vim-easy-align
+| 快捷键          | 用途             | 所属插件
+| <Leader>xa+动作 | 对齐文本         | vim-easy-align
+| <Leader>xdw     | 删除行尾空白字符 | 内置
 
 // | <Leader>xtc | 交换两个字符 | 内置
 // | <Leader>xtw | 交换两个word | 内置
@@ -282,9 +296,12 @@ NOTE: ``<Leader>``是``<Space>``。
 [options="header"]
 |===
 | 快捷键      | 用途                          | 所属插件
-| <Leader>ti  | 是否高亮显示indentation guide | indentLine
+| <Leader>ti  | 切换高亮显示indentation guide | indentLine
+| <Leader>tw  | 切换高亮显示行尾空白字符      | vim-airline
+| <Leader>tn  | 切换显示行号                  | 内置
+| <Leader>tr  | 切换相对行号                  | 内置
+| <Leader>tha | 切换高亮当前词                | 内置
 | <Leader>ts  | 选择colorscheme               | unite-colorscheme
-| <Leader>tha | 切换高亮当前词                |
 |===
 
 === 窗口 `<Leader>w`

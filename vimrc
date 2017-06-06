@@ -1203,7 +1203,21 @@ if s:is_plugin_group_enabled('editing') "{{{
     let g:CodeReviewer_reviewFile="review.rev"
     " }}}
     " tcomment_vim: 注释工具。gc{motion}/gcc/<C-_>等 {{{
-    NeoBundle 'tomtom/tcomment_vim'
+    NeoBundleLazy 'tomtom/tcomment_vim', {
+                \ 'on_map': '<Plug>TComment',
+                \ 'on_func': ['tcomment#Complete', 'tcomment#CompleteArgs'],
+                \ 'on_cmd': [
+                \     { 'name': 'TComment', 'complete':'customlist,tcomment#CompleteArgs' },
+                \     { 'name': 'TCommentAs', 'complete':'customlist,tcomment#Complete' } ,
+                \     { 'name': 'TCommentRight', 'complete':'customlist,tcomment#CompleteArgs' },
+                \     { 'name': 'TCommentBlock', 'complete':'customlist,tcomment#CompleteArgs' },
+                \     { 'name': 'TCommentInline', 'complete':'customlist,tcomment#CompleteArgs' },
+                \     { 'name': 'TCommentMaybeInline', 'complete':'customlist,tcomment#CompleteArgs' },
+                \ ]}
+    nnoremap <silent> <Leader>cl :<C-U>TComment<CR>
+    vnoremap <silent> <Leader>cl :<C-U>TCommentMaybeInline<CR>
+    xmap <silent> <Leader>c <Plug>TComment_gc
+    nmap <silent> <Leader>c <Plug>TComment_gc
     " }}}
     " syntastic: 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表 {{{
     NeoBundle 'scrooloose/syntastic'
@@ -1494,7 +1508,7 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
     " let g:HiCursorWords_style = ''
     let g:HiCursorWords_linkStyle = 'Underlined'
 
-    nmap <Leader>sh :call HiCursorWords_toggle()<CR>
+    nmap <Leader>tha :call HiCursorWords_toggle()<CR>
     " }}}
     " ExtractMatches: 可以拷贝匹配pattern的内容 {{{
     NeoBundleLazy 'ExtractMatches', {
@@ -2594,6 +2608,8 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
     NeoBundle 'vim-airline/vim-airline', {
                 \ 'depends': ['vim-airline/vim-airline-themes', 'unicode.vim'],
                 \ }
+    nmap <Leader>tw :AirlineToggleWhitespace<CR>
+
     let bundle = neobundle#get('vim-airline')
     function! bundle.hooks.on_post_source(bundle)
         " 把section a的第1个part从mode改为bufnr() + mode
@@ -2817,7 +2833,7 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         " let g:indentLine_leadingSpaceChar = '·'
         " let g:indentLine_leadingSpaceChar = iconv(nr2char(0x02F0，1), "utf-8", &encoding) " '?'
 
-        nmap <silent> <Leader>ti <C-U>:IndentLinesToggle<CR>
+        nmap <silent> <Leader>ti :<C-U>IndentLinesToggle<CR>
     endif
     " }}}
 endif
@@ -3058,8 +3074,8 @@ nmap <silent> g<F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j 
 nmap <silent> <F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
 
 " V模式下，搜索选中的内容而不是当前word
-vnoremap <silent> g<F3> :<C-U>:exec "vimgrep /" . substitute(escape(s:VisualSelection(), '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
-vnoremap <silent> <F3> :<C-U>:exec "vimgrep /" . substitute(escape(s:VisualSelection(), '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
+vnoremap <silent> g<F3> :<C-U>exec "vimgrep /" . substitute(escape(s:VisualSelection(), '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
+vnoremap <silent> <F3> :<C-U>exec "vimgrep /" . substitute(escape(s:VisualSelection(), '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
 " }}}
 
 " 在VISUAL模式下，缩进后保持原来的选择，以便再次进行缩进 {{{
@@ -3107,21 +3123,29 @@ nmap <silent> <Leader>bd :bdelete<CR>
 nmap <silent> <Leader>bn :bnext<CR>
 nmap <silent> <Leader>bp :bprevious<CR>
 nmap <silent> <Leader>bR :e<CR>
+nmap <silent> <Leader>bw :set readonly!<CR>
+
 nmap <silent> <Leader><Tab> <C-^>
 nmap <silent> <Leader>ww <C-W><C-W>
+
+nmap <silent> <Leader>sc :<C-U>set nohlsearch<CR>
 
 nmap <silent> <Leader>fs :w<CR>
 nmap <silent> <Leader>fS :wa<CR>
 
-nmap <silent> <Leader>fy <C-U>:echo expand("%:p")<CR>
+nmap <silent> <Leader>fy :<C-U>echo expand("%:p")<CR>
 
-nmap <silent> <Leader>en <C-U>:lnext<CR>
-nmap <silent> <Leader>ep <C-U>:lprevious<CR>
+nmap <silent> <Leader>en :<C-U>lnext<CR>
+nmap <silent> <Leader>ep :<C-U>lprevious<CR>
 
-nmap <silent> <Leader>qq <C-U>:qa<CR>
-nmap <silent> <Leader>qQ <C-U>:qa!<CR>
-nmap <silent> <Leader>qs <C-U>:xa<CR>
+nmap <silent> <Leader>qq :<C-U>qa<CR>
+nmap <silent> <Leader>qQ :<C-U>qa!<CR>
+nmap <silent> <Leader>qs :<C-U>xa<CR>
 
+nmap <silent> <Leader>tn :<C-U>set number!<CR>
+nmap <silent> <Leader>tr :<C-U>set relativenumber!<CR>
+
+nmap <silent> <Leader>xdw :<C-U>%s/\s\+$//<CR>
 nmap <silent> <Leader>j= mzgg=G`z
 
 " Split line(opposite to S-J joining line)
