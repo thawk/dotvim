@@ -11,10 +11,10 @@ let g:dotvim_user_settings.plugin_groups_include = []
 
 "let g:dotvim_user_settings.autocomplete_method = 'neocomplete'
 "let g:dotvim_user_settings.snippet_engine = 'neosnippet'
-"let g:dotvim_user_settings.notes_directory = ['~/vim-notes']
 "let g:dotvim_user_settings.default_indent = 4
 "let g:dotvim_user_settings.background = 'light'
-let g:dotvim_user_settings.colorscheme = 'base16-solarized'
+"let g:dotvim_user_settings.colorscheme = 'base16-solarized-dark'
+let g:dotvim_user_settings.colorscheme = 'solarized'
 
 " airline的几种模式：powerline/unicode/ascii，分别使用powerline专有字符、
 " UNICODE字符、和普通ASCII字符，根据使用的字体进行选择

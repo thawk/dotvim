@@ -59,8 +59,7 @@ let g:dotvim_settings.cpp_complete_method = 'marching'
 " let g:dotvim_settings.cpp_complete_method = 'vim-clang'
 let g:dotvim_settings.enable_cursorcolumn = 0
 let g:dotvim_settings.background = 'dark'
-let g:dotvim_settings.colorscheme = 'base16-solarized-dark'
-let g:dotvim_settings.notes_directory = ['~/vim-notes']
+let g:dotvim_settings.colorscheme = 'solarized'
 let g:dotvim_settings.cache_dir = '~/.vim_cache'
 " airline的几种模式：powerline/unicode/ascii，分别使用powerline专有字符、
 " UNICODE字符、和普通ASCII字符，根据使用的字体进行选择
@@ -2692,7 +2691,7 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
 
     set noshowmode
 
-    let g:airline_solarized_normal_green = 1
+    let g:airline_solarized_normal_green = 0
 
     let g:unite_force_overwrite_statusline = 0
     let g:vimfiler_force_overwrite_statusline = 0
@@ -2951,7 +2950,7 @@ NeoBundle 'altercation/vim-colors-solarized'
 " Xshell需要打开termtrans选项才能正确显示
 let g:solarized_termtrans=1
 " let g:solarized_degrade=0
-" let g:solarized_bold=1
+" let g:solarized_bold=0
 " let g:solarized_underline=1
 " let g:solarized_italic=1
 " let g:solarized_termcolors=16
