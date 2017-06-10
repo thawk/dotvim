@@ -1213,8 +1213,8 @@ if s:is_plugin_group_enabled('editing') "{{{
                 \     { 'name': 'TCommentInline', 'complete':'customlist,tcomment#CompleteArgs' },
                 \     { 'name': 'TCommentMaybeInline', 'complete':'customlist,tcomment#CompleteArgs' },
                 \ ]}
-    nnoremap <silent> <Leader>cl :<C-U>TComment<CR>
-    vnoremap <silent> <Leader>cl :<C-U>TCommentMaybeInline<CR>
+    nnoremap <silent> <Leader>cl :TComment<CR>
+    vnoremap <silent> <Leader>cl :TCommentMaybeInline<CR>
     xmap <silent> <Leader>c <Plug>TComment_gc
     nmap <silent> <Leader>c <Plug>TComment_gc
     " }}}
@@ -1381,18 +1381,18 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
     " let g:ack_use_dispatch = 1
 
     " 在项目目录下找，可能退化为当前目录
-    vmap <silent> <Leader>sP :<C-U>ProjectRootExe Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
+    vmap <silent> <Leader>sP :ProjectRootExe Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
     nmap <silent> <Leader>sP :<C-U>ProjectRootExe Ack! <C-R>=expand('<cword>')<CR><CR>
     nmap <silent> <Leader>sp :<C-U>ProjectRootExe Ack!<SPACE>
     nmap <silent> <Leader>/  :<C-U>ProjectRootExe Ack!<SPACE>
 
     " 在当前文件目录下找
-    vmap <silent> <Leader>sF :<C-U>BufferDirExe Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
+    vmap <silent> <Leader>sF :BufferDirExe Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
     nmap <silent> <Leader>sF :<C-U>BufferDirExe Ack! <C-R>=expand('<cword>')<CR><CR>
     nmap <silent> <Leader>sf :<C-U>BufferDirExe Ack!<SPACE>
 
     " 在当前目录下找
-    vmap <silent> <Leader>sB :<C-U>Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
+    vmap <silent> <Leader>sB :Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
     nmap <silent> <Leader>sB :<C-U>Ack! <C-R>=expand('<cword>')<CR><CR>
     nmap <silent> <Leader>sb :<C-U>Ack!<SPACE>
     "}}}
@@ -1411,17 +1411,17 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
     let g:ctrlsf_default_root = 'cwd'
 
     " 在project下找
-    vmap <silent> <Leader>sfP :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=projectroot#guess()<CR><CR>
+    vmap <silent> <Leader>sfP :CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=projectroot#guess()<CR><CR>
     nmap <silent> <Leader>sfP :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=projectroot#guess()<CR><CR>
     nmap <silent> <Leader>sfp :<C-U>ProjectRootExe CtrlSF -regex<SPACE>
 
     " 在当前文件目录下找
-    vmap <silent> <Leader>sfB :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
+    vmap <silent> <Leader>sfB :CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=expand('%:p:h')<CR><CR>
     nmap <silent> <Leader>sfB :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=expand('%:p:h')<CR><CR>
     nmap <silent> <Leader>sfb :<C-U>ProjectRootExe CtrlSF<SPACE>
 
     " 在当前目录下找
-    vmap <silent> <Leader>sfC :<C-U>CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=getcwd()<CR><CR>
+    vmap <silent> <Leader>sfC :CtrlSF <C-R>=g:CtrlSFGetVisualSelection()<CR> <C-R>=getcwd()<CR><CR>
     nmap <silent> <Leader>sfC :<C-U>CtrlSF <C-R>=expand('<cword>')<CR> <C-R>=getcwd()<CR><CR>
     nmap <silent> <Leader>sfc :<C-U>CtrlSF<SPACE>
 
@@ -2431,8 +2431,8 @@ if s:is_plugin_group_enabled('development.shell') "{{{
         map <silent> <Leader>msl :<C-U>VimShellSendString<CR>
         map <silent> <Leader>msr :<C-U>VimShellSendString<CR>
         " 执行所选内容
-        vmap <silent> <Leader>msr :<C-U>'<,'>VimShellSendString<CR>
-        vmap <silent> <Leader>msr :<C-U>'<,'>VimShellSendString<CR>
+        vmap <silent> <Leader>msr :'<,'>VimShellSendString<CR>
+        vmap <silent> <Leader>msr :'<,'>VimShellSendString<CR>
 
         " 提示执行命令
         map <silent> <Leader>msn :<C-U>VimShellSendString<SPACE>
@@ -2455,8 +2455,8 @@ if s:is_plugin_group_enabled('development.shell') "{{{
         map <silent> <Leader>msl :<C-U>SlimuxREPLSendLine<CR>
         map <silent> <Leader>msr :<C-U>SlimuxREPLSendLine<CR>
         " 执行所选内容
-        vmap <silent> <Leader>msr :<C-U>'<,'>SlimuxREPLSendSelection<CR>
-        vmap <silent> <Leader>msr :<C-U>'<,'>SlimuxREPLSendSelection<CR>
+        vmap <silent> <Leader>msr :SlimuxREPLSendSelection<CR>
+        vmap <silent> <Leader>msr :SlimuxREPLSendSelection<CR>
 
         " 提示执行命令
         map <silent> <Leader>msn :<C-U>SlimuxShellPrompt<SPACE>
@@ -3073,8 +3073,8 @@ nmap <silent> g<F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j 
 nmap <silent> <F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %" <CR><ESC>:botright copen<CR>
 
 " V模式下，搜索选中的内容而不是当前word
-vnoremap <silent> g<F3> :<C-U>exec "vimgrep /" . substitute(escape(s:VisualSelection(), '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
-vnoremap <silent> <F3> :<C-U>exec "vimgrep /" . substitute(escape(s:VisualSelection(), '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
+vnoremap <silent> g<F3> :exec "vimgrep /" . substitute(escape(s:VisualSelection(), '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
+vnoremap <silent> <F3> :exec "vimgrep /" . substitute(escape(s:VisualSelection(), '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
 " }}}
 
 " 在VISUAL模式下，缩进后保持原来的选择，以便再次进行缩进 {{{
