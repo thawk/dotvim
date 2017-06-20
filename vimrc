@@ -1082,38 +1082,57 @@ if s:is_plugin_group_enabled('editing') "{{{
                 \ 'on_cmd' : ['EasyAlign', 'LiveEasyAlign'],
                 \ }
     if neobundle#tap('vim-easy-align')
-        " Start interactive EasyAlign in visual mode (e.g. vipga)
-        vmap <silent> <Enter> <Plug>(EasyAlign)
-
-        " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-        nmap <silent> <Leader>xa <Plug>(EasyAlign)
-
         " 对齐过程中禁用foldmethod，以免拖慢速度
         let g:easy_align_bypass_fold = 1
+        let g:easy_align_ignore_groups = ['.*Comment.*', 'doxygen.*', 'String']
 
         if !exists('g:easy_align_delimiters')
             let g:easy_align_delimiters = {}
         endif
 
-        " 对齐C/C++注释
+        " 对齐各类注释。如//、///、///<、/*、/**、/**<、#、#:、"
         let g:easy_align_delimiters['/'] = {
-                    \ 'pattern': '\/\/\|\/\*',
-                    \ 'delimiter_align': 'l', 'ignore_groups': ['!Comment']
+                    \ 'pattern': '\/\/\+<\?\|\/\*\+<\?\|#\+:\?\|"\+',
+                    \ 'delimiter_align': 'l',
+                    \ 'ignore_groups': ['!.*Comment.*\|doxygen.*'],
+                    \ 'left_margin': 2,
+                    \ 'right_margin': 1,
                     \ }
 
         " 用于定义C++变量声明、函数声明的对齐规则。变量前、注释前的空白字符都
         " 要进行对齐
         " 为易于维护，先定义一个数组，每种形式定义一行，再join起来
         let kw = []
-        call add(kw, '\w\+\s*[,;=]')                                   " ,;=前的单词
-        call add(kw, '\w\+\s*)\(\s*const\)\?\(\s*=\s*0\)\?\s*;\?\s*$') " 函数声明的最后一个参数，行末有可选的const和=0（纯虚函数）
-        call add(kw, '\/\/.*\|\/\*.*')                                 " 注释
+        call add(kw, '\([*&]\+\|\s\)\ze\w\+[*&]*\(\[[^]]*\]\)*\s*[,;=]')                                   " ,;=前的单词。变量前后可以有*和&，可以是数组
+        call add(kw, '\([*&]\+\|\s\)\ze\w\+\s*)\(\s*const\)\?\(\s*=\s*0\)\?\s*;\?\s*$') " 函数声明的最后一个参数，行末有可选的const和=0（纯虚函数）
+        call add(kw, '\s\ze\/\/.*\|\/\*.*')                                 " 注释
 
         " 对齐C++变更声明。*d会把后面的注释也一起对齐
         let g:easy_align_delimiters['d'] = {
-                    \ 'pattern': ' \ze\(' . join(kw, '\|') . '\)',
+                    \ 'pattern': '\(' . join(kw, '\|') . '\)',
                     \ 'left_margin': 0, 'right_margin': 0
                     \ }
+
+        " Start interactive EasyAlign in visual mode
+        vmap <silent> <Enter> <Plug>(EasyAlign)
+
+        " Start interactive EasyAlign for a motion/text object (e.g. <Leader>xaip)
+        nmap <silent> <Leader>xa <Plug>(EasyAlign)
+        vmap <silent> <Leader>xa <Plug>(EasyAlign)
+
+        vmap <silent> <Leader>xad <Plug>(EasyAlign)*dgv<Plug>(EasyAlign)/
+        vmap <silent> <Leader>xa= <Plug>(EasyAlign)*=<CR>
+        vmap <silent> <Leader>xa: <Plug>(EasyAlign):<CR>
+        vmap <silent> <Leader>xa. <Plug>(EasyAlign).<CR>
+        vmap <silent> <Leader>xa, <Plug>(EasyAlign)*,<CR>
+        vmap <silent> <Leader>xa& <Plug>(EasyAlign)&<CR>
+        vmap <silent> <Leader>xa# <Plug>(EasyAlign)#<CR>
+        vmap <silent> <Leader>xa" <Plug>(EasyAlign)"<CR>
+        vmap <silent> <Leader>xa{ <Plug>(EasyAlign){<CR>
+        vmap <silent> <Leader>xa} <Plug>(EasyAlign)}<CR>
+        vmap <silent> <Leader>xa/ <Plug>(EasyAlign)/<CR>
+        vmap <silent> <Leader>xa<Bar> <Plug>(EasyAlign)*<Bar><CR>
+        vmap <silent> <Leader>xa<Space> <Plug>(EasyAlign)*<Space><CR>
 
         call neobundle#untap()
     endif
