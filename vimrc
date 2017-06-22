@@ -42,6 +42,8 @@ endif
 " 设置缺省值 {{{
 let g:dotvim_settings = {}
 let g:dotvim_settings.mapleader = ' '
+" 把<Leader>m映射为“,”，方便使用
+let g:dotvim_settings.map_mainmode = ','
 let g:dotvim_settings.default_indent = 4
 if v:version >= '703' && has('lua')
     let g:dotvim_settings.autocomplete_method = 'neocomplete'
@@ -724,6 +726,10 @@ autocmd vimrc FileType task call ForceFileEncoding('utf-8')
 
 " 用于各插件的热键前缀 {{{
 let mapleader = g:dotvim_settings.mapleader
+if g:dotvim_settings.map_mainmode != ''
+    exec "nmap ".g:dotvim_settings.map_mainmode." <Leader>m"
+    exec "vmap ".g:dotvim_settings.map_mainmode." <Leader>m"
+endif
 " }}}
 
 " Plugins {{{
@@ -2478,9 +2484,9 @@ if s:is_plugin_group_enabled('development.shell') "{{{
         vmap <silent> <Leader>msr :SlimuxREPLSendSelection<CR>
 
         " 提示执行命令
-        map <silent> <Leader>msn :<C-U>SlimuxShellPrompt<SPACE>
+        map <silent> <Leader>msn :<C-U>SlimuxShellPrompt<CR>
         " 执行上一条命令
-        map <silent> <Leader>mse :<C-U>SlimuxShellLast<SPACE>
+        map <silent> <Leader>mse :<C-U>SlimuxShellLast<CR>
     endif
     " }}}
     " vim-tbone: 可以操作tmux缓冲区，执行tmux命令 {{{
@@ -2496,11 +2502,11 @@ if s:is_plugin_group_enabled('development.shell') "{{{
                     \ ],
                     \ })
 
-        " 以项目目录打开vimshell窗口
+        " 以项目目录打开tmux窗口
         map <silent> <Leader>p' :<C-U>silent ProjectRootExe !tmux split-window -p 30 -d<CR>
-        " 以当前目录打开vimshell窗口
+        " 以当前目录打开tmux窗口
         map <silent> <Leader>j' :<C-U>silent !tmux split-window -p 30 -d<CR>
-        " 以当前缓冲区目录打开vimshell窗口
+        " 以当前缓冲区目录打开tmux窗口
         map <silent> <Leader>f' :<C-U>silent BufferDirExe !tmux split-window -p 30 -d<CR>
     endif
     " }}}
