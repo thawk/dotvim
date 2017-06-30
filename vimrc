@@ -2571,6 +2571,11 @@ if s:is_plugin_group_enabled('doc') "{{{ 文档编写，如OrgMode、AsciiDoc等
     "             \ 'on_ft' : ['markdown'],
     "             \ }
     " " }}}
+    " vim-markdown: 正确支持markdown文件 {{{
+    NeoBundleLazy 'plasticboy/vim-markdown', {
+                \ 'on_ft' : ['markdown'],
+                \ }
+    " }}}
     " wmgraphviz.vim: 提供对Graphviz dot的支持，包括编译、snippet等 {{{
     NeoBundleLazy 'wannesm/wmgraphviz.vim', {
                 \ 'on_ft' : 'dot',
