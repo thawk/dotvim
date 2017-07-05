@@ -979,20 +979,19 @@ if s:is_plugin_group_enabled('unite') "{{{
             let g:unite_source_gtags_enable_nearness = 1
         endif
 
-        autocmd vimrc FileType c,cpp,java,php
-                    \   nnoremap <silent><buffer> <Leader>s] :<C-U>Unite -immediately gtags/context<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sR :<C-U>Unite -immediately gtags/ref<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sr :<C-U>Unite gtags/completion -default-action=list_refereces<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sD :<C-U>Unite -immediately gtags/def<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sd :<C-U>Unite gtags/completion -default-action=list_definitions<CR>
-                    \ | nnoremap <silent><buffer> <Leader>pg :<C-U>Unite gtags/completion -default-action=list_definitions<CR>
-                    \ | nnoremap <silent><buffer> <Leader>s/ :<C-U>Unite gtags/file<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sn :<C-U>Unite gtags/path::<CR>
-                    \ | nnoremap <silent><buffer> <Leader>sN :<C-U>UniteWithCursorWord -immediately gtags/path<CR>
-                    "\ | nnoremapap <silent><buffer> <Leader>st :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
-                    "\ | nnoremapap <silent><buffer> <Leader>sT :<C-U>Unite gtags/grep:
-                    "\ | nnoremapap <silent><buffer> <Leader>se :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
-                    "\ | nnoremapap <silent><buffer> <Leader>sE :<C-U>Unite gtags/grep:
+        nnoremap <silent> <Leader>s] :<C-U>Unite -immediately gtags/context<CR>
+        nnoremap <silent> <Leader>sR :<C-U>Unite -immediately gtags/ref<CR>
+        nnoremap <silent> <Leader>sr :<C-U>Unite gtags/completion -default-action=list_refereces<CR>
+        nnoremap <silent> <Leader>sD :<C-U>Unite -immediately gtags/def<CR>
+        nnoremap <silent> <Leader>sd :<C-U>Unite gtags/completion -default-action=list_definitions<CR>
+        nnoremap <silent> <Leader>pg :<C-U>Unite gtags/completion -default-action=list_definitions<CR>
+        nnoremap <silent> <Leader>s/ :<C-U>Unite gtags/file<CR>
+        nnoremap <silent> <Leader>sn :<C-U>Unite gtags/path::<CR>
+        nnoremap <silent> <Leader>sN :<C-U>UniteWithCursorWord -immediately gtags/path<CR>
+        " nnoremapap <silent><buffer> <Leader>st :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
+        " nnoremapap <silent><buffer> <Leader>sT :<C-U>Unite gtags/grep:
+        " nnoremapap <silent><buffer> <Leader>se :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
+        " nnoremapap <silent><buffer> <Leader>sE :<C-U>Unite gtags/grep:
     endif
     " }}}
     " tabpagebuffer.vim: 记录一个tab中包含的buffer {{{
