@@ -2452,14 +2452,13 @@ if s:is_plugin_group_enabled('development.shell') "{{{
         map <silent> <Leader>msq :<C-U>VimShellClose<CR>
 
         " 执行当前行
-        map <silent> <Leader>msl :<C-U>VimShellSendString<CR>
-        map <silent> <Leader>msr :<C-U>VimShellSendString<CR>
+        map <silent> <Leader>msl :VimShellSendString<CR>
+        nmap <silent> <Leader>msr :VimShellSendString<CR>
         " 执行所选内容
-        vmap <silent> <Leader>msr :'<,'>VimShellSendString<CR>
-        vmap <silent> <Leader>msr :'<,'>VimShellSendString<CR>
+        vmap <silent> <Leader>msr :VimShellSendString<CR>
 
         " 提示执行命令
-        map <silent> <Leader>msn :<C-U>VimShellSendString<SPACE>
+        map <silent> <Leader>msn :VimShellSendString<SPACE>
 
         call neobundle#untap()
     endif
@@ -2476,16 +2475,18 @@ if s:is_plugin_group_enabled('development.shell') "{{{
                     \ })
 
         " 执行当前行
-        map <silent> <Leader>msl :<C-U>SlimuxREPLSendLine<CR>
-        map <silent> <Leader>msr :<C-U>SlimuxREPLSendLine<CR>
+        map <silent> <Leader>msl :SlimuxREPLSendLine<CR>
+        map <silent> <Leader>msr :SlimuxREPLSendLine<CR>
+        map <silent> <Leader>msp :SlimuxREPLSendParagraph<CR>
         " 执行所选内容
-        vmap <silent> <Leader>msr :SlimuxREPLSendSelection<CR>
         vmap <silent> <Leader>msr :SlimuxREPLSendSelection<CR>
 
         " 提示执行命令
         map <silent> <Leader>msn :<C-U>SlimuxShellPrompt<CR>
         " 执行上一条命令
         map <silent> <Leader>mse :<C-U>SlimuxShellLast<CR>
+
+        let g:slimux_select_from_current_window = 1  " select panes only from current
     endif
     " }}}
     " vim-tbone: 可以操作tmux缓冲区，执行tmux命令 {{{
