@@ -1304,6 +1304,7 @@ if s:is_plugin_group_enabled('editing') "{{{
     " }}}
     " vim-bracketed-paste: 支持bracketed paste mode，在支持此功能的终端下，自动进入paste模式 {{{
     NeoBundle 'ConradIrwin/vim-bracketed-paste'
+    let g:bracketed_paste_tmux_wrap = 0
     " }}}
 endif
 " }}}
@@ -2487,6 +2488,17 @@ if s:is_plugin_group_enabled('development.shell') "{{{
         map <silent> <Leader>mse :<C-U>SlimuxShellLast<CR>
 
         let g:slimux_select_from_current_window = 1  " select panes only from current
+
+        " IPython下，需要使用%paste
+        " Need to send '%cpaste' before pasting, and '--' or Ctrl-D after
+        function! SlimuxPre_python(target_pane)
+            call system("tmux send-keys -t " . a:target_pane . " %cpaste")
+            call system("tmux send-keys -t " . a:target_pane . " Enter")
+        endfunction
+
+        function! SlimuxPost_python(target_pane)
+            call system("tmux send-keys -t " . a:target_pane . " C-D")
+        endfunction
     endif
     " }}}
     " vim-tbone: 可以操作tmux缓冲区，执行tmux命令 {{{
