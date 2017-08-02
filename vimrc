@@ -1059,8 +1059,8 @@ if s:is_plugin_group_enabled('unite') "{{{
     nnoremap <silent> <Leader>fF :<C-U>Unite -buffer-name=files -start-insert file buffer file/new<CR>
     nnoremap <silent> <Leader>fb :<C-U>Unite -buffer-name=files bookmark directory_mru<CR>
 
-    nnoremap <silent> <Leader>fp :<C-U>UniteWithProjectDir -immediately -input=<C-R>expand('<cword>')<CR> file_rec<CR>
-    nnoremap <silent> <Leader>fP :<C-U>UniteWithProjectDir file_rec<CR>
+    nnoremap <silent> <Leader>fP :<C-U>UniteWithProjectDir -immediately -input=<C-R>expand('<cword>')<CR> file_rec/async<CR>
+    nnoremap <silent> <Leader>fp :<C-U>UniteWithProjectDir file_rec/async<CR>
 
     nnoremap <silent> <Leader>f? :<C-U>Unite line -buffer-name=search -start-insert -input=<C-R><C-W><CR>
     nnoremap <silent> <Leader>f/ :<C-U>Unite line -buffer-name=search -start-insert<CR>
