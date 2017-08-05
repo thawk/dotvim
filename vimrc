@@ -2387,6 +2387,18 @@ if s:is_plugin_group_enabled('development.web') "{{{ 前端开发
                 \ }
     " let g:used_javascript_libs = 'jquery,angularjs,react,flux'
     " }}}
+    " unite-js-func: 列出Javascript的函数 {{{
+    " 需要 npm install -g parsefunc
+    NeoBundleLazy 'chemzqm/unite-js-func'
+    if executable("parsefunc")
+        call neobundle#config('unite-js-func', {
+                    \ 'on_ft' : ['javascript', 'js'],
+                    \ })
+        autocmd vimrc FileType javascript,js
+                    \   nnoremap <silent><buffer> <Leader>s/ :Unite func<CR>
+                    \   nnoremap <silent><buffer> <Leader>sd :Unite func:t<CR>
+    endif
+    " }}}
 endif
 " }}}
 
