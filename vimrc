@@ -1213,7 +1213,14 @@ if s:is_plugin_group_enabled('editing') "{{{
     nmap <silent> <Leader>c <Plug>TComment_gc
     " }}}
     " syntastic: 保存文件时自动进行合法检查。:SyntasticCheck 执行检查， :Errors 打开错误列表 {{{
-    NeoBundle 'scrooloose/syntastic'
+    NeoBundleLazy 'scrooloose/syntastic', {
+                \ 'on_i': 1,
+                \ 'on_cmd': [
+                \     'SyntasticCheck', 'SyntasticInfo', 'Errors',
+                \     'SyntasticReset', 'SyntasticToggleMode', 'SyntasticSetLocList',
+                \     'SyntasticJavacEditClasspath', 'SyntasticJavacEditConfig',
+                \ ],
+                \ }
     " let g:syntastic_mode_map = {
     "             \ 'mode': 'active',
     "             \ 'active_filetypes': ['ruby', 'php', 'python'],
@@ -1239,6 +1246,12 @@ if s:is_plugin_group_enabled('editing') "{{{
     " if executable('python2')
     "     let g:syntastic_python_python_exec = 'python2'
     " endif
+
+    " 在syntastic插件启用前，提供一个空的SyntasticStatuslineFlag()函数，以去掉
+    " vim-airline之类的插件对syntastic插件的强制依赖
+    function SyntasticStatuslineFlag()
+        return ''
+    endfunction
     " }}}
     " vim-repeat: 把.能重复的操作扩展到一些插件中的操作 {{{
     NeoBundleLazy 'tpope/vim-repeat', {
