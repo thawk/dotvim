@@ -2661,7 +2661,7 @@ endif
 if s:is_plugin_group_enabled('visual') "{{{ 界面增强
     " vim-airline: 增强的statusline {{{
     NeoBundle 'vim-airline/vim-airline', {
-                \ 'depends': ['vim-airline/vim-airline-themes', 'unicode.vim'],
+                \ 'depends': ['vim-airline/vim-airline-themes'],
                 \ }
     nmap <Leader>tw :AirlineToggleWhitespace<CR>
 
@@ -2752,6 +2752,9 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
     let g:unite_force_overwrite_statusline = 0
     let g:vimfiler_force_overwrite_statusline = 0
     let g:vimshell_force_overwrite_statusline = 0
+
+    " 无须依赖unicode插件
+    let g:airline#extensions#unicode#enabled = 0
 
     " 显示tabline
     let g:airline#extensions#tabline#enabled = 1
