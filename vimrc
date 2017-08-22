@@ -964,36 +964,6 @@ if s:is_plugin_group_enabled('unite') "{{{
     nnoremap <silent> g<C-]> :<C-U>Unite -immediately tselect:<C-R>=expand('<cword>')<CR><CR>
     nnoremap <silent> g] :<C-U>Unite tselect:<C-R>=expand('<cword>')<CR><CR>
     " }}}
-    " unite-gtags: Unite下调用gtags {{{
-    NeoBundleLazy 'thawk/unite-gtags'
-    if g:dotvim_settings.commands.global != ''
-        call neobundle#config('unite-gtags', {
-                    \ 'on_source': ['unite.vim'],
-                    \ })
-
-        " 旧版本global需要设置一些兼容选项
-        if g:dotvim_settings.global_version < 6
-            let g:unite_source_gtags_ref_option = 'rse'
-            let g:unite_source_gtags_def_option = 'e'
-            let g:unite_source_gtags_result_option = 'ctags-x'
-            let g:unite_source_gtags_enable_nearness = 1
-        endif
-
-        nnoremap <silent> <Leader>s] :<C-U>Unite -immediately gtags/context<CR>
-        nnoremap <silent> <Leader>sR :<C-U>Unite -immediately gtags/ref<CR>
-        nnoremap <silent> <Leader>sr :<C-U>Unite gtags/completion -default-action=list_refereces<CR>
-        nnoremap <silent> <Leader>sD :<C-U>Unite -immediately gtags/def<CR>
-        nnoremap <silent> <Leader>sd :<C-U>Unite gtags/completion -default-action=list_definitions<CR>
-        nnoremap <silent> <Leader>pg :<C-U>Unite gtags/completion -default-action=list_definitions<CR>
-        nnoremap <silent> <Leader>s/ :<C-U>Unite gtags/file<CR>
-        nnoremap <silent> <Leader>sn :<C-U>Unite gtags/path::<CR>
-        nnoremap <silent> <Leader>sN :<C-U>UniteWithCursorWord -immediately gtags/path<CR>
-        " nnoremapap <silent><buffer> <Leader>st :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
-        " nnoremapap <silent><buffer> <Leader>sT :<C-U>Unite gtags/grep:
-        " nnoremapap <silent><buffer> <Leader>se :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
-        " nnoremapap <silent><buffer> <Leader>sE :<C-U>Unite gtags/grep:
-    endif
-    " }}}
     " tabpagebuffer.vim: 记录一个tab中包含的buffer {{{
     NeoBundle 'Shougo/tabpagebuffer.vim'
     " }}}
@@ -2207,6 +2177,38 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
     let g:wandbox#default_extra_options = get(g:, 'wandbox#default_extra_options', {
                 \   'clang-head' : '-O3 -Werror',
                 \ })
+    " }}}
+    " unite-gtags: Unite下调用gtags {{{
+    NeoBundleLazy 'thawk/unite-gtags', {
+                \ 'depends' : 'unite.vim',
+                \ }
+    if g:dotvim_settings.commands.global != ''
+        call neobundle#config('unite-gtags', {
+                    \ 'on_source': ['unite.vim'],
+                    \ })
+
+        " 旧版本global需要设置一些兼容选项
+        if g:dotvim_settings.global_version < 6
+            let g:unite_source_gtags_ref_option = 'rse'
+            let g:unite_source_gtags_def_option = 'e'
+            let g:unite_source_gtags_result_option = 'ctags-x'
+            let g:unite_source_gtags_enable_nearness = 1
+        endif
+
+        nnoremap <silent> <Leader>s] :<C-U>Unite -immediately gtags/context<CR>
+        nnoremap <silent> <Leader>sR :<C-U>Unite -immediately gtags/ref<CR>
+        nnoremap <silent> <Leader>sr :<C-U>Unite gtags/completion -default-action=list_refereces<CR>
+        nnoremap <silent> <Leader>sD :<C-U>Unite -immediately gtags/def<CR>
+        nnoremap <silent> <Leader>sd :<C-U>Unite gtags/completion -default-action=list_definitions<CR>
+        nnoremap <silent> <Leader>pg :<C-U>Unite gtags/completion -default-action=list_definitions<CR>
+        nnoremap <silent> <Leader>s/ :<C-U>Unite gtags/file<CR>
+        nnoremap <silent> <Leader>sn :<C-U>Unite gtags/path::<CR>
+        nnoremap <silent> <Leader>sN :<C-U>UniteWithCursorWord -immediately gtags/path<CR>
+        " nnoremapap <silent><buffer> <Leader>st :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
+        " nnoremapap <silent><buffer> <Leader>sT :<C-U>Unite gtags/grep:
+        " nnoremapap <silent><buffer> <Leader>se :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
+        " nnoremapap <silent><buffer> <Leader>sE :<C-U>Unite gtags/grep:
+    endif
     " }}}
 endif
 " }}}
