@@ -1832,6 +1832,7 @@ if s:is_plugin_group_enabled('navigation.autocomplete') "{{{
                     \ 'on_cmd' : ['EchoDocEnable', 'EchoDocDisable'],
                     \ 'on_i' : 1,
                     \ }
+        let g:echodoc#enable_at_startup = 1
         " }}}
         " neco-syntax: 利用syntax文件进行补全 {{{
         NeoBundleLazy 'Shougo/neco-syntax', {
