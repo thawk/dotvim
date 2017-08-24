@@ -2364,6 +2364,14 @@ if s:is_plugin_group_enabled('development.viml') "{{{ VimL，Vim的编程语言
                 \ ],
                 \ }
     " }}}
+    " vim-lookup: 跳到vim函数的定义 {{{
+    NeoBundleLazy 'mhinz/vim-lookup', {
+                \ 'on_func' : ['lookup#lookup', 'lookup#pop'],
+                \ }
+    autocmd vimrc FileType vim
+                \ nnoremap <silent><buffer> <Leader>sD :call lookup#lookup()<CR> |
+                \ nnoremap <silent><buffer> <Leader>s] :call lookup#lookup()<CR>
+    " }}}
 endif
 " }}}
 
@@ -2411,8 +2419,9 @@ if s:is_plugin_group_enabled('development.web') "{{{ 前端开发
                     \ 'on_ft' : ['javascript', 'js'],
                     \ })
         autocmd vimrc FileType javascript,js
-                    \   nnoremap <silent><buffer> <Leader>s/ :Unite func<CR>
-                    \   nnoremap <silent><buffer> <Leader>sd :Unite func:t<CR>
+                    \ nnoremap <silent><buffer> <Leader>s/ :Unite func<CR>   |
+                    \ nnoremap <silent><buffer> <Leader>sd :Unite func:t<CR> |
+                    \ nnoremap <silent><buffer> <Leader>s] :Unite func:t<CR>
     endif
     " }}}
 endif
