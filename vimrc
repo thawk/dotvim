@@ -2967,8 +2967,13 @@ if s:is_plugin_group_enabled('misc') "{{{
     " unicode.vim: ga会显示当前字符的更多信息，<C-X><C-G>/<C-X><C-Z>进行补全 {{{
     NeoBundleLazy 'chrisbra/unicode.vim', {
                 \ 'on_map' : [
-                \   ['nxo','<Plug>'],
-                \   ['nx','<F4>'],
+                \   ['n','<Plug>(MakeDigraph)'],
+                \   ['v','<Plug>(MakeDigraph)'],
+                \   ['n','<Plug>(UnicodeGA)'],
+                \   ['i','<Plug>(DigraphComplete)'],
+                \   ['i','<Plug>(UnicodeComplete)'],
+                \   ['n','<Plug>(UnicodeSwapCompleteName)'],
+                \   ['nv','<F4>'],
                 \   ['i', '<C-X><C-G>', '<C-X><C-Z>'],
                 \   ['n','<Leader>un'],
                 \ ],
