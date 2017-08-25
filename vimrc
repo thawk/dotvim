@@ -1297,7 +1297,6 @@ if s:is_plugin_group_enabled('snippet') "{{{
                 \ }
     call neobundle#config('ultisnips', {
                 \ 'on_i' : 1,
-                \ 'lazy' : 0,
                 \ })
 
     let g:UltiSnipsSnippetsDir = s:vimrc_path . '/mysnippets'
