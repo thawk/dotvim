@@ -761,26 +761,24 @@ endif
 
 if s:is_plugin_group_enabled('core') "{{{
     " vimproc: 用于异步执行命令的插件，被其它插件依赖 {{{
+    NeoBundle 'Shougo/vimproc', {
+                \ 'rev' : 'release',
+                \ 'build' : {
+                \     'windows' : 'tools\\update-dll-mingw',
+                \     'cygwin' : 'make -f make_cygwin.mak',
+                \     'mac' : 'make -f make_mac.mak',
+                \     'linux' : 'make',
+                \     'unix' : 'gmake',
+                \     'others' : 'make',
+                \    },
+                \ }
+
     if (s:is_windows)
-        " Windows下需要固定为与dll对应的版本
-        " 可到 https://github.com/koron/vim-kaoriya/releases 下载编译好的DLL
-        NeoBundle 'Shougo/vimproc', { 'rev' : '9269f38' }
         if has("win64") && filereadable(s:vimrc_path . "/win32/vimproc_win64.dll")
             let g:vimproc_dll_path = s:vimrc_path . "/win32/vimproc_win64.dll"
         elseif has("win32") && filereadable(s:vimrc_path . "/win32/vimproc_win32.dll")
             let g:vimproc_dll_path = s:vimrc_path . "/win32/vimproc_win32.dll"
         endif
-    else
-        NeoBundle 'Shougo/vimproc', {
-                    \ 'build' : {
-                    \     'windows' : 'tools\\update-dll-mingw',
-                    \     'cygwin' : 'make -f make_cygwin.mak',
-                    \     'mac' : 'make -f make_mac.mak',
-                    \     'linux' : 'make',
-                    \     'unix' : 'gmake',
-                    \     'others' : 'make',
-                    \    },
-                    \ }
     endif
     " }}}
     " vim-projectroot: 在项目根目录执行或找出项目的根目录 {{{
