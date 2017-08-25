@@ -1,5 +1,6 @@
 *.swp
 tags
 bundle/*
+!bundle/neobundle.vim
 .netrwhist
 vimrc.local
