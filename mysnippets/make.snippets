@@ -1,0 +1,23 @@
+snippet	cpp "C++ base Makefile"
+TARGET = ${1:target}
+
+# Listing all sources
+SRC = ${2:main.cpp}
+$0
+all: $(TARGET)
+
+# TARGET depends on ".o"s, where every .cpp metioned in SRC are substituted into a .o
+$(TARGET): $(SRC:.cpp=.o)
+	$(CXX) -g -o $@ $^ $(LIBS)
+
+# Every .d contains the header files which the correspending .cpp depends on
+# In gnu make, as of a sub makefile, this rule will automatic checked on the next include command
+%.d: %.cpp
+	@set -e; rm -f $@; \
+	$(CC) -MM $(CXXFLAGS) $< > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+
+# Include ".d"s for each .cpp
+-include $(SRC:.cpp=.d)
+endsnippet
