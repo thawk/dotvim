@@ -1,9 +1,12 @@
-snippet	cpp "C++ base Makefile"
+snippet	skel "C++ base Makefile"
 TARGET = ${1:target}
 
 # Listing all sources
 SRC = ${2:main.cpp}
-$0
+
+CXXFLAGS = -std=c++11
+LIBS = $0
+
 all: $(TARGET)
 
 # TARGET depends on ".o"s, where every .cpp metioned in SRC are substituted into a .o
