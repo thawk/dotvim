@@ -1348,7 +1348,14 @@ if s:is_plugin_group_enabled('snippet') "{{{
                 \ "\<C-y><C-R>=ExpandSnippetOrJumpForwardOrReturn('')<CR>" :
                 \ "\<CR>"
     nnoremap <silent> <Leader>is :<C-U>Unite ultisnips<CR>
-    "}}}
+    " }}}
+
+    " vim-snippets: 支持neosnippet、ultisnips的snippet库 {{{
+    NeoBundleLazy 'honza/vim-snippets'
+    let g:ultisnips_python_quoting_style = "single"
+    let g:ultisnips_python_triple_quoting_style = "double"
+    let g:ultisnips_python_style = "google"
+    " }}}
 endif
 "}}}
 

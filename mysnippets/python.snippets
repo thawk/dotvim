@@ -112,3 +112,8 @@ ${1:description}''')
 	main(**vars(args))
 endsnippet
 
+snippet attr "attribute with sphinx docstring" b
+#: ${3:type: TODO}
+self.${1:attr} = ${2:$1}
+${0}
+endsnippet
