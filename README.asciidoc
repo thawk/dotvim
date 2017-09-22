@@ -273,7 +273,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 .对齐
 
 [options="header"]
-| ===
+|===
 | 快捷键            | 用途                                  | 所属插件
 | 选中文字后<CR>    | 交互式对齐文本                        | vim-easy-align
 | <Space>xa+动作   | 交互式对齐文本                        | vim-easy-align
@@ -290,7 +290,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 | <Space>xa/       | 对齐多种注释                          | vim-easy-align
 | <Space>xa{vbar}  | 对齐所有表格线（{vbar}）              | vim-easy-align
 | <Space>xa<Space> | 对齐所有空白字符                      | vim-easy-align
-| ===
+|===
 
 .其它
 
