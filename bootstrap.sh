@@ -11,7 +11,7 @@ then
     cp "${vim_path}/vimrc.local.sample" ~/.vimrc.local
 fi
 
-if [ ! -d "${vim_path}/bundle/neobundle.vim" ]
+if [ ! -d "${vim_path}/bundle/neobundle.vim/plugin/neobundle.vim" ]
 then
     cd "${vim_path}"
     git submodule init
