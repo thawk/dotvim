@@ -23,7 +23,7 @@ endif
 scriptencoding utf-8
 " }}}
 
-" 插件组命名及选择要使用的插件及插件组 {{{
+" 载入本地.vimrc.local中的配置 {{{
 " Impacted by https://github.com/bling/dotvim
 
 " 读入用户本地设置 {{{
@@ -44,6 +44,8 @@ let g:dotvim_settings = {}
 let g:dotvim_settings.mapleader = ' '
 " 把<Leader>m映射为“,”，方便使用
 let g:dotvim_settings.map_mainmode = ','
+" 是否使用相对的行号
+let g:dotvim_settings.relative_number = 0
 let g:dotvim_settings.default_indent = 4
 if v:version >= '703' && has('lua')
     let g:dotvim_settings.autocomplete_method = 'neocomplete'
@@ -443,6 +445,10 @@ else
 endif
 
 set number " Line numbers on
+if g:dotvim_settings.relative_number
+    set relativenumber
+endif
+
 set showmatch " Show matching brackets.
 set cursorline " 高亮当前行
 set matchtime=5 " Bracket blinking.

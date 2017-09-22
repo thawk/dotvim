@@ -1,6 +1,9 @@
 let g:dotvim_user_settings = {}
+
 " let g:dotvim_user_settings.mapleader = ' '      " <Leader>
 " let g:dotvim_user_settings.map_mainmode = ','   " 代替<Leader>m
+" let g:dotvim_user_settings.relative_number = 1  " 使用相对行号
+
 let g:dotvim_user_settings.disabled_plugins = []
 
 " 有效的插件组请参见vimrc中的plugin_groups。可以用development、navigation禁用
