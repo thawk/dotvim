@@ -117,3 +117,15 @@ snippet attr "attribute with sphinx docstring" b
 self.${1:attr} = ${2:$1}
 ${0}
 endsnippet
+
+snippet catch-keyboard "Catch KeyboardInterrupt" b
+try:
+    ${VISUAL}${0}
+
+except KeyboardInterrupt:
+    pass
+
+finally:
+    pass
+endsnippet
+

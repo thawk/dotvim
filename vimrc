@@ -344,7 +344,7 @@ set modeline
 set modelines=5 " default numbers of lines to read for modeline instructions
 
 " Backup
-set nowritebackup
+set writebackup
 set nobackup
 
 " 设置各种目录 {{{
@@ -354,7 +354,7 @@ let &backupdir = s:get_cache_dir('backup')
 
 " swap files
 let &directory = s:get_cache_dir('swap')
-set noswapfile
+set swapfile
 
 if has("persistent_undo")
     let &undodir = s:get_cache_dir('undo')
@@ -942,8 +942,7 @@ if s:is_plugin_group_enabled('unite') "{{{
     NeoBundleLazy 'MaryHal/unite-unicode', {
                 \ 'on_source': ['unite.vim'],
                 \ }
-    nnoremap <silent> <Leader>iu :<C-U>Unite -default-action=append unicode<CR>
-    nnoremap <silent> <Leader>iU :<C-U>Unite -default-action=insert unicode<CR>
+    nnoremap <silent> <Leader>iu :<C-U>Unite unicode<CR>
     " }}}
     " unite-colorscheme: 列出所有配色方案 {{{
     NeoBundleLazy 'ujihisa/unite-colorscheme', {
@@ -2634,6 +2633,23 @@ if s:is_plugin_group_enabled('doc') "{{{ 文档编写，如OrgMode、AsciiDoc等
     NeoBundleLazy 'plasticboy/vim-markdown', {
                 \ 'on_ft' : ['markdown'],
                 \ }
+    " g:vim_markdown_folding_disabled
+    " g:vim_markdown_folding_style_pythonic
+    " g:vim_markdown_override_foldtext
+    " g:vim_markdown_folding_level
+    " g:vim_markdown_no_default_key_mappings
+    " g:vim_markdown_toc_autofit
+    " g:vim_markdown_emphasis_multiline
+    " g:vim_markdown_conceal
+    " g:tex_conceal
+    " g:vim_markdown_math
+    " g:vim_markdown_fenced_languages
+    " g:vim_markdown_frontmatter
+    " g:vim_markdown_toml_frontmatter
+    " g:vim_markdown_json_frontmatter
+    let g:vim_markdown_new_list_item_indent = 2
+    " g:vim_markdown_no_extensions_in_markdown
+    " g:vim_markdown_autowrite
     " }}}
     " wmgraphviz.vim: 提供对Graphviz dot的支持，包括编译、snippet等 {{{
     NeoBundleLazy 'wannesm/wmgraphviz.vim', {
