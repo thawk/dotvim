@@ -2215,8 +2215,9 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
             let g:unite_source_gtags_ref_option = 'rse'
             let g:unite_source_gtags_def_option = 'e'
             let g:unite_source_gtags_result_option = 'ctags-x'
-            let g:unite_source_gtags_enable_nearness = 1
         endif
+
+        let g:unite_source_gtags_enable_nearness = 1
 
         nnoremap <silent> <Leader>s] :<C-U>Unite -immediately gtags/context<CR>
         nnoremap <silent> <Leader>sR :<C-U>Unite -immediately gtags/ref<CR>
@@ -2256,7 +2257,7 @@ if s:is_plugin_group_enabled('development.python') "{{{
     if neobundle#tap('jedi-vim')
         let g:jedi#popup_select_first = 1   " 自动选择第一个候选项
         let g:jedi#show_call_signatures = 2 " 在cmdline显示函数签名
-        let g:jedi#popup_on_dot = 1
+        let g:jedi#popup_on_dot = 0
 
         let g:jedi#goto_command = "<Leader>s]"
         let g:jedi#goto_assignments_command = "<Leader>sD"
