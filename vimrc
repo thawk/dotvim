@@ -218,6 +218,11 @@ function! GetSvnBranchOfPath(path)
 endfunction
 " }}}
 
+function! CircledNum(num) "{{{把20以内的数字转换为加圈的数字
+  return a:num > 20 ? a:num : nr2char(char2nr('①') - 1 + a:num)
+endfunction
+"}}}
+
 function! s:path_join(...) "{{{
     if a:0 <= 0
         return ""
@@ -264,11 +269,12 @@ endfunction
 command! -nargs=* -complete=command BufferDirExe :call s:buffer_dir_exe([<f-args>])
 "}}}
 
-function! s:match_group(group_name, pattern)
+function! s:match_group(group_name, pattern) "{{{
     return '.' . a:group_name . '.' =~ '\.' . substitute(a:pattern, '\.', '\\.', 'g') . '\.'
 endfunction
+"}}}
 
-function! s:is_plugin_group_enabled(group_name)
+function! s:is_plugin_group_enabled(group_name) "{{{
     " group_name中可以用.进行分层。支持部分匹配
     for name in ["_plugin_groups", "_enabled_plugin_groups", "_disabled_plugin_groups"]
         if !has_key(g:dotvim_settings, name)
@@ -306,6 +312,7 @@ function! s:is_plugin_group_enabled(group_name)
     call add(g:dotvim_settings._enabled_plugin_groups, a:group_name)
     return 1
 endfunction
+"}}}
 
 " s:VisualSelection(): 返回当前被选中的文字 {{{
 " Thanks to xolox!
@@ -430,7 +437,7 @@ set cinwords=if,else,while,do,for,switch,case
 " Visual {{{
 let &termencoding = &encoding
 if (s:is_windows)
-    set guifont=Menlo_for_Powerline:h12,Powerline_Consolas:h12,Bitstream\ Vera\ Sans\ Mono\ 12,Fixed\ 12,Consolas:h12,Courier_New:h12
+    set guifont=DejaVuSansMono_Nerd_Font:h12,Menlo_for_Powerline:h12,Powerline_Consolas:h12,Bitstream\ Vera\ Sans\ Mono\ 12,Fixed\ 12,Consolas:h12,Courier_New:h12
     set guifontwide=Microsoft\ Yahei\ 12,WenQuanYi\ Zen\ Hei\ 12,NSimsun:h12
 
     "解决菜单乱码
@@ -2723,8 +2730,11 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
             let g:airline_section_b = airline#section#create(['hunks', 'mybranch'])
         endif
 
-        let g:airline_section_a = '%{bufnr("%")} ' . g:airline_section_a
+        let g:airline_section_a = '%{CircledNum(bufnr("%"))} %{tabpagewinnr(tabpagenr())} ' . g:airline_section_a
         " let g:airline_section_y = g:airline_section_y . '%{&bomb ? "[BOM]" : ""}'
+
+        " call airline#add_statusline_func('AirLineAddWinnrBufnr')
+        call airline#add_inactive_statusline_func('AirLineAddWinnrBufnr')
     endfunction
 
     " if neobundle#is_installed("vcscommand.vim")
@@ -2867,6 +2877,14 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
 
         let s:path_branch[path] = branch
         return branch
+    endfunction
+
+    function! AirLineAddWinnrBufnr(...)
+        let builder = a:1
+        let context = a:2
+
+        call builder.add_section('airline_a', '%{CircledNum(bufnr("%"))} %{tabpagewinnr(tabpagenr())}')
+        return 0   " the default: draw the rest of the statusline
     endfunction
     " }}}
     " taboo.vim: 为TAB起名 {{{
