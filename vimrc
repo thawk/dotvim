@@ -1632,8 +1632,8 @@ if s:is_plugin_group_enabled('navigation.tagging') "{{{
                 \ ]}
     let g:tagbar_left = 1
 
-    nnoremap <silent> g<F9> :<C-U>TagbarCurrentTag fs<CR>
-    nnoremap <silent> <F9> :<C-U>TagbarToggle<CR>
+    nnoremap <silent> <Leader>tt :<C-U>TagbarToggle<CR>
+    nnoremap <silent> <Leader>tT :<C-U>TagbarCurrentTag fs<CR>
 
     let g:tagbar_ctags_bin = g:dotvim_settings.commands.ctags
 
@@ -2245,11 +2245,6 @@ endif
 " }}}
 
 if s:is_plugin_group_enabled('development.arduino') "{{{
-    " arduvim: 提供了更多的Arduino关键字，并且可以根据需要生成自己的库的关键字 {{{
-    NeoBundleLazy 'z3t0/arduvim', {
-                \ 'on_ft' : ['arduino'],
-                \ }
-    " }}}
     " vim-compiler-arduino: 利用Arduino IDE的命令行作为Arduino的compiler {{{
     NeoBundle 'thawk/vim-compiler-arduino'
     " }}}
@@ -2277,20 +2272,16 @@ if s:is_plugin_group_enabled('development.python') "{{{
     endif
     " }}}
 
-    NeoBundleLazy 'hynek/vim-python-pep8-indent', {
-                \ 'on_ft' : ['python', 'python3'],
-                \ }
-
-    " SimpylFold: python语法折叠 {{{
-    NeoBundleLazy 'tmhedberg/SimpylFold', {
-                \ 'on_ft' : ['python', 'python3'],
-                \ }
-    if neobundle#tap('SimpylFold')
-        let g:SimpylFold_docstring_preview = 1
-
-        call neobundle#untap()
-    endif
-    " }}}
+    " " SimpylFold: python语法折叠 {{{
+    " NeoBundleLazy 'tmhedberg/SimpylFold', {
+    "             \ 'on_ft' : ['python', 'python3'],
+    "             \ }
+    " if neobundle#tap('SimpylFold')
+    "     let g:SimpylFold_docstring_preview = 1
+    "
+    "     call neobundle#untap()
+    " endif
+    " " }}}
 
     " vim-behave: 对behave测试框架的支持 {{{
     NeoBundleLazy 'rooprob/vim-behave', {
@@ -2314,34 +2305,6 @@ if s:is_plugin_group_enabled('development.haskell') "{{{
 
         let g:necoghc_enable_detailed_browse = 0
         let g:necoghc_debug = 0
-    endif
-    " }}}
-    " haskell-vim: Haskell的语法高亮和缩进 {{{
-    NeoBundleLazy 'neovimhaskell/haskell-vim', {
-                \ 'on_ft' : ['haskell', 'cabal'],
-                \ }
-
-    if neobundle#tap('haskell-vim')
-        " 控制部分功能的启用与否
-        " let g:haskell_enable_quantification = 1   " enable highlighting of forall
-        " let g:haskell_enable_recursivedo = 1      " enable highlighting of mdo and rec
-        " let g:haskell_enable_arrowsyntax = 1      " enable highlighting of proc
-        " let g:haskell_enable_pattern_synonyms = 1 " enable highlighting of pattern
-        " let g:haskell_enable_typeroles = 1        " enable highlighting of type roles
-        " let g:haskell_enable_static_pointers = 1  " enable highlighting of static
-
-        " 控制haskell缩进
-        " let g:haskell_indent_if = 3
-        " let g:haskell_indent_case = 2
-        " let g:haskell_indent_let = 4
-        " let g:haskell_indent_where = 6
-        " let g:haskell_indent_do = 3
-        " let g:haskell_indent_in = 1
-
-        " 控制cabal缩进
-        " let g:cabal_indent_section = 2
-
-        call neobundle#untap()
     endif
     " }}}
     " ref-hoogle: 让vim-ref插件支持hoogle {{{
@@ -2404,29 +2367,6 @@ if s:is_plugin_group_enabled('development.web') "{{{ 前端开发
     NeoBundleLazy 'othree/xml.vim', {
                 \ 'on_ft' : ['xml'],
                 \ }
-    " }}}
-    " vim-json: 对JSON文件提供语法高亮 {{{
-    NeoBundleLazy 'elzr/vim-json', {
-                \ 'on_ft' : ['json'],
-                \ 'on_path' : ['.*\.jsonp\?'],
-                \ }
-    " }}}
-    " vim-jinja: jinja2语法支持 {{{
-    NeoBundleLazy 'lepture/vim-jinja', {
-                \ 'on_path': '\.\(htm\|html\|jinja2\|j2\|jinja\)$',
-                \ }
-    " }}}
-    " vim-bundle-mako: python的mako模板支持 {{{
-    NeoBundleLazy 'sophacles/vim-bundle-mako', {
-                \ 'on_ft' : ['mako'],
-                \ 'on_path' : ['.*\.mako'],
-                \ }
-    " }}}
-    " javascript-libraries-syntax.vim: Javascript语法高亮 {{{
-    NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {
-                \ 'on_ft' : ['javascript', 'js'],
-                \ }
-    " let g:used_javascript_libs = 'jquery,angularjs,react,flux'
     " }}}
     " unite-js-func: 列出Javascript的函数 {{{
     " 需要 npm install -g parsefunc
@@ -2627,38 +2567,6 @@ if s:is_plugin_group_enabled('doc') "{{{ 文档编写，如OrgMode、AsciiDoc等
     "             \ }
     " autocmd vimrc BufRead,BufNewFile *.org setf org
     " " }}}
-    " vim-asciidoc: AsciiDoc的语法高亮 {{{
-    NeoBundleLazy 'asciidoc/vim-asciidoc', {
-                \ 'on_ft' : ['asciidoc'],
-                \ }
-    " }}}
-    " " vim-markdown-concealed: markdown支持，并且利用conceal功能隐藏不需要的字符 {{{
-    " NeoBundleLazy 'prurigro/vim-markdown-concealed', {
-    "             \ 'on_ft' : ['markdown'],
-    "             \ }
-    " " }}}
-    " vim-markdown: 正确支持markdown文件 {{{
-    NeoBundleLazy 'plasticboy/vim-markdown', {
-                \ 'on_ft' : ['markdown'],
-                \ }
-    " g:vim_markdown_folding_disabled
-    " g:vim_markdown_folding_style_pythonic
-    " g:vim_markdown_override_foldtext
-    " g:vim_markdown_folding_level
-    " g:vim_markdown_no_default_key_mappings
-    " g:vim_markdown_toc_autofit
-    " g:vim_markdown_emphasis_multiline
-    " g:vim_markdown_conceal
-    " g:tex_conceal
-    " g:vim_markdown_math
-    " g:vim_markdown_fenced_languages
-    " g:vim_markdown_frontmatter
-    " g:vim_markdown_toml_frontmatter
-    " g:vim_markdown_json_frontmatter
-    let g:vim_markdown_new_list_item_indent = 2
-    " g:vim_markdown_no_extensions_in_markdown
-    " g:vim_markdown_autowrite
-    " }}}
     " wmgraphviz.vim: 提供对Graphviz dot的支持，包括编译、snippet等 {{{
     NeoBundleLazy 'wannesm/wmgraphviz.vim', {
                 \ 'on_ft' : 'dot',
@@ -2711,6 +2619,10 @@ if s:is_plugin_group_enabled('syntax') "{{{ 为一些文件提供语法高亮
     NeoBundleLazy 'thawk/vim-pcet', {
                 \ 'on_source': ['unite-outline'],
                 \ }
+    " }}}
+    " vim-polyglot: 集合了N多插件，提供了对一堆语言的语法高亮和缩进 {{{
+    NeoBundle 'sheerun/vim-polyglot'
+    let g:vim_markdown_new_list_item_indent = 2
     " }}}
 endif
 " }}}

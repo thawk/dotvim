@@ -324,6 +324,8 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 | <Space>tr  | 切换相对行号                  | 内置
 | <Space>tha | 切换高亮当前词                | 内置
 | <Space>ts  | 选择colorscheme               | unite-colorscheme
+| <Space>tt  | 切换Tagbar                    | tagbar
+| <Space>tT  | 在Tagbar中显示当前符号        | tagbar
 |===
 
 === 窗口 `<Space>w`
