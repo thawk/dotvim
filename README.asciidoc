@@ -146,7 +146,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键     | 用途            | 所属插件
+| 快捷键    | 用途            | 所属插件
 | <Space>sc | :set nohlsearch | 内置
 |===
 
@@ -154,7 +154,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键           | 用途                               | 所属插件
+| 快捷键          | 用途                               | 所属插件
 | <Space>hdb      | describe bindings                  | unite.vim
 | <Space>hdc      | 显示当前字符的Unicode名称          | unicode.vim
 | <Space>hdf      | 列出所有vim函数                    | unite.vim
@@ -170,7 +170,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键     | 用途                    | 所属插件
+| 快捷键    | 用途                    | 所属插件
 | <Space>rl | 重新打开最近的Unite窗口 | unite.vim
 | <Space>rr | 将光标下的符号改名      | jedi.vim
 // | <Space>re | 列出kill-ring           | neoyank.vim
@@ -182,7 +182,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键         | 用途                       | 所属插件
+| 快捷键        | 用途                       | 所属插件
 | <Space>p'     | 在项目目录下打开shell      | vimshell
 | <Space>pf     | 在项目目录下找文件         | unite.vim
 | <Space>pd     | 在项目目录下找目录         | unite.vim
@@ -204,7 +204,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键     | 用途                               | 所属插件
+| 快捷键    | 用途                               | 所属插件
 | <Space>f` | 在当前文件目录打开shell            | vimshell
 | <Space>fb | 打开书签                           | unite.vim
 | <Space>ff | 在当前文件目录找文件               | unite.vim
@@ -226,22 +226,23 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键     | 用途                         | 所属插件
-| <Space>bb | 选择并切换缓冲区             | unite.vim
-| <Space>bd | 删除当前缓冲区               | 内置
-| <Space>bn | 打开下一缓冲区（:bnext）     | 内置
-| <Space>bp | 打开上一缓冲区（:bprevious） | 内置
-| <Space>bR | 重新载入当前文件（:e）       | 内置
-| <Space>bs | 打开或切换到scratch          | scratch.vim
-| <Space>bt | 在当前目录打开目录树         | scratch.vim
-| <Space>bw | 切换只读状态                 | 内置
+| 快捷键       | 用途                         | 所属插件
+| <Space>bb    | 选择并切换缓冲区             | unite.vim
+| <Space>bd    | 删除当前缓冲区               | 内置
+| <Space>bn    | 打开下一缓冲区（:bnext）     | 内置
+| <Space>bp    | 打开上一缓冲区（:bprevious） | 内置
+| <Space>bR    | 重新载入当前文件（:e）       | 内置
+| <Space>bs    | 打开或切换到scratch          | scratch.vim
+| <Space>bt    | 在当前目录打开目录树         | scratch.vim
+| <Space>bw    | 切换只读状态                 | 内置
+| <Space>b数字 | 切换到指定编号的缓冲区       | 内置
 |===
 
 === 调试 `<Space>d`
 
 [options="header"]
 |===
-| 快捷键     | 用途                | 所属插件
+| 快捷键    | 用途                | 所属插件
 | <Space>db | 设置/切换断点       | Conque-GDB
 | <Space>dd | 删除断点            | Conque-GDB
 | <Space>dc | 继续运行，Continue  | Conque-GDB
@@ -257,7 +258,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键     | 用途 | 所属插件
+| 快捷键    | 用途 | 所属插件
 | <Space>cc | 编译 |
 // | <Space>cC | compile                      |
 // | <Space>cd | close compilation window     |
@@ -274,8 +275,8 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键            | 用途                                  | 所属插件
-| 选中文字后<CR>    | 交互式对齐文本                        | vim-easy-align
+| 快捷键           | 用途                                  | 所属插件
+| 选中文字后<CR>   | 交互式对齐文本                        | vim-easy-align
 | <Space>xa+动作   | 交互式对齐文本                        | vim-easy-align
 | <Space>xad       | 对齐{cpp}的变量声明                   | vim-easy-align
 | <Space>xa=       | 对齐包含等号的操作符，如=、>=、!=之类 | vim-easy-align
@@ -306,7 +307,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键     | 用途                  | 所属插件
+| 快捷键    | 用途                  | 所属插件
 | <Space>iu | 搜索并插入Unicode字符 | unite-unicode
 | <Space>is | 选择追加snippets | ultisnips
 | <Space>iS | 选择插入snippets | ultisnips
@@ -316,7 +317,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键      | 用途                          | 所属插件
+| 快捷键     | 用途                          | 所属插件
 | <Space>ti  | 切换高亮显示indentation guide | indentLine
 | <Space>tw  | 切换高亮显示行尾空白字符      | vim-airline
 | <Space>tn  | 切换显示行号                  | 内置
@@ -329,10 +330,11 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键        | 用途                     | 所属插件
+| 快捷键       | 用途                     | 所属插件
 | <Space><Tab> | 当前窗口切换为上一buffer | 内置
 | <Space>ww    | 切换到下一个窗口         | 内置
 // | <Space>wW    | 选择并切换窗口           |
+| <Space>数字  | 切换到指定编号的窗口     | 内置
 |===
 
 // === 注释 `<Space>;`
@@ -348,7 +350,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键     | 用途          | 所属插件
+| 快捷键    | 用途          | 所属插件
 // | <Space>el | 切换Syntastic | syntastic
 | <Space>en | 下一个错误    | 内置
 | <Space>ep | 上一个错误    | 内置
@@ -367,7 +369,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键      | 用途                                             | 所属插件
+| 快捷键     | 用途                                             | 所属插件
 | <Space>ga  | 加入文件（VCAdd）                                | vc.vim
 | <Space>gb  | 查看每行的最后修改人（VCBlame）                  | vc.vim
 | <Space>gc  | 提交（VCCommit）                                 | vc.vim
@@ -387,7 +389,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键     | 用途                           | 所属插件
+| 快捷键    | 用途                           | 所属插件
 | <Space>qq | 退出Vim（:qa）                 | 内置
 | <Space>qQ | 退出Vim（:qa!，放弃所有修改）  | 内置
 | <Space>qs | 并退出Vim（:xa，保存所有文件） | 内置
@@ -397,7 +399,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键     | 用途                     | 所属插件
+| 快捷键    | 用途                     | 所属插件
 | <Space>jd | 在当前窗口打开文件浏览器 | vimfiler
 | <Space>jD | 在另一窗口打开文件浏览器 | vimfiler
 | <Space>jl | <Plug>(easymotion-bd-jk) | vim-easymotion
@@ -409,7 +411,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键      | 用途                       | 所属插件
+| 快捷键     | 用途                       | 所属插件
 | <Space>mga | 在.h和.cpp间切换           | vim-fswitch
 | <Space>mgA | 在.h和.cpp间切换（新窗口） | vim-fswitch
 // | <Space>mgt | 切换到单元测试文件 |
@@ -421,7 +423,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键      | 用途           | 所属插件
+| 快捷键     | 用途           | 所属插件
 | <Space>msb | 发送整个缓冲区 | vimshell/slimux
 | <Space>msl | 发送当前行     | vimshell/slimux
 | <Space>msr | 发送选中内容   | vimshell/slimux
@@ -433,7 +435,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键     | 用途                  | 所属插件
+| 快捷键    | 用途                  | 所属插件
 | <Space>ur | 打开或关闭Unite窗口   | unite.vim
 | <Space>uc | 打开或关闭Unite窗口   | unite.vim
 | <Space>up | 跳到Unite窗口的上一项 | unite.vim
@@ -446,9 +448,10 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键     | 用途                       | 所属插件
-| <Space>?  | 列出可用的按键绑定         | unite.vim
-| <Space>au | UndotreeToggle             | undotree
-| <Space>j= | 格式化整个文件（mzgg=G`z） | 内置
+| 快捷键             | 用途                       | 所属插件
+| <Space>?           | 列出可用的按键绑定         | unite.vim
+| <Space>au          | UndotreeToggle             | undotree
+| <Space>j=          | 格式化整个文件（mzgg=G`z） | 内置
+| <Space><Space>数字 | 切换到指定编号的Tab页      | 内置
 |===
 

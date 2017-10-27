@@ -3193,6 +3193,11 @@ map  <silent> <C-S-tab> :tabprevious<CR>
 map  <silent> <C-tab>   :tabnext<CR>
 imap <silent> <C-S-tab> <ESC>:tabprevious<CR>i
 imap <silent> <C-tab>   <ESC>:tabnext<CR>i
+
+" <Leader><leader>[1-9] move to tab [1-9]
+for s:i in range(1, 9)
+  execute 'nnoremap <Leader><Leader>' . s:i . ' ' . s:i . 'gt'
+endfor
 " }}}
 
 " 查找 {{{
@@ -3249,16 +3254,30 @@ inoremap kj <Esc>
 cnoremap kj <Esc>
 " }}}
 
-" 其它 {{{
+" Buffer {{{
 nmap <silent> <Leader>bd :bdelete<CR>
 nmap <silent> <Leader>bn :bnext<CR>
 nmap <silent> <Leader>bp :bprevious<CR>
 nmap <silent> <Leader>bR :e<CR>
 nmap <silent> <Leader>bw :set readonly!<CR>
 
+" <Leader>b[1-9] move to buffer [1-9]
+for s:i in range(1, 9)
+  execute 'nnoremap <Leader>b' . s:i . ' :b' . s:i . '<CR>'
+endfor
+" }}}
+
+" Window {{{
+" <Leader>[1-9] move to window [1-9]
+for s:i in range(1, 9)
+  execute 'nnoremap <Leader>' . s:i . ' :' . s:i . 'wincmd w<CR>'
+endfor
+
 nmap <silent> <Leader><Tab> <C-^>
 nmap <silent> <Leader>ww <C-W><C-W>
+" }}}
 
+" 其他 {{{
 nmap <silent> <Leader>sc :<C-U>set nohlsearch<CR>
 
 nmap <silent> <Leader>fs :w<CR>
