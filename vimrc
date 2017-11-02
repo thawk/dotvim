@@ -1030,7 +1030,7 @@ if s:is_plugin_group_enabled('unite') "{{{
     nnoremap <silent> <Leader>rM :<C-U>Unite -buffer-name=registers -default-action=insert register<CR>
 
     nnoremap <silent> <Leader>pf :<C-U>UniteWithProjectDir -buffer-name=files -start-insert file file/new<CR>
-    nnoremap <silent> <Leader>pd :<C-U>UniteWithProjectDir -buffer-name=direectories -start-insert directory directory/new<CR>
+    " nnoremap <silent> <Leader>pd :<C-U>UniteWithProjectDir -buffer-name=directories -start-insert directory directory/new<CR>
 
     nnoremap <silent> <Leader>bb :<C-U>Unite -buffer-name=buffers -start-insert buffer_tab<CR>
     nnoremap <silent> <Leader>bB :<C-U>Unite -buffer-name=buffers -start-insert buffer<CR>
@@ -1147,9 +1147,6 @@ if s:is_plugin_group_enabled('editing') "{{{
     xmap <silent>sa <Plug>(operator-surround-append)
     xmap <silent>sd <Plug>(operator-surround-delete)
     xmap <silent>sr <Plug>(operator-surround-replace)
-    " }}}
-    " targets.vim: 提供大量括号、标点之类的text object {{{
-    NeoBundle 'wellle/targets.vim'
     " }}}
     " DrawIt: 使用横、竖线画图、制表。\di和\ds分别启、停画图模式。在模式中，hjkl移动光标，方向键画线 {{{
     NeoBundleLazy 'DrawIt', {
@@ -1875,26 +1872,11 @@ endif
 "}}}
 
 if s:is_plugin_group_enabled('navigation.textobj') "{{{
+    " targets.vim: 提供大量括号、标点之类的text object {{{
+    NeoBundle 'wellle/targets.vim'
+    " }}}
     " vim-textobj-indent: 增加motion: ai ii（含更深缩进） aI iI（仅相同缩进） {{{
     NeoBundle 'kana/vim-textobj-indent', {
-               \ 'depends' : 'kana/vim-textobj-user',
-               \ }
-    " }}}
-    " vim-textobj-line: 增加motion: al il {{{
-    NeoBundle 'kana/vim-textobj-line', {
-               \ 'depends' : 'kana/vim-textobj-user',
-               \ }
-    " }}}
-    " vim-textobj-function: 增加motion: if/af/iF/aF 选择一个函数 {{{
-    NeoBundle 'kana/vim-textobj-function', {
-               \ 'depends' : 'kana/vim-textobj-user',
-               \ }
-    " }}}
-    " CamelCaseMotion: 增加,w ,b ,e 可以处理大小写混合或下划线分隔两种方式的单词 {{{
-    NeoBundle 'bkad/CamelCaseMotion'
-    " }}}
-    " vim-textobj-comment: 增加motion: ac ic {{{
-    NeoBundle 'thinca/vim-textobj-comment', {
                \ 'depends' : 'kana/vim-textobj-user',
                \ }
     " }}}
@@ -2414,50 +2396,6 @@ if s:is_plugin_group_enabled('development.shell') "{{{
         let g:ConqueGdb_Leader = ',d'
     endif
     " }}}
-    " vimshell: Shell，:VimShell {{{
-    NeoBundleLazy 'Shougo/vimshell', {
-                \ 'on_cmd' : [
-                \    { 'name' : 'VimShell', 'complete' : 'customlist,vimshell#complete'},
-                \    { 'name' : 'VimShellCreate', 'complete' : 'customlist,vimshell#complete'},
-                \    { 'name' : 'VimShellPop', 'complete' : 'customlist,vimshell#complete'},
-                \    { 'name' : 'VimShellTab', 'complete' : 'customlist,vimshell#complete'},
-                \    { 'name' : 'VimShellCurrentDir', 'complete' : 'customlist,vimshell#complete'},
-                \    { 'name' : 'VimShellBufferDir', 'complete' : 'customlist,vimshell#complete'},
-                \    { 'name' : 'VimShellExecute', 'complete' : 'customlist,vimshell#helpers#vimshell_execute_complete'},
-                \    { 'name' : 'VimShellInteractive', 'complete' : 'customlist,vimshell#helpers#vimshell_execute_complete'},
-                \    'VimShellSendString', 'VimShellSendBuffer', 'VimShellClose',
-                \ ],
-                \ 'on_map' : ['<Plug>(vimshell_'],
-                \ 'on_source': ['unite.vim'],
-                \ }
-    if neobundle#tap('vimshell')
-        let g:vimshell_data_directory=s:get_cache_dir('vimshell')
-
-        " 下面的键如果slimux/vim-tbone启用则会被这两个插件覆盖，因此vimshell
-        " 应在那两个插件前
-
-        " 以项目目录打开vimshell窗口
-        map <silent> <Leader>p' :<C-U>ProjectRootExe VimShellPop<CR>
-        " 以当前目录打开vimshell窗口
-        map <silent> <Leader>j' :<C-U>VimShellPop<CR>
-        " 以当前缓冲区目录打开vimshell窗口
-        map <silent> <Leader>f' :<C-U>BufferDirExe VimShellPop<CR>
-
-        " 关闭最近一个vimshell窗口
-        map <silent> <Leader>msq :<C-U>VimShellClose<CR>
-
-        " 执行当前行
-        map <silent> <Leader>msl :VimShellSendString<CR>
-        nmap <silent> <Leader>msr :VimShellSendString<CR>
-        " 执行所选内容
-        vmap <silent> <Leader>msr :VimShellSendString<CR>
-
-        " 提示执行命令
-        map <silent> <Leader>msn :VimShellSendString<SPACE>
-
-        call neobundle#untap()
-    endif
-    " }}}
     " slimux: 配合tmux的REPL工具，可以把缓冲区中的内容拷贝到tmux指定pane下运行。\rs发送当前行或选区，\rp提示输入命令，\ra重复上一命令，\rk重复上个key序列 {{{
     NeoBundleLazy 'epeli/slimux'
     if executable("tmux")
@@ -2526,12 +2464,6 @@ if s:is_plugin_group_enabled('development.shell') "{{{
                 \     { 'name' : 'Start', 'complete' : 'customlist,dispatch#command_complete' },
                 \     'Copen',
                 \ ],
-                \ }
-    " }}}
-    " neossh.vim: 支持ssh://协议 {{{
-    NeoBundleLazy 'Shougo/neossh.vim', {
-                \ 'on_ft' : ['vimfiler', 'vimshell'],
-                \ 'on_source': ['unite.vim'],
                 \ }
     " }}}
 endif
@@ -2882,44 +2814,12 @@ if s:is_plugin_group_enabled('misc') "{{{
     NeoBundle 'mhinz/vim-hugefile'
     " let g:hugefile_trigger_size = 2 " MiB
     " }}}
-    " vimfiler: 文件管理器 {{{
-    NeoBundleLazy 'Shougo/vimfiler', {
-                \ 'depends' : 'Shougo/unite.vim',
-                \ 'on_cmd' : [
-                \               { 'name' : 'VimFiler',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'VimFilerTab',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'VimFilerExplorer',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'VimFilerEdit',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'VimFilerWrite',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'VimFilerRead',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \               { 'name' : 'VimFilerSource',
-                \                 'complete' : 'customlist,vimfiler#complete' },
-                \              ],
-                \ 'on_map' : ['<Plug>(vimfiler_'],
-                \ 'explorer' : 1,
-                \ 'on_source': ['unite.vim'],
-                \ }
-    " 文件管理器，通过 :VimFiler 启动。
-    " c : copy, m : move, r : rename,
-    let g:vimfiler_as_default_explorer = 1
-    let g:vimfiler_define_wrapper_commands = 0
-    let g:vimfiler_data_directory = s:get_cache_dir('vimfiler')
-
+    " vim-dirvish: 代替netrw的文件浏览器 {{{
+    NeoBundle 'justinmk/vim-dirvish'
     " 切换侧边栏
-    nnoremap <silent> <Leader>pD :<C-U>VimFiler -project<CR>
-    nnoremap <silent> <Leader>pt :<C-U>VimFiler -project -explorer -parent -direction=rightbelow<CR>
-    nnoremap <silent> <Leader>fd :<C-U>VimFilerBufferDir<CR>
-    nnoremap <silent> <Leader>fD :<C-U>VimFilerBufferDir -split<CR>
-    nnoremap <silent> <Leader>ft :<C-U>VimFilerBufferDir -explorer -parent -direction=rightbelow<CR>
-    nnoremap <silent> <Leader>bt :<C-U>VimFilerCurrentDir -explorer -parent -direction=rightbelow<CR>
-    nnoremap <silent> <Leader>jd :<C-U>VimFilerCurrentDir<CR>
-    nnoremap <silent> <Leader>jD :<C-U>VimFilerCurrentDir -split<CR>
+    nnoremap <silent> <Leader>pd :<C-U>ProjectRootExe Dirvish<CR>
+    nnoremap <silent> <Leader>fd :<C-U>BufferDirExe Dirvish<CR>
+    nnoremap <silent> <Leader>jd :<C-U>Dirvish<CR>
     " }}}
     " unicode.vim: ga会显示当前字符的更多信息，<C-X><C-G>/<C-X><C-Z>进行补全 {{{
     NeoBundleLazy 'chrisbra/unicode.vim', {

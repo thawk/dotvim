@@ -183,11 +183,8 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 [options="header"]
 |===
 | 快捷键        | 用途                       | 所属插件
-| <Space>p'     | 在项目目录下打开shell      | vimshell
 | <Space>pf     | 在项目目录下找文件         | unite.vim
-| <Space>pd     | 在项目目录下找目录         | unite.vim
-| <Space>pD     | 在项目目录下打开文件浏览器 | vimfiler
-| <Space>pt     | 在项目目录下打开目录树     | vimfiler
+| <Space>pd     | 在项目目录下打开文件浏览器 | dirvish
 
 | <Space>pg     | 找项目中的tag              | unite-gtags
 | <Space>p<C-g> | 更新tags                   | gtags.vim
@@ -205,14 +202,13 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 [options="header"]
 |===
 | 快捷键    | 用途                               | 所属插件
-| <Space>f` | 在当前文件目录打开shell            | vimshell
 | <Space>fb | 打开书签                           | unite.vim
+| <Space>fd | 在当前文件目录打开文件浏览器       | dirvish
 | <Space>ff | 在当前文件目录找文件               | unite.vim
 | <Space>fs | 保存当前文件                       | 内置
 | <Space>fS | 保存所有文件                       | 内置
 | <Space>fr | 打开recent文件                     | neomru.vim
 // | <Space>fl | 在当前文件目录找文件（纯文本） | unite.vim
-| <Space>ft | 在文件目录下打开目录树                         | vimfiler
 | <Space>fy | 显示当前文件的全路径               | 内置
 | <Space>fo | 打开文件的大纲                     | unite-outline
 | <Space>fO | 打开文件的Folding                  | unite-fold
@@ -402,8 +398,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 [options="header"]
 |===
 | 快捷键    | 用途                     | 所属插件
-| <Space>jd | 在当前窗口打开文件浏览器 | vimfiler
-| <Space>jD | 在另一窗口打开文件浏览器 | vimfiler
+| <Space>jd | 在当前窗口打开文件浏览器 | dirvish
 | <Space>jl | <Plug>(easymotion-bd-jk) | vim-easymotion
 | <Space>jw | <Plug>(easymotion-s2)    | vim-easymotion
 | <Space>j= | 格式化选区或整个buffer   | clang-format
@@ -426,10 +421,10 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 [options="header"]
 |===
 | 快捷键     | 用途           | 所属插件
-| <Space>msb | 发送整个缓冲区 | vimshell/slimux
-| <Space>msl | 发送当前行     | vimshell/slimux
-| <Space>msr | 发送选中内容   | vimshell/slimux
-| <Space>msq | 关闭           | vimshell/slimux
+| <Space>msb | 发送整个缓冲区 | slimux
+| <Space>msl | 发送当前行     | slimux
+| <Space>msr | 发送选中内容   | slimux
+| <Space>msq | 关闭           | slimux
 | <Space>mse | 重复上一次     | slimux
 |===
 
