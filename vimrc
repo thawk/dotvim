@@ -1148,8 +1148,8 @@ if s:is_plugin_group_enabled('editing') "{{{
     xmap <silent>sd <Plug>(operator-surround-delete)
     xmap <silent>sr <Plug>(operator-surround-replace)
     " }}}
-    " vim-pairs: ci/, di;, yi*, vi@, ca/, da;, ya*, va@ ... {{{
-    NeoBundle 'kurkale6ka/vim-pairs'
+    " targets.vim: 提供大量括号、标点之类的text object {{{
+    NeoBundle 'wellle/targets.vim'
     " }}}
     " DrawIt: 使用横、竖线画图、制表。\di和\ds分别启、停画图模式。在模式中，hjkl移动光标，方向键画线 {{{
     NeoBundleLazy 'DrawIt', {
@@ -3185,7 +3185,7 @@ for s:i in range(1, 9)
   execute 'nnoremap <Leader>' . s:i . ' :' . s:i . 'wincmd w<CR>'
 endfor
 
-nmap <silent> <Leader><Tab> <C-^>
+nmap <silent> <Leader><Tab> :b#<CR>
 nmap <silent> <Leader>ww <C-W><C-W>
 " }}}
 
