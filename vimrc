@@ -2688,7 +2688,7 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         let builder = a:1
         let context = a:2
 
-        call builder.add_section('airline_a', '%{CircledNum(bufnr("%"))} %{tabpagewinnr(tabpagenr())}')
+        call builder.add_section('airline_a', ' %{CircledNum(bufnr("%"))} %{tabpagewinnr(tabpagenr())}')
         return 0   " the default: draw the rest of the statusline
     endfunction
     " }}}

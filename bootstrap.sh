@@ -18,9 +18,9 @@ then
     git submodule update
 fi
 
-if [ -d "${vim_path}/bundle/vimproc" ]
+if [ -d "${vim_path}/bundle/vimproc_release" ]
 then
-    cd "${vim_path}/bundle/vimproc"
+    cd "${vim_path}/bundle/vimproc_release"
     find -name "*.so" -o -name "*.dll" | xargs --no-run-if-empty touch -t 200001010000.00
     make
     cd ${OLDPWD}
