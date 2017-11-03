@@ -569,7 +569,7 @@ let java_space_errors=1
 
 if g:dotvim_settings.commands.ag != ""
     exec 'set grepprg=' . g:dotvim_settings.commands.ag . '\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow'
-    set grepformat=%f:%l:%c:%m
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 " }}}
 
@@ -1378,45 +1378,6 @@ if s:is_plugin_group_enabled('navigation.searching') "{{{
                 \ 'on_cmd' : [ 'Abolish', 'Subvert', 'S' ],
                 \ }
     " }}}
-    " ack.vim: 用ack/ag快速查找文件 "{{{
-    NeoBundleLazy 'mileszs/ack.vim', {
-                \ 'on_cmd' : [
-                \     {'name': 'Ack', 'complete': 'file'},
-                \     {'name': 'AckAdd', 'complete': 'file'},
-                \     {'name': 'AckFromSearch', 'complete': 'file'},
-                \     {'name': 'LAck', 'complete': 'file'},
-                \     {'name': 'LAckAdd', 'complete': 'file'},
-                \     {'name': 'AckFile', 'complete': 'file'},
-                \     {'name': 'AckHelp', 'complete': 'help'},
-                \     {'name': 'LAckHelp', 'complete': 'help'},
-                \     'AckWindow', 'LAckWindow',
-                \ ]}
-    if g:dotvim_settings.commands.ag != ""
-        let g:ackprg = g:dotvim_settings.commands.ag . " --vimgrep --nogroup --column --smart-case --follow"
-    endif
-
-    " let g:ackhighlight = 1
-    " let g:ack_autoclose = 1
-    " let g:ack_autofold_results = 1
-    " let g:ackpreview = 1
-    " let g:ack_use_dispatch = 1
-
-    " 在项目目录下找，可能退化为当前目录
-    vmap <silent> <Leader>sP :ProjectRootExe Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
-    nmap <silent> <Leader>sP :<C-U>ProjectRootExe Ack! <C-R>=expand('<cword>')<CR><CR>
-    nmap <silent> <Leader>sp :<C-U>ProjectRootExe Ack!<SPACE>
-    nmap <silent> <Leader>/  :<C-U>ProjectRootExe Ack!<SPACE>
-
-    " 在当前文件目录下找
-    vmap <silent> <Leader>sF :BufferDirExe Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
-    nmap <silent> <Leader>sF :<C-U>BufferDirExe Ack! <C-R>=expand('<cword>')<CR><CR>
-    nmap <silent> <Leader>sf :<C-U>BufferDirExe Ack!<SPACE>
-
-    " 在当前目录下找
-    vmap <silent> <Leader>sB :Ack! <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
-    nmap <silent> <Leader>sB :<C-U>Ack! <C-R>=expand('<cword>')<CR><CR>
-    nmap <silent> <Leader>sb :<C-U>Ack!<SPACE>
-    "}}}
     " ctrlsf.vim: 快速查找及编辑 {{{
     NeoBundleLazy 'dyng/ctrlsf.vim', {
                 \ 'on_map' : [ '<Plug>CtrlSF' ],
@@ -3024,6 +2985,22 @@ nmap <silent> <F3> <ESC>:<C-U>exec "vimgrep /\\<" . expand("<cword>") . "\\>/j %
 " V模式下，搜索选中的内容而不是当前word
 vnoremap <silent> g<F3> :exec "vimgrep /" . substitute(escape(s:VisualSelection(), '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j " . b:vimgrep_files <CR><ESC>:botright copen<CR>
 vnoremap <silent> <F3> :exec "vimgrep /" . substitute(escape(s:VisualSelection(), '/\.*$^~['), '\_s\+', '\\_s\\+', 'g') . "/j %" <CR><ESC>:botright copen<CR>
+
+" 在项目目录下找，可能退化为当前目录
+vmap <silent> <Leader>sP :<C-U>ProjectRootExe CWindow Silent grep <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
+nmap <silent> <Leader>sP :<C-U>ProjectRootExe CWindow Silent grep <C-R>=expand('<cword>')<CR><CR>
+nmap <silent> <Leader>sp :<C-U>ProjectRootExe CWindow Silent grep<SPACE>
+nmap <silent> <Leader>/  :<C-U>ProjectRootExe CWindow Silent grep<SPACE>
+
+" 在当前文件目录下找
+vmap <silent> <Leader>sF :<C-U>BufferDirExe CWindow Silent grep <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
+nmap <silent> <Leader>sF :<C-U>BufferDirExe CWindow Silent grep <C-R>=expand('<cword>')<CR><CR>
+nmap <silent> <Leader>sf :<C-U>BufferDirExe CWindow Silent grep<SPACE>
+
+" 在当前目录下找
+vmap <silent> <Leader>sB :<C-U>CWindow Silent grep <C-R>=g:CtrlSFGetVisualSelection()<CR><CR>
+nmap <silent> <Leader>sB :<C-U>CWindow Silent grep <C-R>=expand('<cword>')<CR><CR>
+nmap <silent> <Leader>sb :<C-U>CWindow Silent grep<SPACE>
 " }}}
 
 " 在VISUAL模式下，缩进后保持原来的选择，以便再次进行缩进 {{{
@@ -3087,6 +3064,8 @@ endfor
 
 nmap <silent> <Leader><Tab> :b#<CR>
 nmap <silent> <Leader>ww <C-W><C-W>
+nmap <silent> <Leader>wc :close<CR>
+nmap <silent> <Leader>wo :only<CR>
 " }}}
 
 " 其他 {{{
@@ -3097,8 +3076,10 @@ nmap <silent> <Leader>fS :wa<CR>
 
 nmap <silent> <Leader>fy :<C-U>echo expand("%:p")<CR>
 
-nmap <silent> <Leader>en :<C-U>lnext<CR>
-nmap <silent> <Leader>ep :<C-U>lprevious<CR>
+nmap <silent> <Leader>eo :<C-U>copen<CR>
+nmap <silent> <Leader>el :<C-U>lopen<CR>
+nmap <silent> <Leader>en :<C-U>cnext<CR>
+nmap <silent> <Leader>ep :<C-U>cprevious<CR>
 
 nmap <silent> <Leader>qq :<C-U>qa<CR>
 nmap <silent> <Leader>qQ :<C-U>qa!<CR>
@@ -3142,18 +3123,31 @@ function! OutputSplitWindow(...)
 endfunction
 command! -nargs=+ -complete=command Output call OutputSplitWindow(<f-args>)
 " }}}
-
 " SyntaxId {{{
 function! s:syntax_id()
       return synIDattr(synID(line('.'), col('.'), 0), 'name')
   endfunction
   command! SyntaxId echo s:syntax_id()
 " }}}
-
-" diff commands --- {{{
+" diff commands {{{
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 command! -bar ToggleDiff if &diff | execute 'windo diffoff'  | else
       \                           | execute 'windo diffthis' | endif
+" }}}
+" Silent: Avoid "Press ENTER" {{{
+command! -nargs=1 Silent
+            \ | execute ':silent '.<q-args>
+            \ | execute ':redraw!'
+" }}}
+" CWindow: Open quickfix after command {{{
+command! -nargs=1 CWindow
+            \ | execute <q-args>
+            \ | execute ':cwindow'
+" }}}
+" LWindow: Open location after command {{{
+command! -nargs=1 LWindow
+            \ | execute <q-args>
+            \ | execute ':lwindow'
 " }}}
 " }}}
 

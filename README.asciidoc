@@ -331,6 +331,8 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 | 快捷键       | 用途                     | 所属插件
 | <Space><Tab> | 当前窗口切换为上一buffer | 内置
 | <Space>ww    | 切换到下一个窗口         | 内置
+| <Space>wc    | 关闭当前窗口             | 内置
+| <Space>wo    | 只保留当前窗口           | 内置
 // | <Space>wW    | 选择并切换窗口           |
 | <Space>数字  | 切换到指定编号的窗口     | 内置
 |===
@@ -348,10 +350,11 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键    | 用途          | 所属插件
-// | <Space>el | 切换Syntastic | syntastic
-| <Space>en | 下一个错误    | 内置
-| <Space>ep | 上一个错误    | 内置
+| 快捷键    | 用途         | 所属插件
+| <Space>eo | 打开quickfix | 内置
+| <Space>el | 打开location | 内置
+| <Space>en | 下一个错误   | 内置
+| <Space>ep | 上一个错误   | 内置
 |===
 
 // === vim配置文件 `<Space>fe`
