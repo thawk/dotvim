@@ -2702,27 +2702,6 @@ if s:is_plugin_group_enabled('visual') "{{{ 界面增强
         call neobundle#untap()
     endif
     " }}}
-    " GoldenView.Vim: <F8>/<S-F8>当前窗口与主窗口交换 {{{
-    NeoBundle 'zhaocai/GoldenView.Vim'
-
-    if neobundle#tap('GoldenView.Vim')
-        function! neobundle#hooks.on_post_source(bundle)
-            " 忽略CodeReviewer窗口
-            call add(g:goldenview__ignore_urule['filetype'], 'rev')
-        endfunction
-
-        let g:goldenview__enable_default_mapping = 0
-        " nmap <silent> <C-N>  <Plug>GoldenViewNext
-        " nmap <silent> <C-P>  <Plug>GoldenViewPrevious
-
-        nmap <silent> <F8>   <Plug>GoldenViewSwitchMain
-        nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
-
-        " nmap <silent> <C-L>  <Plug>GoldenViewSplit
-
-        call neobundle#untap()
-    endif
-    " }}}
     " indentLine: 以竖线标记各缩进块 {{{
     NeoBundleLazy 'Yggdroot/indentLine'
 

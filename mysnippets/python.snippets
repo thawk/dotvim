@@ -1,3 +1,20 @@
+snippet attr "attribute with sphinx docstring" b
+#: ${3:type: TODO}
+self.${1:attr} = ${2:$1}
+${0}
+endsnippet
+
+snippet catch-keyboard "Catch KeyboardInterrupt" b
+try:
+	${VISUAL}${0}
+
+except KeyboardInterrupt:
+	pass
+
+finally:
+	pass
+endsnippet
+
 #! header
 snippet #! "Shebang header for python scripts" b
 #!/usr/bin/env python${1:}
@@ -8,6 +25,14 @@ endsnippet
 
 snippet modeline "VIM modeline for python scripts" b
 # vim: set fileencoding=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4:
+endsnippet
+
+snippet context
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+import ${1:sample}
 endsnippet
 
 snippet skel2 "skel with argparse for python2" b
@@ -45,16 +70,16 @@ ${1:description}''')
 
 	# 对解释出来的参数进行编码转换
 	for k in vars(args):
-	    v = getattr(args, k)
-	    if isinstance(v, str):
-	        setattr(args, k, unicode(v, locale.getpreferredencoding()).strip())
-	    elif isinstance(v, list):
-	        setattr(
-	            args, k,
-	            [unicode(s, locale.getpreferredencoding()).strip() if isinstance(s, str) else s for s in v])
+		v = getattr(args, k)
+		if isinstance(v, str):
+			setattr(args, k, unicode(v, locale.getpreferredencoding()).strip())
+		elif isinstance(v, list):
+			setattr(
+				args, k,
+				[unicode(s, locale.getpreferredencoding()).strip() if isinstance(s, str) else s for s in v])
 
-    if not args.verbose:
-        args.verbose = 0
+	if not args.verbose:
+		args.verbose = 0
 
 	# 日志初始化
 	log_format = u'%(asctime)s %(levelname)s %(message)s'
@@ -96,8 +121,8 @@ ${1:description}''')
 
 	args = parser.parse_args()
 
-    if not args.verbose:
-        args.verbose = 0
+	if not args.verbose:
+		args.verbose = 0
 
 	# 日志初始化
 	log_format = u'%(asctime)s %(levelname)s %(message)s'
@@ -110,22 +135,5 @@ ${1:description}''')
 		logging.basicConfig(level=logging.INFO, format=log_format)
 
 	main(**vars(args))
-endsnippet
-
-snippet attr "attribute with sphinx docstring" b
-#: ${3:type: TODO}
-self.${1:attr} = ${2:$1}
-${0}
-endsnippet
-
-snippet catch-keyboard "Catch KeyboardInterrupt" b
-try:
-    ${VISUAL}${0}
-
-except KeyboardInterrupt:
-    pass
-
-finally:
-    pass
 endsnippet
 
