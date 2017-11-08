@@ -219,7 +219,7 @@ endfunction
 " }}}
 
 function! CircledNum(num) "{{{把20以内的数字转换为加圈的数字
-  return a:num > 20 ? a:num : nr2char(char2nr('①') - 1 + a:num)
+  return a:num > 10 ? a:num : nr2char(char2nr('①') - 1 + a:num)
 endfunction
 "}}}
 
@@ -1716,14 +1716,14 @@ if s:is_plugin_group_enabled('navigation.autocomplete') "{{{
 
         "let g:neocomplete_enable_debug = 1
         let g:neocomplete#enable_at_startup = 1
-        " Disable auto completion, if set to 1, must use <C-x><C-U>
-        let g:neocomplete#disable_auto_complete = 0
+        " Disable auto completion, if set to 1, must use <C-X><C-U>
+        let g:neocomplete#disable_auto_complete = 1
         " Use smartcase.
         let g:neocomplete#enable_smart_case = 1
         " Set minimum syntax keyword length.
         let g:neocomplete#sources#syntax#min_syntax_length = 3
         let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-        let g:neocomplete#enable_auto_select = 0
+        let g:neocomplete#enable_auto_select = 1
         let g:neocomplete#auto_completion_start_length = 3
         let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
 
