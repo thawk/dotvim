@@ -3121,7 +3121,7 @@ command! -nargs=1 Silent
 " CWindow: Open quickfix after command {{{
 command! -nargs=1 CWindow
             \ | execute <q-args>
-            \ | execute ':cwindow'
+            \ | execute ':botright cwindow'
 " }}}
 " LWindow: Open location after command {{{
 command! -nargs=1 LWindow
