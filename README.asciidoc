@@ -106,7 +106,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键      | 用途                       | 所属插件
+| 快捷键     | 用途                       | 所属插件
 | <Space>sfp | 项目目录下CtrlSF           | ctrlsf.vim
 | <Space>sfP | 项目目录下CtrlSF当前词     | ctrlsf.vim
 | <Space>sff | 当前文件目录下CtrlSF       | ctrlsf.vim
@@ -119,7 +119,7 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 
 [options="header"]
 |===
-| 快捷键     | 用途                         | 所属插件
+| 快捷键    | 用途                         | 所属插件
 | <Space>/  | 在项目目录下进行搜索         | ack.vim
 | <Space>sp | 项目目录下进行搜索           | ack.vim
 | <Space>sP | 项目目录下进行搜索当前词     | ack.vim
@@ -127,13 +127,15 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 | <Space>sF | 当前文件目录下进行搜索当前词 | ack.vim
 | <Space>sb | 当前目录下进行搜索           | ack.vim
 | <Space>sB | 当前目录下进行搜索当前词     | ack.vim
+| <Space>ss | 在当前文件中查找             | unite.vim
+| <Space>sS | 在当前文件中查找当前词       | unite.vim
 |===
 
 .Symbol
 
 [options="header"]
 |===
-| 快捷键     | 用途                               | 所属插件
+| 快捷键    | 用途                               | 所属插件
 | <Space>s] | 根据上下文进行跳转到定义或引用     | unite-gtags/jedi.vim
 | <Space>sr | 跳转到引用                         | unite-gtags/jedi.vim
 | <Space>sR | 跳转到当前词的引用                 | unite-gtags/jedi.vim
@@ -214,7 +216,6 @@ NOTE: ``<Leader>``是``<Space>``。可以在``{tilde}/.vimrc.local``中通过``g
 | <Space>fO | 打开文件的Folding                  | unite-fold
 | <Space>fp | 查找项目中的路径和文件名           | unite-gtags
 | <Space>fP | 查找项目中匹配当前词的路径和文件名 | unite-gtags
-| <Space>f/ | 在当前文件中查找                   | unite.vim
 // | <Space>fL | locate                   | ?
 |===
 

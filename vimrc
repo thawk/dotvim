@@ -1042,8 +1042,8 @@ if s:is_plugin_group_enabled('unite') "{{{
     nnoremap <silent> <Leader>fP :<C-U>UniteWithProjectDir -immediately -input=<C-R>expand('<cword>')<CR> file_rec/async<CR>
     nnoremap <silent> <Leader>fp :<C-U>UniteWithProjectDir file_rec/async<CR>
 
-    nnoremap <silent> <Leader>f? :<C-U>Unite line -buffer-name=search -start-insert -input=<C-R><C-W><CR>
-    nnoremap <silent> <Leader>f/ :<C-U>Unite line -buffer-name=search -start-insert<CR>
+    nnoremap <silent> <Leader>sS :<C-U>Unite line -buffer-name=search -start-insert -input=<C-R><C-W><CR>
+    nnoremap <silent> <Leader>ss :<C-U>Unite line -buffer-name=search -start-insert<CR>
 
     nnoremap <silent> <Leader>us :<C-U>Unite source<CR>
 
