@@ -1,11 +1,6 @@
 #!/bin/sh
 vim_path=$(dirname $(readlink -f "$0"))
 
-if [ ! -e ~/.vimrc ]
-then
-    echo "runtime vimrc" > ~/.vimrc
-fi
-
 if [ ! -e ~/.vimrc.local ]
 then
     cp "${vim_path}/vimrc.local.sample" ~/.vimrc.local
