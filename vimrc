@@ -2848,6 +2848,9 @@ if !s:is_gui " 在终端模式下，使用16色（终端需要使用solarized配
 end
 " let g:solarized_termcolors=256
 " }}}
+" NeoSolarized: 可以利用真彩色的Solarized配色方案 {{{
+NeoBundle 'icymind/NeoSolarized'
+" }}}
 " Zenburn: Zenburn配色方案 {{{
 NeoBundle 'Zenburn'
 " }}}
