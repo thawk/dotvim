@@ -2182,6 +2182,10 @@ if s:is_plugin_group_enabled('development.cpp') "{{{
         " nnoremapap <silent><buffer> <Leader>sT :<C-U>Unite gtags/grep:
         " nnoremapap <silent><buffer> <Leader>se :<C-U>UniteWithCursorWord -immediately gtags/grep<CR>
         " nnoremapap <silent><buffer> <Leader>sE :<C-U>Unite gtags/grep:
+
+        nnoremap <silent> <Leader>mg] :<C-U>Unite -immediately gtags/context<CR>
+        nnoremap <silent> <Leader>mgr :<C-U>Unite -immediately gtags/ref<CR>
+        nnoremap <silent> <Leader>mgd :<C-U>Unite -immediately gtags/def<CR>
     endif
     " }}}
 endif
